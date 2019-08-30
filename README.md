@@ -1,5 +1,5 @@
 # ECON622 - Fall 2019
-This is a graduate topics course in computational economics.
+This is a graduate topics course in computational economics, with applications in datascience and machine learning.
 # Course materials
 - Get a [GitHub](www.github.com) ID and apply for the [Student Developer Pack](https://education.github.com/pack) to get further free features
 - Consider clicking `Watch` at the top of this repository to see file changes
@@ -23,7 +23,7 @@ Problem sets should be submitted as a *single* Jupyter notebook on Canvas, with 
   - Redo Exercise 5 in [Julia Essentials](https://lectures.quantecon.org/jl/getting_started_julia/julia_essentials.html) except
       - Pass in a range instead of `a`, `b`, and `n`, e.g. `nodes = -1.0:0.5:1.0`
       - Hint: try `step(nodes)`, `length(nodes)`, `nodes[1]` and `nodes[end]`
-      - Also, instead of the `while` in the solution, find a better way to efficiently bracket the `x` in the nodes.  Hint: `10 ÷ 4 = 2`  or `div(10,4)` are  the division truncated to the lower integer.
+      - Also, instead of the `while` in the solution, find a better way to efficiently bracket the `x` in the nodes.  Hint: Type `?÷` into jupyter to explore quotients from Euclidean division
 
 <!-- 
 - **Problem Set 2:**

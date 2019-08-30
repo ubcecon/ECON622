@@ -35,9 +35,9 @@ remainder of the grade will be a computational project.
 
 - Nearly weekly problem sets: 50%
 - Final Project: 45%
-- Participation: 5% (incentive to set alarm)
+- Participation: 5% (incentive to wake up in time)
 
-While the problem sets will be frequent, many will be short to force practice - and hence they will not be weighting uniformly in the grade.  Assume you will get the full participation mark if you rarely miss class.
+While the problem sets will be frequent, many will be short to force practice (and will not be weighed identicall)  Assume you will get the full participation mark if you rarely miss class.
 
 The final project topics are very open, and the main criteria is that you either (1) learn/use/apply a computational tool to a research topic of your interest or (2) contribute to an open-source computational economics project as a public good.
 
