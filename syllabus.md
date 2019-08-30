@@ -33,9 +33,9 @@ significant portion of the grade will be regular problem sets.  The
 remainder of the grade will be a computational project.
 
 
-- Nearly weekly problem sets: 45%
+- Nearly weekly problem sets: 50%
 - Final Project: 45%
-- Participation: 10% (incentive to set alarm)
+- Participation: 5% (incentive to set alarm)
 
 While the problem sets will be frequent, many will be short to force practice - and hence they will not be weighting uniformly in the grade.  Assume you will get the full participation mark if you rarely miss class.
 
