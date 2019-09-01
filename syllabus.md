@@ -2,16 +2,20 @@
 
 ## Computational Economics with Data Science Applications
 
-
-
 - **Instructors:** jesse.perla@ubc.ca and schrimpf@mail.ubc.ca
 - **Office Hours:** TBD
 - **Teaching Assistant:** Mahdi Ebrahimi Kahou, mahdi.ebk@gmail.com
 - **Start Time** 8:40am sharp so there are no excuses, please be on time
 
 **Course Description**
-This is a graduate topics course in computational economics.
-
+This is a graduate topics course in computational economics.  We intend
+this to be useful for a large number of fields, but it is most useful
+for anyone likely to:
+1. Solve a structural model
+2. Solve a dynamic
+model
+3. Collect and use data beyond what is possible in Stata (e.g "Large Data", textual data, etc.); or
+4. Implement econometric techniques that go beyond what is available in Stata
 
 A key purpose of this class is to teach specific techniques,
 algorithms, and tools to ensure that students write robust, correct,
@@ -35,7 +39,7 @@ remainder of the grade will be a computational project.
 
 - Nearly weekly problem sets: 50%
 - Final Project: 45%
-- Participation: 5% (incentive to wake up in time)
+- Participation: 5% (incentive to wake up on time)
 
 While the problem sets will be frequent, many will be short to force practice (and will not be weighed identicall)  Assume you will get the full participation mark if you rarely miss class.
 
@@ -49,7 +53,7 @@ The course will be taught in 4 parts
 3. Structural estimation (Paul Schrimpf)
 4. Data science and machine learning (Paul Schrimpf)
 
-Throughout the course we will be using the programming language Julia.
+Throughout the course we will be using the programming language Julia.  We may introduce Python or R for some big data/large data introduction.  For your final project, you can use any of those languages.
      
 ## Topics
 
@@ -69,15 +73,18 @@ Throughout the course we will be using the programming language Julia.
     - Interpolation
     - Quadrature
     - Spectral methods and functional equations
+    
 4. Sparsity/AD/scaling to large problems
    - Application: multiway fixed-effect models
    - Sparse matrices, banded matrices, etc. in Julia
     - Forward/reverse/etc. auto-differentiation
     - Iterative and matrix-free solutions to linear systems, eigensystems, and sparse linear least squares
-6. Computational dynamic programming and heterogenous agents
-
-7. Perturbation approaches to solving models with heterogeneous agents
-    - Reiter (2009) or similar methods for solving models with aggregate shocks
+    - Large data and big data overview (in Python or R)
+    
+6. Computational dynamic programming
+    - Heterogenous agents
+    - Dynamic contracting
+    - Perturbation approaches to solving models with heterogeneous agents (i.e. Reiter (2009) or similar methods)
     
 ### Paul
 
