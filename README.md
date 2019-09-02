@@ -11,8 +11,11 @@ This is a graduate topics course in computational economics, with applications i
     - Later you will need to do a local installation by following the [Getting Started](https://lectures.quantecon.org/jl/getting_started_julia/getting_started.html) but this is a better way to begin
     - For support with vse.syzygy.ca, email arnav.sood@ubc.ca
 
+Most of the course will be taught using Julia, but we will briefly introduce Python (or R) for discussing "medium" and "big" data pipeline. 
+
 ## Syllabus
 See [Syllabus](syllabus.md) for more details
+
 
 ## Problem Sets
 Problem sets should be submitted as a *single* Jupyter notebook on Canvas, with the code and output clean.
@@ -46,7 +49,7 @@ In the (updated) testing.ipynb lecture, do exercise 1
 -->
 
 ## Lectures
-1. **September 4th**: Introduciton to Julia
+1. **September 4th**: Introduction to Julia
     - [Julia Environment](https://lectures.quantecon.org/jl/getting_started_julia/julia_environment.html), [Introductory Examples](https://lectures.quantecon.org/jl/getting_started_julia/julia_by_example.html), and [Julia Essentials](https://lectures.quantecon.org/jl/getting_started_julia/julia_essentials.html)
 
 2. **September 9th**:
@@ -61,8 +64,8 @@ In the (updated) testing.ipynb lecture, do exercise 1
 10. **October 7th**:
 11. **October 9th**:
 12. **October 14th**: NO CLASS (Thanksgiving)
-13. **October 16th**: (Paul takes over)
-14. **October 21th**:
+13. **October 16th**: 
+14. **October 21th**: (Paul takes over)
 15. **October 23th**:
 16. **October 28th**:
 17. **October 30th**:
@@ -73,6 +76,6 @@ In the (updated) testing.ipynb lecture, do exercise 1
 22. **November 18th**:
 23. **November 20th**:
 24. **November 25th**:
-25. **November 27th**: Final Project Discussions
+25. **November 27th**: 
 26. Final Project due mid December
 
