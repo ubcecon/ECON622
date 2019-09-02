@@ -14,7 +14,7 @@ for anyone likely to:
 1. Solve a structural model
 2. Solve a dynamic
 model
-3. Collect and use data beyond what is possible in Stata (e.g "Large Data", textual data, etc.); or
+3. Collect and use data beyond what is possible in Stata (e.g medium/big data, textual data, etc.); or
 4. Implement econometric techniques that go beyond what is available in Stata
 
 A key purpose of this class is to teach specific techniques,
@@ -53,7 +53,7 @@ The course will be taught in 4 parts
 3. Structural estimation (Paul Schrimpf)
 4. Data science and machine learning (Paul Schrimpf)
 
-Throughout the course we will be using the programming language Julia.  We may introduce Python or R for some big data/large data introduction.  For your final project, you can use any of those languages.
+Throughout the course we will be using the programming language Julia.  We will introduce Python or R for some big data/large data introduction.  As a lingua-franca, at some point you will want to learn python for interfacing with key ML packages and for use in  data-cleaning pipeline.  For your final project, you can use any of those languages.
      
 ## Topics
 
@@ -62,30 +62,30 @@ Throughout the course we will be using the programming language Julia.  We may i
 1. Introduction to Julia 
    - Learning the Julia programming language, with simple applications
    - Generic and Functional programming, multiple dispatch
+   - Introduction to interpolation, quadrature, and functional equations
   
 2. Software engineering tools: source-code control, unit testing, and continuous integration
    - Git and Github version tracking, diffs, collaboration, Pull Requests, etc.
     - Reproducible environments: package managers, and virtual environments
     - Unit and regression testing frameworks, benchmarking, and continuous-integration
-    - Using a cluster/parallel programming
     
-3. Function approximation and quadrature for solving dynamic economic models
-    - Interpolation
-    - Quadrature
-    - Spectral methods and functional equations
+3. Medium Data, clusters, and Medium-Scale Parallel Programming
+    - Using the cluster/parallel programming/executing computational jobs in Julia
+    - Enough python (or R) to get by
+    - Tools for data too large memory but too small for massive clusters
+    - Tools for parallel processing of data too large for memory
     
 4. Sparsity/AD/scaling to large problems
    - Application: multiway fixed-effect models
    - Sparse matrices, banded matrices, etc. in Julia
-    - Forward/reverse/etc. auto-differentiation
-    - Iterative and matrix-free solutions to linear systems, eigensystems, and sparse linear least squares
-    - Large data and big data overview (in Python or R)
+   - Forward/reverse/etc. auto-differentiation
+   - Iterative and matrix-free solutions to linear systems, eigensystems, and sparse linear least squares
     
 6. Computational dynamic programming
     - Heterogenous agents
     - Dynamic contracting
     - Perturbation approaches to solving models with heterogeneous agents (i.e. Reiter (2009) or similar methods)
-    
+
 ### Paul
 
 1. Extremum estimators & optimization
