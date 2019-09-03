@@ -5,7 +5,7 @@
 - **Instructors:** jesse.perla@ubc.ca and schrimpf@mail.ubc.ca
 - **Office Hours:** TBD
 - **Teaching Assistant:** Mahdi Ebrahimi Kahou, mahdi.ebk@gmail.com
-- **Start Time** 8:40am sharp so there are no excuses, please be on time
+- **Start Time** 8:35am sharp so there are no excuses, please be on time!
 
 **Course Description**
 This is a graduate topics course in computational economics.  We intend
@@ -53,7 +53,7 @@ The course will be taught in 4 parts
 3. Structural estimation (Paul Schrimpf)
 4. Data science and machine learning (Paul Schrimpf)
 
-Throughout the course we will be using the programming language Julia.  We will introduce Python or R for some big data/large data introduction.  As a lingua-franca, at some point you will want to learn python for interfacing with key ML packages and for use in  data-cleaning pipeline.  For your final project, you can use any of those languages.
+Throughout the course we will be using the programming language Julia.  We will introduce Python or R for a "medium data" introduction.  As a lingua-franca, at some point you will want to learn Python for interfacing with key ML packages and for use in  data-cleaning pipeline.  For your final project, you can use any of those languages.
      
 ## Topics
 
@@ -69,9 +69,9 @@ Throughout the course we will be using the programming language Julia.  We will 
     - Reproducible environments: package managers, and virtual environments
     - Unit and regression testing frameworks, benchmarking, and continuous-integration
     
-3. Medium Data, clusters, and Medium-Scale Parallel Programming
+3. Medium Data, clusters, and medium-scale parallel programming
+    - "Just Enough Python to Get By" - and use great libraries
     - Using the cluster/parallel programming/executing computational jobs in Julia
-    - Enough python (or R) to get by
     - Tools for data too large memory but too small for massive clusters
     - Tools for parallel processing of data too large for memory
     
