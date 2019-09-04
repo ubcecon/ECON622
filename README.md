@@ -19,7 +19,7 @@ See [Syllabus](syllabus.md) for more details
 
 ## Problem Sets
 Problem sets should be submitted as a *single* Jupyter notebook on Canvas, with the code and output clean.
-- **Problem Set 1**
+- **Problem Set 1** - Due Friday September 13th
   - Exercises 7, 8(a), and 8(b) in [Introductory Examples](https://lectures.quantecon.org/jl/getting_started_julia/julia_by_example.html)
   - Redo any exercise of your choice from 1 to 6 in [Introductory Examples](https://lectures.quantecon.org/jl/getting_started_julia/julia_by_example.html)
     - In all "Redo" look at the provided solutions afterwards, but still submit your code
@@ -35,11 +35,9 @@ Problem sets should be submitted as a *single* Jupyter notebook on Canvas, with 
     - Redo Exercise 1 in [Fundamental Types](https://lectures.quantecon.org/jl/getting_started_julia/fundamental_types.html) using a fixed point function?  Check number of iterations.
     - Unlike the first assignment, we will start grading this on "style" and "reproducibility" rather than just on whether you get the correct numbers ou
     - For problem set Another approach to the overlay of histograms:  try `stephist` and `stephist!` instead of `histogram`  What about T = 150.   histogram(data, alpha = 0.5) then histogram!(moredata, alpha = 0.2) )/ stephist! or stephist
-
 - **Problem Set 3:**
     - Problems 1 to 6 in [Introduction to Types](https://lectures.quantecon.org/jl/getting_started_julia/introduction_to_types.html) 
-    - Add something on Generic Programming as well?
-
+    - Add something on Generic Programming as well?    
 - ** Problem Set 4:** 
 -  version_control.ipynb lecture, do exercises 1a, 1b, 1c, 2a, and 2b
 In the (updated) testing.ipynb lecture, do exercise 1
@@ -50,11 +48,10 @@ In the (updated) testing.ipynb lecture, do exercise 1
 
 ## Lectures
 1. **September 4th**: Introduction to Julia
-    - [Julia Environment](https://lectures.quantecon.org/jl/getting_started_julia/julia_environment.html), [Introductory Examples](https://lectures.quantecon.org/jl/getting_started_julia/julia_by_example.html), and [Julia Essentials](https://lectures.quantecon.org/jl/getting_started_julia/julia_essentials.html)
+    - [Julia Environment](https://lectures.quantecon.org/jl/getting_started_julia/julia_environment.html), [Introductory Examples](https://lectures.quantecon.org/jl/getting_started_julia/julia_by_example.html)
 
-2. **September 9th**:
+2. **September 9th**: [Introductory Examples](https://lectures.quantecon.org/jl/getting_started_julia/julia_by_example.html), and [Julia Essentials](https://lectures.quantecon.org/jl/getting_started_julia/julia_essentials.html) and start [Fundamental Types](https://lectures.quantecon.org/jl/getting_started_julia/fundamental_types.html)
 3. **September 11th**:
-   - Problem Set 1 Due
 4. **September 16th**:
 5. **September 18th**:
 6. **September 23th**:
