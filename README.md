@@ -10,8 +10,13 @@ This is a graduate topics course in computational economics, with applications i
 2.  Click [Here](https://vse.syzygy.ca/jupyter/hub/user-redirect/git-pull?repo=https%3A%2F%2Fgithub.com%2FQuantEcon%2Fquantecon-notebooks-julia&urlpath=lab%2Ftree%2Fquantecon-notebooks-julia) to install the QuantEcon Julia Lectures there
     - Later you will need to do a local installation by following the [Getting Started](https://lectures.quantecon.org/jl/getting_started_julia/getting_started.html) but this is a better way to begin
     - For support with vse.syzygy.ca, email arnav.sood@ubc.ca
+3. To automatically launch the QuantEcon lecture notes on vse.syzygy.ca
+    - Open the lecture notes in a website (e.g. go to  [Introductory Examples](https://lectures.quantecon.org/jl/getting_started_julia/julia_by_example.html))
+    - Hover your mouse over the button "jupyter notebook | run" at the top
+    - When it pops up a configuration, choose `vse.syzygy.ca (UBC Only)` from the list, move your mouse to somewhere else on the screen
+    - Now when you click on the "jupyter notebook | run" without hovering, it will launch in our hub.
 
-Most of the course will be taught using Julia, but we will briefly introduce Python (or R) for discussing "medium" and "big" data pipeline. 
+Most of the course will be taught using Julia, but we will briefly introduce Python (or R) for discussing topics where Julia is not ideal.
 
 ## Syllabus
 See [Syllabus](syllabus.md) for more details
