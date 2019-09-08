@@ -14,7 +14,7 @@ This is a graduate topics course in computational economics, with applications i
     - Open the lecture notes in a website (e.g. go to  [Introductory Examples](https://lectures.quantecon.org/jl/getting_started_julia/julia_by_example.html))
     - Hover your mouse over the button "jupyter notebook | run" at the top
     - When it pops up a configuration, choose `vse.syzygy.ca (UBC Only)` from the list, move your mouse to somewhere else on the screen
-    - Now when you click on the "jupyter notebook | run" without hovering, it will launch in our hub.
+    - Now when you click on the "jupyter notebook | run" on any of the Julia lectures (no need to hover again), it will launch in our hub.
 
 Most of the course will be taught using Julia, but we will briefly introduce Python (or R) for discussing topics where Julia is not ideal.
 
