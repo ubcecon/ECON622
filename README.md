@@ -55,8 +55,11 @@ In the (updated) testing.ipynb lecture, do exercise 1
 1. **September 4th**: Introduction to Julia
     - [Julia Environment](https://lectures.quantecon.org/jl/getting_started_julia/julia_environment.html), [Introductory Examples](https://lectures.quantecon.org/jl/getting_started_julia/julia_by_example.html)
 
-2. **September 9th**: [Introductory Examples](https://lectures.quantecon.org/jl/getting_started_julia/julia_by_example.html), and [Julia Essentials](https://lectures.quantecon.org/jl/getting_started_julia/julia_essentials.html) and start [Fundamental Types](https://lectures.quantecon.org/jl/getting_started_julia/fundamental_types.html)
-3. **September 11th**:
+2. **September 9th**: [Introductory Examples](https://lectures.quantecon.org/jl/getting_started_julia/julia_by_example.html)
+3. **September 11th**: Review of 
+-  Self-study: [Julia Essentials](https://lectures.quantecon.org/jl/getting_started_julia/julia_essentials.html)
+-  Self-study: [Fundamental Types](https://lectures.quantecon.org/jl/getting_started_julia/fundamental_types.html)
+-  Start [Intro to Generic Programming](https://lectures.quantecon.org/jl/getting_started_julia/introduction_to_types.html)
 4. **September 16th**:
 5. **September 18th**:
 6. **September 23th**:
@@ -66,8 +69,8 @@ In the (updated) testing.ipynb lecture, do exercise 1
 10. **October 7th**:
 11. **October 9th**:
 12. **October 14th**: NO CLASS (Thanksgiving)
-13. **October 16th**: 
-14. **October 21th**: (Paul takes over)
+13. **October 16th**: Clusters + "Enough Python to Read Glue Codey"
+14. **October 21th**: Webscraping and text
 15. **October 23th**:
 16. **October 28th**:
 17. **October 30th**:
