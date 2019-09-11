@@ -3,8 +3,8 @@
 ## Computational Economics with Data Science Applications
 
 - **Instructors:** jesse.perla@ubc.ca and schrimpf@mail.ubc.ca
-- **Office Hours:** TBD
 - **Teaching Assistant:** Mahdi Ebrahimi Kahou, mahdi.ebk@gmail.com
+- **Office Hours:** Mahdi has office hours in Iona 441 Wed 1-2pm (except October 16th)
 - **Start Time** 8:35am sharp so there are no excuses, please be on time!
 
 **Course Description**
