@@ -15,6 +15,10 @@ This is a graduate topics course in computational economics, with applications i
     - Hover your mouse over the button "jupyter notebook | run" at the top
     - When it pops up a configuration, choose `vse.syzygy.ca (UBC Only)` from the list, move your mouse to somewhere else on the screen
     - Now when you click on the "jupyter notebook | run" on any of the Julia lectures (no need to hover again), it will launch in our hub.
+4. Download the extra notebooks from this repository with  [Here](https://vse.syzygy.ca/hub/user-redirect/git-pull?repo=https%3A%2F%2Fgithub.com%2Fubcecon%2FECON622_2019&urlpath=lab%2Ftree%2FECON622_2019%2F)
+    - To update this repository when we create new notebooks, just click on that link again to clone.
+
+In all cases, the reset a notebook, delete it and click on the launch of clone links again.
 
 Most of the course will be taught using Julia, but we will briefly introduce Python (or R) for discussing topics where Julia is not ideal.
 
@@ -32,16 +36,15 @@ Problem sets should be submitted as a *single* Jupyter notebook on Canvas, with 
       - Pass in a range instead of `a`, `b`, and `n`, e.g. `nodes = -1.0:0.5:1.0`
       - Hint: try `step(nodes)`, `length(nodes)`, `nodes[1]` and `nodes[end]`
       - Also, instead of the `while` in the solution, find a better way to efficiently bracket the `x` in the nodes.  Hint: Type `?÷` into jupyter to explore quotients from Euclidean division
+- **Problem Set 2** - Due Friday September 20th
+  - Unlike the first assignment, we will start grading this on style and reproducibility rather than just on whether you get the correct numbers
+  - Redo exercise 1 in [Fundamental Types](https://lectures.quantecon.org/jl/getting_started_julia/fundamental_types.html) using the `fixedpoint` function from [Introductory Examples](https://lectures.quantecon.org/jl/getting_started_julia/julia_by_example.html) rather than the hand-coded iteration.  Compare the number of iterations of the built-in Anderson Acceleration to the handcoded iteration
+  - Exercises 2 and 3 in [Fundamental Types](https://lectures.quantecon.org/jl/getting_started_julia/fundamental_types.html)
+  - Exercises 1 and 2 in [Intro to Types](https://lectures.quantecon.org/jl/getting_started_julia/introduction_to_types.html)
 
 <!-- 
-- **Problem Set 2:**
-    - Redo Exercise 5 in in  [Julia Essentials](https://lectures.quantecon.org/jl/getting_started_julia/julia_essentials.html).  But pass in a range and use the a much more efficient approach than the `while`
-    - Exercises 2 and 3 in [Fundamental Types](https://lectures.quantecon.org/jl/getting_started_julia/fundamental_types.html)
-    - Redo Exercise 1 in [Fundamental Types](https://lectures.quantecon.org/jl/getting_started_julia/fundamental_types.html) using a fixed point function?  Check number of iterations.
-    - Unlike the first assignment, we will start grading this on "style" and "reproducibility" rather than just on whether you get the correct numbers ou
-    - For problem set Another approach to the overlay of histograms:  try `stephist` and `stephist!` instead of `histogram`  What about T = 150.   histogram(data, alpha = 0.5) then histogram!(moredata, alpha = 0.2) )/ stephist! or stephist
 - **Problem Set 3:**
-    - Problems 1 to 6 in [Introduction to Types](https://lectures.quantecon.org/jl/getting_started_julia/introduction_to_types.html) 
+    - Problems 3 to 6 in [Introduction to Types](https://lectures.quantecon.org/jl/getting_started_julia/introduction_to_types.html) 
     - Add something on Generic Programming as well?    
 - ** Problem Set 4:** 
 -  version_control.ipynb lecture, do exercises 1a, 1b, 1c, 2a, and 2b
@@ -52,15 +55,20 @@ In the (updated) testing.ipynb lecture, do exercise 1
 -->
 
 ## Lectures
-1. **September 4th**: Introduction to Julia
+1. **September 4th**: Environment and Introduction to Julia
     - [Julia Environment](https://lectures.quantecon.org/jl/getting_started_julia/julia_environment.html), [Introductory Examples](https://lectures.quantecon.org/jl/getting_started_julia/julia_by_example.html)
 
-2. **September 9th**: [Introductory Examples](https://lectures.quantecon.org/jl/getting_started_julia/julia_by_example.html)
-3. **September 11th**: Review of 
--  Self-study: [Julia Essentials](https://lectures.quantecon.org/jl/getting_started_julia/julia_essentials.html)
--  Self-study: [Fundamental Types](https://lectures.quantecon.org/jl/getting_started_julia/fundamental_types.html)
--  Start [Intro to Generic Programming](https://lectures.quantecon.org/jl/getting_started_julia/introduction_to_types.html)
-4. **September 16th**:
+2. **September 9th**: Introduction and Variations on Fixed-points
+   - [Introductory Examples](https://lectures.quantecon.org/jl/getting_started_julia/julia_by_example.html)
+3. **September 11th**: Introduction to types
+   -  Self-study: [Julia Essentials](https://lectures.quantecon.org/jl/getting_started_julia/julia_essentials.html)
+   -  Self-study: [Fundamental Types](https://lectures.quantecon.org/jl/getting_started_julia/fundamental_types.html)
+   -  Start [Intro to Generic Programming](https://lectures.quantecon.org/jl/getting_started_julia/introduction_to_types.html)
+4. **September 16th**: Generic Programming
+   -  Self-study: [Intro to Types](https://lectures.quantecon.org/jl/getting_started_julia/introduction_to_types.html)
+   -  Self-study: [Generic Programming](https://lectures.quantecon.org/jl/more_julia/generic_programming.html)
+   -  Self-study [General Packages](https://lectures.quantecon.org/jl/more_julia/general_packages.html)
+   -  More on quadrature and numerical integration
 5. **September 18th**:
 6. **September 23th**:
 7. **September 25th**:
@@ -69,7 +77,7 @@ In the (updated) testing.ipynb lecture, do exercise 1
 10. **October 7th**:
 11. **October 9th**:
 12. **October 14th**: NO CLASS (Thanksgiving)
-13. **October 16th**: Clusters + "Enough Python to Read Glue Codey"
+13. **October 16th**: Clusters + "Enough Python to Read Glue Code"
 14. **October 21th**: Webscraping and text
 15. **October 23th**:
 16. **October 28th**:
