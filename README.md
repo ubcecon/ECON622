@@ -15,7 +15,7 @@ This is a graduate topics course in computational economics, with applications i
     - Hover your mouse over the button "jupyter notebook | run" at the top
     - When it pops up a configuration, choose `vse.syzygy.ca (UBC Only)` from the list, move your mouse to somewhere else on the screen
     - Now when you click on the "jupyter notebook | run" on any of the Julia lectures (no need to hover again), it will launch in our hub.
-4. Download the extra notebooks from this repository with  [Here](https://vse.syzygy.ca/hub/user-redirect/git-pull?repo=https%3A%2F%2Fgithub.com%2Fubcecon%2FECON622_2019&urlpath=lab%2Ftree%2FECON622_2019%2F)
+4. Download the extra notebooks from this repository with  [Here](https://vse.syzygy.ca/jupyter/hub/user-redirect/git-pull?repo=https%3A%2F%2Fgithub.com%2Fubcecon%2FECON622_2019&urlpath=lab%2Ftree%2FECON622_2019%2F)
     - To update this repository when we create new notebooks, just click on that link again to clone.
 
 In all cases, the reset a notebook, delete it and click on the launch of clone links again.
