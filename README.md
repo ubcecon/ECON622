@@ -64,6 +64,7 @@ In the (updated) testing.ipynb lecture, do exercise 1
    -  Self-study: [Julia Essentials](https://lectures.quantecon.org/jl/getting_started_julia/julia_essentials.html)
    -  Self-study: [Fundamental Types](https://lectures.quantecon.org/jl/getting_started_julia/fundamental_types.html)
    -  Start [Intro to Generic Programming](https://lectures.quantecon.org/jl/getting_started_julia/introduction_to_types.html)
+   -  Flip through the [Matlab - Julia Cheat Sheet](https://cheatsheets.quantecon.org/)
 4. **September 16th**: Generic Programming
    -  Self-study: [Intro to Types](https://lectures.quantecon.org/jl/getting_started_julia/introduction_to_types.html)
    -  Self-study: [Generic Programming](https://lectures.quantecon.org/jl/more_julia/generic_programming.html)
