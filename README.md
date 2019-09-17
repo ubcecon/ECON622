@@ -9,7 +9,7 @@ This is a graduate topics course in computational economics, with applications i
 1.  Login to https://vse.syzygy.ca/ with your CWL to ensure you can access our JupyterHub
 2.  Click [Here](https://vse.syzygy.ca/jupyter/hub/user-redirect/git-pull?repo=https%3A%2F%2Fgithub.com%2FQuantEcon%2Fquantecon-notebooks-julia&urlpath=lab%2Ftree%2Fquantecon-notebooks-julia) to install the QuantEcon Julia Lectures there
     - Later you will need to do a local installation by following the [Getting Started](https://lectures.quantecon.org/jl/getting_started_julia/getting_started.html) but this is a better way to begin
-    - For support with vse.syzygy.ca, email arnav.sood@ubc.ca
+    - For support with vse.syzygy.ca, email me@arnavsood.com
 3. To automatically launch the QuantEcon lecture notes on vse.syzygy.ca
     - Open the lecture notes in a website (e.g. go to  [Introductory Examples](https://lectures.quantecon.org/jl/getting_started_julia/julia_by_example.html))
     - Hover your mouse over the button "jupyter notebook | run" at the top
@@ -68,6 +68,10 @@ In the (updated) testing.ipynb lecture, do exercise 1
    -  Self-study [General Packages](https://lectures.quantecon.org/jl/more_julia/general_packages.html)
    -  More on quadrature and numerical integration
 5. **September 18th**:
+   -  Self-study: [Generic Programming](https://lectures.quantecon.org/jl/more_julia/generic_programming.html)
+   -  Self-study [General Packages](https://lectures.quantecon.org/jl/more_julia/general_packages.html)
+   -  Self-study [Data and Statistical Packages](https://lectures.quantecon.org/jl/more_julia/data_statistical_packages.html)
+   -  Discussion on quadrature
 6. **September 23th**:
 7. **September 25th**:
 8.  **September 30th**:
