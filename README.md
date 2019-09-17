@@ -36,15 +36,14 @@ Problem sets should be submitted as a *single* Jupyter notebook on Canvas, with 
       - Pass in a range instead of `a`, `b`, and `n`, e.g. `nodes = -1.0:0.5:1.0`
       - Hint: try `step(nodes)`, `length(nodes)`, `nodes[1]` and `nodes[end]`
       - Also, instead of the `while` in the solution, find a better way to efficiently bracket the `x` in the nodes.  Hint: Type `?÷` into jupyter to explore quotients from Euclidean division
-- **Problem Set 2** - Due Friday September 20th
+- **Problem Set 2** - Due Monday September 23th
   - Unlike the first assignment, we will start grading this on style and reproducibility rather than just on whether you get the correct numbers
-  - Redo exercise 1 in [Fundamental Types](https://lectures.quantecon.org/jl/getting_started_julia/fundamental_types.html) using the `fixedpoint` function from [Introductory Examples](https://lectures.quantecon.org/jl/getting_started_julia/julia_by_example.html) rather than the hand-coded iteration.  Compare the number of iterations of the built-in Anderson Acceleration to the handcoded iteration
-  - Exercises 2 and 3 in [Fundamental Types](https://lectures.quantecon.org/jl/getting_started_julia/fundamental_types.html)
-  - Exercises 1 and 2 in [Intro to Types](https://lectures.quantecon.org/jl/getting_started_julia/introduction_to_types.html)
+  - Exercises 2, 3, and 4 in [Fundamental Types](https://lectures.quantecon.org/jl/getting_started_julia/fundamental_types.html)
+  - Exercises 1, 2, and 3 in [Intro to Types](https://lectures.quantecon.org/jl/getting_started_julia/introduction_to_types.html)
 
 <!-- 
 - **Problem Set 3:**
-    - Problems 3 to 6 in [Introduction to Types](https://lectures.quantecon.org/jl/getting_started_julia/introduction_to_types.html) 
+    - Problems 4 to 6 in [Introduction to Types](https://lectures.quantecon.org/jl/getting_started_julia/introduction_to_types.html) 
     - Add something on Generic Programming as well?    
 - ** Problem Set 4:** 
 -  version_control.ipynb lecture, do exercises 1a, 1b, 1c, 2a, and 2b
