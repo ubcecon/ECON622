@@ -40,9 +40,6 @@ Problem sets should be submitted as a *single* Jupyter notebook on Canvas, with 
 - **Problem Set 3** - Due Saturday September 28th
   - Exercises 4, 5, 6 in [Introduction to Types](https://lectures.quantecon.org/jl/getting_started_julia/introduction_to_types.html)
 <!-- 
-- **Problem Set 3:**
-    - Problems 4 to 6 in [Introduction to Types](https://lectures.quantecon.org/jl/getting_started_julia/introduction_to_types.html) 
-    - Add something on Generic Programming as well?    
 - ** Problem Set 4:** 
 -  version_control.ipynb lecture, do exercises 1a, 1b, 1c, 2a, and 2b
 In the (updated) testing.ipynb lecture, do exercise 1
@@ -63,21 +60,23 @@ In the (updated) testing.ipynb lecture, do exercise 1
    -  Start [Intro to Generic Programming](https://lectures.quantecon.org/jl/getting_started_julia/introduction_to_types.html)
    -  Flip through the [Matlab - Julia Cheat Sheet](https://cheatsheets.quantecon.org/)
 4. **September 16th**: Generic Programming
-   -  Self-study: [Intro to Types](https://lectures.quantecon.org/jl/getting_started_julia/introduction_to_types.html)
+   -  Self-study: [Intro to Generic Programming](https://lectures.quantecon.org/jl/getting_started_julia/introduction_to_types.html)
    -  Self-study: [Generic Programming](https://lectures.quantecon.org/jl/more_julia/generic_programming.html)
-   -  Self-study [General Packages](https://lectures.quantecon.org/jl/more_julia/general_packages.html)
-   -  More on quadrature and numerical integration
 5. **September 18th**:
    -  Self-study: [Generic Programming](https://lectures.quantecon.org/jl/more_julia/generic_programming.html)
-   -  Self-study [General Packages](https://lectures.quantecon.org/jl/more_julia/general_packages.html)
-   -  Self-study [Data and Statistical Packages](https://lectures.quantecon.org/jl/more_julia/data_statistical_packages.html)
-   -  Discussion on quadrature
+   -  Self-study: [General Packages](https://lectures.quantecon.org/jl/more_julia/general_packages.html)
+   -  Self-study: [Data and Statistical Packages](https://lectures.quantecon.org/jl/more_julia/data_statistical_packages.html)
+   -  Notes on [Quadrature](https://github.com/ubcecon/ECON622_2019/blob/master/notebooks/quadrature.ipynb) applying generic programming
 6. **September 23th**:
+   -  Self-study: [Linear Algebra](https://lectures.quantecon.org/jl/tools_and_techniques/linear_algebra.html)
+   -  Self-study: [Orthogonal Projections](https://lectures.quantecon.org/jl/tools_and_techniques/orth_proj.html)
+   -  Notes on  [Numerical Linear](https://github.com/ubcecon/ECON622_2019/blob/master/notebooks/numerical_linear_algebra.ipynb) applying generic programming
 7. **September 25th**:
-8.  **September 30th**:
-9.  **October 2nd**:
-10. **October 7th**:
-11. **October 9th**:
+   - More on linear algebra and iterative methods 
+8.  **September 30th**: Optimization and sparsity
+9.  **October 2nd**: 
+10. **October 7th**: Julia on the Desktop
+11. **October 9th**: 
 12. **October 14th**: NO CLASS (Thanksgiving)
 13. **October 16th**: Clusters + "Enough Python to Read Glue Code"
 14. **October 21th**: Webscraping and text
