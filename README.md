@@ -39,15 +39,17 @@ Problem sets should be submitted as a *single* Jupyter notebook on Canvas, with 
   - Exercises 1, 2, and 3 in [Introduction to Types](https://lectures.quantecon.org/jl/getting_started_julia/introduction_to_types.html)
 - **Problem Set 3** - Due Saturday September 28th
   - Exercises 4, 5, 6 in [Introduction to Types](https://lectures.quantecon.org/jl/getting_started_julia/introduction_to_types.html)
-<!-- 
-- ** Problem Set 4:** 
--  version_control.ipynb lecture, do exercises 1a, 1b, 1c, 2a, and 2b
-In the (updated) testing.ipynb lecture, do exercise 1
-    - For all of these, please prepare a ipynb notebook or something similar with links to the various PRs or screenshots with some evidence that you executed the steps.  No need to do much about the formatting
-    - The easiest is certainly if you do all of this with public github repos, and then you can just provide links to the "evidence"
+- **Problem Set 4:** Due Friday, October 4th
+  - Exercise 1 in [Generic Programming](https://lectures.quantecon.org/jl/more_julia/generic_programming.html)
+  - (Optional) Exercise 2 in [Generic Programming](https://lectures.quantecon.org/jl/more_julia/generic_programming.html)
+  - Exercises 1a, 1b, 1c, 2a, and 2b in [Git and Github](https://lectures.quantecon.org/jl/more_julia/version_control.html)
+    - For the git/github in your ipynb notebook add links to the various PRs or screenshots with some evidence that you executed the steps.  No need to do much about the formatting
+     - The easiest is certainly if you do all of this with public github repos, and then you can just provide links to the "evidence"
     - One more comment on this:  For the PRs, make sure to look at the style of the underlying code or text.  For example, if no punctuation is used anywhere in a document, then that is the style used.  Making style suggestions as PRs is not the best approach.
--->
 
+ <!--
+Exercise 1 in testing.ipynb lecture, do exercise 1
+-->
 ## Lectures
 1. **September 4th**: Environment and Introduction to Julia
     - [Julia Environment](https://lectures.quantecon.org/jl/getting_started_julia/julia_environment.html), [Introductory Examples](https://lectures.quantecon.org/jl/getting_started_julia/julia_by_example.html)
@@ -75,12 +77,18 @@ In the (updated) testing.ipynb lecture, do exercise 1
    - The Schur Decomposition
    - [Desktop Tools/Package Management](https://lectures.quantecon.org/jl/more_julia/tools_editors.html)
    - [Git and Github](https://lectures.quantecon.org/jl/more_julia/version_control.html)
-8.  **September 30th**:
-   - Linear algebra and iterative methods 
-9.  **October 2nd**
-   - Optimization and sparsity 
+8. **September 30th**: 
+   - [Finite Markov Chains](https://julia.quantecon.org/tools_and_techniques/finite_markov.html)
+   - [Discrete State Dynamic Programming](https://lectures.quantecon.org/jl/dynamic_programming/discrete_dp.html)
+9. **October 2nd**
+   - [Testing and Packages](https://julia.quantecon.org/more_julia/testing.html)
+   - Big Markov Chains
+   - Linear algebra and iterative methods
 10. **October 7th**
-11. **October 9th**: 
+    - Sparsity of derivatives
+    - Automatic differentiation
+    - Large-scale optimization
+11. **October 9th**:
 12. **October 14th**: NO CLASS (Thanksgiving)
 13. **October 16th**: Clusters + "Enough Python to Read Glue Code"
 14. **October 21th**: Webscraping and text
