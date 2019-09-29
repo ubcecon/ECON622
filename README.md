@@ -39,7 +39,7 @@ Problem sets should be submitted as a *single* Jupyter notebook on Canvas, with 
   - Exercises 1, 2, and 3 in [Introduction to Types](https://lectures.quantecon.org/jl/getting_started_julia/introduction_to_types.html)
 - **Problem Set 3** - Due Saturday September 28th
   - Exercises 4, 5, 6 in [Introduction to Types](https://lectures.quantecon.org/jl/getting_started_julia/introduction_to_types.html)
-- **Problem Set 4:** Due Friday, October 4th
+- **Problem Set 4:** Due Saturday, October 5th
   - Exercise 1 in [Generic Programming](https://lectures.quantecon.org/jl/more_julia/generic_programming.html)
   - (Optional) Exercise 2 in [Generic Programming](https://lectures.quantecon.org/jl/more_julia/generic_programming.html)
   - Exercises 1a, 1b, 1c, 2a, and 2b in [Git and Github](https://lectures.quantecon.org/jl/more_julia/version_control.html)
