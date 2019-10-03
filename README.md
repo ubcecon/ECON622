@@ -79,16 +79,14 @@ Exercise 1 in testing.ipynb lecture, do exercise 1
    - [Git and Github](https://lectures.quantecon.org/jl/more_julia/version_control.html)
 8. **September 30th**: 
    - [Finite Markov Chains](https://julia.quantecon.org/tools_and_techniques/finite_markov.html)
-   - [Discrete State Dynamic Programming](https://lectures.quantecon.org/jl/dynamic_programming/discrete_dp.html)
 9. **October 2nd**
-   - [Testing and Packages](https://julia.quantecon.org/more_julia/testing.html)
-   - Big Markov Chains
-   - Linear algebra and iterative methods
+   - [Continuous Time Markov Chains](https://github.com/ubcecon/ECON622_2019/blob/master/notebooks/numerical_linear_algebra.ipynb) 
+   - Self-study [Discrete State Dynamic Programming](https://lectures.quantecon.org/jl/dynamic_programming/discrete_dp.html)   
 10. **October 7th**
-    - Sparsity of derivatives
-    - Automatic differentiation
-    - Large-scale optimization
+   - [Testing and Packages](https://julia.quantecon.org/more_julia/testing.html)
+   - Iterative methods
 11. **October 9th**:
+   - Automatic Differentiation and sparsity
 12. **October 14th**: NO CLASS (Thanksgiving)
 13. **October 16th**: Clusters + "Enough Python to Read Glue Code"
 14. **October 21th**: Webscraping and text
