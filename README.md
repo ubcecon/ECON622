@@ -46,10 +46,10 @@ Problem sets should be submitted as a *single* Jupyter notebook on Canvas, with 
     - For the git/github in your ipynb notebook add links to the various PRs or screenshots with some evidence that you executed the steps.  No need to do much about the formatting
      - The easiest is certainly if you do all of this with public github repos, and then you can just provide links to the "evidence"
     - One more comment on this:  For the PRs, make sure to look at the style of the underlying code or text.  For example, if no punctuation is used anywhere in a document, then that is the style used.  Making style suggestions as PRs is not the best approach.
+- **Problem Set 5:** Due Saturday, October 12th
+  - Exercise 1 in [Testing and Packages](https://julia.quantecon.org/more_julia/testing.html)
+  - Exercise 1, 2a, and 2b in [Numerical Linear Algebra](https://github.com/ubcecon/ECON622_2019/blob/master/notebooks/numerical_linear_algebra.ipynb)
 
- <!--
-Exercise 1 in testing.ipynb lecture, do exercise 1
--->
 ## Lectures
 1. **September 4th**: Environment and Introduction to Julia
     - [Julia Environment](https://lectures.quantecon.org/jl/getting_started_julia/julia_environment.html), [Introductory Examples](https://lectures.quantecon.org/jl/getting_started_julia/julia_by_example.html)
@@ -86,7 +86,7 @@ Exercise 1 in testing.ipynb lecture, do exercise 1
    - [Testing and Packages](https://julia.quantecon.org/more_julia/testing.html)
    - Iterative methods
 11. **October 9th**:
-   - Automatic Differentiation and sparsity
+   - Automatic differentiation and sparsity
 12. **October 14th**: NO CLASS (Thanksgiving)
 13. **October 16th**: Clusters + "Enough Python to Read Glue Code"
 14. **October 21th**: Webscraping and text
