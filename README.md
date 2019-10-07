@@ -83,10 +83,11 @@ Problem sets should be submitted as a *single* Jupyter notebook on Canvas, with 
    - [Continuous Time Markov Chains](https://github.com/ubcecon/ECON622_2019/blob/master/notebooks/numerical_linear_algebra.ipynb) 
    - Self-study [Discrete State Dynamic Programming](https://lectures.quantecon.org/jl/dynamic_programming/discrete_dp.html)   
 10. **October 7th**
-   - [Testing and Packages](https://julia.quantecon.org/more_julia/testing.html)
-   - Iterative methods
+    - [Testing and Packages](https://julia.quantecon.org/more_julia/testing.html)
+    - [Conditioning and Numerical Stability](https://github.com/ubcecon/ECON622_2019/blob/master/notebooks/iterative_methods_sparsity.ipynb) 
 11. **October 9th**:
-   - Automatic differentiation and sparsity
+    - [Iterative Methods](https://github.com/ubcecon/ECON622_2019/blob/master/notebooks/iterative_methods_sparsity.ipynb) 
+    - [Intro to AD](https://julia.quantecon.org/more_julia/optimization_solver_packages.html#Introduction-to-Automatic-Differentiation)
 12. **October 14th**: NO CLASS (Thanksgiving)
 13. **October 16th**: Clusters + "Enough Python to Read Glue Code"
 14. **October 21th**: Webscraping and text
