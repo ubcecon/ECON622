@@ -68,11 +68,11 @@ Problem sets should be submitted as a *single* Jupyter notebook on Canvas, with 
    -  [Generic Programming](https://lectures.quantecon.org/jl/more_julia/generic_programming.html)
    -  Self-study: [General Packages](https://lectures.quantecon.org/jl/more_julia/general_packages.html)
    -  Self-study: [Data and Statistical Packages](https://lectures.quantecon.org/jl/more_julia/data_statistical_packages.html)
-   -  Notes on [Quadrature](https://github.com/ubcecon/ECON622_2019/blob/master/notebooks/quadrature.ipynb) applying generic programming
+   -  Notes on [Quadrature](https://nbviewer.jupyter.org/github/ubcecon/ECON622_2019/blob/master/notebooks/quadrature.ipynb) applying generic programming
 6. **September 23th**
    -  Self-study: [Linear Algebra](https://lectures.quantecon.org/jl/tools_and_techniques/linear_algebra.html)
    -  Self-study: [Orthogonal Projections](https://lectures.quantecon.org/jl/tools_and_techniques/orth_proj.html)
-   -  Notes on  [Numerical Linear Algebra](https://github.com/ubcecon/ECON622_2019/blob/master/notebooks/numerical_linear_algebra.ipynb) applying generic programming
+   -  Notes on  [Numerical Linear Algebra](https://nbviewer.jupyter.org/github/ubcecon/ECON622_2019/blob/master/notebooks/numerical_linear_algebra.ipynb) applying generic programming
 7. **September 25th**
    - The Schur Decomposition
    - [Desktop Tools/Package Management](https://lectures.quantecon.org/jl/more_julia/tools_editors.html)
@@ -80,13 +80,13 @@ Problem sets should be submitted as a *single* Jupyter notebook on Canvas, with 
 8. **September 30th**: 
    - [Finite Markov Chains](https://julia.quantecon.org/tools_and_techniques/finite_markov.html)
 9. **October 2nd**
-   - [Continuous Time Markov Chains](https://github.com/ubcecon/ECON622_2019/blob/master/notebooks/numerical_linear_algebra.ipynb) 
+   - [Continuous Time Markov Chains](https://nbviewer.jupyter.org/github/ubcecon/ECON622_2019/blob/master/notebooks/numerical_linear_algebra.ipynb) 
    - Self-study [Discrete State Dynamic Programming](https://lectures.quantecon.org/jl/dynamic_programming/discrete_dp.html)   
 10. **October 7th**
     - [Testing and Packages](https://julia.quantecon.org/more_julia/testing.html)
-    - [Conditioning and Numerical Stability](https://github.com/ubcecon/ECON622_2019/blob/master/notebooks/iterative_methods_sparsity.ipynb) 
+    - [Conditioning and Numerical Stability](https://nbviewer.jupyter.org/github/ubcecon/ECON622_2019/blob/master/notebooks/iterative_methods_sparsity.ipynb) 
 11. **October 9th**:
-    - [Iterative Methods](https://github.com/ubcecon/ECON622_2019/blob/master/notebooks/iterative_methods_sparsity.ipynb) 
+    - [Iterative Methods](https://nbviewer.jupyter.org/github/ubcecon/ECON622_2019/blob/master/notebooks/iterative_methods_sparsity.ipynb) 
     - [Intro to AD](https://julia.quantecon.org/more_julia/optimization_solver_packages.html#Introduction-to-Automatic-Differentiation)
 12. **October 14th**: NO CLASS (Thanksgiving)
 13. **October 16th**: Clusters + "Enough Python to Read Glue Code"
