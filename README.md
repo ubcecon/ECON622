@@ -89,8 +89,10 @@ Problem sets should be submitted as a *single* Jupyter notebook on Canvas, with 
     - [Iterative Methods](https://nbviewer.jupyter.org/github/ubcecon/ECON622_2019/blob/master/notebooks/iterative_methods_sparsity.ipynb) 
     - [Intro to AD](https://julia.quantecon.org/more_julia/optimization_solver_packages.html#Introduction-to-Automatic-Differentiation)
 12. **October 14th**: NO CLASS (Thanksgiving)
-13. **October 16th**: Clusters + "Enough Python to Read Glue Code"
-14. **October 21th**: Webscraping and text
+13. **October 16th**: Clusters + Debugging
+    - See https://github.com/ubcecon/cluster_tools for instructions on setting up/using the cluster.
+    - [Juno debugger](https://docs.junolab.org/latest/man/debugging/)
+14. **October 21th**: 
 15. **October 23th**:
 16. **October 28th**:
 17. **October 30th**:
