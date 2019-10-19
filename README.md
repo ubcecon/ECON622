@@ -93,14 +93,23 @@ Problem sets should be submitted as a *single* Jupyter notebook on Canvas, with 
     - See https://github.com/ubcecon/cluster_tools for instructions on setting up/using the cluster.
     - [Juno debugger](https://docs.junolab.org/latest/man/debugging/)
 14. **October 21th**: 
-15. **October 23th**:
-16. **October 28th**:
+    - [Optimization algorithms](https://schrimpf.github.io/AnimatedOptimization.jl/optimization/)
+    - [Optimization packages](https://julia.quantecon.org/more_julia/optimization_solver_packages.html#Optimization)
+15. **October 23th**: Extremum estimation
+    - [Extremum estimation](http://faculty.arts.ubc.ca/pschrimpf/628/extremumEstimation.html) link will change
+16. **October 28th**: 
+    - [Empirical likelihood](http://faculty.arts.ubc.ca/pschrimpf/628/empiricalLikelihood.html) link will change
 17. **October 30th**:
+    - [Bootstrap](http://faculty.arts.ubc.ca/pschrimpf/628/bootstrap.html) link will change
 18. **November 4th**:
+    - [Coding for performance](https://github.com/schrimpf/ARGridBootstrap) link will change
 19. **November 6th**:
+    - [GPU usage](https://github.com/schrimpf/ARGridBootstrap) link will change
 20. **November 11th**: NO CLASS (Remembrance Day)
-21. **November 13th**:
+21. **November 13th**:    
+    - [Structural estimation](http://faculty.arts.ubc.ca/pschrimpf/628/rustrothwell.html) link will change
 22. **November 18th**:
+    - [Machine learning](http://faculty.arts.ubc.ca/pschrimpf/628/machineLearningAndCausalInference.html) link and content will change
 23. **November 20th**:
 24. **November 25th**:
 25. **November 27th**: 
