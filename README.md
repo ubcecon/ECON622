@@ -49,6 +49,9 @@ Problem sets should be submitted as a *single* Jupyter notebook on Canvas, with 
 - **Problem Set 5:** Due Saturday, October 12th
   - Exercise 1 in [Testing and Packages](https://julia.quantecon.org/more_julia/testing.html)
   - Exercise 1, 2a, and 2b in [Numerical Linear Algebra](https://github.com/ubcecon/ECON622_2019/blob/master/notebooks/numerical_linear_algebra.ipynb)
+  
+- **Problem Set 6:** Due Monday, October 28th
+  - Complete one of the exercises from [optimization algorithms](https://schrimpf.github.io/AnimatedOptimization.jl/exercises/) Turn in a link to a public git repo containing your work (preferred) or a jupyter notebook.
 
 ## Lectures
 1. **September 4th**: Environment and Introduction to Julia
