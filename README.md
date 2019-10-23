@@ -99,7 +99,7 @@ Problem sets should be submitted as a *single* Jupyter notebook on Canvas, with 
     - [Optimization algorithms](https://schrimpf.github.io/AnimatedOptimization.jl/optimization/)
     - [Optimization packages](https://julia.quantecon.org/more_julia/optimization_solver_packages.html#Optimization)
 15. **October 23th**: 
-    - [Extremum estimation](http://faculty.arts.ubc.ca/pschrimpf/628/extremumEstimation.html) link will change
+    - [Extremum estimation](https://schrimpf.github.io/GMMInference.jl/extremumEstimation/)
 16. **October 28th**: 
     - [Empirical likelihood](http://faculty.arts.ubc.ca/pschrimpf/628/empiricalLikelihood.html) link will change
 17. **October 30th**:
