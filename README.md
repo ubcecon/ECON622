@@ -52,6 +52,13 @@ Problem sets should be submitted as a *single* Jupyter notebook on Canvas, with 
   
 - **Problem Set 6:** Due Monday, October 28th
   - Complete one of the exercises from [optimization algorithms](https://schrimpf.github.io/AnimatedOptimization.jl/exercises/) Turn in a link to a public git repo containing your work (preferred) or a jupyter notebook.
+  
+- **Problem Set 7:** Due Monday, November 4th
+  - Work on one of the issues in [GMMInference.jl](https://github.com/schrimpf/GMMInference.jl/issues). 
+    - If you have a GMM model you're interested in, Issue #7 would be a good choice
+    - If you are interested in econometric theory, issues #5 and the second bullet of #8 are good and will require some research
+    - If you like thinking about code organization and package design, #2 or #6 are relevant
+  - As with the previous assignment, you need not complete the task; make whatever progress you can in 6 hours or so. If you want your work to be added to the repository, either make a pull request or say so on whatever you turn in. 
 
 ## Lectures
 1. **September 4th**: Environment and Introduction to Julia
