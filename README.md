@@ -110,7 +110,7 @@ Problem sets should be submitted as a *single* Jupyter notebook on Canvas, with 
 16. **October 28th**: 
     - [Empirical likelihood](https://schrimpf.github.io/GMMInference.jl/empiricalLikelihood/) 
 17. **October 30th**:
-    - [Bootstrap](http://faculty.arts.ubc.ca/pschrimpf/628/bootstrap.html) link will change
+    - [Bootstrap](https://schrimpf.github.io/GMMInference.jl/bootstrap/)    
 18. **November 4th**:
     - [Coding for performance](https://github.com/schrimpf/ARGridBootstrap)
 19. **November 6th**:
