@@ -60,6 +60,9 @@ Problem sets should be submitted as a *single* Jupyter notebook on Canvas, with 
     - If you like thinking about code organization and package design, #2 or #6 are relevant
   - As with the previous assignment, you need not complete the task; make whatever progress you can in 6 hours or so. If you want your work to be added to the repository, either make a pull request or say so on whatever you turn in. 
 
+- **Problem Set 8:** Due Wednesday, November 13th
+  - Improve the performance of a piece of code. Take some code from a package, previous assignment, or lecture and attempt to improve its performance. Include benchmarks of the initial version and your modified version. Briefly describe the things you tried. 
+
 ## Lectures
 1. **September 4th**: Environment and Introduction to Julia
     - [Julia Environment](https://lectures.quantecon.org/jl/getting_started_julia/julia_environment.html), [Introductory Examples](https://lectures.quantecon.org/jl/getting_started_julia/julia_by_example.html)
