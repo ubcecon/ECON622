@@ -120,10 +120,13 @@ Problem sets should be submitted as a *single* Jupyter notebook on Canvas, with 
     - [GPU usage](https://github.com/schrimpf/ARGridBootstrap)
 20. **November 11th**: NO CLASS (Remembrance Day)
 21. **November 13th**:    
-    - [Structural estimation](http://faculty.arts.ubc.ca/pschrimpf/628/rustrothwell.html) link will change
+    <!-- [Structural estimation](http://faculty.arts.ubc.ca/pschrimpf/628/rustrothwell.html) link will change -->
+    - [Machine learning](https://schrimpf.github.io/NeuralNetworkEconomics.jl/ml-intro/) or [older version with slides](http://faculty.arts.ubc.ca/pschrimpf/628/machineLearningAndCausalInference.html)
 22. **November 18th**:
-    - [Machine learning](http://faculty.arts.ubc.ca/pschrimpf/628/machineLearningAndCausalInference.html) link and content will change
+    - [Machine learning in Julia](https://github.com/schrimpf/NeuralNetworkEconomics.jl)
 23. **November 20th**:
+    - [Neural networks](https://github.com/schrimpf/NeuralNetworkEconomics.jl)
+    - Good references: [Deep Learning](http://www.deeplearningbook.org/) and [Knet.jl book](https://denizyuret.github.io/Knet.jl/latest/#Textbook-1)
 24. **November 25th**:
 25. **November 27th**: 
 26. Final Project due mid December
