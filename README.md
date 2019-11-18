@@ -129,5 +129,7 @@ Problem sets should be submitted as a *single* Jupyter notebook on Canvas, with 
     - Good references: [Deep Learning](http://www.deeplearningbook.org/) and [Knet.jl book](https://denizyuret.github.io/Knet.jl/latest/#Textbook-1)
 24. **November 25th**:
 25. **November 27th**: 
-26. Final Project due mid December
+    - Project proposal due 
+26. **December 18th**
+    - Final Project due December 18th
 
