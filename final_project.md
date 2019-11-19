@@ -7,9 +7,9 @@
 
 ## Requirements
 We will accept a wide-range of proposals on many different topics.  The key requirements are that:
-* There is some element of practicing your coding skills (in Julia or R preferably)
+* There is some element of practicing your coding skills (in Julia preferably)
 * The practice is on a tool with the intention of learning something which would be useful for doing your own research (e.g. replicating an estimation procedure, adding some new examples to a public package for some econometric procedure, doing a web scraping exercise to generate new datasource, etc.)
-* While it is not encouraged, we will consider joint projects with other classes - but make sure to tell us your plans, and understand our expectations of the amount of work will be adjusted.
+* While it is not encouraged, we will consider joint projects with other classes - but make sure to tell us your plans, and understand our expectations of the amount of work will be adjusted. 
 
 ## Size of Project and Grading Criteria
 You should target roughly a similar length as the amount of code in one of the Jupyter notebooks used for lectures.  If you are contributing to an open-source project, then the contribution can be significantly smaller as it would require more work to iterate.
@@ -19,6 +19,6 @@ If you want to get the highest possible marks on the project, you will need to:
  * Carefully creating tests for each individual function rather than writing out the code all the way to the solution.
  * Ensure that it runs with continuous integration (i.e. Travis) and with code-coverage
  * Ensure that the project is reproducible (i.e. someone else can run the code without any modifications)
- * Demonstrate some use of generic programming (for Julia) or functional programming (for R)
+ * Demonstrate some use of generic programming (for Julia)
  
- If you are able to make a contribution to an existing open-source project, it is preferred. For contributions to existing projects, we will consider more modest goals since we realize it adds rigorous of testing/documentation/etc.
+ If you are able to make a contribution to an existing open-source project, it is preferred. For contributions to existing projects, we will consider more modest goals since we realize it adds rigors of testing/documentation/etc.
