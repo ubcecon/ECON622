@@ -7,9 +7,12 @@
 
 ## Requirements
 We will accept a wide-range of proposals on many different topics.  The key requirements are that:
-* There is some element of practicing your coding skills (in Julia preferably)
+* There is some element of practicing your coding skills (in Julia preferably).
+* The project must be submitted as a git repository.
 * The practice is on a tool with the intention of learning something which would be useful for doing your own research (e.g. replicating an estimation procedure, adding some new examples to a public package for some econometric procedure, doing a web scraping exercise to generate new datasource, etc.)
 * While it is not encouraged, we will consider joint projects with other classes - but make sure to tell us your plans, and understand our expectations of the amount of work will be adjusted. 
+* Group projects are allowed, but make sure to get our approval.
+   - Groups must use github (or another git platform) to coordinate their work. This means creating a repository, planning the project by creating issues, group members working on the issues in separate branches, creating pull requests, merging the work together, and then repeating as needed.
 
 ## Size of Project and Grading Criteria
 You should target roughly a similar length as the amount of code in one of the Jupyter notebooks used for lectures.  If you are contributing to an open-source project, then the contribution can be significantly smaller as it would require more work to iterate.
