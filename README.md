@@ -125,11 +125,12 @@ Problem sets should be submitted as a *single* Jupyter notebook on Canvas, with 
 22. **November 18th**:
     - [Machine learning in Julia](https://github.com/schrimpf/NeuralNetworkEconomics.jl)
 23. **November 20th**:
-    - [Neural networks](https://github.com/schrimpf/NeuralNetworkEconomics.jl)
+    - [Neural Networks](https://github.com/schrimpf/NeuralNetworkEconomics.jl)
     - Good references: [Deep Learning](http://www.deeplearningbook.org/) and [Knet.jl book](https://denizyuret.github.io/Knet.jl/latest/#Textbook-1)
 24. **November 25th**:
+    - [Convolutional and Recurrent Neural Networks](https://github.com/schrimpf/NeuralNetworkEconomics.jl)
 25. **November 27th**: 
-    - Project proposal due 
+    - [Project proposal due](final_project.md)
 26. **December 18th**
     - Final Project due December 18th
 
