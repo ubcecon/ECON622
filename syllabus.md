@@ -1,10 +1,10 @@
-# ECON622 - Fall 2019
+# ECON622 - Fall 2020
 
 ## Computational Economics with Data Science Applications
 
-- **Instructors:** jesse.perla@ubc.ca and schrimpf@mail.ubc.ca
-- **Teaching Assistant:** Mahdi Ebrahimi Kahou, mahdi.ebk@gmail.com
-- **Office Hours:** Mahdi has office hours in Iona 441 Wed 1-2pm (except October 16th)
+- **Instructor:** Paul Schrimpf, schrimpf@mail.ubc.ca
+- **Teaching Assistant:** Josh Catalano, joshua.catalano@alumni.ubc.ca
+- **Office Hours:** 
 - **Start Time** 8:35am sharp so there are no excuses, please be on time!
 
 **Course Description**
@@ -41,23 +41,21 @@ remainder of the grade will be a computational project.
 - Final Project: 45%
 - Participation: 5% (incentive to wake up on time)
 
-While the problem sets will be frequent, many will be short to force practice (and will not be weighed identicall)  Assume you will get the full participation mark if you rarely miss class.
+While the problem sets will be frequent, many will be short to force practice (and will not be weighed identically)  Assume you will get the full participation mark if you rarely miss class.
 
 The final project topics are very open, and the main criteria is that you either (1) learn/use/apply a computational tool to a research topic of your interest or (2) contribute to an open-source computational economics project as a public good.
 
 ## Course Parts 
 
 The course will be taught in 4 parts
-1. Introduction to Julia and scientific computing (Jesse Perla)
-2. Dynamic Programming applications (Jesse Perla)
-3. Structural estimation (Paul Schrimpf)
-4. Data science and machine learning (Paul Schrimpf)
+1. Introduction to Julia and scientific computing 
+2. Dynamic Programming applications 
+3. Structural estimation 
+4. Data science and machine learning 
 
-Throughout the course we will be using the programming language Julia.  We will introduce Python or R for a "medium data" introduction.  As a lingua-franca, at some point you will want to learn Python for interfacing with key ML packages and for use in  data-cleaning pipeline.  For your final project, you can use any of those languages.
+Throughout the course we will be using the programming language Julia.
      
 ## Topics
-
-### Jesse
 
 1. Introduction to Julia 
    - Learning the Julia programming language, with simple applications
@@ -86,27 +84,26 @@ Throughout the course we will be using the programming language Julia.  We will 
     - Dynamic contracting
     - Perturbation approaches to solving models with heterogeneous agents (i.e. Reiter (2009) or similar methods)
 
-### Paul
-
-1. Extremum estimators & optimization
+7. Extremum estimators & optimization
      - Review of extremum estimators 
      - Introduction to optimization algorithms
      - Inference for extremum estimators
        
-2. Unobserved heterogeneity and simulation based inference
+8. Unobserved heterogeneity and simulation based inference
      - Numeric integration
 
-3.  Dynamic structural models 
+9.  Dynamic structural models 
      - Dynamic discrete choice, dynamic games
 
-4.  Machine learning methods 
+10.  Machine learning methods 
      
-5.  Bayesian methods
+11.  Bayesian methods
 
-Although all these topics are related to econometrics, we will focus
-on computational details and not econometric theory. Through example
-applications, we will also cover data cleaning, visualization, text
-processing, and spatial data. 
+Through example applications, we will also cover data cleaning,
+visualization, text processing, and spatial data.
+
+We may not cover all these topics. A tentative schedule, based on last
+year's course is availabe on the course webpage. 
 
 ### UBC values and policies
 
