@@ -35,15 +35,15 @@ Problem sets should be submitted as a *single* Jupyter notebook on Canvas, with 
   - Redo any exercise of your choice from 1 to 6 in [Introductory Examples](https://lectures.quantecon.org/jl/getting_started_julia/julia_by_example.html)
     - In all "Redo" look at the provided solutions afterwards, but still submit your code
   - Exercise 7 in [Julia Essentials](https://lectures.quantecon.org/jl/getting_started_julia/julia_essentials.html)
-    
+- **Problem Set 2** - Due Thursday September 24th
+  - Unlike the first assignment, we will start grading this on style and reproducibility rather than just on whether you get the correct numbers.  See the [Digression on Style and Naming](https://lectures.quantecon.org/jl/getting_started_julia/introduction_to_types.html#A-Digression-on-Style-and-Naming)
+  - Exercises 2, 3, and 4 in [Fundamental Types](https://lectures.quantecon.org/jl/getting_started_julia/fundamental_types.html)
+  - Exercises 1, 2, and 3 in [Introduction to Types](https://lectures.quantecon.org/jl/getting_started_julia/introduction_to_types.html)
+
 ### From Last Year 
 
 These will likely be largely reused this year.
 
-- **Problem Set 2** - Due Monday September 23th
-  - Unlike the first assignment, we will start grading this on style and reproducibility rather than just on whether you get the correct numbers.  See the [Digression on Style and Naming](https://lectures.quantecon.org/jl/getting_started_julia/introduction_to_types.html#A-Digression-on-Style-and-Naming)
-  - Exercises 2, 3, and 4 in [Fundamental Types](https://lectures.quantecon.org/jl/getting_started_julia/fundamental_types.html)
-  - Exercises 1, 2, and 3 in [Introduction to Types](https://lectures.quantecon.org/jl/getting_started_julia/introduction_to_types.html)
 - **Problem Set 3** - Due Saturday September 28th
   - Exercises 4, 5, 6 in [Introduction to Types](https://lectures.quantecon.org/jl/getting_started_julia/introduction_to_types.html)
 - **Problem Set 4:** Due Saturday, October 5th
