@@ -10,14 +10,14 @@ Problem sets should be submitted as a *single* Jupyter notebook on Canvas, with 
   - Unlike the first assignment, we will start grading this on style and reproducibility rather than just on whether you get the correct numbers.  See the [Digression on Style and Naming](https://lectures.quantecon.org/jl/getting_started_julia/introduction_to_types.html#A-Digression-on-Style-and-Naming)
   - Exercises 2, 3, and 4 in [Fundamental Types](https://lectures.quantecon.org/jl/getting_started_julia/fundamental_types.html)
   - Exercises 1, 2, and 3 in [Introduction to Types](https://lectures.quantecon.org/jl/getting_started_julia/introduction_to_types.html)
+- **Problem Set 3** - Due Thursday October 1st
+  - Exercises 4, 5, 6 in [Introduction to Types](https://lectures.quantecon.org/jl/getting_started_julia/introduction_to_types.html)
 
 
 ### From Last Year 
 
 These will likely be largely reused this year.
 
-- **Problem Set 3** - Due Saturday September 28th
-  - Exercises 4, 5, 6 in [Introduction to Types](https://lectures.quantecon.org/jl/getting_started_julia/introduction_to_types.html)
 - **Problem Set 4:** Due Saturday, October 5th
   - Exercise 1 in [Generic Programming](https://lectures.quantecon.org/jl/more_julia/generic_programming.html)
   - (Optional) Exercise 2 in [Generic Programming](https://lectures.quantecon.org/jl/more_julia/generic_programming.html)
