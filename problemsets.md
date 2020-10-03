@@ -12,22 +12,19 @@ Problem sets should be submitted as a *single* Jupyter notebook on Canvas, with 
   - Exercises 1, 2, and 3 in [Introduction to Types](https://lectures.quantecon.org/jl/getting_started_julia/introduction_to_types.html)
 - **Problem Set 3** - Due Thursday October 1st
   - Exercises 4, 5, 6 in [Introduction to Types](https://lectures.quantecon.org/jl/getting_started_julia/introduction_to_types.html)
-
-
+- **Problem Set 4:** Due Thursday, October 8th
+  - Exercise 1 in [Generic Programming](https://lectures.quantecon.org/jl/more_julia/generic_programming.html)
+  - Exercise 1 in [Numerical Linear Algebra](https://github.com/ubcecon/ECON622_2019/blob/master/notebooks/numerical_linear_algebra.ipynb)
+  - Exercises 1a, 1b, 1c  in [Git and Github](https://lectures.quantecon.org/jl/more_julia/version_control.html)
+    - For the git/github in your ipynb notebook add links to the various PRs or screenshots with some evidence that you executed the steps.  No need to do much about the formatting
+    - The easiest is certainly if you do all of this with public github repos, and then you can just provide links to the "evidence"
+  
 ### From Last Year 
 
 These will likely be largely reused this year.
 
-- **Problem Set 4:** Due Saturday, October 5th
-  - Exercise 1 in [Generic Programming](https://lectures.quantecon.org/jl/more_julia/generic_programming.html)
-  - (Optional) Exercise 2 in [Generic Programming](https://lectures.quantecon.org/jl/more_julia/generic_programming.html)
-  - Exercises 1a, 1b, 1c, 2a, and 2b in [Git and Github](https://lectures.quantecon.org/jl/more_julia/version_control.html)
-    - For the git/github in your ipynb notebook add links to the various PRs or screenshots with some evidence that you executed the steps.  No need to do much about the formatting
-     - The easiest is certainly if you do all of this with public github repos, and then you can just provide links to the "evidence"
-    - One more comment on this:  For the PRs, make sure to look at the style of the underlying code or text.  For example, if no punctuation is used anywhere in a document, then that is the style used.  Making style suggestions as PRs is not the best approach.
 - **Problem Set 5:** Due Saturday, October 12th
   - Exercise 1 in [Testing and Packages](https://julia.quantecon.org/more_julia/testing.html)
-  - Exercise 1, 2a, and 2b in [Numerical Linear Algebra](https://github.com/ubcecon/ECON622_2019/blob/master/notebooks/numerical_linear_algebra.ipynb)
   
 - **Problem Set 6:** Due Monday, October 28th
   - Complete one of the exercises from [optimization algorithms](https://schrimpf.github.io/AnimatedOptimization.jl/exercises/) Turn in a link to a public git repo containing your work (preferred) or a jupyter notebook.
