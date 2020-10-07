@@ -68,7 +68,7 @@ See [problemsets.md](problemsets.md).
 10. **October 7th**
     - [Testing and Packages](https://julia.quantecon.org/more_julia/testing.html)
     - [Conditioning and Numerical Stability](https://nbviewer.jupyter.org/github/ubcecon/ECON622_2019/blob/master/notebooks/iterative_methods_sparsity.ipynb) 
-11. **October 12th**: Thanksgivine
+11. **October 12th**: Thanksgiving
 12. **October 14th**
     - [Iterative Methods](https://nbviewer.jupyter.org/github/ubcecon/ECON622_2019/blob/master/notebooks/iterative_methods_sparsity.ipynb) 
     - [Intro to AD](https://julia.quantecon.org/more_julia/optimization_solver_packages.html#Introduction-to-Automatic-Differentiation)
