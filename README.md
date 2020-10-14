@@ -82,8 +82,9 @@ See [problemsets.md](problemsets.md).
     - [Empirical likelihood](https://schrimpf.github.io/GMMInference.jl/empiricalLikelihood/) 
 17. **November 2nd**
     - [Bootstrap](https://schrimpf.github.io/GMMInference.jl/bootstrap/)    
-18. **November 4th**:
+18. **November 4th**:    
     - [Coding for performance](https://github.com/schrimpf/ARGridBootstrap)
+    - Self-study: [Need for speed](https://julia.quantecon.org/more_julia/need_for_speed.html)
 19. **November 9th**
     - [GPU usage](https://github.com/schrimpf/ARGridBootstrap)
 20. **November 11th**: Remembrance Day
