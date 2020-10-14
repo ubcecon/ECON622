@@ -65,17 +65,14 @@ See [problemsets.md](problemsets.md).
 9. **October 7th**
    - [Continuous Time Markov Chains](https://nbviewer.jupyter.org/github/ubcecon/ECON622_2019/blob/master/notebooks/numerical_linear_algebra.ipynb) 
    - Self-study [Discrete State Dynamic Programming](https://lectures.quantecon.org/jl/dynamic_programming/discrete_dp.html)   
-10. **October 7th**
+10. **October 12th**: Thanksgiving
+11. **October 14th**
     - [Testing and Packages](https://julia.quantecon.org/more_julia/testing.html)
     - [Conditioning and Numerical Stability](https://nbviewer.jupyter.org/github/ubcecon/ECON622_2019/blob/master/notebooks/iterative_methods_sparsity.ipynb) 
-11. **October 12th**: Thanksgiving
-12. **October 14th**
+12. **October 19th**
     - [Iterative Methods](https://nbviewer.jupyter.org/github/ubcecon/ECON622_2019/blob/master/notebooks/iterative_methods_sparsity.ipynb) 
     - [Intro to AD](https://julia.quantecon.org/more_julia/optimization_solver_packages.html#Introduction-to-Automatic-Differentiation)
-
-13. **October 19th**: Clusters + Debugging
-    - See https://github.com/ubcecon/cluster_tools for instructions on setting up/using the cluster.
-    - [Juno debugger](https://docs.junolab.org/latest/man/debugging/)
+    - Self-study: https://github.com/ubcecon/cluster_tools for instructions on setting up/using the cluster.   
 14. **October 21st** 
     - [Optimization algorithms](https://schrimpf.github.io/AnimatedOptimization.jl/optimization/)
     - [Optimization packages](https://julia.quantecon.org/more_julia/optimization_solver_packages.html#Optimization)
