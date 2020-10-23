@@ -20,15 +20,15 @@ Problem sets should be submitted as a *single* Jupyter notebook on Canvas, with 
     - The easiest is certainly if you do all of this with public github repos, and then you can just provide links to the "evidence"
 - **Problem Set 5:** Due Thursday, October 22nd
   - Exercise 1 in [Testing and Packages](https://julia.quantecon.org/more_julia/testing.html) also consider doing exercise 2, which is watching a video, perhaps first
-    
+- **Problem Set 6:** Due Thursday, October 29th
+  - Complete one of the exercises from [optimization algorithms](https://schrimpf.github.io/AnimatedOptimization.jl/exercises/) Turn in a link to a public git repo containing your work (preferred) or a jupyter notebook.
+      
   
 ### From Last Year 
 
 These will likely be largely reused this year.
   
-- **Problem Set 6:** Due Monday, October 28th
-  - Complete one of the exercises from [optimization algorithms](https://schrimpf.github.io/AnimatedOptimization.jl/exercises/) Turn in a link to a public git repo containing your work (preferred) or a jupyter notebook.
-  
+
 - **Problem Set 7:** Due Monday, November 4th
   - Work on one of the issues in [GMMInference.jl](https://github.com/schrimpf/GMMInference.jl/issues). 
     - If you have a GMM model you're interested in, Issue #7 would be a good choice
