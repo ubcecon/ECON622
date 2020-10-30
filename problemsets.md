@@ -28,6 +28,7 @@ Problem sets should be submitted as a *single* Jupyter notebook on Canvas, with 
     - If you are interested in econometric theory, issues #5 and the second bullet of #8 are good and will require some research
     - If you like thinking about code organization and package design, #2, #6, or #10 are relevant
     - As with the previous assignment, you need not complete the task; make whatever progress you can in 6 hours or so. If you want your work to be added to the repository, either make a pull request or say so on whatever you turn in. 
+    
   or 
   b) Contribute to another Julia package. This can be something modest like clarifying documentation, improving tests, or even creating an issue reporting a bug or thoughtfully requesting a feature. Check with me if you're unsure whether your plan is appropriate.
   
