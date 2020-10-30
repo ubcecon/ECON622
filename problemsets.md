@@ -22,19 +22,19 @@ Problem sets should be submitted as a *single* Jupyter notebook on Canvas, with 
   - Exercise 1 in [Testing and Packages](https://julia.quantecon.org/more_julia/testing.html) also consider doing exercise 2, which is watching a video, perhaps first
 - **Problem Set 6:** Due Thursday, October 29th
   - Complete one of the exercises from [optimization algorithms](https://schrimpf.github.io/AnimatedOptimization.jl/exercises/) Turn in a link to a public git repo containing your work (preferred) or a jupyter notebook.
-      
+- **Problem Set 7:** Due Thursday, November 5th : either  
+  a) Work on one of the issues in [GMMInference.jl](https://github.com/schrimpf/GMMInference.jl/issues). 
+    - If you have a GMM model you're interested in, Issue #7 would be a good choice
+    - If you are interested in econometric theory, issues #5 and the second bullet of #8 are good and will require some research
+    - If you like thinking about code organization and package design, #2, #6, or #10 are relevant
+    - As with the previous assignment, you need not complete the task; make whatever progress you can in 6 hours or so. If you want your work to be added to the repository, either make a pull request or say so on whatever you turn in. 
+  or 
+  b) Contribute to another Julia package. This can be something modest like clarifying documentation, improving tests, or even creating an issue reporting a bug or thoughtfully requesting a feature. Check with me if you're unsure whether your plan is appropriate.
   
 ### From Last Year 
 
 These will likely be largely reused this year.
   
-
-- **Problem Set 7:** Due Monday, November 4th
-  - Work on one of the issues in [GMMInference.jl](https://github.com/schrimpf/GMMInference.jl/issues). 
-    - If you have a GMM model you're interested in, Issue #7 would be a good choice
-    - If you are interested in econometric theory, issues #5 and the second bullet of #8 are good and will require some research
-    - If you like thinking about code organization and package design, #2 or #6 are relevant
-  - As with the previous assignment, you need not complete the task; make whatever progress you can in 6 hours or so. If you want your work to be added to the repository, either make a pull request or say so on whatever you turn in. 
 
 - **Problem Set 8:** Due Wednesday, November 13th
   - Improve the performance of a piece of code. Take some code from a package, previous assignment, or lecture and attempt to improve its performance. Include benchmarks of the initial version and your modified version. Briefly describe the things you tried. 
