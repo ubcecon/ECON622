@@ -4,7 +4,7 @@
 
 - **Instructor:** Paul Schrimpf, schrimpf@mail.ubc.ca
 - **Teaching Assistant:** Josh Catalano, joshua.catalano@alumni.ubc.ca
-- **Office Hours:** 
+- **Office Hours:**
 - **Start Time** 8:35am sharp so there are no excuses, please be on time!
 
 **Course Description**
@@ -45,65 +45,67 @@ While the problem sets will be frequent, many will be short to force practice (a
 
 The final project topics are very open, and the main criteria is that you either (1) learn/use/apply a computational tool to a research topic of your interest or (2) contribute to an open-source computational economics project as a public good.
 
-## Course Parts 
+## Course Parts
 
 The course will be taught in 4 parts
-1. Introduction to Julia and scientific computing 
-2. Dynamic Programming applications 
-3. Structural estimation 
-4. Data science and machine learning 
+1. Introduction to Julia and scientific computing
+2. Dynamic Programming applications
+3. Structural estimation
+4. Data science and machine learning
 
 Throughout the course we will be using the programming language Julia.
-     
+
+The course will be held in-person in Iona 633. Lectures will also be recorded and streamed, see canvas for links.
+
 ## Topics
 
-1. Introduction to Julia 
+1. Introduction to Julia
    - Learning the Julia programming language, with simple applications
    - Generic and Functional programming, multiple dispatch
    - Introduction to interpolation, quadrature, and functional equations
-  
+
 2. Software engineering tools: source-code control, unit testing, and continuous integration
    - Git and Github version tracking, diffs, collaboration, Pull Requests, etc.
     - Reproducible environments: package managers, and virtual environments
     - Unit and regression testing frameworks, benchmarking, and continuous-integration
-    
+
 3. Medium Data, clusters, and medium-scale parallel programming
     - "Just Enough Python to Get By" - and use great libraries
     - Using the cluster/parallel programming/executing computational jobs in Julia
     - Tools for data too large memory but too small for massive clusters
     - Tools for parallel processing of data too large for memory
-    
+
 4. Sparsity/AD/scaling to large problems
    - Application: multiway fixed-effect models
    - Sparse matrices, banded matrices, etc. in Julia
    - Forward/reverse/etc. auto-differentiation
    - Iterative and matrix-free solutions to linear systems, eigensystems, and sparse linear least squares
-    
+
 6. Computational dynamic programming
     - Heterogenous agents
     - Dynamic contracting
     - Perturbation approaches to solving models with heterogeneous agents (i.e. Reiter (2009) or similar methods)
 
 7. Extremum estimators & optimization
-     - Review of extremum estimators 
+     - Review of extremum estimators
      - Introduction to optimization algorithms
      - Inference for extremum estimators
-       
+
 8. Unobserved heterogeneity and simulation based inference
      - Numeric integration
 
-9.  Dynamic structural models 
+9.  Dynamic structural models
      - Dynamic discrete choice, dynamic games
 
-10.  Machine learning methods 
-     
+10.  Machine learning methods
+
 11.  Bayesian methods
 
 Through example applications, we will also cover data cleaning,
 visualization, text processing, and spatial data.
 
 We may not cover all these topics. A tentative schedule, based on last
-year's course is availabe on the course webpage. 
+year's course is availabe on the course webpage.
 
 ### UBC values and policies
 
