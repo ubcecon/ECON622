@@ -32,39 +32,48 @@ See [Syllabus](syllabus.md) for more details
 
 See [problemsets.md](problemsets.md).
 
+
+
 ## Lectures
 
+The notes at https://julia.quantecon.org are currently being
+updated. The html pages are the old version for now. Updated notebooks
+can be found in https://github.com/QuantEcon/lecture-julia.notebooks
+The updated notebooks should be preferred, especially for the "Julia
+Environment" section.
+
+
 1. **September 8**: Environment and Introduction to Julia
-    - [Julia Environment](https://lectures.quantecon.org/jl/getting_started_julia/julia_environment.html), [Introductory Examples](https://lectures.quantecon.org/jl/getting_started_julia/julia_by_example.html)
+    - [Julia Environment](https://github.com/QuantEcon/lecture-julia.notebooks/blob/main/getting_started_julia/getting_started.ipynb) ([old html version](https://julia.quantecon.org/getting_started_julia/julia_environment.html)), [Introductory Examples](https://github.com/QuantEcon/lecture-julia.notebooks/blob/main/getting_started_julia/julia_by_example.ipynb) ([old html version]https://julia.quantecon.org/getting_started_julia/julia_by_example.html))
 
 2. **September 13**: Introduction and Variations on Fixed-points
-   - [Introductory Examples](https://lectures.quantecon.org/jl/getting_started_julia/julia_by_example.html)
+   - [Introductory Examples](https://github.com/QuantEcon/lecture-julia.notebooks/blob/main/getting_started_julia/julia_by_example.ipynb)
 3. **September 15**: Introduction to types
-   -  Self-study: [Julia Essentials](https://lectures.quantecon.org/jl/getting_started_julia/julia_essentials.html)
-   -  Self-study: [Fundamental Types](https://lectures.quantecon.org/jl/getting_started_julia/fundamental_types.html)
-   -  Start [Intro to Generic Programming](https://lectures.quantecon.org/jl/getting_started_julia/introduction_to_types.html)
+   -  Self-study: [Julia Essentials](https://github.com/QuantEcon/lecture-julia.notebooks/blob/main/getting_started_julia/julia_essentials.ipynb)
+   -  Self-study: [Fundamental Types](https://github.com/QuantEcon/lecture-julia.notebooks/blob/main/getting_started_julia/fundamental_types.ipynb)
+   -  Start [Intro to Generic Programming](https://github.com/QuantEcon/lecture-julia.notebooks/blob/main/getting_started_julia/introduction_to_types.ipynb)
    -  Flip through the [Matlab - Julia Cheat Sheet](https://cheatsheets.quantecon.org/)
 4. **September 20**
-   -  Self-study: [Intro to Generic Programming](https://lectures.quantecon.org/jl/getting_started_julia/introduction_to_types.html)
-   -  Self-study: [Generic Programming](https://lectures.quantecon.org/jl/more_julia/generic_programming.html)
+   -  Self-study: [Intro to Generic Programming](https://julia.quantecon.org/getting_started_julia/introduction_to_types.html)
+   -  Self-study: [Generic Programming](https://julia.quantecon.org/more_julia/generic_programming.html)
 5. **September 22**
-   -  [Generic Programming](https://lectures.quantecon.org/jl/more_julia/generic_programming.html)
-   -  Self-study: [General Packages](https://lectures.quantecon.org/jl/more_julia/general_packages.html)
-   -  Self-study: [Data and Statistical Packages](https://lectures.quantecon.org/jl/more_julia/data_statistical_packages.html)
+   -  [Generic Programming](https://julia.quantecon.org/more_julia/generic_programming.html)
+   -  Self-study: [General Packages](https://julia.quantecon.org/more_julia/general_packages.html)
+   -  Self-study: [Data and Statistical Packages](https://julia.quantecon.org/more_julia/data_statistical_packages.html)
    -  Notes on [Quadrature](https://nbviewer.jupyter.org/github/ubcecon/ECON622_2019/blob/master/notebooks/quadrature.ipynb) applying generic programming
 6. **September 27**
-   -  Self-study: [Linear Algebra](https://lectures.quantecon.org/jl/tools_and_techniques/linear_algebra.html)
-   -  Self-study: [Orthogonal Projections](https://lectures.quantecon.org/jl/tools_and_techniques/orth_proj.html)
+   -  Self-study: [Linear Algebra](https://julia.quantecon.org/tools_and_techniques/linear_algebra.html)
+   -  Self-study: [Orthogonal Projections](https://julia.quantecon.org/tools_and_techniques/orth_proj.html)
    -  Notes on  [Numerical Linear Algebra](https://nbviewer.jupyter.org/github/ubcecon/ECON622_2019/blob/master/notebooks/numerical_linear_algebra.ipynb) applying generic programming
 7. **September 29**
    - The Schur Decomposition
-   - [Desktop Tools/Package Management](https://lectures.quantecon.org/jl/more_julia/tools_editors.html)
-   - [Git and Github](https://lectures.quantecon.org/jl/more_julia/version_control.html)
+   - [Desktop Tools/Package Management](https://julia.quantecon.org/more_julia/tools_editors.html)
+   - [Git and Github](https://julia.quantecon.org/more_julia/version_control.html)
 8. **October 4**:
    - [Finite Markov Chains](https://julia.quantecon.org/tools_and_techniques/finite_markov.html)
 9. **October 6**
    - [Continuous Time Markov Chains](https://nbviewer.jupyter.org/github/ubcecon/ECON622_2019/blob/master/notebooks/numerical_linear_algebra.ipynb)
-   - Self-study [Discrete State Dynamic Programming](https://lectures.quantecon.org/jl/dynamic_programming/discrete_dp.html)
+   - Self-study [Discrete State Dynamic Programming](https://julia.quantecon.org/dynamic_programming/discrete_dp.html)
 10. **October 11**: Thanksgiving
 11. **October 13**
     - [Testing and Packages](https://julia.quantecon.org/more_julia/testing.html)
