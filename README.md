@@ -38,7 +38,6 @@ See [problemsets.md](problemsets.md).
 
 1. **January 14**: Environment and Introduction to Julia
     - [Julia Environment](https://quantecon.github.io/lecture-julia.myst/getting_started_julia/getting_started.html), [Introductory Examples](https://quantecon.github.io/lecture-julia.myst/getting_started_julia/julia_by_example.html)
-
 2. **January 14**: Introduction and Variations on Fixed-points
    - [Introductory Examples](https://quantecon.github.io/lecture-julia.myst/getting_started_julia/julia_by_example.html)
 3. **January 21**: Introduction to types
