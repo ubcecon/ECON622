@@ -1,11 +1,11 @@
 # Problem Sets
 
 Problem sets should be submitted as a *single* Jupyter notebook on Canvas, with the code and output clean.
-- **Problem Set 1** - Due Monday, January 17
+- **Problem Set 1** - Due Wednesday, January 19
   - Exercises 7, 8(a), and 8(b) in [Introductory Examples](https://julia.quantecon.org/getting_started_julia/julia_by_example.html)
   - Redo any exercise of your choice from 1 to 6 in [Introductory Examples](https://julia.quantecon.org/getting_started_julia/julia_by_example.html)
     - In all "Redo" look at the provided solutions afterwards, but still submit your code
-  - Exercise 7 in [Julia Essentials](https://julia.quantecon.org/getting_started_julia/julia_essentials.html)
+  <!-- - Exercise 7 in [Julia Essentials](https://julia.quantecon.org/getting_started_julia/julia_essentials.html) -->
 
 <!-- - **Problem Set 2** - Due Thursday September 24th -->
 <!--   - Unlike the first assignment, we will start grading this on style and reproducibility rather than just on whether you get the correct numbers.  See the [Digression on Style and Naming](https://julia.quantecon.org/getting_started_julia/introduction_to_types.html#A-Digression-on-Style-and-Naming) -->

@@ -1,4 +1,4 @@
-# ECON622 - Fall 2021
+# ECON622
 
 This is a graduate topics course in computational economics, with applications in datascience and machine learning.
 
