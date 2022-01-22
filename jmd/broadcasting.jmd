@@ -37,8 +37,8 @@ It will work on any type for which:
 - transposing and then multiplying is allowed
 You might ask: what types are those? 
 We can easily come up with some, like `Vector` and `Matrix`, but there may be others too.  
-The advantage of leaving the type unspecified is that our function will work with some 
-types that we haven't even imagined. This approach is called "duck-typing" if `x` walks 
+The advantage of leaving the type unspecified is that our function will work with types
+ that we haven't even imagined. This approach is called "duck-typing" if `x` walks 
 like a duck (has `'`) and talks like a duck (has `*`), then we'll treat it like a duck, 
 and let `generic_f` work.
 
