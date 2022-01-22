@@ -9,7 +9,7 @@ Problem sets should be submitted as a *single* Jupyter notebook on Canvas, with 
 
 - **Problem Set 2** - Due Wednesday, January 26
 <!--   - Unlike the first assignment, we will start grading this on style and reproducibility rather than just on whether you get the correct numbers.  See the [Digression on Style and Naming](https://julia.quantecon.org/getting_started_julia/introduction_to_types.html#A-Digression-on-Style-and-Naming) -->
-  - Exercises 2 and  3 <!--, and 4---> in [Fundamental Types](https://julia.quantecon.org/getting_started_julia/fundamental_types.html)
+  - Exercises 2 and  3 <!-- , and 4 --> in [Fundamental Types](https://julia.quantecon.org/getting_started_julia/fundamental_types.html)
   - Exercises 1, 2, 3 and 4 in [Introduction to Types](https://julia.quantecon.org/getting_started_julia/introduction_to_types.html)
 <!-- - **Problem Set 3** - Due Thursday October 1st -->
 <!--   - Exercises 4, 5, 6 in [Introduction to Types](https://julia.quantecon.org/getting_started_julia/introduction_to_types.html) -->
