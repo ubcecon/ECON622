@@ -11,10 +11,11 @@ Problem sets should be submitted as a *single* Jupyter notebook on Canvas, with 
 <!--   - Unlike the first assignment, we will start grading this on style and reproducibility rather than just on whether you get the correct numbers.  See the [Digression on Style and Naming](https://julia.quantecon.org/getting_started_julia/introduction_to_types.html#A-Digression-on-Style-and-Naming) -->
   - Exercises 2 and  3 <!-- , and 4 --> in [Fundamental Types](https://julia.quantecon.org/getting_started_julia/fundamental_types.html)
   - Exercises 1, 2, 3 and 4 in [Introduction to Types](https://julia.quantecon.org/getting_started_julia/introduction_to_types.html)
-<!-- - **Problem Set 3** - Due Thursday October 1st -->
-<!--   - Exercises 4, 5, 6 in [Introduction to Types](https://julia.quantecon.org/getting_started_julia/introduction_to_types.html) -->
+- **Problem Set 3** - Due Wednesday, February 2
+  - Exercises 5 in [Introduction to Types](https://julia.quantecon.org/getting_started_julia/introduction_to_types.html)
+  - Exercise 1 in [Generic Programming](https://julia.quantecon.org/more_julia/generic_programming.html)
 <!-- - **Problem Set 4:** Due Thursday, October 8th -->
-<!--   - Exercise 1 in [Generic Programming](https://julia.quantecon.org/more_julia/generic_programming.html) -->
+<!--
 <!--   - Exercise 1 in [Numerical Linear Algebra](https://github.com/ubcecon/ECON622_2019/blob/master/notebooks/numerical_linear_algebra.ipynb) -->
 <!--   - Exercises 1a, 1b, 1c  in [Git and Github](https://julia.quantecon.org/more_julia/version_control.html) -->
 <!--     - For the git/github in your ipynb notebook add links to the various PRs or screenshots with some evidence that you executed the steps.  No need to do much about the formatting -->

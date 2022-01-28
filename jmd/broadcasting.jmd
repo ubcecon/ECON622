@@ -81,7 +81,7 @@ generic_f.(eachslice(X, dims=1))
 We can also use `mapslices` instead of broadcasting
 
 ```julia
-mapslices(generic_f, X, dims=[1])
+mapslices(generic_f, X, dims=[1]) # [generic_f(X[:,i] for i in axes(X,2)]
 mapslices(generic_f, X, dims=[2])
 ```
 There are some differences here. With `mapslices`, the result is a matrix instead of a vector. 
@@ -89,3 +89,9 @@ Somewhat confusingly,  the `dims` argument in `mapslices` is different than the 
 argument to `eachslice`. In `mapslices`, `dims` should be the locations where you would 
 put colons if you were to write a loop e.g. `dims=[1]` means you're going to map to 
 each `X[:,i] for i in axes(X, 2)`. 
+
+```julia
+
+@time generic_f(1)
+
+```
