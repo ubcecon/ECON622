@@ -59,10 +59,10 @@ See [problemsets.md](problemsets.md).
    -  Notes on  [Numerical Linear Algebra](https://nbviewer.jupyter.org/github/ubcecon/ECON622_2019/blob/master/notebooks/numerical_linear_algebra.ipynb) applying generic programming
 7. **February 4**
    - The Schur Decomposition
-   - [Desktop Tools/Package Management](https://quantecon.github.io/lecture-julia.myst/more_julia/tools_editors.html)
-   - [Git and Github](https://quantecon.github.io/lecture-julia.myst/more_julia/version_control.html)
+   - [Desktop Tools/Package Management](https://julia.quantecon.org/software_engineering/tools_editors.html)
+   - [Git and Github](https://julia.quantecon.org/software_engineering/version_control.html)
 8. **February 4**:
-   - [Finite Markov Chains](https://quantecon.github.io/lecture-julia.myst/tools_and_techniques/finite_markov.html)
+   - [Finite Markov Chains](https://julia.quantecon.org/tools_and_techniques/finite_markov.html)
 9. **February 11**
    - [Continuous Time Markov Chains](https://nbviewer.jupyter.org/github/ubcecon/ECON622_2019/blob/master/notebooks/numerical_linear_algebra.ipynb)
    - Self-study [Discrete State Dynamic Programming](https://quantecon.github.io/lecture-julia.myst/dynamic_programming/discrete_dp.html)
