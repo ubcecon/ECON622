@@ -14,7 +14,7 @@ Problem sets should be submitted as a *single* Jupyter notebook on Canvas, with 
   - Exercises 5 in [Introduction to Types](https://julia.quantecon.org/getting_started_julia/introduction_to_types.html)
   - Exercise 1 in [Generic Programming](https://julia.quantecon.org/more_julia/generic_programming.html)
 - **Problem Set 4:** Due Thursday, February 10
-  - Exercise 1 in [Numerical Linear Algebra](https://github.com/ubcecon/ECON622_2019/blob/master/notebooks/numerical_linear_algebra.ipynb)
+  - Exercise 1 in [Numerical Linear Algebra](https://github.com/ubcecon/ECON622/blob/master/notebooks/numerical_linear_algebra.ipynb)
   - Exercises 1a, 1b, 1c  in [Git and Github](https://julia.quantecon.org/software_engineering/version_control.html) OR Exercise 2a OR Exercise 2b
     - For the git/github in your ipynb notebook add links to the various PRs or screenshots with some evidence that you executed the steps.  No need to do much about the formatting
     - The easiest is certainly if you do all of this with public github repos, and then you can just provide links to the "evidence"
