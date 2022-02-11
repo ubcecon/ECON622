@@ -1,0 +1,105 @@
+---
+title       : "Continuous Time Markov Chains"
+subtitle    : ""
+author      : Paul Schrimpf
+date        : `j using Dates; print(Dates.today())`
+weave_options:
+      out_width : 100%
+      wrap : true
+      fig_width : 800
+      fig_height : 800
+      dpi : 192
+---
+
+[![](https://i.creativecommons.org/l/by-sa/4.0/88x31.png)](http://creativecommons.org/licenses/by-sa/4.0/)
+
+This work is licensed under a [Creative Commons Attribution-ShareAlike
+4.0 International
+License](http://creativecommons.org/licenses/by-sa/4.0/)
+
+
+# Introduction
+
+Review the section on [discrete time Markov Chains](https://julia.quantecon.org/tools_and_techniques/finite_markov.html) 
+and [continuous time Markov Chains](https://julia.quantecon.org/tools_and_techniques/numerical_linear_algebra.html#continuous-time-markov-chains-ctmcs).
+
+Here we will see how to use packages from the [SciML](https://github.com/SciML)
+ecosystem to work with continuous time Markov chains. The SciML ecosystem largely
+began around tools related to differential equations, but has since expanded to 
+many packages more generally useful for scientific computing. The SciML packages are 
+generally high quality and are worth using. 
+
+In the context of differential equations, what we have been calling continuous time Markov Chains 
+are called [continuous-time Markov jump processes](https://mpaldridge.github.io/math2750/S17-continuous-time.html). 
+The SciML package for working with such processes is [DiffEqJump.jl](https://github.com/SciML/DiffEqJump.jl)
+There's a nice example of a SIR model using this package in the [DifferentialEquations.jl documentation.](https://diffeq.sciml.ai/dev/tutorials/discrete_stochastic_example/) 
+An extended SIR example is in sections [41](https://julia.quantecon.org/continuous_time/seir_model.html) and 
+[42](https://julia.quantecon.org/continuous_time/covid_sde.html) of QuantEcon.
+
+# Example 
+
+We will build on the simple example from [continuous time Markov Chains](https://julia.quantecon.org/tools_and_techniques/numerical_linear_algebra.html#continuous-time-markov-chains-ctmcs)
+
+This example has `N` states, and the intensity matrix is 
+such that we can only jump to adjacent states.
+```julia
+using LinearAlgebra, DiffEqJump, Plots, SparseArrays, DifferentialEquations
+α = 0.1 # rate of changing state
+N = 10  # number of states
+Q = Tridiagonal(fill(α, N-1), [-α; fill(-2α, N-2); -α], fill(α, N-1))
+sparse(Q)
+```
+
+We can build a DiffEqJump problem that represents 
+this continuous-time Markov Chain with the following code.
+
+```julia
+function createjumps(intensitymatrix)
+  Q = intensitymatrix
+  jumps = []
+  for i in 1:size(Q,1)
+    rate(u,Q,t) = (i == Int(u[1]) ? 0.0 : Q[Int(u[1]),i])
+    affect!(integrator) = ( integrator.u[1] = i )
+    push!(jumps,ConstantRateJump(rate, affect!))
+  end
+  return(jumps)
+end
+jumps = createjumps(Q)
+u0 = [N ÷ 2]
+tspan = (0., 1000.)
+
+cmt = JumpProblem(DiscreteProblem(u0, tspan, Q), Direct(), jumps...)
+```
+
+Applying the `solve` method to this problem will simulate a 
+realization of the process.
+
+```julia
+sol = solve(cmt, SSAStepper())
+
+plot(sol)
+```
+
+# Combining with a Differential Equation
+The power of the above approach is that we can combine it 
+with differential equations and other functionality from SciML. 
+
+To continue the example, let's suppose the discrete state affects
+the growth rate of the economy. 
+
+$$
+\frac{dy}{dt} = g[u[t]] y
+$$
+
+We can nearly as easily simulate this model.
+
+```julia
+g = range(-0.01, 0.01, N)
+u0 = [N ÷ 2, 10.0]
+f(u,Q,t) = [0., g[Int(u[1])] * u[2]]
+ode = ODEProblem(f, u0, tspan, Q)
+jump_prob = JumpProblem(ode,Direct(),jumps...)
+sol = solve(jump_prob, Tsit5())
+plot(sol)
+```
+

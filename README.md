@@ -64,11 +64,11 @@ See [problemsets.md](problemsets.md).
 8. **February 4**:
    - [Finite Markov Chains](https://julia.quantecon.org/tools_and_techniques/finite_markov.html)
 9. **February 11**
-   - [Continuous Time Markov Chains](https://nbviewer.jupyter.org/github/ubcecon/ECON622_2019/blob/master/notebooks/numerical_linear_algebra.ipynb)
+   - [Continuous Time Markov Chains](https://julia.quantecon.org/tools_and_techniques/numerical_linear_algebra.html#continuous-time-markov-chains-ctmcs) and [continuous_time_markov.jmd](jmd/continuous_time_markov.jmd)
    - Self-study [Discrete State Dynamic Programming](https://quantecon.github.io/lecture-julia.myst/dynamic_programming/discrete_dp.html)
 10. **February 11**
     - [Testing and Packages](https://quantecon.github.io/lecture-julia.myst/more_julia/testing.html)
-    - [Conditioning and Numerical Stability](https://nbviewer.jupyter.org/github/ubcecon/ECON622_2019/blob/master/notebooks/iterative_methods_sparsity.ipynb)
+    - [Conditioning and Numerical Stability](https://julia.quantecon.org/tools_and_techniques/iterative_methods_sparsity.html)
 11. **February 18**
     - [Iterative Methods](https://nbviewer.jupyter.org/github/ubcecon/ECON622_2019/blob/master/notebooks/iterative_methods_sparsity.ipynb)
     - [Intro to AD](https://quantecon.github.io/lecture-julia.myst/more_julia/optimization_solver_packages.html#Introduction-to-Automatic-Differentiation)
