@@ -67,7 +67,7 @@ See [problemsets.md](problemsets.md).
    - [Continuous Time Markov Chains](https://julia.quantecon.org/tools_and_techniques/numerical_linear_algebra.html#continuous-time-markov-chains-ctmcs) and [continuous_time_markov.jmd](jmd/continuous_time_markov.jmd)
    - Self-study [Discrete State Dynamic Programming](https://quantecon.github.io/lecture-julia.myst/dynamic_programming/discrete_dp.html)
 10. **February 11**
-    - [Testing and Packages](https://quantecon.github.io/lecture-julia.myst/more_julia/testing.html)
+    - [Testing and Packages](https://julia.quantecon.org/software_engineering/testing.html)
     - [Conditioning and Numerical Stability](https://julia.quantecon.org/tools_and_techniques/iterative_methods_sparsity.html)
 11. **February 18**
     - [Iterative Methods](https://nbviewer.jupyter.org/github/ubcecon/ECON622_2019/blob/master/notebooks/iterative_methods_sparsity.ipynb)
