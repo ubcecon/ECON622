@@ -21,6 +21,8 @@ Problem sets should be submitted as a *single* Jupyter notebook on Canvas, with 
 - **Problem Set 5:** Due Friday, February 18
   - Exercise 1 in [Testing and Packages](https://julia.quantecon.org/software_engineering/testing.html) Or
   - Or contribute tests to another package (this could be your own package or some other public package)
+- **Problem Set 6:** Due Thursday, March 10
+  - Improve the performance of a piece of code. Preferrably, this would be code useful for your research, but it can be any code from a package, previous assignment, lecture, etc. Attempt to improve the code's performance. Include benchmarks of the initial version and your modified version. Briefly describe the things you tried.
 
 <!-- - **Problem Set 6:** Due Thursday, October 29th -->
 <!--   - Complete one of the exercises from [optimization algorithms](https://schrimpf.github.io/AnimatedOptimization.jl/exercises/) Turn in a link to a public git repo containing your work (preferred) or a jupyter notebook. -->
