@@ -90,7 +90,6 @@ the growth rate of the economy.
 $$
 \frac{dy}{dt} = g[u[t]] y
 $$
-
 We can nearly as easily simulate this model.
 
 ```julia

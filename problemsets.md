@@ -37,3 +37,4 @@ Problem sets should be submitted as a *single* Jupyter notebook on Canvas, with 
 <!--   b) Contribute to another Julia package. This can be something modest like clarifying documentation, improving tests, or even creating an issue reporting a bug or thoughtfully requesting a feature. Check with me if you're unsure whether your plan is appropriate. -->
 <!-- - **Problem Set 8:** Due Thursday, November 19th -->
 <!--   - Improve the performance of a piece of code. Take some code from a package, previous assignment, or lecture and attempt to improve its performance. Include benchmarks of the initial version and your modified version. Briefly describe the things you tried.  -->
+<!-- - **Problem Set 7:** -->

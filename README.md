@@ -85,17 +85,22 @@ See [problemsets.md](problemsets.md).
 18. **March 11**:
     - [Coding for performance](https://github.com/schrimpf/ARGridBootstrap)
     - Self-study: [Need for speed](https://quantecon.github.io/lecture-julia.myst/more_julia/need_for_speed.html)
-19. **March 18**
+19. **March 11**
     - [GPU usage](https://github.com/schrimpf/ARGridBootstrap)
-21. **March 18**
+21. **March 11**
     <!-- [Structural estimation](http://faculty.arts.ubc.ca/pschrimpf/628/rustrothwell.html) link will change -->
     - [Machine learning](https://schrimpf.github.io/NeuralNetworkEconomics.jl/ml-intro/) or [older version with slides](http://faculty.arts.ubc.ca/pschrimpf/628/machineLearningAndCausalInference.html)
-22. **March 25**
+22. **March 11**
     - [Machine learning in Julia](https://github.com/schrimpf/NeuralNetworkEconomics.jl)
-23. **March 25**
+23. **March 18**
+    - Finish [Machine learning](https://schrimpf.github.io/NeuralNetworkEconomics.jl/ml-intro/) focus on DML
+    - [Gradient Boosting](https://schrimpf.github.io/GradientBoostingNotes/gb/#introduction)
+23. **March 18**
     - [Neural Networks](https://github.com/schrimpf/NeuralNetworkEconomics.jl)
-24. **April 1**
+24. **March 25**
     - [Convolutional and Recurrent Neural Networks](https://github.com/schrimpf/NeuralNetworkEconomics.jl)
+    - Transformers
+25. **April 1**
 25. **April 8**
     - [Project proposal due](final_project.md)
 27. **April 22**
