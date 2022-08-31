@@ -36,74 +36,74 @@ See [problemsets.md](problemsets.md).
 ## Lectures
 
 
-1. **January 14**: Environment and Introduction to Julia
+1. **September 6**: Environment and Introduction to Julia
     - [Julia Environment](https://quantecon.github.io/lecture-julia.myst/getting_started_julia/getting_started.html), [Introductory Examples](https://quantecon.github.io/lecture-julia.myst/getting_started_julia/julia_by_example.html)
-2. **January 14**: Introduction and Variations on Fixed-points
+2. **September 8**: Introduction and Variations on Fixed-points
    - [Introductory Examples](https://quantecon.github.io/lecture-julia.myst/getting_started_julia/julia_by_example.html)
-3. **January 21**: Introduction to types
+3. **September 13**: Introduction to types
    -  Self-study: [Julia Essentials](https://quantecon.github.io/lecture-julia.myst/getting_started_julia/julia_essentials.html)
    -  Self-study: [Fundamental Types](https://quantecon.github.io/lecture-julia.myst/getting_started_julia/fundamental_types.html)
    - [Note on broadcasting](jmd/broadcasting.jmd)
    -  Start [Intro to Types and Generic Programming](https://quantecon.github.io/lecture-julia.myst/getting_started_julia/introduction_to_types.html)
-4. **January 21**
+4. **September 15**
    -  Self-study: [Intro to Types and Generic Programming](https://quantecon.github.io/lecture-julia.myst/getting_started_julia/introduction_to_types.html)
    -  Self-study: [Generic Programming](https://quantecon.github.io/lecture-julia.myst/more_julia/generic_programming.html)
-5. **January 28**
+5. **Sepember 20**
    -  [Generic Programming](https://quantecon.github.io/lecture-julia.myst/more_julia/generic_programming.html)
    -  Self-study: [General Packages](https://quantecon.github.io/lecture-julia.myst/more_julia/general_packages.html)
    -  Self-study: [Data and Statistical Packages](https://quantecon.github.io/lecture-julia.myst/more_julia/data_statistical_packages.html)
    -  Notes on [Quadrature](https://nbviewer.jupyter.org/github/ubcecon/ECON622_2019/blob/master/notebooks/quadrature.ipynb) applying generic programming
-6. **January 28**
+6. **September 22**
    -  Self-study: [Linear Algebra](https://quantecon.github.io/lecture-julia.myst/tools_and_techniques/linear_algebra.html)
    -  Self-study: [Orthogonal Projections](https://quantecon.github.io/lecture-julia.myst/tools_and_techniques/orth_proj.html)
    -  Notes on  [Numerical Linear Algebra](https://nbviewer.jupyter.org/github/ubcecon/ECON622_2019/blob/master/notebooks/numerical_linear_algebra.ipynb) applying generic programming
-7. **February 4**
+7. **September 27**
    - The Schur Decomposition
    - [Desktop Tools/Package Management](https://julia.quantecon.org/software_engineering/tools_editors.html)
    - [Git and Github](https://julia.quantecon.org/software_engineering/version_control.html)
-8. **February 4**:
+8. **September 29**:
    - [Finite Markov Chains](https://julia.quantecon.org/tools_and_techniques/finite_markov.html)
-9. **February 11**
+9. **October 4**
    - [Continuous Time Markov Chains](https://julia.quantecon.org/tools_and_techniques/numerical_linear_algebra.html#continuous-time-markov-chains-ctmcs) and [continuous_time_markov.jmd](jmd/continuous_time_markov.jmd)
    - Self-study [Discrete State Dynamic Programming](https://quantecon.github.io/lecture-julia.myst/dynamic_programming/discrete_dp.html)
-10. **February 11**
+10. **October 6**
     - [Testing and Packages](https://julia.quantecon.org/software_engineering/testing.html)
     - [Conditioning and Numerical Stability](https://julia.quantecon.org/tools_and_techniques/iterative_methods_sparsity.html)
-11. **February 18**
+11. **October 11**
     - [Iterative Methods](https://nbviewer.jupyter.org/github/ubcecon/ECON622_2019/blob/master/notebooks/iterative_methods_sparsity.ipynb)
     - [Intro to AD](https://quantecon.github.io/lecture-julia.myst/more_julia/optimization_solver_packages.html#Introduction-to-Automatic-Differentiation)
     - Self-study: https://github.com/ubcecon/cluster_tools for instructions on setting up/using the cluster.
-12. **February 18**
+12. **October 13**
     - [Optimization algorithms](https://schrimpf.github.io/AnimatedOptimization.jl/optimization/)
     - [Optimization packages](https://quantecon.github.io/lecture-julia.myst/more_julia/optimization_solver_packages.html#Optimization)
-15. **March 4**
+15. **October 18**
     - [Extremum estimation](https://schrimpf.github.io/GMMInference.jl/extremumEstimation/) and [inference](https://schrimpf.github.io/GMMInference.jl/identificationRobustInference/)
-16. **March 4**
+16. **October 20**
     - [Empirical likelihood](https://schrimpf.github.io/GMMInference.jl/empiricalLikelihood/)
-17. **March 11**
+17. **October 25**
     - [Bootstrap](https://schrimpf.github.io/GMMInference.jl/bootstrap/)
-18. **March 11**:
+18. **October 27**:
     - [Coding for performance](https://github.com/schrimpf/ARGridBootstrap)
     - Self-study: [Need for speed](https://quantecon.github.io/lecture-julia.myst/more_julia/need_for_speed.html)
-19. **March 11**
+19. **November 1**
     - [GPU usage](https://github.com/schrimpf/ARGridBootstrap)
-21. **March 11**
+21. **November 3**
     <!-- [Structural estimation](http://faculty.arts.ubc.ca/pschrimpf/628/rustrothwell.html) link will change -->
     - [Machine learning](https://schrimpf.github.io/NeuralNetworkEconomics.jl/ml-intro/) or [older version with slides](http://faculty.arts.ubc.ca/pschrimpf/628/machineLearningAndCausalInference.html)
-22. **March 11**
+22. **November 8**
     - [Machine learning in Julia](https://github.com/schrimpf/NeuralNetworkEconomics.jl)
-23. **March 18**
+23. **November 15**
     - Finish [Machine learning](https://schrimpf.github.io/NeuralNetworkEconomics.jl/ml-intro/) focus on DML
     - [Gradient Boosting](https://schrimpf.github.io/GradientBoostingNotes/gb/#introduction)
-23. **March 18**
+23. **November 17**
     - [Neural Networks](https://github.com/schrimpf/NeuralNetworkEconomics.jl)
-24. **March 25**
+24. **November 22**
     - [Convolutional and Recurrent Neural Networks](https://github.com/schrimpf/NeuralNetworkEconomics.jl)
     - Transformers
-25. **April 1**
-25. **April 8**
+25. **November 24**
+25. **December 1**
     - [Project proposal due](final_project.md)
-27. **April 22**
+27. **Decemeber 16**
     - Final Project due
 
 
