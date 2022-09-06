@@ -2,6 +2,9 @@
 
 Problem sets should be submitted as a *single* Jupyter notebook on Canvas, with the code and output clean.
 - **Problem Set 1** - Due Wednesday, September 14
+  - To possibly tailor course content to students' interests, please answer:
+      1. What is/are your field(s)?
+      2. Give an example of a paper with computations similar to what you'd like to be able to do.
   - Exercises 7, 8(a), and 8(b) in [Introductory Examples](https://julia.quantecon.org/getting_started_julia/julia_by_example.html)
   - Redo any exercise of your choice from 1 to 6 in [Introductory Examples](https://julia.quantecon.org/getting_started_julia/julia_by_example.html)
     - In all "Redo" look at the provided solutions afterwards, but still submit your code
