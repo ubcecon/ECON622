@@ -3,8 +3,7 @@
 ## Computational Economics with Data Science Applications
 
 - **Instructor:** Paul Schrimpf, schrimpf@mail.ubc.ca
-<!-- - **Teaching Assistant:** Josh Catalano, joshua.catalano@alumni.ubc.ca -->
-- **Office Hours:** TBA
+- **Office Hours:** Tuesdays & Thursdays after class
 - **Class Time** Tuesday & Thursday 2:00PM-3:20PM
 
 
@@ -12,9 +11,9 @@ Classes will held in-person. In-person attendance is preferred, but
 classes will be streamed and recorded for at least the first few
 weeks.
 
-Whenever possible, please use
-[Piazza](piazza.com/ubc.ca/winterterm22022/econ6220012021w1) instead
-of email for discussion and to ask questions.
+<!-- Whenever possible, please use -->
+<!-- [Piazza](piazza.com/ubc.ca/winterterm22022/econ6220012021w1) instead -->
+<!-- of email for discussion and to ask questions. -->
 
 
 ## Course Description
