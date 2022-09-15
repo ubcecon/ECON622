@@ -44,10 +44,9 @@ See [problemsets.md](problemsets.md).
    -  Self-study: [Julia Essentials](https://quantecon.github.io/lecture-julia.myst/getting_started_julia/julia_essentials.html)
    -  Self-study: [Fundamental Types](https://quantecon.github.io/lecture-julia.myst/getting_started_julia/fundamental_types.html)
    - [Note on broadcasting](jmd/broadcasting.jmd)
-   -  Start [Intro to Types and Generic Programming](https://quantecon.github.io/lecture-julia.myst/getting_started_julia/introduction_to_types.html)
+   - [Intro to Types and Generic Programming](https://quantecon.github.io/lecture-julia.myst/getting_started_julia/introduction_to_types.html)
 4. **September 15**
-   -  Self-study: [Intro to Types and Generic Programming](https://quantecon.github.io/lecture-julia.myst/getting_started_julia/introduction_to_types.html)
-   -  Self-study: [Generic Programming](https://quantecon.github.io/lecture-julia.myst/more_julia/generic_programming.html)
+   - [Generic Programming](https://quantecon.github.io/lecture-julia.myst/more_julia/generic_programming.html)
 5. **Sepember 20**
    -  [Generic Programming](https://quantecon.github.io/lecture-julia.myst/more_julia/generic_programming.html)
    -  Self-study: [General Packages](https://quantecon.github.io/lecture-julia.myst/more_julia/general_packages.html)

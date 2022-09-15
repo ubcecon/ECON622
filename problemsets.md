@@ -10,9 +10,9 @@ Problem sets should be submitted as a *single* Jupyter notebook on Canvas, with 
     - In all "Redo" look at the provided solutions afterwards, but still submit your code
   <!-- - Exercise 7 in [Julia Essentials](https://julia.quantecon.org/getting_started_julia/julia_essentials.html) -->
 
-<!-- - **Problem Set 2** - Due Wednesday, January 26 -->
-<!--   - Exercises 2 and  3 <\!-- , and 4 -\-> in [Fundamental Types](https://julia.quantecon.org/getting_started_julia/fundamental_types.html) -->
-<!--   - Exercises 1, 2, 3 and 4 in [Introduction to Types](https://julia.quantecon.org/getting_started_julia/introduction_to_types.html) -->
+- **Problem Set 2** - Due Wednesday, September 21
+  <!-- -  Exercises 2 and  3 <\!-- , and 4 -\-> in [Fundamental Types](https://julia.quantecon.org/getting_started_julia/fundamental_types.html) -->
+  - Exercises 1, 2, 3, 4, and 5 in [Introduction to Types](https://julia.quantecon.org/getting_started_julia/introduction_to_types.html)
 <!-- - **Problem Set 3** - Due Wednesday, February 2 -->
 <!--   - Exercises 5 in [Introduction to Types](https://julia.quantecon.org/getting_started_julia/introduction_to_types.html) -->
 <!--   - Exercise 1 in [Generic Programming](https://julia.quantecon.org/more_julia/generic_programming.html) -->
