@@ -55,22 +55,19 @@ See [problemsets.md](problemsets.md).
 6. **September 22**
    -  Self-study: [Linear Algebra](https://quantecon.github.io/lecture-julia.myst/tools_and_techniques/linear_algebra.html)
    -  Self-study: [Orthogonal Projections](https://quantecon.github.io/lecture-julia.myst/tools_and_techniques/orth_proj.html)
-   -  Notes on  [Numerical Linear Algebra](https://nbviewer.jupyter.org/github/ubcecon/ECON622_2019/blob/master/notebooks/numerical_linear_algebra.ipynb) applying generic programming
+   -  Notes on  [Numerical Linear Algebra](https://julia.quantecon.org/tools_and_techniques/numerical_linear_algebra.html) applying generic programming
+   - [Iterative Methods](https://julia.quantecon.org/tools_and_techniques/iterative_methods_sparsity.html)
 7. **September 27**
-   - The Schur Decomposition
+   - [Conditioning and Numerical Stability](https://julia.quantecon.org/tools_and_techniques/iterative_methods_sparsity.html)
    - [Desktop Tools/Package Management](https://julia.quantecon.org/software_engineering/tools_editors.html)
    - [Git and Github](https://julia.quantecon.org/software_engineering/version_control.html)
 8. **September 29**:
-   - [Finite Markov Chains](https://julia.quantecon.org/tools_and_techniques/finite_markov.html)
+   - [Discrete State Dynamic Programming](https://quantecon.github.io/lecture-julia.myst/dynamic_programming/discrete_dp.html)
 9. **October 4**
-   - [Continuous Time Markov Chains](https://julia.quantecon.org/tools_and_techniques/numerical_linear_algebra.html#continuous-time-markov-chains-ctmcs) and [continuous_time_markov.jmd](jmd/continuous_time_markov.jmd)
-   - Self-study [Discrete State Dynamic Programming](https://quantecon.github.io/lecture-julia.myst/dynamic_programming/discrete_dp.html)
-10. **October 6**
     - [Testing and Packages](https://julia.quantecon.org/software_engineering/testing.html)
-    - [Conditioning and Numerical Stability](https://julia.quantecon.org/tools_and_techniques/iterative_methods_sparsity.html)
-11. **October 11**
-    - [Iterative Methods](https://nbviewer.jupyter.org/github/ubcecon/ECON622_2019/blob/master/notebooks/iterative_methods_sparsity.ipynb)
+10. **October 6**
     - [Intro to AD](https://quantecon.github.io/lecture-julia.myst/more_julia/optimization_solver_packages.html#Introduction-to-Automatic-Differentiation)
+11. **October 11**
     - Self-study: https://github.com/ubcecon/cluster_tools for instructions on setting up/using the cluster.
 12. **October 13**
     - [Optimization algorithms](https://schrimpf.github.io/AnimatedOptimization.jl/optimization/)
