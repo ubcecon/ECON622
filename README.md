@@ -67,6 +67,7 @@ See [problemsets.md](problemsets.md).
     - [Testing and Packages](https://julia.quantecon.org/software_engineering/testing.html)
 10. **October 6**
     - [Intro to AD](https://quantecon.github.io/lecture-julia.myst/more_julia/optimization_solver_packages.html#Introduction-to-Automatic-Differentiation)
+    and [Differentiation for Hackers](https://github.com/MikeInnes/diff-zoo)
 11. **October 11**
     - Self-study: https://github.com/ubcecon/cluster_tools for instructions on setting up/using the cluster.
 12. **October 13**
