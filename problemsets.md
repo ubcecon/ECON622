@@ -17,6 +17,10 @@ Problem sets should be submitted as a *single* Jupyter notebook on Canvas, with 
   - Exercise 1 in [Generic Programming](https://julia.quantecon.org/more_julia/generic_programming.html)
   - Read [Kaplan, Moll, & Violante (2018)](https://www.proquest.com/docview/2008829729?accountid=14656) and outline the steps needed to reproduce their results. Your outline need not be especially detailed. Pay particular attention to how the project can be broken into smaller, relatively independent tasks.
   - What's your github username or email? I will give you read/write access to https://github.com/ubcecon/ECON622_HANK (Sign up for a github account if you haven't already).
+- **Problem Set 4** - Due Monday, October 17th
+    - Review [this pull request](https://github.com/ubcecon/ECON622_HANK/pull/9/files)
+    - Solve the optimal control problem for either households or intermediate goods firms. Create a branch for your code in https://github.com/ubcecon/ECON622_HANK/ .
+      Turn in your code by creating a pull request.
 
 <!--   - Exercises 5 in [Introduction to Types](https://julia.quantecon.org/getting_started_julia/introduction_to_types.html) -->
 <!--   - Exercise 1 in [Generic Programming](https://julia.quantecon.org/more_julia/generic_programming.html) -->
