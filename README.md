@@ -81,7 +81,7 @@ See [problemsets.md](problemsets.md).
     - [Bootstrap](https://schrimpf.github.io/GMMInference.jl/bootstrap/)
 18. **October 27**:
     - [Coding for performance](https://github.com/schrimpf/ARGridBootstrap)
-    - Self-study: [Need for speed](https://quantecon.github.io/lecture-julia.myst/more_julia/need_for_speed.html)
+    - Self-study: [Need for speed](https://julia.quantecon.org/software_engineering/need_for_speed.html)
 19. **November 1**
     - [GPU usage](https://github.com/schrimpf/ARGridBootstrap)
 21. **November 3**
