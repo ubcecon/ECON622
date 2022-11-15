@@ -1,4 +1,4 @@
-# ECON622
+ds# ECON622
 
 This is a graduate topics course in computational economics, with applications in datascience and machine learning.
 
@@ -77,26 +77,29 @@ See [problemsets.md](problemsets.md).
     - [Extremum estimation](https://schrimpf.github.io/GMMInference.jl/extremumEstimation/) and [inference](https://schrimpf.github.io/GMMInference.jl/identificationRobustInference/)
 16. **October 20**
     - [Empirical likelihood](https://schrimpf.github.io/GMMInference.jl/empiricalLikelihood/)
-17. **October 25**
     - [Bootstrap](https://schrimpf.github.io/GMMInference.jl/bootstrap/)
-18. **October 27**:
-    - [Coding for performance](https://github.com/schrimpf/ARGridBootstrap)
-    - Self-study: [Need for speed](https://julia.quantecon.org/software_engineering/need_for_speed.html)
-19. **November 1**
-    - [GPU usage](https://github.com/schrimpf/ARGridBootstrap)
-21. **November 3**
+17. **October 25**
     <!-- [Structural estimation](http://faculty.arts.ubc.ca/pschrimpf/628/rustrothwell.html) link will change -->
     - [Machine learning](https://schrimpf.github.io/NeuralNetworkEconomics.jl/ml-intro/) or [older version with slides](http://faculty.arts.ubc.ca/pschrimpf/628/machineLearningAndCausalInference.html)
-22. **November 8**
     - [Machine learning in Julia](https://github.com/schrimpf/NeuralNetworkEconomics.jl)
-23. **November 15**
-    - Finish [Machine learning](https://schrimpf.github.io/NeuralNetworkEconomics.jl/ml-intro/) focus on DML
-    - [Gradient Boosting](https://schrimpf.github.io/GradientBoostingNotes/gb/#introduction)
-23. **November 17**
+18. **October 27**
     - [Neural Networks](https://github.com/schrimpf/NeuralNetworkEconomics.jl)
-24. **November 22**
+19. **November 1**:
     - [Convolutional and Recurrent Neural Networks](https://github.com/schrimpf/NeuralNetworkEconomics.jl)
-    - Transformers
+20. **November 3**
+    - [Transformers](https://github.com/schrimpf/NeuralNetworkEconomics.jl)
+21. **November 8**
+    - [Coding for performance](https://github.com/schrimpf/ARGridBootstrap)
+    - Self-study: [Need for speed](https://julia.quantecon.org/software_engineering/need_for_speed.html)
+    - [GPU usage](https://github.com/schrimpf/ARGridBootstrap)
+22. **November 10**
+    - [Bayesian Methods](https://ubcecon567.github.io/Bayes101.jl/ols/)
+22. **November 15**
+    - [ODE](https://julia.quantecon.org/continuous_time/seir_model.html)
+23. **November 17**
+    - [Stochastic ODE](https://julia.quantecon.org/continuous_time/covid_sde.html)
+24. **November 22**
+    - [Gradient Boosting](https://schrimpf.github.io/GradientBoostingNotes/gb/#introduction)
 25. **November 24**
 25. **December 1**
     - [Project proposal due](final_project.md)
