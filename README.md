@@ -1,4 +1,4 @@
-ds# ECON622
+# ECON622
 
 This is a graduate topics course in computational economics, with applications in datascience and machine learning.
 
