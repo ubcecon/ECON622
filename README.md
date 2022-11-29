@@ -101,6 +101,7 @@ See [problemsets.md](problemsets.md).
 24. **November 22**
     - [Gradient Boosting](https://schrimpf.github.io/GradientBoostingNotes/gb/#introduction)
 25. **November 24**
+26. **November 29** [Dynamic discrete choice](https://github.com/UBCECON567/DynamicDiscreteChoice.jl)
 25. **December 1**
     - [Project proposal due](final_project.md)
 27. **Decemeber 16**
