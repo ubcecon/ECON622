@@ -38,13 +38,15 @@ See [problemsets.md](problemsets.md).
    **Paul**
 
 1. **September 6**: Environment and Introduction to Julia
-    - [Julia Environment](https://quantecon.github.io/lecture-julia.myst/getting_started_julia/getting_started.html), [Introductory Examples](https://quantecon.github.io/lecture-julia.myst/getting_started_julia/julia_by_example.html)
+    - Environment: read one or both of these on your own and install Julia, IJulia, and VSCode, preferrably before the first class
+        - [Julia Environment](https://quantecon.github.io/lecture-julia.myst/getting_started_julia/getting_started.html)
+        - [MoJuWo: Writing your code](https://modernjuliaworkflows.github.io/pages/writing/)
+    - [Introductory Examples](https://quantecon.github.io/lecture-julia.myst/getting_started_julia/julia_by_example.html): to be covered in class
 2. **September 11**: Introduction and Variations on Fixed-points
    - [Introductory Examples](https://quantecon.github.io/lecture-julia.myst/getting_started_julia/julia_by_example.html)
 3. **September 13**: Introduction to types
    -  Self-study: [Julia Essentials](https://quantecon.github.io/lecture-julia.myst/getting_started_julia/julia_essentials.html)
    -  Self-study: [Fundamental Types](https://quantecon.github.io/lecture-julia.myst/getting_started_julia/fundamental_types.html)
-   - [Note on broadcasting](jmd/broadcasting.jmd)
    - [Intro to Types and Generic Programming](https://quantecon.github.io/lecture-julia.myst/getting_started_julia/introduction_to_types.html)
 4. **September 18**
    - [Generic Programming](https://quantecon.github.io/lecture-julia.myst/more_julia/generic_programming.html)
@@ -52,38 +54,46 @@ See [problemsets.md](problemsets.md).
    -  [Generic Programming](https://quantecon.github.io/lecture-julia.myst/more_julia/generic_programming.html)
    -  Self-study: [General Packages](https://quantecon.github.io/lecture-julia.myst/more_julia/general_packages.html)
    -  Self-study: [Data and Statistical Packages](https://quantecon.github.io/lecture-julia.myst/more_julia/data_statistical_packages.html)
-   -  Notes on [Quadrature](https://nbviewer.jupyter.org/github/ubcecon/ECON622_2019/blob/master/notebooks/quadrature.ipynb) applying generic programming
 6. **September 25**
    -  Self-study: [Linear Algebra](https://quantecon.github.io/lecture-julia.myst/tools_and_techniques/linear_algebra.html)
    -  Self-study: [Orthogonal Projections](https://quantecon.github.io/lecture-julia.myst/tools_and_techniques/orth_proj.html)
-   -  Notes on  [Numerical Linear Algebra](https://julia.quantecon.org/tools_and_techniques/numerical_linear_algebra.html) applying generic programming
-   - [Iterative Methods](https://julia.quantecon.org/tools_and_techniques/iterative_methods_sparsity.html)
+   - [Optimization algorithms](https://schrimpf.github.io/AnimatedOptimization.jl/optimization/)
+   - [Optimization packages](https://quantecon.github.io/lecture-julia.myst/more_julia/optimization_solver_packages.html#Optimization)
 7. **September 27**
-   - [Conditioning and Numerical Stability](https://julia.quantecon.org/tools_and_techniques/iterative_methods_sparsity.html)
+    - [Intro to AD](https://quantecon.github.io/lecture-julia.myst/more_julia/optimization_solver_packages.html#Introduction-to-Automatic-Differentiation)
+    and [Differentiation for Hackers](https://github.com/MikeInnes/diff-zoo)
+
    - [Desktop Tools/Package Management](https://julia.quantecon.org/software_engineering/tools_editors.html)
    - [Git and Github](https://julia.quantecon.org/software_engineering/version_control.html)
 8. **October 2**:
-   - [Discrete State Dynamic Programming](https://quantecon.github.io/lecture-julia.myst/dynamic_programming/discrete_dp.html)
-9. **October 4**
+    - [Extremum estimation](https://schrimpf.github.io/GMMInference.jl/extremumEstimation/) and [inference](https://schrimpf.github.io/GMMInference.jl/identificationRobustInference/)
     - [Testing and Packages](https://julia.quantecon.org/software_engineering/testing.html)
+
+9. **October 4**
+    - [Empirical likelihood](https://schrimpf.github.io/GMMInference.jl/empiricalLikelihood/)
+    - [Bootstrap](https://schrimpf.github.io/GMMInference.jl/bootstrap/)
+
+    - [Coding for performance](https://github.com/schrimpf/ARGridBootstrap)
+    - Self-study: [Need for speed](https://julia.quantecon.org/software_engineering/need_for_speed.html)
+    - [GPU usage](https://github.com/schrimpf/ARGridBootstrap)
+
+  ## Moved topics
+   -  Notes on [Quadrature](https://nbviewer.jupyter.org/github/ubcecon/ECON622_2019/blob/master/notebooks/quadrature.ipynb) applying generic programming
+   -  Notes on  [Numerical Linear Algebra](https://julia.quantecon.org/tools_and_techniques/numerical_linear_algebra.html) applying generic programming
+   - [Iterative Methods](https://julia.quantecon.org/tools_and_techniques/iterative_methods_sparsity.html)
+   - [Conditioning and Numerical Stability](https://julia.quantecon.org/tools_and_techniques/iterative_methods_sparsity.html)
+   - [Discrete State Dynamic Programming](https://quantecon.github.io/lecture-julia.myst/dynamic_programming/discrete_dp.html)
 
   **Jesse**
 
 10. **October 9**
-    - [Intro to AD](https://quantecon.github.io/lecture-julia.myst/more_julia/optimization_solver_packages.html#Introduction-to-Automatic-Differentiation)
-    and [Differentiation for Hackers](https://github.com/MikeInnes/diff-zoo)
 11. **October 11**
     - Self-study: https://github.com/ubcecon/cluster_tools for instructions on setting up/using the cluster.
 12. **October 12** **"Make-up Monday"**
 
 13. **October 16**
-    - [Optimization algorithms](https://schrimpf.github.io/AnimatedOptimization.jl/optimization/)
-    - [Optimization packages](https://quantecon.github.io/lecture-julia.myst/more_julia/optimization_solver_packages.html#Optimization)
 14. **October 18**
-    - [Extremum estimation](https://schrimpf.github.io/GMMInference.jl/extremumEstimation/) and [inference](https://schrimpf.github.io/GMMInference.jl/identificationRobustInference/)
 15. **October 23**
-    - [Empirical likelihood](https://schrimpf.github.io/GMMInference.jl/empiricalLikelihood/)
-    - [Bootstrap](https://schrimpf.github.io/GMMInference.jl/bootstrap/)
 16. **October 25**
     <!-- [Structural estimation](http://faculty.arts.ubc.ca/pschrimpf/628/rustrothwell.html) link will change -->
     - [Machine learning](https://schrimpf.github.io/NeuralNetworkEconomics.jl/ml-intro/) or [older version with slides](http://faculty.arts.ubc.ca/pschrimpf/628/machineLearningAndCausalInference.html)
@@ -98,9 +108,6 @@ See [problemsets.md](problemsets.md).
 19. **November 6**
     - [Transformers](https://github.com/schrimpf/NeuralNetworkEconomics.jl)
 20. **November 8**
-    - [Coding for performance](https://github.com/schrimpf/ARGridBootstrap)
-    - Self-study: [Need for speed](https://julia.quantecon.org/software_engineering/need_for_speed.html)
-    - [GPU usage](https://github.com/schrimpf/ARGridBootstrap)
 21. **November 10**
     - [Bayesian Methods](https://ubcecon567.github.io/Bayes101.jl/ols/)
     - [ODE](https://julia.quantecon.org/continuous_time/seir_model.html)
