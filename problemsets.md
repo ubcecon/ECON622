@@ -1,26 +1,28 @@
 # Problem Sets
 
 Problem sets should be submitted as a *single* Jupyter notebook on Canvas, with the code and output clean.
-- **Problem Set 1** - Due Wednesday, September 14
+- **Problem Set 1** - Due Tuesday, September 12
   - To possibly tailor course content to students' interests, please answer:
       1. What is/are your field(s)?
       2. Give an example of a paper with computations similar to what you'd like to be able to do.
   - Exercises 7, 8(a), and 8(b) in [Introductory Examples](https://julia.quantecon.org/getting_started_julia/julia_by_example.html)
-  - Redo any exercise of your choice from 1 to 6 in [Introductory Examples](https://julia.quantecon.org/getting_started_julia/julia_by_example.html)
-    - In all "Redo" look at the provided solutions afterwards, but still submit your code
+  <!-- - Redo any exercise of your choice from 1 to 6 in [Introductory Examples](https://julia.quantecon.org/getting_started_julia/julia_by_example.html) -->
+  <!--   - In all "Redo" look at the provided solutions afterwards, but still submit your code -->
   <!-- - Exercise 7 in [Julia Essentials](https://julia.quantecon.org/getting_started_julia/julia_essentials.html) -->
 
-- **Problem Set 2** - Due Wednesday, September 21
-  <!-- -  Exercises 2 and  3 <\!-- , and 4 -\-> in [Fundamental Types](https://julia.quantecon.org/getting_started_julia/fundamental_types.html) -->
-  - Exercises 1, 2, 3, 4, and 5 in [Introduction to Types](https://julia.quantecon.org/getting_started_julia/introduction_to_types.html)
-- **Problem Set 3** - Due Wednesday, October 5
-  - Exercise 1 in [Generic Programming](https://julia.quantecon.org/more_julia/generic_programming.html)
-  - Read [Kaplan, Moll, & Violante (2018)](https://www.proquest.com/docview/2008829729?accountid=14656) and outline the steps needed to reproduce their results. Your outline need not be especially detailed. Pay particular attention to how the project can be broken into smaller, relatively independent tasks.
-  - What's your github username or email? I will give you read/write access to https://github.com/ubcecon/ECON622_HANK (Sign up for a github account if you haven't already).
-- **Problem Set 4** - Due Monday, October 17th
-    - Review [this pull request](https://github.com/ubcecon/ECON622_HANK/pull/9/files)
-    - Solve the optimal control problem for either households or intermediate goods firms. Create a branch for your code in https://github.com/ubcecon/ECON622_HANK/ .
-      Turn in your code by creating a pull request.
+<!-- - **Problem Set 2** - Due Wednesday, September 21 -->
+<!--   <\!-- -  Exercises 2 and  3 <\\!-- , and 4 -\\-> in [Fundamental Types](https://julia.quantecon.org/getting_started_julia/fundamental_types.html) -\-> -->
+<!--   - Exercises 1, 2, 3, 4, and 5 in [Introduction to Types](https://julia.quantecon.org/getting_started_julia/introduction_to_types.html) -->
+
+<!-- - **Problem Set 3** - Due Wednesday, October 5 -->
+<!--   - Exercise 1 in [Generic Programming](https://julia.quantecon.org/more_julia/generic_programming.html) -->
+<!--   - Read [Kaplan, Moll, & Violante (2018)](https://www.proquest.com/docview/2008829729?accountid=14656) and outline the steps needed to reproduce their results. Your outline need not be especially detailed. Pay particular attention to how the project can be broken into smaller, relatively independent tasks. -->
+<!--   - What's your github username or email? I will give you read/write access to https://github.com/ubcecon/ECON622_HANK (Sign up for a github account if you haven't already). -->
+
+<!-- - **Problem Set 4** - Due Monday, October 17th -->
+<!--     - Review [this pull request](https://github.com/ubcecon/ECON622_HANK/pull/9/files) -->
+<!--     - Solve the optimal control problem for either households or intermediate goods firms. Create a branch for your code in https://github.com/ubcecon/ECON622_HANK/ . -->
+<!--       Turn in your code by creating a pull request. -->
 
 <!--   - Exercises 5 in [Introduction to Types](https://julia.quantecon.org/getting_started_julia/introduction_to_types.html) -->
 <!--   - Exercise 1 in [Generic Programming](https://julia.quantecon.org/more_julia/generic_programming.html) -->

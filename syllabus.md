@@ -1,19 +1,17 @@
-# ECON622 - Fall 2022
+# ECON622 - Fall 2023
 
 ## Computational Economics with Data Science Applications
 
-- **Instructor:** Paul Schrimpf, schrimpf@mail.ubc.ca
-- **Office Hours:** Tuesdays & Thursdays after class
-- **Class Time** Tuesday & Thursday 2:00PM-3:20PM
+- **Instructors:**
+  - Paul Schrimpf, schrimpf@mail.ubc.ca
+  - Jesse Perla,
+  - Phil Solimine,
+- **Office Hours:**
+- **Class Time** Mondays & Wednesdays 9:30-11:00 in [Buchanon D301](https://learningspaces.ubc.ca/classrooms/buch-d301)
 
 
 Classes will held in-person. In-person attendance is preferred, but
-classes will be streamed and recorded for at least the first few
-weeks.
-
-<!-- Whenever possible, please use -->
-<!-- [Piazza](piazza.com/ubc.ca/winterterm22022/econ6220012021w1) instead -->
-<!-- of email for discussion and to ask questions. -->
+classes will be streamed and recorded as well.
 
 
 ## Course Description
@@ -21,7 +19,7 @@ weeks.
 This is a graduate topics course in computational economics.  We intend
 this to be useful for a large number of fields, but it is most useful
 for anyone likely to:
-1. Solve a structural model
+1. Estimate a structural model
 2. Solve a dynamic
 model
 3. Collect and use data beyond what is possible in Stata (e.g medium/big data, textual data, etc.); or
@@ -60,29 +58,45 @@ you either (1) learn/use/apply a computational tool to a research
 topic of your interest or (2) contribute to an open-source
 computational economics project as a public good.
 
-## Course Parts
+<!-- ## Course Parts -->
 
-The course will be taught in 4 parts
-1. Introduction to Julia and scientific computing
-2. Dynamic Programming applications
-3. Structural estimation
-4. Data science and machine learning
+<!-- The course will be taught in 3 parts by  -->
+<!-- 1. Introduction to Julia and scientific computing -->
+<!-- 2. Dynamic Programming applications -->
+<!-- 3. Structural estimation -->
+<!-- 4. Data science and machine learning -->
 
-Throughout the course we will be using the programming language Julia.
+<!-- Throughout the course we will be using the programming language Julia. -->
 
-The course will be held in-person in Iona 633. Lectures will also be recorded and streamed, see canvas for links.
+<!-- The course will be held in-person in Iona 633. Lectures will also be recorded and streamed, see canvas for links. -->
 
 ## Topics
+
+The course will be taught in 3 parts, one with each instructor.
+
+We may not cover all these topics. A tentative schedule, based on last
+year's course is availabe on the course webpage.
+
+### Paul
+
+This part of the course will introduce Julia and illustrate how it can be used for econometrics, especially structural estimation.
 
 1. Introduction to Julia
    - Learning the Julia programming language, with simple applications
    - Generic and Functional programming, multiple dispatch
-   - Introduction to interpolation, quadrature, and functional equations
 
 2. Software engineering tools: source-code control, unit testing, and continuous integration
    - Git and Github version tracking, diffs, collaboration, Pull Requests, etc.
-    - Reproducible environments: package managers, and virtual environments
-    - Unit and regression testing frameworks, benchmarking, and continuous-integration
+   - Reproducible environments: package managers, and virtual environments
+   - Unit and regression testing frameworks, benchmarking, and continuous-integration
+
+3. Extremum estimators & optimization
+     - Review of extremum estimators
+     - Introduction to optimization algorithms
+     - Automatic Differentiation
+     - Inference for extremum estimators
+
+### Jesse
 
 3. Medium Data, clusters, and medium-scale parallel programming
     - "Just Enough Python to Get By" - and use great libraries
@@ -101,10 +115,6 @@ The course will be held in-person in Iona 633. Lectures will also be recorded an
     - Dynamic contracting
     - Perturbation approaches to solving models with heterogeneous agents (i.e. Reiter (2009) or similar methods)
 
-7. Extremum estimators & optimization
-     - Review of extremum estimators
-     - Introduction to optimization algorithms
-     - Inference for extremum estimators
 
 8. Unobserved heterogeneity and simulation based inference
      - Numeric integration
@@ -116,13 +126,10 @@ The course will be held in-person in Iona 633. Lectures will also be recorded an
 
 11.  Bayesian methods
 
-Through example applications, we will also cover data cleaning,
-visualization, text processing, and spatial data.
+## Phil
 
-We may not cover all these topics. A tentative schedule, based on last
-year's course is availabe on the course webpage.
 
-### UBC values and policies
+## UBC values and policies
 
 UBC provides resources to support student learning and to maintain
 healthy lifestyles but recognizes that sometimes crises arise and so
