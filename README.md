@@ -41,41 +41,35 @@ See [problemsets.md](problemsets.md).
     - Environment: read one or both of these on your own and install Julia, IJulia, and VSCode, preferrably before the first class
         - [Julia Environment](https://quantecon.github.io/lecture-julia.myst/getting_started_julia/getting_started.html)
         - [MoJuWo: Writing your code](https://modernjuliaworkflows.github.io/pages/writing/)
-    - [Introductory Examples](https://quantecon.github.io/lecture-julia.myst/getting_started_julia/julia_by_example.html): to be covered in class
-2. **September 11**: Introduction and Variations on Fixed-points
-   - [Introductory Examples](https://quantecon.github.io/lecture-julia.myst/getting_started_julia/julia_by_example.html)
-3. **September 13**: Introduction to types
+    - In class: Motivating econometric examples
+    - Self-study: [Introductory Examples](https://quantecon.github.io/lecture-julia.myst/getting_started_julia/julia_by_example.html)
+2. **September 11**: From Economic Models to Code
+   - In class: Comparing ways to implement some of the motivating examples
    -  Self-study: [Julia Essentials](https://quantecon.github.io/lecture-julia.myst/getting_started_julia/julia_essentials.html)
    -  Self-study: [Fundamental Types](https://quantecon.github.io/lecture-julia.myst/getting_started_julia/fundamental_types.html)
-   - [Intro to Types and Generic Programming](https://quantecon.github.io/lecture-julia.myst/getting_started_julia/introduction_to_types.html)
-4. **September 18**
-   - [Generic Programming](https://quantecon.github.io/lecture-julia.myst/more_julia/generic_programming.html)
-5. **Sepember 20**
-   -  [Generic Programming](https://quantecon.github.io/lecture-julia.myst/more_julia/generic_programming.html)
-   -  Self-study: [General Packages](https://quantecon.github.io/lecture-julia.myst/more_julia/general_packages.html)
-   -  Self-study: [Data and Statistical Packages](https://quantecon.github.io/lecture-julia.myst/more_julia/data_statistical_packages.html)
-6. **September 25**
-   -  Self-study: [Linear Algebra](https://quantecon.github.io/lecture-julia.myst/tools_and_techniques/linear_algebra.html)
-   -  Self-study: [Orthogonal Projections](https://quantecon.github.io/lecture-julia.myst/tools_and_techniques/orth_proj.html)
+3. **September 13**: Optimization
    - [Optimization algorithms](https://schrimpf.github.io/AnimatedOptimization.jl/optimization/)
    - [Optimization packages](https://quantecon.github.io/lecture-julia.myst/more_julia/optimization_solver_packages.html#Optimization)
-7. **September 27**
+   - Self-study: [Generic Programming](https://quantecon.github.io/lecture-julia.myst/more_julia/generic_programming.html)
+   - Self-study: [Linear Algebra](https://quantecon.github.io/lecture-julia.myst/tools_and_techniques/linear_algebra.html)
+4. **September 18**: Automatic Differentiation
     - [Intro to AD](https://quantecon.github.io/lecture-julia.myst/more_julia/optimization_solver_packages.html#Introduction-to-Automatic-Differentiation)
     and [Differentiation for Hackers](https://github.com/MikeInnes/diff-zoo)
-
-   - [Desktop Tools/Package Management](https://julia.quantecon.org/software_engineering/tools_editors.html)
-   - [Git and Github](https://julia.quantecon.org/software_engineering/version_control.html)
-8. **October 2**:
-    - [Extremum estimation](https://schrimpf.github.io/GMMInference.jl/extremumEstimation/) and [inference](https://schrimpf.github.io/GMMInference.jl/identificationRobustInference/)
-    - [Testing and Packages](https://julia.quantecon.org/software_engineering/testing.html)
-
-9. **October 4**
-    - [Empirical likelihood](https://schrimpf.github.io/GMMInference.jl/empiricalLikelihood/)
-    - [Bootstrap](https://schrimpf.github.io/GMMInference.jl/bootstrap/)
-
-    - [Coding for performance](https://github.com/schrimpf/ARGridBootstrap)
-    - Self-study: [Need for speed](https://julia.quantecon.org/software_engineering/need_for_speed.html)
-    - [GPU usage](https://github.com/schrimpf/ARGridBootstrap)
+5. **Sepember 20**: Extremum Estimation
+   - [Extremum estimation](https://schrimpf.github.io/GMMInference.jl/extremumEstimation/) and [inference](https://schrimpf.github.io/GMMInference.jl/identificationRobustInference/)
+   - [Empirical likelihood](https://schrimpf.github.io/GMMInference.jl/empiricalLikelihood/)
+   - [Bootstrap](https://schrimpf.github.io/GMMInference.jl/bootstrap/)
+   -  Self-study: [General Packages](https://quantecon.github.io/lecture-julia.myst/more_julia/general_packages.html)
+   -  Self-study: [Data and Statistical Packages](https://quantecon.github.io/lecture-julia.myst/more_julia/data_statistical_packages.html)
+6. **September 25**: Testing and Package Development
+   - In class: examples from Paul's packages and Julia ecosystem
+   - Self-study: [Testing and Packages](https://julia.quantecon.org/software_engineering/testing.html)
+   - Self-study: [Git and Github](https://julia.quantecon.org/software_engineering/version_control.html
+7. **September 27**: Code Performance
+   - [Coding for performance](https://github.com/schrimpf/ARGridBootstrap)
+   - [GPU usage](https://github.com/schrimpf/ARGridBootstrap)
+   - Self-study: [Need for speed](https://julia.quantecon.org/software_engineering/need_for_speed.html
+   - Self-study: [Performance Tips](https://docs.julialang.org/en/v1/manual/performance-tips/)
 
   ## Moved topics
    -  Notes on [Quadrature](https://nbviewer.jupyter.org/github/ubcecon/ECON622_2019/blob/master/notebooks/quadrature.ipynb) applying generic programming
@@ -83,6 +77,7 @@ See [problemsets.md](problemsets.md).
    - [Iterative Methods](https://julia.quantecon.org/tools_and_techniques/iterative_methods_sparsity.html)
    - [Conditioning and Numerical Stability](https://julia.quantecon.org/tools_and_techniques/iterative_methods_sparsity.html)
    - [Discrete State Dynamic Programming](https://quantecon.github.io/lecture-julia.myst/dynamic_programming/discrete_dp.html)
+
 
   **Jesse**
 
