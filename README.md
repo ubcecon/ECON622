@@ -70,53 +70,50 @@ See [problemsets.md](problemsets.md).
    - [GPU usage](https://github.com/schrimpf/ARGridBootstrap)
    - Self-study: [Need for speed](https://julia.quantecon.org/software_engineering/need_for_speed.html
    - Self-study: [Performance Tips](https://docs.julialang.org/en/v1/manual/performance-tips/)
-
+**JESSE** 
+8. **October 4th**: Iterative and matrix-free methods, pre-conditioning and regularization
+   - [Iterative Methods](https://julia.quantecon.org/tools_and_techniques/iterative_methods_sparsity.html)
+   - [Conditioning and Numerical Stability](https://julia.quantecon.org/tools_and_techniques/iterative_methods_sparsity.html)
+   - Assignment in prep for ECON628 two-way fixed effects
+9.  **October 11**: Introduction to Pytorch and JAX and "ML Devops"  
+10. **October 12**: Reverse-mode and forward-mode AD.  Differentiable everything!
+    - Describe differentiation of systems of ODEs, linear systems, etc.
+    - Custom jvps and vjps 
+    - Why we need gradients?
+11. **October 16**: Probabilistic Programming Languages (PPLs), Bayesian methods, and generative models
+    - Sampling and approximation of model posteriors
+    - High-dimensional sampling in practice
+    - Variational inference with Auto-differentiation vs. HMC
+12. **October 18** Gaussian Processes (and Intro to Bayesian Optimization)
+13. **October 23** Intro to Neural Networks and Function Approximation
+14. **October 25** Neural Networks Architectures and Optimization in Practice
+15. **October 30** Double-descent, regularization, and generalization
+**PHIL**
+1.  **November 1**
+2.  **November 6**: GUEST LECTURE [GEOFF PLEISS](https://geoffpleiss.com/)
   ## Moved topics
    -  Notes on [Quadrature](https://nbviewer.jupyter.org/github/ubcecon/ECON622_2019/blob/master/notebooks/quadrature.ipynb) applying generic programming
    -  Notes on  [Numerical Linear Algebra](https://julia.quantecon.org/tools_and_techniques/numerical_linear_algebra.html) applying generic programming
-   - [Iterative Methods](https://julia.quantecon.org/tools_and_techniques/iterative_methods_sparsity.html)
-   - [Conditioning and Numerical Stability](https://julia.quantecon.org/tools_and_techniques/iterative_methods_sparsity.html)
+
    - [Discrete State Dynamic Programming](https://quantecon.github.io/lecture-julia.myst/dynamic_programming/discrete_dp.html)
 
-
-  **Jesse**
-
-10. **October 9**
-11. **October 11**
-    - Self-study: https://github.com/ubcecon/cluster_tools for instructions on setting up/using the cluster.
-12. **October 12** **"Make-up Monday"**
-
-13. **October 16**
-14. **October 18**
-15. **October 23**
-16. **October 25**
-    <!-- [Structural estimation](http://faculty.arts.ubc.ca/pschrimpf/628/rustrothwell.html) link will change -->
-    - [Machine learning](https://schrimpf.github.io/NeuralNetworkEconomics.jl/ml-intro/) or [older version with slides](http://faculty.arts.ubc.ca/pschrimpf/628/machineLearningAndCausalInference.html)
-    - [Machine learning in Julia](https://github.com/schrimpf/NeuralNetworkEconomics.jl)
-17. **October 30**
-    - [Neural Networks](https://github.com/schrimpf/NeuralNetworkEconomics.jl)
-18. **November 1**:
-    - [Convolutional and Recurrent Neural Networks](https://github.com/schrimpf/NeuralNetworkEconomics.jl)
-
-  **Phil**
-
-19. **November 6**
+1.  **November 6**
     - [Transformers](https://github.com/schrimpf/NeuralNetworkEconomics.jl)
-20. **November 8**
-21. **November 10**
+2.  **November 8**
+3.  **November 10**
     - [Bayesian Methods](https://ubcecon567.github.io/Bayes101.jl/ols/)
     - [ODE](https://julia.quantecon.org/continuous_time/seir_model.html)
-22. **November 20**
+4.  **November 20**
     - [Stochastic ODE](https://julia.quantecon.org/continuous_time/covid_sde.html)
-23. **November 22**
+5.  **November 22**
     - [Gradient Boosting](https://schrimpf.github.io/GradientBoostingNotes/gb/#introduction)
-24. **November 27**
-25. **November 29** [Dynamic discrete choice](https://github.com/UBCECON567/DynamicDiscreteChoice.jl)
-26. **December 4**
+6.  **November 27**
+7.  **November 29** [Dynamic discrete choice](https://github.com/UBCECON567/DynamicDiscreteChoice.jl)
+8.  **December 4**
     - [Project proposal due](final_project.md)
-27. **December 6**
+9.  **December 6**
 
-28. **Decemeber 20**
+10. **Decemeber 20**
     - Final Project due
 
 
