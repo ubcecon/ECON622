@@ -95,7 +95,7 @@ See [problemsets.md](problemsets.md).
 
 **PHIL**
 
-16.  **November 1**
+16.  **November 1** Uncertainty Quantification, High-dimensional quadrature
 17.  **November 6**: GUEST LECTURE [GEOFF PLEISS](https://geoffpleiss.com/) FROM UBC STATS
 18. **November 8**
     - [Transformers](https://github.com/schrimpf/NeuralNetworkEconomics.jl)
