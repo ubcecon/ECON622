@@ -78,16 +78,15 @@ See [problemsets.md](problemsets.md).
 9.  **October 11**: Introduction to Pytorch and JAX and "ML Devops"  
 10. **October 12**: Reverse-mode and forward-mode AD.  Differentiable everything!
     - Describe differentiation of systems of ODEs, linear systems, etc.
-    - Custom jvps and vjps 
-    - Why we need gradients?
-11. **October 16**: Probabilistic Programming Languages (PPLs), Bayesian methods, and generative models
+    - Custom jvps and vjps.  Why we need gradients?
+1.  **October 16**: Probabilistic Programming Languages (PPLs), Bayesian methods, and intro to generative models
     - Sampling and approximation of model posteriors
     - High-dimensional sampling in practice
     - Variational inference with Auto-differentiation vs. HMC
-12. **October 18** Gaussian Processes (and Intro to Bayesian Optimization)
-13. **October 23** Intro to Neural Networks and Function Approximation
-14. **October 25** Neural Networks Architectures and Optimization in Practice
-15. **October 30** Double-descent, regularization, and generalization
+2.  **October 18** Gaussian Processes (and Intro to Bayesian Optimization)
+3.  **October 23** Intro to Neural Networks and Function Approximation
+4.  **October 25** Neural Networks Architectures and Optimization in Practice
+5.  **October 30** Double-descent, regularization, and generalization
 **PHIL**
 1.  **November 1**
 2.  **November 6**: GUEST LECTURE [GEOFF PLEISS](https://geoffpleiss.com/)
