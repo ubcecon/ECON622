@@ -24,6 +24,7 @@ for anyone likely to:
 model
 3. Collect and use data beyond what is possible in Stata (e.g medium/big data, textual data, etc.); or
 4. Implement econometric techniques that go beyond what is available in Stata
+5. Understand how new ML techniques can be applied to economics
 
 A key purpose of this class is to teach specific techniques,
 algorithms, and tools to ensure that students write robust, correct,
@@ -98,33 +99,18 @@ This part of the course will introduce Julia and illustrate how it can be used f
 
 ### Jesse
 
-3. Medium Data, clusters, and medium-scale parallel programming
-    - "Just Enough Python to Get By" - and use great libraries
-    - Using the cluster/parallel programming/executing computational jobs in Julia
-    - Tools for data too large memory but too small for massive clusters
-    - Tools for parallel processing of data too large for memory
-
-4. Sparsity/AD/scaling to large problems
-   - Application: multiway fixed-effect models
-   - Sparse matrices, banded matrices, etc. in Julia
-   - Forward/reverse/etc. auto-differentiation
-   - Iterative and matrix-free solutions to linear systems, eigensystems, and sparse linear least squares
-
-6. Computational dynamic programming
-    - Heterogenous agents
-    - Dynamic contracting
-    - Perturbation approaches to solving models with heterogeneous agents (i.e. Reiter (2009) or similar methods)
+This section will concentration on machine learning and deep learning techniques, and built computational tools such as working with gradients.  Much of the code with be introduced using python toolkits such as JAX and PyTorch
 
 
-8. Unobserved heterogeneity and simulation based inference
-     - Numeric integration
-
-9.  Dynamic structural models
-     - Dynamic discrete choice, dynamic games
-
-10.  Machine learning methods
-
-11.  Bayesian methods
+1. Iterative and matrix-free methods, pre-conditioning and regularization
+2. Introduction to Pytorch, JAX, and "ML Devops" 
+3. Reverse-mode and forward-mode AD.  Differentiable everything!
+4. Probabilistic Programming Languages (PPLs), Bayesian methods, and intro to generative models
+5. Gaussian Processes and Intro to Bayesian Optimization
+6. Neural Networks and Function Approximation
+7. Intro to Neural Networks, Function Approximation, and Representation Learning
+8. Deep Learning and Dynamic Models
+9. Double-descent, regularization, and generalization
 
 ## Phil
 
