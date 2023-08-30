@@ -103,7 +103,7 @@ See [problemsets.md](problemsets.md).
 21. **November 22** Dynamic games, Robust LQ (theory and computation)
 22. **November 27** Discrete dynamic games, Estimation by Conditional Choice Probabilities
 23. **November 29** Networks I - Graph theory, Graph spectrum, Network games
-24. **December 4** Networks II - Endogenous networks, Homophily, Embeddings, Graph Neural Networks
+24. **December 4** Networks II - Endogenous networks, Exponential family (Ising) models, Homophily, Embeddings, Graph Neural Networks
 25. **December 6** Variational inference for network models, Mean-field approximations, Graphons and limit games
 
 26. **Decemeber 20**
