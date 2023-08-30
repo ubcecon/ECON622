@@ -95,21 +95,16 @@ See [problemsets.md](problemsets.md).
 
 **PHIL**
 
-16.  **November 1** Uncertainty Quantification, High-dimensional quadrature
-17.  **November 6**: GUEST LECTURE [GEOFF PLEISS](https://geoffpleiss.com/) FROM UBC STATS
-18. **November 8**
-    - [Transformers](https://github.com/schrimpf/NeuralNetworkEconomics.jl)
-19. **November 10**
-    - [Bayesian Methods](https://ubcecon567.github.io/Bayes101.jl/ols/)
-    - [ODE](https://julia.quantecon.org/continuous_time/seir_model.html)
-20. **November 20**
-    - [Stochastic ODE](https://julia.quantecon.org/continuous_time/covid_sde.html)
-21. **November 22**
-    - [Gradient Boosting](https://schrimpf.github.io/GradientBoostingNotes/gb/#introduction)
-22. **November 27**
-23. **November 29** [Dynamic discrete choice](https://github.com/UBCECON567/DynamicDiscreteChoice.jl)
-24. **December 4**
-25. **December 6**
+16.  **November 1** Uncertainty Quantification (UQ), The unreasonable (in)effectiveness of Monte-Carlo
+17.  **November 6** GUEST LECTURE [GEOFF PLEISS](https://geoffpleiss.com/) FROM UBC STATS
+18. **November 8** Linear dynamical systems, Linear Quadratic (LQ) control (theory and computation)
+19. **November 10** Nonlinear systems, Stability
+20. **November 20** [Dynamic discrete choice](https://github.com/UBCECON567/DynamicDiscreteChoice.jl), Nested fixed-point (Rust bus)
+21. **November 22** Dynamic games, Robust LQ (theory and computation)
+22. **November 27** Discrete dynamic games, Estimation by Conditional Choice Probabilities
+23. **November 29** Networks I - Graph theory, Graph spectrum, Network games
+24. **December 4** Networks II - Endogenous networks, Homophily, Embeddings
+25. **December 6** Mean-field approximations, Graphons and limit games
 
 26. **Decemeber 20**
     - Final Project due
