@@ -99,7 +99,7 @@ See [problemsets.md](problemsets.md).
 17.  **November 6** GUEST LECTURE [GEOFF PLEISS](https://geoffpleiss.com/) FROM UBC STATS
 18. **November 8** Linear dynamical systems, Linear Quadratic (LQ) control (theory and computation)
 19. **November 10** Nonlinear systems, Stability
-20. **November 20** [Dynamic discrete choice](https://github.com/UBCECON567/DynamicDiscreteChoice.jl), Nested fixed-point (Rust bus)
+20. **November 20** [Dynamic discrete choice](https://github.com/UBCECON567/DynamicDiscreteChoice.jl), Nested fixed-point (Rust bus) and alternative estimation algorithms
 21. **November 22** Dynamic games, Robust LQ (theory and computation)
 22. **November 27** Discrete dynamic games, Estimation by Conditional Choice Probabilities
 23. **November 29** Networks I - Graph theory, Graph spectrum, Network games
