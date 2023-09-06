@@ -97,11 +97,11 @@ See [problemsets.md](problemsets.md).
 
 16.  **November 1** NLP, Attention/Transformers, Tuning Foundation Models
 17.  **November 6** GUEST LECTURE [GEOFF PLEISS](https://geoffpleiss.com/) FROM UBC STATS
-18. **November 8** Linear dynamical systems, Linear Quadratic (LQ) control (theory and computation)
-19. **November 10** Nonlinear systems, Stability
-20. **November 20** [Dynamic discrete choice](https://github.com/UBCECON567/DynamicDiscreteChoice.jl), Nested fixed-point, Heterogeneity and finite mixture models (E-M algorithm)
-21. **November 22** Dynamic games, Robust LQ (theory and computation)
-22. **November 27** Discrete dynamic games, Estimation by Conditional Choice Probabilities
+18. **November 8** Uncertainty Quantification (UQ) and the Unreasonable Effectiveness of Monte-Carlo
+19. **November 10** ODEs; Linear dynamical systems, Linear Quadratic (LQ) Control, Nonlinear systems, Stability
+20. **November 20** [Dynamic discrete choice](https://github.com/UBCECON567/DynamicDiscreteChoice.jl), Nested fixed-point, Heterogeneity and mixture models (E-M algorithm)
+21. **November 22** Discrete dynamic games, Estimation by Conditional Choice Probabilities
+22. **November 27** 
 23. **November 29** Networks I - Graph theory, Graph spectrum, Network games
 24. **December 4** Networks II - Endogenous networks, Exponential family (Ising) models, Homophily, Embeddings, Graph Neural Networks
 25. **December 6** Variational inference for network models, Mean-field approximations, Graphons and limit games
