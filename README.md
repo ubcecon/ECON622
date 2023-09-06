@@ -101,9 +101,9 @@ See [problemsets.md](problemsets.md).
 19. **November 10** ODEs; Linear dynamical systems, Linear Quadratic (LQ) Control, Nonlinear systems, Stability
 20. **November 20** [Dynamic discrete choice](https://github.com/UBCECON567/DynamicDiscreteChoice.jl), Nested fixed-point, Heterogeneity and mixture models (E-M algorithm)
 21. **November 22** Discrete dynamic games, Conditional Choice Probabilities Estimation
-22. **November 27** Networks I - Graph theory, Graph spectrum, Network games
+22. **November 27** Graph theory, Graph spectrum, Network games
 23. **November 29** Graphical models in machine learning
-24. **December 4** Networks II - Endogenous networks, Exponential family (Ising) models, Homophily, Embeddings, Graph Neural Networks
+24. **December 4** Network econometrics, Exponential family (Ising) models, Homophily, Embeddings, Graph Neural Networks
 25. **December 6** Variational inference for network models, Mean-field approximations, Graphons and limit games
 
 26. **Decemeber 20**
