@@ -1,0 +1,88 @@
+---
+title       : "Problem Set 1"
+subtitle    : "ECON622"
+author      :
+date        : 2023-09-12
+weave_options:
+      out_width : 100%
+      wrap : true
+      fig_width : 800
+      fig_height : 800
+      dpi : 192
+---
+
+Problems 2-5 are relatively simple exercises meant to familiarize yourself with some Julia syntax and features. Please write your answers without looking at the solutions on quantecon.org.
+
+# Problem 1
+
+This is [Exercise 8(a) from Quantecon chapter 2](https://julia.quantecon.org/getting_started_julia/julia_by_example.html#exercise-8-a).
+
+The root of a univariate function $f(\cdot)$ is an $x$ such that $f(x) = 0$.
+
+One solution method to find local roots of smooth functions is called Newton's method.
+
+Starting with an $x_0$ guess, a function $f(\cdot)$ and the first-derivative $f'(\cdot)$, the algorithm is to repeat
+
+$$
+x^{n+1} = x^n - \frac{f(x^n)}{f'(x^n)}
+$$
+
+until $| x^{n+1} - x^n|$ is below a tolerance
+
+1. Use a variation of the `fixedpointmap` code to implement Newton's method, where the function would accept arguments `f, f_prime, x_0, tolerance, maxiter`.
+2. Test it with $f(x) = (x-1)^3$ and another function of your choice where you can analytically find the derivative.
+
+# Problem 2
+
+[Exercise 1 from Chapter 3 of Quantecon](https://julia.quantecon.org/getting_started_julia/julia_essentials.html#exercise-1)
+
+Part 1: Given two numeric arrays or tuples `x_vals` and `y_vals` of equal length, compute
+their inner product using `zip()`.
+
+Part 2: Using a comprehension, count the number of even numbers between 0 and 99.
+
+* Hint: `iseven` returns `true` for even numbers and `false` for odds.
+
+Part 3: Using a comprehension, take `my_pairs = ((2, 5), (4, 2), (9, 8), (12, 10))` and count the number of pairs `(a, b)` such that both `a` and `b` are even.
+
+
+# Problem 3
+
+[Exercise 2 from Chapter 3 of Quantecon](https://julia.quantecon.org/getting_started_julia/julia_essentials.html#exercise-2)
+
+
+Consider the polynomial
+
+$$
+p(x)
+= a_0 + a_1 x + a_2 x^2 + \cdots a_n x^n
+= \sum_{i=0}^n a_i x^i
+$$
+
+Using `enumerate()` in your loop, write a function `p` such that `p(x, coeff)` computes the value in {eq}`polynom0` given a point `x` and an array of coefficients `coeff`.
+
+
+# Problem 4
+
+[Exercise 3 from Chapter 3 of Quantecon](https://julia.quantecon.org/getting_started_julia/julia_essentials.html#exercise-3)
+
+
+Write a function that takes a string as an argument and returns the number of capital letters in the string.
+
+Hint: `uppercase("foo")` returns `"FOO"`.
+
+
+# Problem 5
+
+[Exercise 4 from Chapter 3 of Quantecon](https://julia.quantecon.org/getting_started_julia/julia_essentials.html#exercise-4)
+
+Write a function that takes two sequences `seq_a` and `seq_b` as arguments and
+returns `true` if every element in `seq_a` is also an element of `seq_b`, else
+`false`.
+
+* By "sequence" we mean an array, tuple or string.
+
+# Problem 6
+
+1. What is your intended field?
+2. Give an example of a paper that contains the sort of models you want to be able to compute.

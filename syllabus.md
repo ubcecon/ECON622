@@ -45,8 +45,9 @@ significant portion of the grade will be regular problem sets.  The
 remainder of the grade will be a computational project.
 
 
-- Nearly weekly problem sets: 50%
-- Final Project: 45%
+- Nearly weekly problem sets: 40%
+- Final Project: 35%
+- Presentation: 20%
 - Participation: 5%
 
 While the problem sets will be frequent, many will be short to force
@@ -57,6 +58,8 @@ The final project topics are very open, and the main criteria is that
 you either (1) learn/use/apply a computational tool to a research
 topic of your interest or (2) contribute to an open-source
 computational economics project as a public good.
+
+There will be presentations in the last week of class. Your presentation ...
 
 <!-- ## Course Parts -->
 
