@@ -100,7 +100,7 @@ See [problemsets.md](problemsets.md).
 18. **November 8** Uncertainty Quantification (UQ) and the Unreasonable Effectiveness of Monte-Carlo
 19. **November 10** ODEs; Linear dynamical systems, Linear Quadratic (LQ) Control, Nonlinear systems, Stability
 20. **November 20** [Dynamic discrete choice](https://github.com/UBCECON567/DynamicDiscreteChoice.jl), Nested fixed-point, Heterogeneity and mixture models (E-M algorithm)
-21. **November 22** Discrete dynamic games, Estimation by Conditional Choice Probabilities
+21. **November 22** Discrete dynamic games, Conditional Choice Probabilities Estimation
 22. **November 27** 
 23. **November 29** Networks I - Graph theory, Graph spectrum, Network games
 24. **December 4** Networks II - Endogenous networks, Exponential family (Ising) models, Homophily, Embeddings, Graph Neural Networks
