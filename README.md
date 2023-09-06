@@ -95,7 +95,7 @@ See [problemsets.md](problemsets.md).
 
 **PHIL**
 
-16.  **November 1** Uncertainty Quantification (UQ), The unreasonable (in)effectiveness of Monte-Carlo
+16.  **November 1** NLP, Attention/Transformers, Tuning Foundation Models
 17.  **November 6** GUEST LECTURE [GEOFF PLEISS](https://geoffpleiss.com/) FROM UBC STATS
 18. **November 8** Linear dynamical systems, Linear Quadratic (LQ) control (theory and computation)
 19. **November 10** Nonlinear systems, Stability
