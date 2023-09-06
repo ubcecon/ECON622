@@ -71,52 +71,42 @@ See [problemsets.md](problemsets.md).
    - Self-study: [Need for speed](https://julia.quantecon.org/software_engineering/need_for_speed.html
    - Self-study: [Performance Tips](https://docs.julialang.org/en/v1/manual/performance-tips/)
 
-  ## Moved topics
-   -  Notes on [Quadrature](https://nbviewer.jupyter.org/github/ubcecon/ECON622_2019/blob/master/notebooks/quadrature.ipynb) applying generic programming
-   -  Notes on  [Numerical Linear Algebra](https://julia.quantecon.org/tools_and_techniques/numerical_linear_algebra.html) applying generic programming
+**JESSE** 
+
+8. **October 4th**: Iterative and matrix-free methods, pre-conditioning and regularization
+   - Large-scale linear least squares and eigenvalue problems
+   - Introduction to regularization and implicit bias of algorithms
    - [Iterative Methods](https://julia.quantecon.org/tools_and_techniques/iterative_methods_sparsity.html)
-   - [Conditioning and Numerical Stability](https://julia.quantecon.org/tools_and_techniques/iterative_methods_sparsity.html)
-   - [Discrete State Dynamic Programming](https://quantecon.github.io/lecture-julia.myst/dynamic_programming/discrete_dp.html)
+   - [Numerical Linear Algebra](https://julia.quantecon.org/tools_and_techniques/numerical_linear_algebra.html) applying generic programming
+   - Assignment in prep for ECON628 two-way fixed effects
+9.  **October 11**: Introduction to Pytorch, JAX, and "ML Devops"  
+10. **October 12**: Reverse-mode and forward-mode AD.  Differentiable everything!
+    - Implicit differentiation of systems of ODEs, linear systems, etc.
+    - Differentiable ODEs/SDEs in JAX and Julia
+    - Custom jvps and vjps.  Why we need gradients?
+11.  **October 16**: Probabilistic Programming Languages (PPLs), Bayesian methods, and intro to generative models
+    - Sampling and approximation of model posteriors
+    - High-dimensional sampling of latents in practice
+    - Variational inference with AD vs. HMC
+12.  **October 18** Gaussian Processes and Intro to Bayesian Optimization
+13.  **October 23** Intro to Neural Networks, Function Approximation, and Representation Learning
+14.  **October 25** Deep Learning and Dynamic Models
+15.  **October 30** Double-descent, regularization, and generalization
 
+**PHIL**
 
-  **Jesse**
+16.  **November 1** Uncertainty Quantification (UQ), The unreasonable (in)effectiveness of Monte-Carlo
+17.  **November 6** GUEST LECTURE [GEOFF PLEISS](https://geoffpleiss.com/) FROM UBC STATS
+18. **November 8** Linear dynamical systems, Linear Quadratic (LQ) control (theory and computation)
+19. **November 10** Nonlinear systems, Stability
+20. **November 20** [Dynamic discrete choice](https://github.com/UBCECON567/DynamicDiscreteChoice.jl), Nested fixed-point, Heterogeneity and finite mixture models (E-M algorithm)
+21. **November 22** Dynamic games, Robust LQ (theory and computation)
+22. **November 27** Discrete dynamic games, Estimation by Conditional Choice Probabilities
+23. **November 29** Networks I - Graph theory, Graph spectrum, Network games
+24. **December 4** Networks II - Endogenous networks, Exponential family (Ising) models, Homophily, Embeddings, Graph Neural Networks
+25. **December 6** Variational inference for network models, Mean-field approximations, Graphons and limit games
 
-10. **October 9**
-11. **October 11**
-    - Self-study: https://github.com/ubcecon/cluster_tools for instructions on setting up/using the cluster.
-12. **October 12** **"Make-up Monday"**
-
-13. **October 16**
-14. **October 18**
-15. **October 23**
-16. **October 25**
-    <!-- [Structural estimation](http://faculty.arts.ubc.ca/pschrimpf/628/rustrothwell.html) link will change -->
-    - [Machine learning](https://schrimpf.github.io/NeuralNetworkEconomics.jl/ml-intro/) or [older version with slides](http://faculty.arts.ubc.ca/pschrimpf/628/machineLearningAndCausalInference.html)
-    - [Machine learning in Julia](https://github.com/schrimpf/NeuralNetworkEconomics.jl)
-17. **October 30**
-    - [Neural Networks](https://github.com/schrimpf/NeuralNetworkEconomics.jl)
-18. **November 1**:
-    - [Convolutional and Recurrent Neural Networks](https://github.com/schrimpf/NeuralNetworkEconomics.jl)
-
-  **Phil**
-
-19. **November 6**
-    - [Transformers](https://github.com/schrimpf/NeuralNetworkEconomics.jl)
-20. **November 8**
-21. **November 10**
-    - [Bayesian Methods](https://ubcecon567.github.io/Bayes101.jl/ols/)
-    - [ODE](https://julia.quantecon.org/continuous_time/seir_model.html)
-22. **November 20**
-    - [Stochastic ODE](https://julia.quantecon.org/continuous_time/covid_sde.html)
-23. **November 22**
-    - [Gradient Boosting](https://schrimpf.github.io/GradientBoostingNotes/gb/#introduction)
-24. **November 27**
-25. **November 29** [Dynamic discrete choice](https://github.com/UBCECON567/DynamicDiscreteChoice.jl)
-26. **December 4**
-    - [Project proposal due](final_project.md)
-27. **December 6**
-
-28. **Decemeber 20**
+26. **Decemeber 20**
     - Final Project due
 
 
