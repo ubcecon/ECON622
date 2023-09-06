@@ -47,8 +47,8 @@ remainder of the grade will be a computational project.
 
 
 - Nearly weekly problem sets: 40%
-- Final Project: 35%
-- Presentation: 20%
+- Final Project: 40%
+- Presentation: 15%
 - Participation: 5%
 
 While the problem sets will be frequent, many will be short to force
@@ -106,7 +106,7 @@ This section will concentration on machine learning and deep learning techniques
 
 
 1. Iterative and matrix-free methods, pre-conditioning and regularization
-2. Introduction to Pytorch, JAX, and "ML Devops" 
+2. Introduction to Pytorch, JAX, and "ML Devops"
 3. Reverse-mode and forward-mode AD.  Differentiable everything!
 4. Probabilistic Programming Languages (PPLs), Bayesian methods, and intro to generative models
 5. Gaussian Processes and Intro to Bayesian Optimization
