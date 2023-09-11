@@ -1,0 +1,222 @@
+---
+title:
+author: Paul Schrimpf
+date: last-modified
+bibliography: 622.bib
+format:
+  revealjs:
+    theme: blood
+    width: 1575
+    height: 1050
+    min-scale: 0.1
+    max-scale: 3.0
+    chalkboard:
+      theme: whiteboard
+      boardmarker-width: 2
+      chalk-width: 2
+      chalk-effect: 0.0
+---
+
+$$
+\def\Er{{\mathrm{E}}}
+\def\En{{\mathbb{E}_n}}
+\def\cov{{\mathrm{Cov}}}
+\def\var{{\mathrm{Var}}}
+\def\R{{\mathbb{R}}}
+\def\arg{{\mathrm{arg}}}
+\newcommand\norm[1]{\left\lVert#1\right\rVert}
+\def\rank{{\mathrm{rank}}}
+\newcommand{\inpr}{ \overset{p^*_{\scriptscriptstyle n}}{\longrightarrow}}
+\def\inprob{{\,{\buildrel p \over \rightarrow}\,}}
+\def\indist{\,{\buildrel d \over \rightarrow}\,}
+\DeclareMathOperator*{\plim}{plim}
+\DeclareMathOperator*{\argmax}{argmax}
+\DeclareMathOperator*{\argmin}{argmin}
+$$
+
+# Example: Random Coefficients Demand
+
+## Example: Random Coefficients Demand
+
+- @blp1995
+- Consumers choose product:
+  $$
+  j = \argmax_{j \in \{0, ..., J\}} x_{jt}' (\bar{\beta} + \Sigma \nu_i) + \xi_{jt} + \epsilon_{ijt}
+  $$
+  - $\nu_i \sim N(0,I_k)$, $\epsilon_{ijt} \sim$ Type I Extreme Value
+  - Unobserved demand shock $\xi_{jt}$
+
+## Example: Random Coefficients Demand
+
+- Aggregate demand:
+$$
+s_{jt} = \int \frac{e^{x_{jt}'(\bar{\beta} + \Sigma \nu) + \xi_{jt}}} {\sum_{k = 0}^J e^{x_{kt}'(\bar{\beta} + \Sigma \nu) + \xi_{kt}} } dF\nu
+$$
+
+
+## Example: Random Coefficients Demand
+
+- Instruments $Z_{jt}$ with $E[\xi_{jt} Z_{jt}] = 0$
+- $g(s_{jt},x_{jt}, Z_{jt}, \bar{\beta},\Sigma) = \left(\delta_{jt}(s_{\cdot t}, x_{\cdot t},\beta,\Sigma) - x_{jt}'\bar{\beta}\right) Z_{jt}$
+- where $\delta_{jt}$ solves
+$$
+s_{jt} = \int \frac{e^{\delta_{jt} + x_{jt}'\Sigma \nu}} {\sum_{k = 0}^J e^{\delta_{kt} + x_{kt}'\Sigma \nu}} dF\nu
+$$
+
+# Code
+
+## Shares: version 1
+
+```julia
+function share(δ, Σ, dFν, x)
+  function shareν(ν)
+    s = exp.(δ .+ x*Σ*ν)
+    return(s./sum(s))
+  end
+  return(∫(shareν, dFν))
+end
+```
+
+::: {.incremental}
+- `∫(shareν, dFν)` is not a function that exists, will create it next
+- clear?
+- correct?
+- robust?
+:::
+
+## Shares: version 2
+
+```julia
+"""
+    share(δ, Σ, dFν, x)
+
+Computes shares in random coefficient logit with mean tastes `δ`, observed characteristics `x`, unobserved taste distribution `dFν`, and taste covariances `Σ`.
+
+# Arguments
+
+- `δ` vector of length `J`
+- `Σ` `K` by `K` matrix
+- `dFν` distribution of length `K` vector
+- `x` `J` by `K` array
+
+# Returns
+
+- vector of length `J` consisting of $s_1$, ..., $s_J$
+"""
+function share(δ, Σ, dFν, x)
+  J,K = size(x)
+  (length(δ) == J) || error("length(δ)=$(length(δ)) != size(x,1)=$J")
+  K,K == size(Σ) || error("size(x,1)=$J != size(Σ)=$(size(Σ))")
+  function shareν(ν)
+    s = δ .+ x*Σ*ν
+    s .-= maximum(s)
+    s .= exp.(s)
+    s ./= sum(s)
+    return(s)
+  end
+  return(∫(shareν, dFν))
+end
+```
+
+::: {.incremental}
+- adds documentation
+- some error checking on inputs
+- protects against overflow in `exp`
+- Are these changes needed & desirable?
+:::
+
+## Integration: Monte-Carlo
+```julia
+using Distributions, Statistics
+∫mc(f, dx; ndraw=100)=mean(f(rand(dx)) for i in 1:ndraw)
+```
+
+## Integration: Monte-Carlo
+```julia
+using Sobol
+import Base.Iterators: take
+function ∫s(f,dx::ZeroMeanIsoNormal;ndraw=100)
+  marginals = [Normal(dx.μ[i], sqrt(dx.Σ[i,i])) for i in 1:length(dx)]
+  invcdf(x) = quantile.(marginals,x)
+  ss = skip(SobolSeq(length(dx)),ndraw)
+  mean(f(invcdf(x)) for x in take(ss,ndraw))
+end
+```
+
+## Integration: Quadrature
+
+```julia
+using FastGaussQuadrature, LinearAlgebra
+import Base.Iterators: product, repeated
+function ∫q(f, dx::MvNormal; ndraw=100)
+  n = Int(ceil(ndraw^(1/length(dx))))
+  x, w = gausshermite(n)
+  L = cholesky(dx.Σ).L
+  sum(f(√2*L*vcat(xs...) + dx.μ)*prod(ws)
+      for (xs,ws) ∈ zip(product(repeated(x, length(dx))...),
+                        product(repeated(w, length(dx))...))
+        )/(π^(length(dx)/2))
+end
+```
+
+## Integration: Sparse Grid Quadrature
+
+```julia
+using SparseGrids
+function ∫sgq(f, dx::MvNormal; order=5)
+  X, W = sparsegrid(length(dx), order, gausshermite, sym=true)
+  L = cholesky(dx.Σ).L
+  sum(f(√2*L*x + dx.μ)*w for (x,w) ∈ zip(X,W))/(π^(length(dx)/2))
+end
+```
+
+## Integration: Cubature
+
+```julia
+using HCubature
+function ∫cuba(f, dx; rtol=1e-4)
+  D = length(dx)
+  x(t) = t./(1 .- t.^2)
+  Dx(t) = prod((1 .+ t.^2)./(1 .- t.^2).^2)
+  hcubature(t->f(x(t))*pdf(dx,x(t))*Dx(t), -ones(D),ones(D), rtol=rtol)[1]
+end
+```
+
+"""
+    share(δ, Σ, dFν, x)
+
+Computes
+```math
+s_{j} = \int \frac{e^{\delta_{j} + x_{j}'\Sigma \nu}} {\sum_{k = 0}^J e^{\delta_{k} + x_{k}'\Sigma \nu}} dF\nu
+```
+
+# Arguments
+
+- `δ` vector of length `J`
+- `Σ` `K` by `K` matrix
+- `dFν` distributino of length `K` vector
+- `x` `J` by `K` array
+
+# Returns
+
+- vector of length `J` consisting of $s_1$, ..., $s_J$
+"""
+function share(δ, Σ, dFν, x)
+  J,K = size(x)
+  (length(δ) == J) || error("length(δ)=$(length(δ)) != size(x,1)=$J")
+  K,K == size(Σ) || error("size(x,1)=$J != size(Σ)=$(size(Σ))")
+  function shareν(ν)
+    s = δ .+ x*Σ*ν
+    s .-= maximum(s)
+    s .= exp.(s)
+    s ./= sum(s)
+    return(s)
+  end
+  return(∫(shareν, dFν))
+end
+
+end
+```
+
+
+# References
