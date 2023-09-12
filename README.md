@@ -44,9 +44,9 @@ See [problemsets.md](problemsets.md).
     - In class: Motivating econometric examples
     - Self-study: [Introductory Examples](https://quantecon.github.io/lecture-julia.myst/getting_started_julia/julia_by_example.html)
 2. **September 11**: From Economic Models to Code
-   - In class: Comparing ways to implement some of the motivating examples
-   -  Self-study: [Julia Essentials](https://quantecon.github.io/lecture-julia.myst/getting_started_julia/julia_essentials.html)
-   -  Self-study: [Fundamental Types](https://quantecon.github.io/lecture-julia.myst/getting_started_julia/fundamental_types.html)
+   - In class: [Implementing random coefficient demand \& numeric integration methods](jmd/blp.jmd)
+   - Self-study: [Julia Essentials](https://quantecon.github.io/lecture-julia.myst/getting_started_julia/julia_essentials.html)
+   - Self-study: [Fundamental Types](https://quantecon.github.io/lecture-julia.myst/getting_started_julia/fundamental_types.html)
 3. **September 13**: Optimization
    - [Optimization algorithms](https://schrimpf.github.io/AnimatedOptimization.jl/optimization/)
    - [Optimization packages](https://quantecon.github.io/lecture-julia.myst/more_julia/optimization_solver_packages.html#Optimization)
@@ -71,7 +71,7 @@ See [problemsets.md](problemsets.md).
    - Self-study: [Need for speed](https://julia.quantecon.org/software_engineering/need_for_speed.html
    - Self-study: [Performance Tips](https://docs.julialang.org/en/v1/manual/performance-tips/)
 
-**JESSE** 
+**JESSE**
 
 8. **October 4th**: Iterative and matrix-free methods, pre-conditioning and regularization
    - Large-scale linear least squares and eigenvalue problems
@@ -79,7 +79,7 @@ See [problemsets.md](problemsets.md).
    - [Iterative Methods](https://julia.quantecon.org/tools_and_techniques/iterative_methods_sparsity.html)
    - [Numerical Linear Algebra](https://julia.quantecon.org/tools_and_techniques/numerical_linear_algebra.html) applying generic programming
    - Assignment in prep for ECON628 two-way fixed effects
-9.  **October 11**: Introduction to Pytorch, JAX, and "ML Devops"  
+9.  **October 11**: Introduction to Pytorch, JAX, and "ML Devops"
 10. **October 12**: Reverse-mode and forward-mode AD.  Differentiable everything!
     - Implicit differentiation of systems of ODEs, linear systems, etc.
     - Differentiable ODEs/SDEs in JAX and Julia
