@@ -21,8 +21,12 @@ Add tests for your new integration methods in [https://github.com/ubcecon/ECON62
 
 # Problem 3
 
-Compare with Integrals.jl?
+This problem is more open ended and difficult. Work on either option A or option B. You need not have a complete solution to receive full credit, but you should show some effort and explain what you attempted.
 
-# Problem 4
+## Option A
 
-Autodiff share & delta?
+The function `delta` in [https://github.com/ubcecon/ECON622/tree/master/jmd/blp/src/blp.jl](https://github.com/ubcecon/ECON622/tree/master/jmd/blp/src/blp.jl) will fail in some situations, such as when some shares are near 0. Create a test that `delta` fails. Try altering `delta` to make it succeed where it previously failed.
+
+## Option B
+
+Calculate the derivative of `delta` with respect to `Σ`. Can any automatic differentiation packages do this? If not, can you make the code compatible with an automatic differentation package (you could define a special method for `Σ::Array{ForwardDiff.Dual{T}}` or use ChainRules.jl).
