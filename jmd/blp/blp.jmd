@@ -87,7 +87,7 @@ end
 ## Shares: version 2
 
 ```julia
-"""
+@doc raw"""
     share(δ, Σ, dFν, x)
 
 Computes shares in random coefficient logit with mean tastes `δ`, observed characteristics `x`, unobserved taste distribution `dFν`, and taste covariances `Σ`.

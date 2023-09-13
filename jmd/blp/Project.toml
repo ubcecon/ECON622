@@ -1,0 +1,7 @@
+[deps]
+Distributions = "31c24e10-a181-5473-b8eb-7969acd0382f"
+FastGaussQuadrature = "442a2c76-b920-505d-bb47-c5924d526838"
+HCubature = "19dc6840-f33b-545b-b366-655c7e3ffd49"
+NLsolve = "2774e3e8-f4cf-5e23-947b-6d7e65073b56"
+Sobol = "ed01d8cd-4d21-5b2a-85b4-cc3bdc58bad4"
+SparseGrids = "bafbe729-afc6-5148-bb4f-226bf3d46895"

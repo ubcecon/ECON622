@@ -1,15 +1,16 @@
 # Problem Sets
 
-Problem sets should be submitted as a *single* Jupyter notebook on Canvas, with the code and output clean.
-- **Problem Set 1** - Due Tuesday, September 12
-  - To possibly tailor course content to students' interests, please answer:
-      1. What is/are your field(s)?
-      2. Give an example of a paper with computations similar to what you'd like to be able to do.
-  - Exercises 7, 8(a), and 8(b) in [Introductory Examples](https://julia.quantecon.org/getting_started_julia/julia_by_example.html)
+<!-- Problem sets should be submitted as a *single* Jupyter notebook on Canvas, with the code and output clean. -->
+- **Problem Set 1** - see Canvas
+<!-- Due Tuesday, September 12 -->
+<!--   - To possibly tailor course content to students' interests, please answer: -->
+<!--       1. What is/are your field(s)? -->
+<!--       2. Give an example of a paper with computations similar to what you'd like to be able to do. -->
+<!--   - Exercises 7, 8(a), and 8(b) in [Introductory Examples](https://julia.quantecon.org/getting_started_julia/julia_by_example.html) -->
   <!-- - Redo any exercise of your choice from 1 to 6 in [Introductory Examples](https://julia.quantecon.org/getting_started_julia/julia_by_example.html) -->
   <!--   - In all "Redo" look at the provided solutions afterwards, but still submit your code -->
   <!-- - Exercise 7 in [Julia Essentials](https://julia.quantecon.org/getting_started_julia/julia_essentials.html) -->
-
+- **Problem Set 2** - see Canvas
 <!-- - **Problem Set 2** - Due Wednesday, September 21 -->
 <!--   <\!-- -  Exercises 2 and  3 <\\!-- , and 4 -\\-> in [Fundamental Types](https://julia.quantecon.org/getting_started_julia/fundamental_types.html) -\-> -->
 <!--   - Exercises 1, 2, 3, 4, and 5 in [Introduction to Types](https://julia.quantecon.org/getting_started_julia/introduction_to_types.html) -->

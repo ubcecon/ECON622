@@ -35,7 +35,7 @@ See [problemsets.md](problemsets.md).
 
 ## Lectures
 
-   **Paul**
+**Paul**
 
 1. **September 6**: Environment and Introduction to Julia
     - Environment: read one or both of these on your own and install Julia, IJulia, and VSCode, preferrably before the first class
@@ -44,10 +44,11 @@ See [problemsets.md](problemsets.md).
     - In class: Motivating econometric examples
     - Self-study: [Introductory Examples](https://quantecon.github.io/lecture-julia.myst/getting_started_julia/julia_by_example.html)
 2. **September 11**: From Economic Models to Code
-   - In class: [Implementing random coefficient demand \& numeric integration methods](jmd/blp.jmd)
+   - In class: [Implementing random coefficient demand \& numeric integration methods](jmd/blp/blp.jmd)
    - Self-study: [Julia Essentials](https://quantecon.github.io/lecture-julia.myst/getting_started_julia/julia_essentials.html)
    - Self-study: [Fundamental Types](https://quantecon.github.io/lecture-julia.myst/getting_started_julia/fundamental_types.html)
 3. **September 13**: Optimization
+   - In class: discussion of types and using them to [reorganize numeric integration code from last time](jmd/blp/src/integrate.jl) and [testing them](jmd/blp/test/runtests.jl)
    - [Optimization algorithms](https://schrimpf.github.io/AnimatedOptimization.jl/optimization/)
    - [Optimization packages](https://quantecon.github.io/lecture-julia.myst/more_julia/optimization_solver_packages.html#Optimization)
    - Self-study: [Generic Programming](https://quantecon.github.io/lecture-julia.myst/more_julia/generic_programming.html)

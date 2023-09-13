@@ -1,0 +1,28 @@
+---
+title       : "Problem Set 2"
+subtitle    : "ECON622"
+author      :
+date        : 2023-09-19
+weave_options:
+      out_width : 100%
+      wrap : true
+      fig_width : 800
+      fig_height : 800
+      dpi : 192
+---
+
+# Problem 1
+
+Add quadrature and sparse grid quadrature methods to [https://github.com/ubcecon/ECON622/tree/master/jmd/blp/src/integrate.jl](https://github.com/ubcecon/ECON622/tree/master/jmd/blp/src/integrate.jl).
+
+# Problem 2
+
+Add tests for your new integration methods in [https://github.com/ubcecon/ECON622/tree/master/jmd/blp/test/runtests.jl](https://github.com/ubcecon/ECON622/tree/master/jmd/blp/test/runtests.jl).
+
+# Problem 3
+
+Compare with Integrals.jl?
+
+# Problem 4
+
+Autodiff share & delta?
