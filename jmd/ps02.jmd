@@ -2,7 +2,7 @@
 title       : "Problem Set 2"
 subtitle    : "ECON622"
 author      :
-date        : 2023-09-19
+date        : 2023-09-21
 weave_options:
       out_width : 100%
       wrap : true
@@ -10,6 +10,8 @@ weave_options:
       fig_height : 800
       dpi : 192
 ---
+
+The recommended way to hand in and complete this assignment is to fork [https://github.com/ubcecon/ECON622_BLP.jl/](https://github.com/ubcecon/ECON622_BLP.jl/) and link to your forked repository. If you prefer you can also simply upload (to canvas) the files you edited or put all your code in a jupyter notebook.
 
 # Problem 1
 
