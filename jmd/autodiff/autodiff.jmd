@@ -1,0 +1,166 @@
+---
+title       : "Automatic Differentiation"
+subtitle    : ""
+author      : Paul Schrimpf
+date        : `j using Dates; print(Dates.today())`
+weave_options:
+      out_width : 100%
+      wrap : true
+      fig_width : 800
+      fig_height : 800
+      dpi : 192
+---
+
+[![](https://i.creativecommons.org/l/by-sa/4.0/88x31.png)](http://creativecommons.org/licenses/by-sa/4.0/)
+
+This work is licensed under a [Creative Commons Attribution-ShareAlike
+4.0 International
+License](http://creativecommons.org/licenses/by-sa/4.0/)
+
+
+# Introduction
+
+This document gives an overview of the automatic differentiation packages in Julia.
+
+# ForwardDiff
+
+`ForwardDiff.jl` is a mature and reliable forward mode automatic differentiation package. Forward automatic differentiation is much easier to implement than reverse automatic differentiation.
+
+## Example
+
+```julia
+using Distributions
+function simulate_logit(observations, β)
+  x = randn(observations, length(β))
+  y = (x*β + rand(Logistic(), observations)) .>= 0.0
+  return((y=y,x=x))
+end
+
+function logit_likelihood(β,y,x)
+  p = map(xb -> cdf(Logistic(),xb), x*β)
+  sum(log.(ifelse.(y, p, 1.0 .- p)))
+end
+
+n = 500
+k = 3
+β0 = ones(k)
+(y,x) = simulate_logit(n,β0)
+
+import ForwardDiff
+∇L = ForwardDiff.gradient(b->logit_likelihood(b,y,x),β0)
+```
+
+## Notes
+
+- As with any forward automatic differentiation for $f: \mathbb{R}^n \to \mathbb{R}^m$, the computation scales with $n$. This makes forward mode poorly suited for high dimensional models.
+
+- Code must be generic, be especially careful when allocating arrays, as in the following example.
+
+```julia
+function wontwork(x)
+  y = zeros(size(x))
+  for i ∈ eachindex(x)
+    y[i] += x[i]*i
+  end
+  return(sum(y))
+end
+
+function willwork(x)
+  y = zero(x)
+  for i ∈ eachindex(x)
+    y[i] += x[i]*i
+  end
+  return(sum(y))
+end
+
+betterstyle(x) = sum(v*i for (i,v) in enumerate(x))
+```
+
+# Zygote
+
+[Zygote.jl](https://fluxml.ai/Zygote.jl/latest/)
+
+## Notes
+
+- Does not allow mutating arrays
+- Some bugs
+- Apparently hard to develop, unclear future
+
+# Enzyme
+
+["Enzyme performs automatic differentiation (AD) of statically analyzable LLVM. It is highly-efficient and its ability to perform AD on optimized code allows Enzyme to meet or exceed the performance of state-of-the-art AD tools."](https://enzymead.github.io/Enzyme.jl/stable/)
+
+```julia
+import Enzyme
+import Enzyme: Active, Duplicated, Const
+
+db = zero(β0)
+Enzyme.autodiff(Enzyme.ReverseWithPrimal,logit_likelihood, Active, Duplicated(β0,db), Const(y), Const(x))
+db
+
+```
+
+## Notes
+
+- Documentation is not suited to beginners
+- Does not work on all Julia code, but cases where it fails are not well documented. Calling `Enzyme.API.runtimeActivity!(true)` works around some errors.
+- Crytic error messages. Enzyme operates on LLVM IR, and error messages often reference the point in the LLVM IR where the error occurred. Figuring out what Julia code the LLVM IR corresponds to is not easy.
+
+```julia
+Enzyme.API.runtimeActivity!(false)
+f1(x,y) = sum(x.*y)
+dimx = 30000
+x = ones(dimx)
+y = rand(dimx)
+dx = zeros(dimx)
+@time Enzyme.autodiff(Enzyme.ReverseWithPrimal, f1, Duplicated(x,dx),y)
+dx
+
+f3(x,y) = sum(x[i]*y[i] for i ∈ eachindex(x))
+dx = zeros(dimx)
+Enzyme.autodiff(Enzyme.ReverseWithPrimal, f3, Duplicated(x,dx),y)
+dx
+
+f2(x,y) = sum(a*b for (a,b) ∈ zip(x,y))
+dx = zeros(dimx)
+@time Enzyme.autodiff(Enzyme.ReverseWithPrimal, f2, Duplicated(x,dx), y)
+dx
+
+Enzyme.API.runtimeActivity!(true)
+f2(x,y) = sum(a*b for (a,b) ∈ zip(x,y))
+dx = zeros(dimx)
+@time Enzyme.autodiff(Enzyme.ReverseWithPrimal, f2, Duplicated(x,dx), y)
+dx
+```
+
+# FiniteDiff
+
+[FiniteDiff](https://github.com/JuliaDiff/FiniteDiff.jl) computes finite difference gradients. It is good practice to always check that whatever automatic or manual derivatives you compute are close to the finite difference versions. It is a good idea to use a package for finite differencing instead of doing it yourself because roundoff error needs to be handled carefully when calculating finite differences.
+
+# ChainRules
+
+[ChainRules](https://github.com/JuliaDiff/ChainRules.jl) is not automatic differentiation by itself, but is used by many AD packages to define the derivati
+ves of various functions. Useful if you want to define a custom derivative rule for a function.
+
+
+# Other Reverse Mode Packages
+
+## ReverseDiff.jl
+
+[ReverseDiff.jl](https://github.com/JuliaDiff/ReverseDiff.jl) a tape based reverse mode package. Long lived and well tested.
+
+### Limitations
+
+[See](https://juliadiff.org/ReverseDiff.jl/limits/). Importantly, code must be generic and mutation of arrays is not allowed.
+
+## Yota.jl
+
+[Yota.jl](https://github.com/dfdx/Yota.jl) another tape based package. Compatible with Chainrules.jl. Somewhat newer and less popular. [Its documentation has a very nice explanation of how it works.](https://dfdx.github.io/Yota.jl/dev/design/)
+
+## Tracker
+
+[Tracker](https://github.com/FluxML/Tracker.jl) is a tape based reverse mode package. It was the default autodiff package in Flux before being replaced by Zygote. No longer under active development.
+
+## Diffractor
+
+[Diffractor](https://github.com/JuliaDiff/Diffractor.jl) is automatic differentiation package in development. It was once hoped to be the future of AD in Julia, but has been delayed. It plans to have both forward and reverse mode, but only forward mode is available so far.
