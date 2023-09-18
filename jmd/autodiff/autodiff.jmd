@@ -149,6 +149,13 @@ ves of various functions. Useful if you want to define a custom derivative rule 
 
 [ReverseDiff.jl](https://github.com/JuliaDiff/ReverseDiff.jl) a tape based reverse mode package. Long lived and well tested.
 
+```julia
+import ReverseDiff
+ReverseDiff.gradient(wontwork, rand(5))
+ReverseDiff.gradient(willwork, rand(5)) # actually won't work
+ReverseDiff.gradient(betterstyle, rand(5))
+```
+
 ### Limitations
 
 [See](https://juliadiff.org/ReverseDiff.jl/limits/). Importantly, code must be generic and mutation of arrays is not allowed.
@@ -156,6 +163,13 @@ ves of various functions. Useful if you want to define a custom derivative rule 
 ## Yota.jl
 
 [Yota.jl](https://github.com/dfdx/Yota.jl) another tape based package. Compatible with Chainrules.jl. Somewhat newer and less popular. [Its documentation has a very nice explanation of how it works.](https://dfdx.github.io/Yota.jl/dev/design/)
+
+```julia
+import Yota
+Yota.grad(wontwork, rand(5))
+Yota.grad(willwork, rand(5))
+Yota.grad(betterstyle, rand(5))
+```
 
 ## Tracker
 
