@@ -11,15 +11,15 @@ weave_options:
       dpi : 192
 ---
 
-The recommended way to hand in and complete this assignment is to fork [https://github.com/ubcecon/ECON622_BLP.jl/](https://github.com/ubcecon/ECON622_BLP.jl/) and link to your forked repository. If you prefer you can also simply upload (to canvas) the files you edited or put all your code in a jupyter notebook.
+The recommended way to hand in and complete this assignment is to fork [`https://github.com/ubcecon/ECON622_BLP.jl/`](https://github.com/ubcecon/ECON622_BLP.jl/) and link to your forked repository. If you prefer you can also simply upload (to canvas) the files you edited or put all your code in a jupyter notebook.
 
 # Problem 1
 
-Add quadrature and sparse grid quadrature methods to [https://github.com/ubcecon/ECON622/tree/master/jmd/blp/src/integrate.jl](https://github.com/ubcecon/ECON622/tree/master/jmd/blp/src/integrate.jl).
+Add quadrature and sparse grid quadrature methods to [`https://github.com/ubcecon/ECON622_BLP.jl/blob/main/src/integrate.jl`](https://github.com/ubcecon/ECON622_BLP.jl/blob/main/src/integrate.jl).
 
 # Problem 2
 
-Add tests for your new integration methods in [https://github.com/ubcecon/ECON622/tree/master/jmd/blp/test/runtests.jl](https://github.com/ubcecon/ECON622/tree/master/jmd/blp/test/runtests.jl).
+Add tests for your new integration methods in [`https://github.com/ubcecon/ECON622_BLP.jl/blob/main/test/runtests.jl`](https://github.com/ubcecon/ECON622_BLP.jl/blob/main/test/runtests.jl).
 
 # Problem 3
 
@@ -27,7 +27,7 @@ This problem is more open ended and difficult. Work on either option A or option
 
 ## Option A
 
-The function `delta` in [https://github.com/ubcecon/ECON622/tree/master/jmd/blp/src/blp.jl](https://github.com/ubcecon/ECON622/tree/master/jmd/blp/src/blp.jl) will fail in some situations, such as when some shares are near 0. Create a test that `delta` fails. Try altering `delta` to make it succeed where it previously failed.
+The function `delta` in [`https://github.com/ubcecon/ECON622_BLP.jl/blob/main/src/blp.jl`](https://github.com/ubcecon/ECON622_BLP.jl/blob/main/src/blp.jl) will fail in some situations, such as when some shares are near 0. Create a test that `delta` fails. Try altering `delta` to make it succeed where it previously failed.
 
 ## Option B
 
