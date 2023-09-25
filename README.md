@@ -54,7 +54,7 @@ See [problemsets.md](problemsets.md).
    - Self-study: [Generic Programming](https://quantecon.github.io/lecture-julia.myst/more_julia/generic_programming.html)
    - Self-study: [Linear Algebra](https://quantecon.github.io/lecture-julia.myst/tools_and_techniques/linear_algebra.html)
 4. **September 18**: Automatic Differentiation
-   - In class: TBA
+   - In class: Overview of [optimization packages](jmd/opt/optimization_packages.jmd) and [automatic differentiation packages](jmd/opt/autodiff.jmd)
    - Self-study: [Intro to AD](https://quantecon.github.io/lecture-julia.myst/more_julia/optimization_solver_packages.html#Introduction-to-Automatic-Differentiation)
    - Self-study: [Differentiation for Hackers](https://github.com/MikeInnes/diff-zoo)
    - Self-study: [Engineering Trade-Offs in Automatic Differentiation: from TensorFlow and PyTorch to Jax and Julia](http://www.stochasticlifestyle.com/engineering-trade-offs-in-automatic-differentiation-from-tensorflow-and-pytorch-to-jax-and-julia/)
@@ -68,7 +68,7 @@ See [problemsets.md](problemsets.md).
    -  Self-study: [General Packages](https://quantecon.github.io/lecture-julia.myst/more_julia/general_packages.html)
    -  Self-study: [Data and Statistical Packages](https://quantecon.github.io/lecture-julia.myst/more_julia/data_statistical_packages.html)
 6. **September 25**: Testing and Package Development
-   - In class: examples from Paul's packages and Julia ecosystem
+   - In class: development of [our random coefficients demand package as an example](https://github.com/ubcecon/ECON622_BLP.jl)
    - Self-study: [Testing and Packages](https://julia.quantecon.org/software_engineering/testing.html)
    - Self-study: [Git and Github](https://julia.quantecon.org/software_engineering/version_control.html
 7. **September 27**: Code Performance
