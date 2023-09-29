@@ -72,8 +72,9 @@ See [problemsets.md](problemsets.md).
    - Self-study: [Testing and Packages](https://julia.quantecon.org/software_engineering/testing.html)
    - Self-study: [Git and Github](https://julia.quantecon.org/software_engineering/version_control.html
 7. **September 27**: Code Performance
-   - [Coding for performance](https://github.com/schrimpf/ARGridBootstrap)
+   - [Coding for performance](https://github.com/schrimpf/ARGridBootstrap) be sure to look at the 2023 branch for the recent additions
    - [GPU usage](https://github.com/schrimpf/ARGridBootstrap)
+   - Self-study: [SIMDscan](https://github.com/schrimpf/SIMDscan.jl/): since it briefly came up in class, and I was curious about it, I made a little package for calculating things like cumulative sums and autoregressive simulations using SIMD
    - Self-study: [Need for speed](https://julia.quantecon.org/software_engineering/need_for_speed.html
    - Self-study: [Performance Tips](https://docs.julialang.org/en/v1/manual/performance-tips/)
 
