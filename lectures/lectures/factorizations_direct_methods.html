@@ -1,0 +1,1379 @@
+<!DOCTYPE html>
+<html lang="en"><head>
+<script src="../site_libs/clipboard/clipboard.min.js"></script>
+<script src="../site_libs/quarto-html/tabby.min.js"></script>
+<script src="../site_libs/quarto-html/popper.min.js"></script>
+<script src="../site_libs/quarto-html/tippy.umd.min.js"></script>
+<link href="../site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="../site_libs/quarto-html/light-border.css" rel="stylesheet">
+<link href="../site_libs/quarto-html/quarto-html.min.css" rel="stylesheet" data-mode="light">
+<link href="../site_libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" id="quarto-text-highlighting-styles"><meta charset="utf-8">
+  <meta name="generator" content="quarto-1.3.450">
+
+  <meta name="author" content="Jesse Perla">
+  <title>ECON 622 Lectures - ECON622: Computational Economics with Data Science Applications</title>
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, minimal-ui">
+  <link rel="stylesheet" href="../site_libs/revealjs/dist/reset.css">
+  <link rel="stylesheet" href="../site_libs/revealjs/dist/reveal.css">
+  <style>
+    code{white-space: pre-wrap;}
+    span.smallcaps{font-variant: small-caps;}
+    div.columns{display: flex; gap: min(4vw, 1.5em);}
+    div.column{flex: auto; overflow-x: auto;}
+    div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+    ul.task-list{list-style: none;}
+    ul.task-list li input[type="checkbox"] {
+      width: 0.8em;
+      margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+      vertical-align: middle;
+    }
+    /* CSS for syntax highlighting */
+    pre > code.sourceCode { white-space: pre; position: relative; }
+    pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+    pre > code.sourceCode > span:empty { height: 1.2em; }
+    .sourceCode { overflow: visible; }
+    code.sourceCode > span { color: inherit; text-decoration: inherit; }
+    div.sourceCode { margin: 1em 0; }
+    pre.sourceCode { margin: 0; }
+    @media screen {
+    div.sourceCode { overflow: auto; }
+    }
+    @media print {
+    pre > code.sourceCode { white-space: pre-wrap; }
+    pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+    }
+    pre.numberSource code
+      { counter-reset: source-line 0; }
+    pre.numberSource code > span
+      { position: relative; left: -4em; counter-increment: source-line; }
+    pre.numberSource code > span > a:first-child::before
+      { content: counter(source-line);
+        position: relative; left: -1em; text-align: right; vertical-align: baseline;
+        border: none; display: inline-block;
+        -webkit-touch-callout: none; -webkit-user-select: none;
+        -khtml-user-select: none; -moz-user-select: none;
+        -ms-user-select: none; user-select: none;
+        padding: 0 4px; width: 4em;
+        color: #aaaaaa;
+      }
+    pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+    div.sourceCode
+      { color: #003b4f; background-color: #f1f3f5; }
+    @media screen {
+    pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+    }
+    code span { color: #003b4f; } /* Normal */
+    code span.al { color: #ad0000; } /* Alert */
+    code span.an { color: #5e5e5e; } /* Annotation */
+    code span.at { color: #657422; } /* Attribute */
+    code span.bn { color: #ad0000; } /* BaseN */
+    code span.bu { } /* BuiltIn */
+    code span.cf { color: #003b4f; } /* ControlFlow */
+    code span.ch { color: #20794d; } /* Char */
+    code span.cn { color: #8f5902; } /* Constant */
+    code span.co { color: #5e5e5e; } /* Comment */
+    code span.cv { color: #5e5e5e; font-style: italic; } /* CommentVar */
+    code span.do { color: #5e5e5e; font-style: italic; } /* Documentation */
+    code span.dt { color: #ad0000; } /* DataType */
+    code span.dv { color: #ad0000; } /* DecVal */
+    code span.er { color: #ad0000; } /* Error */
+    code span.ex { } /* Extension */
+    code span.fl { color: #ad0000; } /* Float */
+    code span.fu { color: #4758ab; } /* Function */
+    code span.im { color: #00769e; } /* Import */
+    code span.in { color: #5e5e5e; } /* Information */
+    code span.kw { color: #003b4f; } /* Keyword */
+    code span.op { color: #5e5e5e; } /* Operator */
+    code span.ot { color: #003b4f; } /* Other */
+    code span.pp { color: #ad0000; } /* Preprocessor */
+    code span.sc { color: #5e5e5e; } /* SpecialChar */
+    code span.ss { color: #20794d; } /* SpecialString */
+    code span.st { color: #20794d; } /* String */
+    code span.va { color: #111111; } /* Variable */
+    code span.vs { color: #20794d; } /* VerbatimString */
+    code span.wa { color: #5e5e5e; font-style: italic; } /* Warning */
+  </style>
+  <link rel="stylesheet" href="../site_libs/revealjs/dist/theme/quarto.css">
+  <link href="../site_libs/revealjs/plugin/quarto-line-highlight/line-highlight.css" rel="stylesheet">
+  <link href="../site_libs/revealjs/plugin/reveal-menu/menu.css" rel="stylesheet">
+  <link href="../site_libs/revealjs/plugin/reveal-menu/quarto-menu.css" rel="stylesheet">
+  <link href="../site_libs/revealjs/plugin/reveal-chalkboard/font-awesome/css/all.css" rel="stylesheet">
+  <link href="../site_libs/revealjs/plugin/reveal-chalkboard/style.css" rel="stylesheet">
+  <link href="../site_libs/revealjs/plugin/quarto-support/footer.css" rel="stylesheet">
+  <style type="text/css">
+
+  .callout {
+    margin-top: 1em;
+    margin-bottom: 1em;  
+    border-radius: .25rem;
+  }
+
+  .callout.callout-style-simple { 
+    padding: 0em 0.5em;
+    border-left: solid #acacac .3rem;
+    border-right: solid 1px silver;
+    border-top: solid 1px silver;
+    border-bottom: solid 1px silver;
+    display: flex;
+  }
+
+  .callout.callout-style-default {
+    border-left: solid #acacac .3rem;
+    border-right: solid 1px silver;
+    border-top: solid 1px silver;
+    border-bottom: solid 1px silver;
+  }
+
+  .callout .callout-body-container {
+    flex-grow: 1;
+  }
+
+  .callout.callout-style-simple .callout-body {
+    font-size: 1rem;
+    font-weight: 400;
+  }
+
+  .callout.callout-style-default .callout-body {
+    font-size: 0.9rem;
+    font-weight: 400;
+  }
+
+  .callout.callout-titled.callout-style-simple .callout-body {
+    margin-top: 0.2em;
+  }
+
+  .callout:not(.callout-titled) .callout-body {
+      display: flex;
+  }
+
+  .callout:not(.no-icon).callout-titled.callout-style-simple .callout-content {
+    padding-left: 1.6em;
+  }
+
+  .callout.callout-titled .callout-header {
+    padding-top: 0.2em;
+    margin-bottom: -0.2em;
+  }
+
+  .callout.callout-titled .callout-title  p {
+    margin-top: 0.5em;
+    margin-bottom: 0.5em;
+  }
+    
+  .callout.callout-titled.callout-style-simple .callout-content  p {
+    margin-top: 0;
+  }
+
+  .callout.callout-titled.callout-style-default .callout-content  p {
+    margin-top: 0.7em;
+  }
+
+  .callout.callout-style-simple div.callout-title {
+    border-bottom: none;
+    font-size: .9rem;
+    font-weight: 600;
+    opacity: 75%;
+  }
+
+  .callout.callout-style-default  div.callout-title {
+    border-bottom: none;
+    font-weight: 600;
+    opacity: 85%;
+    font-size: 0.9rem;
+    padding-left: 0.5em;
+    padding-right: 0.5em;
+  }
+
+  .callout.callout-style-default div.callout-content {
+    padding-left: 0.5em;
+    padding-right: 0.5em;
+  }
+
+  .callout.callout-style-simple .callout-icon::before {
+    height: 1rem;
+    width: 1rem;
+    display: inline-block;
+    content: "";
+    background-repeat: no-repeat;
+    background-size: 1rem 1rem;
+  }
+
+  .callout.callout-style-default .callout-icon::before {
+    height: 0.9rem;
+    width: 0.9rem;
+    display: inline-block;
+    content: "";
+    background-repeat: no-repeat;
+    background-size: 0.9rem 0.9rem;
+  }
+
+  .callout-title {
+    display: flex
+  }
+    
+  .callout-icon::before {
+    margin-top: 1rem;
+    padding-right: .5rem;
+  }
+
+  .callout.no-icon::before {
+    display: none !important;
+  }
+
+  .callout.callout-titled .callout-body > .callout-content > :last-child {
+    margin-bottom: 0.5rem;
+  }
+
+  .callout.callout-titled .callout-icon::before {
+    margin-top: .5rem;
+    padding-right: .5rem;
+  }
+
+  .callout:not(.callout-titled) .callout-icon::before {
+    margin-top: 1rem;
+    padding-right: .5rem;
+  }
+
+  /* Callout Types */
+
+  div.callout-note {
+    border-left-color: #4582ec !important;
+  }
+
+  div.callout-note .callout-icon::before {
+    background-image: url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAYAAABzenr0AAAAAXNSR0IArs4c6QAAAERlWElmTU0AKgAAAAgAAYdpAAQAAAABAAAAGgAAAAAAA6ABAAMAAAABAAEAAKACAAQAAAABAAAAIKADAAQAAAABAAAAIAAAAACshmLzAAAEU0lEQVRYCcVXTWhcVRQ+586kSUMMxkyaElstCto2SIhitS5Ek8xUKV2poatCcVHtUlFQk8mbaaziwpWgglJwVaquitBOfhQXFlqlzSJpFSpIYyXNjBNiTCck7x2/8/LeNDOZxDuEkgOXe++553zfefee+/OYLOXFk3+1LLrRdiO81yNqZ6K9cG0P3MeFaMIQjXssE8Z1JzLO9ls20MBZX7oG8w9GxB0goaPrW5aNMp1yOZIa7Wv6o2ykpLtmAPs/vrG14Z+6d4jpbSKuhdcSyq9wGMPXjonwmESXrriLzFGOdDBLB8Y6MNYBu0dRokSygMA/mrun8MGFN3behm6VVAwg4WR3i6FvYK1T7MHo9BK7ydH+1uurECoouk5MPRyVSBrBHMYwVobG2aOXM07sWrn5qgB60rc6mcwIDJtQrnrEr44kmy+UO9r0u9O5/YbkS9juQckLed3DyW2XV/qWBBB3ptvI8EUY3I9p/67OW+g967TNr3Sotn3IuVlfMLVnsBwH4fsnebJvyGm5GeIUA3jljERmrv49SizPYuq+z7c2H/jlGC+Ghhupn/hcapqmcudB9jwJ/3jvnvu6vu5lVzF1fXyZuZZ7U8nRmVzytvT+H3kilYvH09mLWrQdwFSsFEsxFVs5fK7A0g8gMZjbif4ACpKbjv7gNGaD8bUrlk8x+KRflttr22JEMRUbTUwwDQScyzPgedQHZT0xnx7ujw2jfVfExwYHwOsDTjLdJ2ebmeQIlJ7neo41s/DrsL3kl+W2lWvAga0tR3zueGr6GL78M3ifH0rGXrBC2aAR8uYcIA5gwV8zIE8onoh8u0Fca/ciF7j1uOzEnqcIm59sEXoGc0+z6+H45V1CvAvHcD7THztu669cnp+L0okAeIc6zjbM/24LgGM1gZk7jnRu1aQWoU9sfUOuhrmtaPIO3YY1KLLWZaEO5TKUbMY5zx8W9UJ6elpLwKXbsaZ4EFl7B4bMtDv0iRipKoDQT2sNQI9b1utXFdYisi+wzZ/ri/1m7QfDgEuvgUUEIJPq3DhX/5DWNqIXDOweC2wvIR90Oq3lDpdMIgD2r0dXvGdsEW5H6x6HLRJYU7C69VefO1x8Gde1ZFSJLfWS1jbCnhtOPxmpfv2LXOA2Xk2tvnwKKPFuZ/oRmwBwqRQDcKNeVQkYcOjtWVBuM/JuYw5b6isojIkYxyYAFn5K7ZBF10fea52y8QltAg6jnMqNHFBmGkQ1j+U43HMi2xMar1Nv0zGsf1s8nUsmUtPOOrbFIR8bHFDMB5zL13Gmr/kGlCkUzedTzzmzsaJXhYawnA3UmARpiYj5ooJZiUoxFRtK3X6pgNPv+IZVPcnwbOl6f+aBaO1CNvPW9n9LmCp01nuSaTRF2YxHqZ8DYQT6WsXT+RD6eUztwYLZ8rM+rcPxamv1VQzFUkzFXvkiVrySGQgJNvXHJAxiU3/NwiC03rSf05VBaPtu/Z7/B8Yn/w7eguloAAAAAElFTkSuQmCC');
+  }
+
+  div.callout-note.callout-style-default .callout-title {
+    background-color: #dae6fb
+  }
+
+  div.callout-important {
+    border-left-color: #d9534f !important;
+  }
+
+  div.callout-important .callout-icon::before {
+    background-image: url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAYAAABzenr0AAAAAXNSR0IArs4c6QAAAERlWElmTU0AKgAAAAgAAYdpAAQAAAABAAAAGgAAAAAAA6ABAAMAAAABAAEAAKACAAQAAAABAAAAIKADAAQAAAABAAAAIAAAAACshmLzAAAEKklEQVRYCcVXTWhcVRS+575MJym48A+hSRFr00ySRQhURRfd2HYjk2SSTokuBCkU2o0LoSKKraKIBTcuFCoidGFD08nkBzdREbpQ1EDNIv8qSGMFUboImMSZd4/f9zJv8ibJMC8xJQfO3HPPPef7zrvvvnvviIkpC9nsw0UttFunbUhpFzFtarSd6WJkStVMw5xyVqYTvkwfzuf/5FgtkVoB0729j1rjXwThS7Vio+Mo6DNnvLfahoZ+i/o32lULuJ3NNiz7q6+pyAUkJaFF6JwaM2lUJlV0MlnQn5aTRbEu0SEqHUa0A4AdiGuB1kFXRfVyg5d87+Dg4DL6m2TLAub60ilj7A1Ec4odSAc8X95sHh7+ZRPCFo6Fnp7HfU/fBng/hi10CjCnWnJjsxvDNxWw0NfV6Rv5GgP3I3jGWXumdTD/3cbEOP2ZbOZp69yniG3FQ9z1jD7bnBu9Fc2tKGC2q+uAJOQHBDRiZX1x36o7fWBs7J9ownbtO+n0/qWkvW7UPIfc37WgT6ZGR++EOJyeQDSb9UB+DZ1G6DdLDzyS+b/kBCYGsYgJbSQHuThGKRcw5xdeQf8YdNHsc6ePXrlSYMBuSIAFTGAtQo+VuALo4BX83N190NWZWbynBjhOHsmNfFWLeL6v+ynsA58zDvvAC8j5PkbOcXCMg2PZFk3q8MjI7WAG/Dp9AwP7jdGBOOQkAvlFUB+irtm16I1Zw9YBcpGTGXYmk3kQIC/Cds55l+iMI3jqhjAuaoe+am2Jw5GT3Nbz3CkE12NavmzN5+erJW7046n/CH1RO/RVa8lBLozXk9uqykkGAyRXLWlLv5jyp4RFsG5vGVzpDLnIjTWgnRy2Rr+tDKvRc7Y8AyZq10jj8DqXdnIRNtFZb+t/ZRtXcDiVnzpqx8mPcDWxgARUqx0W1QB9MeUZiNrV4qP+Ehc+BpNgATsTX8ozYKL2NtFYAHc84fG7ndxUPr+AR/iQSns7uSUufAymwDOb2+NjK27lEFocm/EE2WpyIy/Hi66MWuMKJn8RvxIcj87IM5Vh9663ziW36kR0HNenXuxmfaD8JC7tfKbrhFr7LiZCrMjrzTeGx+PmkosrkNzW94ObzwocJ7A1HokLolY+AvkTiD/q1H0cN48c5EL8Crkttsa/AXQVDmutfyku0E7jShx49XqV3MFK8IryDhYVbj7Sj2P2eBxwcXoe8T8idsKKPRcnZw1b+slFTubwUwhktrfnAt7J++jwQtLZcm3sr9LQrjRzz6cfMv9aLvgmnAGvpoaGLxM4mAEaLV7iAzQ3oU0IvD5x9ix3yF2RAAuYAOO2f7PEFWCXZ4C9Pb2UsgDeVnFSpbFK7/IWu7TPTvBqzbGdCHOJQSxiEjt6IyZmxQyEJHv6xyQsYk//moVFsN2zP6fRImjfq7/n/wFDguUQFNEwugAAAABJRU5ErkJggg==');
+  }
+
+  div.callout-important.callout-style-default .callout-title {
+    background-color: #f7dddc
+  }
+
+  div.callout-warning {
+    border-left-color: #f0ad4e !important;
+  }
+
+  div.callout-warning .callout-icon::before {
+    background-image: url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAYAAABzenr0AAAAAXNSR0IArs4c6QAAAERlWElmTU0AKgAAAAgAAYdpAAQAAAABAAAAGgAAAAAAA6ABAAMAAAABAAEAAKACAAQAAAABAAAAIKADAAQAAAABAAAAIAAAAACshmLzAAAETklEQVRYCeVWW2gcVRg+58yaTUnizqbipZeX4uWhBEniBaoUX1Ioze52t7sRq6APio9V9MEaoWlVsFasRq0gltaAPuxms8lu0gcviE/FFOstVbSIxgcv6SU7EZqmdc7v9+9mJtNks51NTUH84ed889/PP+cmxP+d5FIbMJmNbpREu4WUkiTtCicKny0l1pIKmBzovF2S+hIJHX8iEu3hZJ5lNZGqyRrGSIQpq15AzF28jgpeY6yk6GVdrfFqdrD6Iw+QlB8g0YS2g7dyQmXM/IDhBhT0UCiRf59lfqmmDvzRt6kByV/m4JjtzuaujMUM2c5Z2d6JdKrRb3K2q6mA+oYVz8JnDdKPmmNthzkAk/lN63sYPgevrguc72aZX/L9C6x09GYyxBgCX4NlvyGUHOKELlm5rXeR1kchuChJt4SSwyddZRXgvwMGvYo4QSlk3/zkHD8UHxwVJA6zjZZqP8v8kK8OWLnIZtLyCAJagYC4rTGW/9Pqj92N/c+LUaAj27movwbi19tk/whRCIE7Q9vyI6yvRpftAKVTdUjOW40X3h5OXsKCdmFcx0xlLJoSuQngnrJe7Kcjm4OMq9FlC7CMmScQANuNvjfP3PjGXDBaUQmbp296S5L4DrpbrHN1T87ZVEZVCzg1FF0Ft+dKrlLukI+/c9ENo+TvlTDbYFvuKPtQ9+l052rXrgKoWkDAFnvh0wTOmYn8R5f4k/jN/fZiCM1tQx9jQQ4ANhqG4hiL0qIFTGViG9DKB7GYzgubnpofgYRwO+DFjh0Zin2m4b/97EDkXkc+f6xYAPX0KK2I/7fUQuwzuwo/L3AkcjugPNixC8cHf0FyPjWlItmLxWw4Ou9YsQCr5fijMGoD/zpdRy95HRysyXA74MWOnscpO4j2y3HAVisw85hX5+AFBRSHt4ShfLFkIMXTqyKFc46xdzQM6XbAi702a7sy04J0+feReMFKp5q9esYLCqAZYw/k14E/xcLLsFElaornTuJB0svMuJINy8xkIYuL+xPAlWRceH6+HX7THJ0djLUom46zREu7tTkxwmf/FdOZ/sh6Q8qvEAiHpm4PJ4a/doJe0gH1t+aHRgCzOvBvJedEK5OFE5jpm4AGP2a8Dxe3gGJ/pAutug9Gp6he92CsSsWBaEcxGx0FHytmIpuqGkOpldqNYQK8cSoXvd+xLxXADw0kf6UkJNFtdo5MOgaLjiQOQHcn+A6h5NuL2s0qsC2LOM75PcF3yr5STuBSAcGG+meA14K/CI21HcS4LBT6tv0QAh8Dr5l93AhZzG5ZJ4VxAqdZUEl9z7WJ4aN+svMvwHHL21UKTd1mqvChH7/Za5xzXBBKrUcB0TQ+Ulgkfbi/H/YT5EptrGzsEK7tR1B7ln9BBwckYfMiuSqklSznIuoIIOM42MQO+QnduCoFCI0bpkzjCjddHPN/F+2Yu+sd9bKNpVwHhbS3LluK/0zgfwD0xYI5dXuzlQAAAABJRU5ErkJggg==');
+  }
+
+  div.callout-warning.callout-style-default .callout-title {
+    background-color: #fcefdc
+  }
+
+  div.callout-tip {
+    border-left-color: #02b875 !important;
+  }
+
+  div.callout-tip .callout-icon::before {
+    background-image: url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAYAAABzenr0AAAAAXNSR0IArs4c6QAAAERlWElmTU0AKgAAAAgAAYdpAAQAAAABAAAAGgAAAAAAA6ABAAMAAAABAAEAAKACAAQAAAABAAAAIKADAAQAAAABAAAAIAAAAACshmLzAAADr0lEQVRYCe1XTWgTQRj9ZjZV8a9SPIkKgj8I1bMHsUWrqYLVg4Ue6v9BwZOxSYsIerFao7UiUryIqJcqgtpimhbBXoSCVxUFe9CTiogUrUp2Pt+3aUI2u5vdNh4dmMzOzHvvezuz8xNFM0mjnbXaNu1MvFWRXkXEyE6aYOYJpdW4IXuA4r0fo8qqSMDBU0v1HJUgVieAXxzCsdE/YJTdFcVIZQNMyhruOMJKXYFoLfIfIvVIMWdsrd+Rpd86ZmyzzjJmLStqRn0v8lzkb4rVIXvnpScOJuAn2ACC65FkPzEdEy4TPWRLJ2h7z4cArXzzaOdKlbOvKKX25Wl00jSnrwVxAg3o4dRxhO13RBSdNvH0xSARv3adTXbBdTf64IWO2vH0LT+cv4GR1DJt+DUItaQogeBX/chhbTBxEiZ6gftlDNXTrvT7co4ub5A6gp9HIcHvzTa46OS5fBeP87Qm0fQkr4FsYgVQ7Qg+ZayaDg9jhg1GkWj8RG6lkeSacrrHgDaxdoBiZPg+NXV/KifMuB6//JmYH4CntVEHy/keA6x4h4CU5oFy8GzrBS18cLJMXcljAKB6INjWsRcuZBWVaS3GDrqB7rdapVIeA+isQ57Eev9eCqzqOa81CY05VLd6SamW2wA2H3SiTbnbSxmzfp7WtKZkqy4mdyAlGx7ennghYf8voqp9cLSgKdqNfa6RdRsAAkPwRuJZNbpByn+RrJi1RXTwdi8RQF6ymDwGMAtZ6TVE+4uoKh+MYkcLsT0Hk8eAienbiGdjJHZTpmNjlbFJNKDVAp2fJlYju6IreQxQ08UJDNYdoLSl6AadO+fFuCQqVMB1NJwPm69T04Wv5WhfcWyfXQB+wXRs1pt+nCknRa0LVzSA/2B+a9+zQJadb7IyyV24YAxKp2Jqs3emZTuNnKxsah+uabKbMk7CbTgJx/zIgQYErIeTKRQ9yD9wxVof5YolPHqaWo7TD6tJlh7jQnK5z2n3+fGdggIOx2kaa2YI9QWarc5Ce1ipNWMKeSG4DysFF52KBmTNMmn5HqCFkwy34rDg05gDwgH3bBi+sgFhN/e8QvRn8kbamCOhgrZ9GJhFDgfcMHzFb6BAtjKpFhzTjwv1KCVuxHvCbsSiEz4CANnj84cwHdFXAbAOJ4LTSAawGWFn5tDhLMYz6nWeU2wJfIhmIJBefcd/A5FWQWGgrWzyORZ3Q6HuV+Jf0Bj+BTX69fm1zWgK7By1YTXchFDORywnfQ7GpzOo6S+qECrsx2ifVQAAAABJRU5ErkJggg==');
+  }
+
+  div.callout-tip.callout-style-default .callout-title {
+    background-color: #ccf1e3
+  }
+
+  div.callout-caution {
+    border-left-color: #fd7e14 !important;
+  }
+
+  div.callout-caution .callout-icon::before {
+    background-image: url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAYAAABzenr0AAAAAXNSR0IArs4c6QAAAERlWElmTU0AKgAAAAgAAYdpAAQAAAABAAAAGgAAAAAAA6ABAAMAAAABAAEAAKACAAQAAAABAAAAIKADAAQAAAABAAAAIAAAAACshmLzAAACV0lEQVRYCdVWzWoUQRCuqp2ICBLJXgITZL1EfQDBW/bkzUMUD7klD+ATSHBEfAIfQO+iXsWDxJsHL96EHAwhgzlkg8nBg25XWb0zIb0zs9muYYWkoKeru+vn664fBqElyZNuyh167NXJ8Ut8McjbmEraKHkd7uAnAFku+VWdb3reSmRV8PKSLfZ0Gjn3a6Xlcq9YGb6tADjn+lUfTXtVmaZ1KwBIvFI11rRXlWlatwIAAv2asaa9mlB9wwygiDX26qaw1yYPzFXg2N1GgG0FMF8Oj+VIx7E/03lHx8UhvYyNZLN7BwSPgekXXLribw7w5/c8EF+DBK5idvDVYtEEwMeYefjjLAdEyQ3M9nfOkgnPTEkYU+sxMq0BxNR6jExrAI31H1rzvLEfRIdgcv1XEdj6QTQAS2wtstEALLG1yEZ3QhH6oDX7ExBSFEkFINXH98NTrme5IOaaA7kIfiu2L8A3qhH9zRbukdCqdsA98TdElyeMe5BI8Rs2xHRIsoTSSVFfCFCWGPn9XHb4cdobRIWABNf0add9jakDjQJpJ1bTXOJXnnRXHRf+dNL1ZV1MBRCXhMbaHqGI1JkKIL7+i8uffuP6wVQAzO7+qVEbF6NbS0LJureYcWXUUhH66nLR5rYmva+2tjRFtojkM2aD76HEGAD3tPtKM309FJg5j/K682ywcWJ3PASCcycH/22u+Bh7Aa0ehM2Fu4z0SAE81HF9RkB21c5bEn4Dzw+/qNOyXr3DCTQDMBOdhi4nAgiFDGCinIa2owCEChUwD8qzd03PG+qdW/4fDzjUMcE1ZpIAAAAASUVORK5CYII=');
+  }
+
+  div.callout-caution.callout-style-default .callout-title {
+    background-color: #ffe5d0
+  }
+
+  </style>
+  <style type="text/css">
+    .reveal div.sourceCode {
+      margin: 0;
+      overflow: auto;
+    }
+    .reveal div.hanging-indent {
+      margin-left: 1em;
+      text-indent: -1em;
+    }
+    .reveal .slide:not(.center) {
+      height: 100%;
+      overflow-y: auto;
+    }
+    .reveal .slide.scrollable {
+      overflow-y: auto;
+    }
+    .reveal .footnotes {
+      height: 100%;
+      overflow-y: auto;
+    }
+    .reveal .slide .absolute {
+      position: absolute;
+      display: block;
+    }
+    .reveal .footnotes ol {
+      counter-reset: ol;
+      list-style-type: none; 
+      margin-left: 0;
+    }
+    .reveal .footnotes ol li:before {
+      counter-increment: ol;
+      content: counter(ol) ". "; 
+    }
+    .reveal .footnotes ol li > p:first-child {
+      display: inline-block;
+    }
+    .reveal .slide ul,
+    .reveal .slide ol {
+      margin-bottom: 0.5em;
+    }
+    .reveal .slide ul li,
+    .reveal .slide ol li {
+      margin-top: 0.4em;
+      margin-bottom: 0.2em;
+    }
+    .reveal .slide ul[role="tablist"] li {
+      margin-bottom: 0;
+    }
+    .reveal .slide ul li > *:first-child,
+    .reveal .slide ol li > *:first-child {
+      margin-block-start: 0;
+    }
+    .reveal .slide ul li > *:last-child,
+    .reveal .slide ol li > *:last-child {
+      margin-block-end: 0;
+    }
+    .reveal .slide .columns:nth-child(3) {
+      margin-block-start: 0.8em;
+    }
+    .reveal blockquote {
+      box-shadow: none;
+    }
+    .reveal .tippy-content>* {
+      margin-top: 0.2em;
+      margin-bottom: 0.7em;
+    }
+    .reveal .tippy-content>*:last-child {
+      margin-bottom: 0.2em;
+    }
+    .reveal .slide > img.stretch.quarto-figure-center,
+    .reveal .slide > img.r-stretch.quarto-figure-center {
+      display: block;
+      margin-left: auto;
+      margin-right: auto; 
+    }
+    .reveal .slide > img.stretch.quarto-figure-left,
+    .reveal .slide > img.r-stretch.quarto-figure-left  {
+      display: block;
+      margin-left: 0;
+      margin-right: auto; 
+    }
+    .reveal .slide > img.stretch.quarto-figure-right,
+    .reveal .slide > img.r-stretch.quarto-figure-right  {
+      display: block;
+      margin-left: auto;
+      margin-right: 0; 
+    }
+  </style>
+  <style>
+  .reveal .custom3070 > div.column:first-child {
+    width: 30%;
+  }
+  .reveal .custom3070 div.column:not(:first-child) {
+    width: 70%;
+  }
+  .reveal .custom4060 > div.column:first-child {
+    width: 40%;
+  }
+  .reveal .custom4060 div.column:not(:first-child) {
+    width: 60%;
+  }
+  </style>
+</head>
+<body class="quarto-light">
+  <div class="reveal">
+    <div class="slides">
+
+<section id="title-slide" class="quarto-title-block center">
+  <h1 class="title">ECON622: Computational Economics with Data Science Applications</h1>
+  <p class="subtitle">Direct Methods and Matrix Factorizations</p>
+
+<div class="quarto-title-authors">
+<div class="quarto-title-author">
+<div class="quarto-title-author-name">
+Jesse Perla 
+</div>
+<div class="quarto-title-author-email">
+<a href="mailto:jesse.perla@ubc.ca">jesse.perla@ubc.ca</a>
+</div>
+        <p class="quarto-title-affiliation">
+            University of British Columbia
+          </p>
+    </div>
+</div>
+
+</section><section id="TOC">
+<nav role="doc-toc"> 
+<h2 id="toc-title">Table of contents</h2>
+<ul>
+<li><a href="#/overview" id="/toc-overview">Overview</a></li>
+<li><a href="#/complexity" id="/toc-complexity">Complexity</a></li>
+<li><a href="#/matrix-structure" id="/toc-matrix-structure">Matrix Structure</a></li>
+<li><a href="#/factorizations" id="/toc-factorizations">Factorizations</a></li>
+<li><a href="#/continuous-time-markov-chains" id="/toc-continuous-time-markov-chains">Continuous Time Markov Chains</a></li>
+</ul>
+</nav>
+</section>
+<section>
+<section id="overview" class="title-slide slide level1 center">
+<h1>Overview</h1>
+
+</section>
+<section id="motivation" class="slide level2">
+<h2>Motivation</h2>
+<ul>
+<li>In preparation for the ML lectures we cover some core numerical linear algebra concepts</li>
+<li>Many of these are directly useful
+<ul>
+<li>e.g.&nbsp;solving large systems of equations or as building blocks in bigger algorithms</li>
+</ul></li>
+</ul>
+</section>
+<section id="packages-and-materials" class="slide level2">
+<h2>Packages and Materials</h2>
+<ul>
+<li>See <a href="https://julia.quantecon.org/tools_and_techniques/numerical_linear_algebra.html">QuantEcon Numerical Linear Algebra</a> and associated notebooks</li>
+</ul>
+<div class="cell" data-execution_count="2">
+<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb1-1"><a href="#cb1-1"></a><span class="im">using</span> <span class="bu">LinearAlgebra</span>, <span class="bu">Statistics</span>, <span class="bu">BenchmarkTools</span>, <span class="bu">SparseArrays</span>, <span class="bu">Random</span></span>
+<span id="cb1-2"><a href="#cb1-2"></a><span class="im">using</span> <span class="bu">Plots</span></span>
+<span id="cb1-3"><a href="#cb1-3"></a><span class="bu">Random</span>.<span class="fu">seed!</span>(<span class="fl">42</span>);  <span class="co"># seed random numbers for reproducibility</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</section></section>
+<section>
+<section id="complexity" class="title-slide slide level1 center">
+<h1>Complexity</h1>
+
+</section>
+<section id="basic-computational-complexity" class="slide level2">
+<h2>Basic Computational Complexity</h2>
+<p><strong>Big-O Notation</strong></p>
+<p>For a function <span class="math inline">\(f(N)\)</span> and a positive constant <span class="math inline">\(C\)</span>, we say <span class="math inline">\(f(N)\)</span> is <span class="math inline">\(O(g(N))\)</span>, if there exist positive constants <span class="math inline">\(C\)</span> and <span class="math inline">\(N_0\)</span> such that:</p>
+<p><span class="math display">\[
+0 \leq f(N) \leq C \cdot g(N) \quad \text{for all } N \geq N_0
+\]</span></p>
+<ul>
+<li>Often crucial to know how problems scale asymptotically (as <span class="math inline">\(N\to\infty\)</span>)</li>
+<li>Caution! This is only an asymptotic limit, and can be misleading for small <span class="math inline">\(N\)</span>
+<ul>
+<li><span class="math inline">\(f_1(N) = N^3 + N\)</span> is <span class="math inline">\(O(N^3)\)</span></li>
+<li><span class="math inline">\(f_2(N) = 1000 N^2 + 3 N\)</span> is <span class="math inline">\(O(N^2)\)</span></li>
+<li>For roughly <span class="math inline">\(N&gt;1000\)</span> use <span class="math inline">\(f_2\)</span> algorithm, otherwise <span class="math inline">\(f_1\)</span></li>
+</ul></li>
+</ul>
+</section>
+<section id="examples-of-computational-complexity" class="slide level2">
+<h2>Examples of Computational Complexity</h2>
+<ul>
+<li>Simple examples:
+<ul>
+<li><span class="math inline">\(x \cdot y = \sum_{n=1}^N x_n y_n\)</span> is <span class="math inline">\(O(N)\)</span> since it requires <span class="math inline">\(N\)</span> multiplications and additions</li>
+<li><span class="math inline">\(A x\)</span> for <span class="math inline">\(A\in\mathbb{R}^{N\times N},x\in\mathbb{R}^N\)</span> is <span class="math inline">\(O(N^2)\)</span> since it requires <span class="math inline">\(N\)</span> dot products, each <span class="math inline">\(O(N)\)</span></li>
+</ul></li>
+</ul>
+</section>
+<section id="computational-complexity" class="slide level2">
+<h2>Computational Complexity</h2>
+<p>Ask yourself whether the following is a <strong>computationally expensive</strong> operation as the matrix <strong>size increases</strong></p>
+<ul>
+<li>Multiplying two matrices?
+<ul>
+<li><em>Answer</em>: It depends. Multiplying two diagonal matrices is trivial.</li>
+</ul></li>
+<li>Solving a linear system of equations?
+<ul>
+<li><em>Answer</em>: It depends. If the matrix is the identity, the solution is the vector itself.</li>
+</ul></li>
+<li>Finding the eigenvalues of a matrix?
+<ul>
+<li><em>Answer</em>: It depends. The eigenvalues of a triangular matrix are the diagonal elements.</li>
+</ul></li>
+</ul>
+</section>
+<section id="numerical-precision" class="slide level2">
+<h2>Numerical Precision</h2>
+<p><strong>Machine Epsilon</strong></p>
+<p>For a given datatype, <span class="math inline">\(\epsilon\)</span> is defined as <span class="math inline">\(\epsilon = \min_{\delta &gt; 0} \left\{ \delta : 1 + \delta &gt; 1 \right\}\)</span></p>
+<ul>
+<li>Computers have finite precision. 64-bit typical, but 32-bit on GPUs</li>
+</ul>
+<div class="cell" data-execution_count="3">
+<div class="cell-output cell-output-stdout">
+<pre><code>machine epsilon for float64 = 2.220446049250313e-16
+1 + eps/2 == 1? true
+machine epsilon for float32 = 1.1920929e-7</code></pre>
+</div>
+</div>
+</section></section>
+<section>
+<section id="matrix-structure" class="title-slide slide level1 center">
+<h1>Matrix Structure</h1>
+
+</section>
+<section id="matrix-structure-1" class="slide level2">
+<h2>Matrix Structure</h2>
+<ul>
+<li>A key principle is to ensure you don’t lose “structure”
+<ul>
+<li>e.g.&nbsp;if sparse, operations should keep it sparse if possible</li>
+<li>If triangular, then use appropriate algorithms instead of converting back to a dense matrix</li>
+</ul></li>
+<li>Key structure is:
+<ul>
+<li>Symmetry, diagonal, tridiagonal, banded, sparse, positive-definite</li>
+</ul></li>
+<li>The worse operations for losing structure are matrix multiplication and inversion</li>
+</ul>
+</section>
+<section id="example-losing-sparsity" class="slide level2">
+<h2>Example Losing Sparsity</h2>
+<ul>
+<li>Here the density increases substantially</li>
+</ul>
+<div class="cell" data-execution_count="4">
+<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb3-1"><a href="#cb3-1"></a>A <span class="op">=</span> <span class="fu">sprand</span>(<span class="fl">10</span>, <span class="fl">10</span>, <span class="fl">0.45</span>)  <span class="co"># random sparse 10x10, 45 percent filled with non-zeros</span></span>
+<span id="cb3-2"><a href="#cb3-2"></a></span>
+<span id="cb3-3"><a href="#cb3-3"></a><span class="pp">@show</span> <span class="fu">nnz</span>(A)  <span class="co"># counts the number of non-zeros</span></span>
+<span id="cb3-4"><a href="#cb3-4"></a>invA <span class="op">=</span> <span class="fu">sparse</span>(<span class="fu">inv</span>(<span class="fu">Array</span>(A)))  <span class="co"># Julia won't invert sparse, so convert to dense with Array.</span></span>
+<span id="cb3-5"><a href="#cb3-5"></a><span class="pp">@show</span> <span class="fu">nnz</span>(invA);</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>nnz(A) = 46
+nnz(invA) = 100</code></pre>
+</div>
+</div>
+</section>
+<section id="losing-tridiagonal-structure" class="slide level2">
+<h2>Losing Tridiagonal Structure</h2>
+<ul>
+<li>An even more extreme example. Tridiagonal has roughly <span class="math inline">\(3N\)</span> nonzeros. Inverses are dense <span class="math inline">\(N^2\)</span></li>
+</ul>
+<div class="cell" data-execution_count="5">
+<div class="sourceCode cell-code" id="cb5"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb5-1"><a href="#cb5-1"></a>N <span class="op">=</span> <span class="fl">5</span></span>
+<span id="cb5-2"><a href="#cb5-2"></a>A <span class="op">=</span> <span class="fu">Tridiagonal</span>([<span class="fu">fill</span>(<span class="fl">0.1</span>, N <span class="op">-</span> <span class="fl">2</span>); <span class="fl">0.2</span>], <span class="fu">fill</span>(<span class="fl">0.8</span>, N), [<span class="fl">0.2</span>; <span class="fu">fill</span>(<span class="fl">0.1</span>, N <span class="op">-</span> <span class="fl">2</span>)])</span>
+<span id="cb5-3"><a href="#cb5-3"></a><span class="fu">inv</span>(A)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="5">
+<pre><code>5×5 Matrix{Float64}:
+  1.29099      -0.327957     0.0416667  -0.00537634   0.000672043
+ -0.163978      1.31183     -0.166667    0.0215054   -0.00268817
+  0.0208333    -0.166667     1.29167    -0.166667     0.0208333
+ -0.00268817    0.0215054   -0.166667    1.31183     -0.163978
+  0.000672043  -0.00537634   0.0416667  -0.327957     1.29099</code></pre>
+</div>
+</div>
+</section>
+<section id="forming-the-covariance-andor-gram-matrix" class="slide level2">
+<h2>Forming the Covariance and/or Gram Matrix</h2>
+<ul>
+<li>Another common example is <span class="math inline">\(A' A\)</span></li>
+</ul>
+<div class="cell" data-execution_count="6">
+<div class="sourceCode cell-code" id="cb7"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb7-1"><a href="#cb7-1"></a>A <span class="op">=</span> <span class="fu">sprand</span>(<span class="fl">20</span>, <span class="fl">21</span>, <span class="fl">0.3</span>)</span>
+<span id="cb7-2"><a href="#cb7-2"></a><span class="pp">@show</span> <span class="fu">nnz</span>(A) <span class="op">/</span> <span class="fl">20</span><span class="op">^</span><span class="fl">2</span></span>
+<span id="cb7-3"><a href="#cb7-3"></a><span class="pp">@show</span> <span class="fu">nnz</span>(A<span class="op">'</span> <span class="op">*</span> A) <span class="op">/</span> <span class="fl">21</span><span class="op">^</span><span class="fl">2</span>;</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>nnz(A) / 20 ^ 2 = 0.34
+nnz(A' * A) / 21 ^ 2 = 0.9229024943310657</code></pre>
+</div>
+</div>
+</section>
+<section id="specialized-algorithms" class="slide level2">
+<h2>Specialized Algorithms</h2>
+<p>Besides sparsity/storage, the real loss is you miss out on algorithms. For example, lets setup the benchmarking code</p>
+<div class="cell" data-execution_count="7">
+<div class="sourceCode cell-code" id="cb9"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb9-1"><a href="#cb9-1"></a><span class="im">using</span> <span class="bu">BenchmarkTools</span></span>
+<span id="cb9-2"><a href="#cb9-2"></a><span class="kw">function</span> <span class="fu">benchmark_solve</span>(A, b)</span>
+<span id="cb9-3"><a href="#cb9-3"></a>    <span class="fu">println</span>(<span class="st">"A</span><span class="sc">\\</span><span class="st">b for typeof(A) = </span><span class="sc">$</span>(<span class="fu">string</span>(<span class="fu">typeof</span>(A)))<span class="st">"</span>)</span>
+<span id="cb9-4"><a href="#cb9-4"></a>    <span class="pp">@btime</span> <span class="op">$</span>A <span class="op">\</span> <span class="op">$</span>b</span>
+<span id="cb9-5"><a href="#cb9-5"></a><span class="kw">end</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="7">
+<pre><code>benchmark_solve (generic function with 1 method)</code></pre>
+</div>
+</div>
+</section>
+<section id="compare-dense-vs.-sparse-vs.-tridiagonal" class="slide level2">
+<h2>Compare Dense vs.&nbsp;Sparse vs.&nbsp;Tridiagonal</h2>
+<div class="cell" data-execution_count="8">
+<div class="sourceCode cell-code" id="cb11"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb11-1"><a href="#cb11-1"></a>N <span class="op">=</span> <span class="fl">1000</span></span>
+<span id="cb11-2"><a href="#cb11-2"></a>b <span class="op">=</span> <span class="fu">rand</span>(N)</span>
+<span id="cb11-3"><a href="#cb11-3"></a>A <span class="op">=</span> <span class="fu">Tridiagonal</span>([<span class="fu">fill</span>(<span class="fl">0.1</span>, N <span class="op">-</span> <span class="fl">2</span>); <span class="fl">0.2</span>], <span class="fu">fill</span>(<span class="fl">0.8</span>, N), [<span class="fl">0.2</span>; <span class="fu">fill</span>(<span class="fl">0.1</span>, N <span class="op">-</span> <span class="fl">2</span>)])</span>
+<span id="cb11-4"><a href="#cb11-4"></a>A_sparse <span class="op">=</span> <span class="fu">sparse</span>(A)  <span class="co"># sparse but losing tridiagonal structure</span></span>
+<span id="cb11-5"><a href="#cb11-5"></a>A_dense <span class="op">=</span> <span class="fu">Array</span>(A)    <span class="co"># dropping the sparsity structure, dense 1000x1000</span></span>
+<span id="cb11-6"><a href="#cb11-6"></a></span>
+<span id="cb11-7"><a href="#cb11-7"></a><span class="co"># benchmark solution to system A x = b</span></span>
+<span id="cb11-8"><a href="#cb11-8"></a><span class="fu">benchmark_solve</span>(A, b)</span>
+<span id="cb11-9"><a href="#cb11-9"></a><span class="fu">benchmark_solve</span>(A_sparse, b)</span>
+<span id="cb11-10"><a href="#cb11-10"></a><span class="fu">benchmark_solve</span>(A_dense, b);</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>A\b for typeof(A) = Tridiagonal{Float64, Vector{Float64}}
+  20.458 μs (8 allocations: 47.72 KiB)
+A\b for typeof(A) = SparseMatrixCSC{Float64, Int64}
+  265.458 μs (79 allocations: 1.03 MiB)
+A\b for typeof(A) = Matrix{Float64}
+  5.808 ms (4 allocations: 7.64 MiB)</code></pre>
+</div>
+</div>
+</section>
+<section id="triangular-matrices-and-backforward-substitution" class="slide level2">
+<h2>Triangular Matrices and Back/Forward Substitution</h2>
+<ul>
+<li>A key example of a better algorithm is for triangular matrices</li>
+<li>Upper or lower triangular matrices can be solved in <span class="math inline">\(O(N^2)\)</span> instead of <span class="math inline">\(O(N^3)\)</span></li>
+</ul>
+<div class="cell" data-execution_count="9">
+<div class="sourceCode cell-code" id="cb13"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb13-1"><a href="#cb13-1"></a>b <span class="op">=</span> [<span class="fl">1.0</span>, <span class="fl">2.0</span>, <span class="fl">3.0</span>]</span>
+<span id="cb13-2"><a href="#cb13-2"></a>U <span class="op">=</span> <span class="fu">UpperTriangular</span>([<span class="fl">1.0</span> <span class="fl">2.0</span> <span class="fl">3.0</span>;</span>
+<span id="cb13-3"><a href="#cb13-3"></a>                     <span class="fl">0.0</span> <span class="fl">5.0</span> <span class="fl">6.0</span>;</span>
+<span id="cb13-4"><a href="#cb13-4"></a>                     <span class="fl">0.0</span> <span class="fl">0.0</span> <span class="fl">9.0</span>])</span>
+<span id="cb13-5"><a href="#cb13-5"></a>U <span class="op">\</span> b</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="9">
+<pre><code>3-element Vector{Float64}:
+ 1.1102230246251563e-17
+ 2.2204460492503132e-17
+ 0.3333333333333333</code></pre>
+</div>
+</div>
+</section>
+<section id="backwards-substitution-example" class="slide level2">
+<h2>Backwards Substitution Example</h2>
+<p><span class="math display">\[
+\begin{aligned}
+U x &amp;= b\\
+U &amp;\equiv \begin{bmatrix}
+3 &amp; 1 \\
+0 &amp; 2 \\
+\end{bmatrix}, \quad b = \begin{bmatrix}
+7 \\
+2 \\
+\end{bmatrix}
+\end{aligned}
+\]</span></p>
+<p>Solving bottom row for <span class="math inline">\(x_2\)</span></p>
+<p><span class="math display">\[
+2 x_2 = 2,\quad x_2 = 1
+\]</span></p>
+<p>Move up a row, solving for <span class="math inline">\(x_1\)</span>, substituting for <span class="math inline">\(x_2\)</span></p>
+<p><span class="math display">\[
+3 x_1 + 1 x_2 = 7,\quad 3 x_1 + 1 \times 1 =  7,\quad x_1 = 2
+\]</span></p>
+<p>Generalizes to many rows. For <span class="math inline">\(L\)</span> it is “forward substitution”</p>
+</section></section>
+<section>
+<section id="factorizations" class="title-slide slide level1 center">
+<h1>Factorizations</h1>
+
+</section>
+<section id="factorizing-matrices" class="slide level2">
+<h2>Factorizing matrices</h2>
+<ul>
+<li>Just like you can factor <span class="math inline">\(6 = 2 \cdot 3\)</span>, you can factor matrices</li>
+<li>Unlike integers, you have more choice over the properties of the factors</li>
+<li>Many operations (e.g., solving systems of equations, finding eigenvalues, inverting, finding determinants) have a factorization done internally
+<ul>
+<li>Instead you can often just find the factorization and reuse it</li>
+</ul></li>
+<li>Key factorizations: LU, QR, Cholesky, SVD, Schur, Eigenvalue</li>
+</ul>
+</section>
+<section id="lup-decompositions" class="slide level2">
+<h2>LU(P) Decompositions</h2>
+<ul>
+<li>We can “factor” any square <span class="math inline">\(A\)</span> into <span class="math inline">\(P A = L U\)</span> for triangular <span class="math inline">\(L\)</span> and <span class="math inline">\(U\)</span>. Invertible can have <span class="math inline">\(A = L U\)</span>, called the LU decomposition. “P” is for partial-pivoting</li>
+<li>Singular matrices may not have full-rank <span class="math inline">\(L\)</span> or <span class="math inline">\(U\)</span> matrices</li>
+</ul>
+<div class="cell" data-execution_count="10">
+<div class="sourceCode cell-code" id="cb15"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb15-1"><a href="#cb15-1"></a>N <span class="op">=</span> <span class="fl">4</span></span>
+<span id="cb15-2"><a href="#cb15-2"></a>A <span class="op">=</span> <span class="fu">rand</span>(N, N)</span>
+<span id="cb15-3"><a href="#cb15-3"></a>b <span class="op">=</span> <span class="fu">rand</span>(N)</span>
+<span id="cb15-4"><a href="#cb15-4"></a><span class="co"># chooses the right factorization based on matrix structure</span></span>
+<span id="cb15-5"><a href="#cb15-5"></a><span class="co"># LU here</span></span>
+<span id="cb15-6"><a href="#cb15-6"></a>Af <span class="op">=</span> <span class="fu">factorize</span>(A)</span>
+<span id="cb15-7"><a href="#cb15-7"></a>Af.P <span class="op">*</span> A <span class="op">≈</span> Af.L <span class="op">*</span> Af.U</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="10">
+<pre><code>true</code></pre>
+</div>
+</div>
+</section>
+<section id="using-a-factorization" class="slide level2">
+<h2>Using a Factorization</h2>
+<ul>
+<li>In Julia the factorization objects typically overload the <code>\</code> and functions such as <code>inv</code></li>
+</ul>
+<div class="cell" data-execution_count="11">
+<div class="sourceCode cell-code" id="cb17"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb17-1"><a href="#cb17-1"></a><span class="pp">@show</span> Af <span class="op">\</span> b</span>
+<span id="cb17-2"><a href="#cb17-2"></a><span class="pp">@show</span> <span class="fu">inv</span>(Af) <span class="op">*</span> b</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Af \ b = [1.567631093835083, -1.8670423474177869, -0.7020922312927875, 1.0653095651070625]
+inv(Af) * b = [1.5676310938350828, -1.867042347417787, -0.7020922312927876, 1.0653095651070623]</code></pre>
+</div>
+<div class="cell-output cell-output-display" data-execution_count="11">
+<pre><code>4-element Vector{Float64}:
+  1.5676310938350828
+ -1.867042347417787
+ -0.7020922312927876
+  1.0653095651070623</code></pre>
+</div>
+</div>
+</section>
+<section id="lu-decompositions-and-systems-of-equations" class="slide level2">
+<h2>LU Decompositions and Systems of Equations</h2>
+<ul>
+<li>Pivoting is typically implied when talking about “LU”</li>
+<li>Used in the default <code>solve</code> algorithm (without more structure)</li>
+<li>Solving systems of equations with triangular matrices: for <span class="math inline">\(A x = L U x = b\)</span>
+<ol type="1">
+<li>Define <span class="math inline">\(y = U x\)</span></li>
+<li>Solve <span class="math inline">\(L y = b\)</span> for <span class="math inline">\(y\)</span> and <span class="math inline">\(U x = y\)</span> for <span class="math inline">\(x\)</span></li>
+</ol></li>
+<li>Since both are triangular, process is <span class="math inline">\(O(N^2)\)</span> (but LU itself <span class="math inline">\(O(N^3)\)</span>)</li>
+<li>Could be used to find <code>inv</code>
+<ul>
+<li><span class="math inline">\(A = L U\)</span> then <span class="math inline">\(A A^{-1} = I = L U A^{-1} = I\)</span></li>
+<li>Solve for <span class="math inline">\(Y\)</span> in <span class="math inline">\(L Y = I\)</span>, then solve <span class="math inline">\(U A^{-1} = Y\)</span></li>
+</ul></li>
+<li>Tight connection to textbook Gaussian elimination (including pivoting)</li>
+</ul>
+</section>
+<section id="cholesky" class="slide level2">
+<h2>Cholesky</h2>
+<ul>
+<li>LU is for general invertible matrices, but it doesn’t use positive-definiteness or symmetry</li>
+<li>The Cholesky is the right factorization for general positive-definite matrices. For general symmetric matrices you can use Bunch-Kaufman or others</li>
+<li><span class="math inline">\(A = L L'\)</span> for lower triangular <span class="math inline">\(L\)</span> or equivalent for upper triangular</li>
+</ul>
+<div class="cell" data-execution_count="12">
+<div class="sourceCode cell-code" id="cb20"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb20-1"><a href="#cb20-1"></a>N <span class="op">=</span> <span class="fl">500</span></span>
+<span id="cb20-2"><a href="#cb20-2"></a>B <span class="op">=</span> <span class="fu">rand</span>(N, N)</span>
+<span id="cb20-3"><a href="#cb20-3"></a>A_dense <span class="op">=</span> B<span class="op">'</span> <span class="op">*</span> B  <span class="co"># an easy way to generate a symmetric positive semi-definite matrix</span></span>
+<span id="cb20-4"><a href="#cb20-4"></a>A <span class="op">=</span> <span class="fu">Symmetric</span>(A_dense)  <span class="co"># flags the matrix as symmetric</span></span>
+<span id="cb20-5"><a href="#cb20-5"></a><span class="fu">println</span>(<span class="st">"A is symmetric? </span><span class="sc">$</span>(<span class="fu">issymmetric</span>(A))<span class="st">"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>A is symmetric? true</code></pre>
+</div>
+</div>
+</section>
+<section id="comparing-cholesky" class="slide level2">
+<h2>Comparing Cholesky</h2>
+<ul>
+<li>By default it doesn’t know the matrix is positive-definite, so <code>factorize</code> is the best it can do given symmetric structure</li>
+</ul>
+<div class="cell" data-execution_count="13">
+<div class="sourceCode cell-code" id="cb22"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb22-1"><a href="#cb22-1"></a>b <span class="op">=</span> <span class="fu">rand</span>(N)</span>
+<span id="cb22-2"><a href="#cb22-2"></a><span class="fu">factorize</span>(A) <span class="op">|&gt;</span> typeof</span>
+<span id="cb22-3"><a href="#cb22-3"></a><span class="fu">cholesky</span>(A) <span class="op">\</span> b  <span class="co"># use the factorization to solve</span></span>
+<span id="cb22-4"><a href="#cb22-4"></a></span>
+<span id="cb22-5"><a href="#cb22-5"></a><span class="fu">benchmark_solve</span>(A, b)</span>
+<span id="cb22-6"><a href="#cb22-6"></a><span class="fu">benchmark_solve</span>(A_dense, b)</span>
+<span id="cb22-7"><a href="#cb22-7"></a><span class="pp">@btime</span> <span class="fu">cholesky</span>(<span class="op">$</span>A, check <span class="op">=</span> <span class="cn">false</span>) <span class="op">\</span> <span class="op">$</span>b;</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>A\b for typeof(A) = Symmetric{Float64, Matrix{Float64}}
+  2.255 ms (6 allocations: 2.16 MiB)
+A\b for typeof(A) = Matrix{Float64}
+  1.101 ms (4 allocations: 1.92 MiB)
+  1.173 ms (3 allocations: 1.91 MiB)</code></pre>
+</div>
+</div>
+</section>
+<section id="eigen-decomposition" class="slide level2">
+<h2>Eigen Decomposition</h2>
+<ul>
+<li>For square, symmetric, non-singular matrix <span class="math inline">\(A\)</span> factor into</li>
+</ul>
+<p><span class="math display">\[
+A = Q \Lambda Q^{-1}
+\]</span></p>
+<ul>
+<li><span class="math inline">\(Q\)</span> is a matrix of eigenvectors, <span class="math inline">\(\Lambda\)</span> is a diagonal matrix of paired eigenvalues</li>
+<li>For symmetric matrices, the eigenvectors are orthogonal and <span class="math inline">\(Q^{-1} Q = Q^T Q = I\)</span> which form an orthonormal basis</li>
+<li>Orthogonal matrices can be thought of as rotations without stretching</li>
+<li>More general matrices all have a Singular Value Decomposition (SVD)</li>
+<li>With symmetric <span class="math inline">\(A\)</span>, an interpretation of <span class="math inline">\(A x\)</span> is that we can first rotate <span class="math inline">\(x\)</span> into the <span class="math inline">\(Q\)</span> basis, then stretch by <span class="math inline">\(\Lambda\)</span>, then rotate back</li>
+</ul>
+</section>
+<section id="calculating-the-eigen-decomposition" class="slide level2">
+<h2>Calculating the Eigen Decomposition</h2>
+<div class="cell" data-execution_count="14">
+<div class="sourceCode cell-code" id="cb24"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb24-1"><a href="#cb24-1"></a>A <span class="op">=</span> <span class="fu">Symmetric</span>(<span class="fu">rand</span>(<span class="fl">5</span>, <span class="fl">5</span>))  <span class="co"># symmetric matrices have real eigenvectors/eigenvalues</span></span>
+<span id="cb24-2"><a href="#cb24-2"></a>A_eig <span class="op">=</span> <span class="fu">eigen</span>(A)</span>
+<span id="cb24-3"><a href="#cb24-3"></a>Λ <span class="op">=</span> <span class="fu">Diagonal</span>(A_eig.values)</span>
+<span id="cb24-4"><a href="#cb24-4"></a>Q <span class="op">=</span> A_eig.vectors</span>
+<span id="cb24-5"><a href="#cb24-5"></a><span class="pp">@show</span> <span class="fu">norm</span>(Q <span class="op">*</span> Λ <span class="op">*</span> <span class="fu">inv</span>(Q) <span class="op">-</span> A)</span>
+<span id="cb24-6"><a href="#cb24-6"></a><span class="pp">@show</span> <span class="fu">norm</span>(Q <span class="op">*</span> Λ <span class="op">*</span> Q<span class="op">'</span> <span class="op">-</span> A);</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>norm(Q * Λ * inv(Q) - A) = 5.418631965188369e-15
+norm(Q * Λ * Q' - A) = 5.4461079236039e-15</code></pre>
+</div>
+</div>
+</section>
+<section id="eigendecompositions-and-matrix-powers" class="slide level2">
+<h2>Eigendecompositions and Matrix Powers</h2>
+<ul>
+<li>Can be used to find <span class="math inline">\(A^t\)</span> for large <span class="math inline">\(t\)</span> (e.g.&nbsp;for Markov chains)
+<ul>
+<li><span class="math inline">\(P^t\)</span>, i.e.&nbsp;<span class="math inline">\(P \cdot P \cdot \ldots \cdot P\)</span> for <span class="math inline">\(t\)</span> times</li>
+<li><span class="math inline">\(P = Q \Lambda Q^{-1}\)</span> then <span class="math inline">\(P^t = Q \Lambda^t Q^{-1}\)</span> where <span class="math inline">\(\Lambda^t\)</span> is just the pointwise power</li>
+</ul></li>
+<li>Related can find matrix exponential <span class="math inline">\(e^A\)</span> for square matrices
+<ul>
+<li><span class="math inline">\(e^A = Q e^\Lambda Q^{-1}\)</span> where <span class="math inline">\(e^\Lambda\)</span> is just the pointwise exponential</li>
+<li>Useful for solving differential equations, e.g.&nbsp;<span class="math inline">\(y' = A y\)</span> for <span class="math inline">\(y(0) = y_0\)</span> is <span class="math inline">\(y(t) = e^{A t} y_0\)</span></li>
+</ul></li>
+</ul>
+</section>
+<section id="more-on-factorizations" class="slide level2">
+<h2>More on Factorizations</h2>
+<ul>
+<li>Plenty more used in different circumstances. Start by looking at structure</li>
+<li>Usually have some connection to textbook algorithms, for example LU is Gaussian elimination with pivoting and QR is Gram-Schmidt Process</li>
+<li>Just as shortcuts can be done with sparse matrices in textbook examples, direct sparse methods can be faster given enough sparsity
+<ul>
+<li>But don’t assume sparsity will be faster. Often slower unless matrices are big and especially sparse</li>
+<li>Dense algorithms on GPUs can be very fast because of parallelism</li>
+</ul></li>
+<li>Keep in mind that barring numerical roundoff issues, these are “exact” methods. They don’t become more accurate with more iterations</li>
+</ul>
+</section>
+<section id="large-scale-systems-of-equations" class="slide level2">
+<h2>Large Scale Systems of Equations</h2>
+<ul>
+<li>Packages that solve BIG problems with “direct methods” include <a href="https://mumps-solver.org/index.php">MUMPS</a>, <a href="https://www.intel.com/content/www/us/en/docs/onemkl/developer-reference-c/2023-0/onemkl-pardiso-parallel-direct-sparse-solver-iface.html">Paradiso</a>, <a href="https://en.wikipedia.org/wiki/UMFPACK">UMFPACK</a>, and many others</li>
+<li>Sparse solvers are bread-and-butter scientific computing, so they can crush huge problems, parallelize on a cluster, etc.</li>
+<li>But for smaller problems they may not be ideal. Profile and test, and only if you need it.</li>
+<li>In Julia, the SciML package <a href="https://github.com/SciML/LinearSolve.jl">LinearSolver.jl</a> is your best bet there, as it lets you swap out backends to profile</li>
+<li>On Python harder to flip between them, but scipy has many built in and many wrappers exist. Same with Matlab</li>
+</ul>
+</section>
+<section id="preview-of-conditioning" class="slide level2">
+<h2>Preview of Conditioning</h2>
+<ul>
+<li>It will turn out that for iterative methods, a different style of algorithm, it is often necessary to multiple by a matrix to transform the problem</li>
+<li>The ideal transform would be the matrix’s inverse, which requires a full factorization.</li>
+<li>But instead, you can do only part of the way towards the factorization. e.g., part of the way on gaussian elimination</li>
+<li>Called “Incomplete Cholesky”, “Incomplete LU”, etc.</li>
+</ul>
+</section></section>
+<section>
+<section id="continuous-time-markov-chains" class="title-slide slide level1 center">
+<h1>Continuous Time Markov Chains</h1>
+
+</section>
+<section id="markov-chains-transitions-in-in-continuous-time" class="slide level2">
+<h2>Markov Chains Transitions in in Continuous Time</h2>
+<ul>
+<li>For a discrete number of states, we cannot have instantaneous transitions between states or it ceases to be measurable</li>
+<li>Instead: intensity of switching from state <span class="math inline">\(i\)</span> to <span class="math inline">\(j\)</span> as a <span class="math inline">\(q_{ij}\)</span> where</li>
+</ul>
+<p><span class="math display">\[
+\mathbb P \{ X(t + \Delta) = j  \,|\, X(t) \} = \begin{cases} q_{ij} \Delta + o(\Delta) &amp; i \neq j\\
+                                                              1 + q_{ii} \Delta + o(\Delta) &amp; i = j \end{cases}
+\]</span></p>
+<ul>
+<li>With <span class="math inline">\(o(\Delta)\)</span> is <a href="https://en.wikipedia.org/wiki/Big_O_notation#Little-o_notation">little-o notation</a>. That is, <span class="math inline">\(\lim_{\Delta\to 0} o(\Delta)/\Delta = 0\)</span>.</li>
+</ul>
+</section>
+<section id="intensity-matrix" class="slide level2">
+<h2>Intensity Matrix</h2>
+<ul>
+<li><span class="math inline">\(Q_{ij} = q_{ij}\)</span> for <span class="math inline">\(i \neq j\)</span> and <span class="math inline">\(Q_{ii} = -\sum_{j \neq i} q_{ij}\)</span></li>
+<li>Rows sum to 0</li>
+<li>For example, consider a counting process</li>
+</ul>
+<p><span class="math display">\[
+Q = \begin{bmatrix} -0.1 &amp; 0.1  &amp; 0 &amp; 0 &amp; 0 &amp; 0\\
+                    0.1  &amp;-0.2  &amp; 0.1 &amp;  0 &amp; 0 &amp; 0\\
+                    0 &amp; 0.1 &amp; -0.2 &amp; 0.1 &amp; 0 &amp; 0\\
+                    0 &amp; 0 &amp; 0.1 &amp; -0.2 &amp; 0.1 &amp; 0\\
+                    0 &amp; 0 &amp; 0 &amp; 0.1 &amp; -0.2 &amp; 0.1\\
+                    0 &amp; 0 &amp; 0 &amp; 0 &amp; 0.1 &amp; -0.1\\
+    \end{bmatrix}
+\]</span></p>
+</section>
+<section id="probability-dynamics" class="slide level2">
+<h2>Probability Dynamics</h2>
+<ul>
+<li><p>The <span class="math inline">\(Q\)</span> is the <a href="https://en.wikipedia.org/wiki/Infinitesimal_generator_(stochastic_processes)">infinitesimal generator</a> of the stochastic process.</p></li>
+<li><p>Let <span class="math inline">\(\pi(t) \in \mathbb{R}^N\)</span> with <span class="math inline">\(\pi_i(t) \equiv \mathbb{P}[X_t = i\,|\,X_0]\)</span></p></li>
+<li><p>Then the probability distribution evolution (Fokker-Planck or KFE), is <span class="math display">\[
+\frac{d}{dt} \pi(t) = \pi(t) Q,\quad \text{ given }\pi(0)
+\]</span></p></li>
+<li><p>Or, often written as <span class="math inline">\(\frac{d}{dt} \pi(t) = Q^{\top} \cdot \pi(t)\)</span>, i.e.&nbsp;in terms of the “adjoint” of the linear operator <span class="math inline">\(Q\)</span></p></li>
+<li><p>A steady state is then a solution to <span class="math inline">\(Q^{\top} \cdot \bar{\pi} = 0\)</span></p>
+<ul>
+<li>i.e., the <span class="math inline">\(\bar{\pi}\)</span> left-eigenvector associated with eigenvalue 0 (i.e.&nbsp;<span class="math inline">\(\bar{\pi} Q = 0\times \bar{\pi}\)</span>)</li>
+</ul></li>
+</ul>
+</section>
+<section id="setting-up-a-counting-process" class="slide level2">
+<h2>Setting up a Counting Process</h2>
+<div class="cell" data-execution_count="15">
+<div class="sourceCode cell-code" id="cb26"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb26-1"><a href="#cb26-1"></a>alpha <span class="op">=</span> <span class="fl">0.1</span></span>
+<span id="cb26-2"><a href="#cb26-2"></a>N <span class="op">=</span> <span class="fl">6</span></span>
+<span id="cb26-3"><a href="#cb26-3"></a>Q <span class="op">=</span> <span class="fu">Tridiagonal</span>(<span class="fu">fill</span>(alpha, N <span class="op">-</span> <span class="fl">1</span>),</span>
+<span id="cb26-4"><a href="#cb26-4"></a>                [<span class="op">-</span>alpha; <span class="fu">fill</span>(<span class="op">-</span><span class="fl">2</span><span class="op">*</span>alpha, N <span class="op">-</span> <span class="fl">2</span>); <span class="op">-</span>alpha],</span>
+<span id="cb26-5"><a href="#cb26-5"></a>                <span class="fu">fill</span>(alpha, N <span class="op">-</span> <span class="fl">1</span>))</span>
+<span id="cb26-6"><a href="#cb26-6"></a>Q</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="15">
+<pre><code>6×6 Tridiagonal{Float64, Vector{Float64}}:
+ -0.1   0.1    ⋅     ⋅     ⋅     ⋅ 
+  0.1  -0.2   0.1    ⋅     ⋅     ⋅ 
+   ⋅    0.1  -0.2   0.1    ⋅     ⋅ 
+   ⋅     ⋅    0.1  -0.2   0.1    ⋅ 
+   ⋅     ⋅     ⋅    0.1  -0.2   0.1
+   ⋅     ⋅     ⋅     ⋅    0.1  -0.1</code></pre>
+</div>
+</div>
+</section>
+<section id="finding-the-stationary-distribution" class="slide level2">
+<h2>Finding the Stationary Distribution</h2>
+<ul>
+<li>There will always be at least one eigenvalue of 0, and the corresponding eigenvector is the stationary distribution</li>
+<li>Teaser: Do we really need all of the eigenvectors/eigenvalues?</li>
+</ul>
+<div class="cell columns column-output-location" data-execution_count="16">
+<div class="column">
+<div class="sourceCode cell-code" id="cb28"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb28-1"><a href="#cb28-1"></a>Lambda, vecs <span class="op">=</span> <span class="fu">eigen</span>(<span class="fu">Array</span>(Q<span class="op">'</span>))</span>
+<span id="cb28-2"><a href="#cb28-2"></a><span class="pp">@show</span> Lambda</span>
+<span id="cb28-3"><a href="#cb28-3"></a>vecs[<span class="op">:</span>, N] <span class="op">./</span> <span class="fu">sum</span>(vecs[<span class="op">:</span>, N])</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div><div class="column">
+<div class="cell-output cell-output-stdout">
+<pre><code>Lambda = [-0.37320508075688735, -0.3, -0.2, -0.09999999999999998, -0.026794919243112277, 0.0]</code></pre>
+</div>
+<div class="cell-output cell-output-display" data-execution_count="16">
+<pre><code>6-element Vector{Float64}:
+ 0.16666666666666655
+ 0.16666666666666655
+ 0.16666666666666669
+ 0.1666666666666668
+ 0.16666666666666685
+ 0.1666666666666666</code></pre>
+</div>
+</div>
+</div>
+</section>
+<section id="using-the-generator-in-a-bellman-equation" class="slide level2">
+<h2>Using the Generator in a Bellman Equation</h2>
+<ul>
+<li>Let <span class="math inline">\(r \in \mathbb{R}^N\)</span> be a vector of payoffs in each state, and <span class="math inline">\(\rho &gt; 0\)</span> a discount rate,</li>
+<li>Then we can use the <span class="math inline">\(Q\)</span> generator as a simple Bellman Equation (using the Kolmogorov Backwards Equation) to find the value <span class="math inline">\(v\)</span> in each state,</li>
+</ul>
+<p><span class="math display">\[
+\rho v = r + Q v
+\]</span></p>
+<ul>
+<li>Rearranging, <span class="math inline">\((\rho I - Q) v = r\)</span></li>
+<li>Teaser: can we just implement <span class="math inline">\((\rho I - Q)\cdot v\)</span> and avoid factorizing the matrix?</li>
+</ul>
+</section>
+<section id="implementing-the-bellman-equation" class="slide level2">
+<h2>Implementing the Bellman Equation</h2>
+<div class="cell columns column-output-location" data-execution_count="17">
+<div class="column">
+<div class="sourceCode cell-code" id="cb31"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb31-1"><a href="#cb31-1"></a>rho <span class="op">=</span> <span class="fl">0.05</span></span>
+<span id="cb31-2"><a href="#cb31-2"></a>r <span class="op">=</span> <span class="fu">range</span>(<span class="fl">0.0</span>, <span class="fl">10.0</span>, length<span class="op">=</span>N)</span>
+<span id="cb31-3"><a href="#cb31-3"></a><span class="pp">@show</span> <span class="fu">typeof</span>(rho<span class="op">*</span>I <span class="op">-</span> Q)</span>
+<span id="cb31-4"><a href="#cb31-4"></a></span>
+<span id="cb31-5"><a href="#cb31-5"></a><span class="co"># solve (rho * I - Q) v = r</span></span>
+<span id="cb31-6"><a href="#cb31-6"></a>v <span class="op">=</span> (rho <span class="op">*</span> I <span class="op">-</span> Q) <span class="op">\</span> r</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div><div class="column">
+<div class="cell-output cell-output-stdout">
+<pre><code>typeof(rho * I - Q) = Tridiagonal{Float64, Vector{Float64}}</code></pre>
+</div>
+<div class="cell-output cell-output-display" data-execution_count="17">
+<pre><code>6-element Vector{Float64}:
+  38.15384615384615
+  57.23076923076923
+  84.92307692307693
+ 115.07692307692311
+ 142.76923076923077
+ 161.84615384615384</code></pre>
+</div>
+</div>
+</div>
+
+<div class="footer footer-default">
+
+</div>
+</section></section>
+    </div>
+  </div>
+
+  <script>window.backupDefine = window.define; window.define = undefined;</script>
+  <script src="../site_libs/revealjs/dist/reveal.js"></script>
+  <!-- reveal.js plugins -->
+  <script src="../site_libs/revealjs/plugin/quarto-line-highlight/line-highlight.js"></script>
+  <script src="../site_libs/revealjs/plugin/pdf-export/pdfexport.js"></script>
+  <script src="../site_libs/revealjs/plugin/reveal-menu/menu.js"></script>
+  <script src="../site_libs/revealjs/plugin/reveal-menu/quarto-menu.js"></script>
+  <script src="../site_libs/revealjs/plugin/reveal-chalkboard/plugin.js"></script>
+  <script src="../site_libs/revealjs/plugin/quarto-support/support.js"></script>
+  
+
+  <script src="../site_libs/revealjs/plugin/notes/notes.js"></script>
+  <script src="../site_libs/revealjs/plugin/search/search.js"></script>
+  <script src="../site_libs/revealjs/plugin/zoom/zoom.js"></script>
+  <script src="../site_libs/revealjs/plugin/math/math.js"></script>
+  <script>window.define = window.backupDefine; window.backupDefine = undefined;</script>
+
+  <script>
+
+      // Full list of configuration options available at:
+      // https://revealjs.com/config/
+      Reveal.initialize({
+'controlsAuto': true,
+'previewLinksAuto': false,
+'smaller': false,
+'pdfSeparateFragments': false,
+'autoAnimateEasing': "ease",
+'autoAnimateDuration': 1,
+'autoAnimateUnmatched': true,
+'menu': {"side":"left","useTextContentForMissingTitles":true,"markers":false,"loadIcons":false,"custom":[{"title":"Tools","icon":"<i class=\"fas fa-gear\"></i>","content":"<ul class=\"slide-menu-items\">\n<li class=\"slide-tool-item active\" data-item=\"0\"><a href=\"#\" onclick=\"RevealMenuToolHandlers.fullscreen(event)\"><kbd>f</kbd> Fullscreen</a></li>\n<li class=\"slide-tool-item\" data-item=\"1\"><a href=\"#\" onclick=\"RevealMenuToolHandlers.speakerMode(event)\"><kbd>s</kbd> Speaker View</a></li>\n<li class=\"slide-tool-item\" data-item=\"2\"><a href=\"#\" onclick=\"RevealMenuToolHandlers.overview(event)\"><kbd>o</kbd> Slide Overview</a></li>\n<li class=\"slide-tool-item\" data-item=\"3\"><a href=\"#\" onclick=\"RevealMenuToolHandlers.togglePdfExport(event)\"><kbd>e</kbd> PDF Export Mode</a></li>\n<li class=\"slide-tool-item\" data-item=\"4\"><a href=\"#\" onclick=\"RevealMenuToolHandlers.toggleChalkboard(event)\"><kbd>b</kbd> Toggle Chalkboard</a></li>\n<li class=\"slide-tool-item\" data-item=\"5\"><a href=\"#\" onclick=\"RevealMenuToolHandlers.toggleNotesCanvas(event)\"><kbd>c</kbd> Toggle Notes Canvas</a></li>\n<li class=\"slide-tool-item\" data-item=\"6\"><a href=\"#\" onclick=\"RevealMenuToolHandlers.downloadDrawings(event)\"><kbd>d</kbd> Download Drawings</a></li>\n<li class=\"slide-tool-item\" data-item=\"7\"><a href=\"#\" onclick=\"RevealMenuToolHandlers.keyboardHelp(event)\"><kbd>?</kbd> Keyboard Help</a></li>\n</ul>"}],"openButton":true},
+'chalkboard': {"buttons":true},
+'smaller': false,
+ 
+        // Display controls in the bottom right corner
+        controls: false,
+
+        // Help the user learn the controls by providing hints, for example by
+        // bouncing the down arrow when they first encounter a vertical slide
+        controlsTutorial: false,
+
+        // Determines where controls appear, "edges" or "bottom-right"
+        controlsLayout: 'edges',
+
+        // Visibility rule for backwards navigation arrows; "faded", "hidden"
+        // or "visible"
+        controlsBackArrows: 'faded',
+
+        // Display a presentation progress bar
+        progress: false,
+
+        // Display the page number of the current slide
+        slideNumber: 'c/t',
+
+        // 'all', 'print', or 'speaker'
+        showSlideNumber: 'all',
+
+        // Add the current slide number to the URL hash so that reloading the
+        // page/copying the URL will return you to the same slide
+        hash: true,
+
+        // Start with 1 for the hash rather than 0
+        hashOneBasedIndex: false,
+
+        // Flags if we should monitor the hash and change slides accordingly
+        respondToHashChanges: true,
+
+        // Push each slide change to the browser history
+        history: true,
+
+        // Enable keyboard shortcuts for navigation
+        keyboard: true,
+
+        // Enable the slide overview mode
+        overview: true,
+
+        // Disables the default reveal.js slide layout (scaling and centering)
+        // so that you can use custom CSS layout
+        disableLayout: false,
+
+        // Vertical centering of slides
+        center: false,
+
+        // Enables touch navigation on devices with touch input
+        touch: true,
+
+        // Loop the presentation
+        loop: false,
+
+        // Change the presentation direction to be RTL
+        rtl: false,
+
+        // see https://revealjs.com/vertical-slides/#navigation-mode
+        navigationMode: 'linear',
+
+        // Randomizes the order of slides each time the presentation loads
+        shuffle: false,
+
+        // Turns fragments on and off globally
+        fragments: true,
+
+        // Flags whether to include the current fragment in the URL,
+        // so that reloading brings you to the same fragment position
+        fragmentInURL: false,
+
+        // Flags if the presentation is running in an embedded mode,
+        // i.e. contained within a limited portion of the screen
+        embedded: false,
+
+        // Flags if we should show a help overlay when the questionmark
+        // key is pressed
+        help: true,
+
+        // Flags if it should be possible to pause the presentation (blackout)
+        pause: true,
+
+        // Flags if speaker notes should be visible to all viewers
+        showNotes: false,
+
+        // Global override for autoplaying embedded media (null/true/false)
+        autoPlayMedia: null,
+
+        // Global override for preloading lazy-loaded iframes (null/true/false)
+        preloadIframes: null,
+
+        // Number of milliseconds between automatically proceeding to the
+        // next slide, disabled when set to 0, this value can be overwritten
+        // by using a data-autoslide attribute on your slides
+        autoSlide: 0,
+
+        // Stop auto-sliding after user input
+        autoSlideStoppable: true,
+
+        // Use this method for navigation when auto-sliding
+        autoSlideMethod: null,
+
+        // Specify the average time in seconds that you think you will spend
+        // presenting each slide. This is used to show a pacing timer in the
+        // speaker view
+        defaultTiming: null,
+
+        // Enable slide navigation via mouse wheel
+        mouseWheel: false,
+
+        // The display mode that will be used to show slides
+        display: 'block',
+
+        // Hide cursor if inactive
+        hideInactiveCursor: true,
+
+        // Time before the cursor is hidden (in ms)
+        hideCursorTime: 5000,
+
+        // Opens links in an iframe preview overlay
+        previewLinks: false,
+
+        // Transition style (none/fade/slide/convex/concave/zoom)
+        transition: 'none',
+
+        // Transition speed (default/fast/slow)
+        transitionSpeed: 'default',
+
+        // Transition style for full page slide backgrounds
+        // (none/fade/slide/convex/concave/zoom)
+        backgroundTransition: 'none',
+
+        // Number of slides away from the current that are visible
+        viewDistance: 3,
+
+        // Number of slides away from the current that are visible on mobile
+        // devices. It is advisable to set this to a lower number than
+        // viewDistance in order to save resources.
+        mobileViewDistance: 2,
+
+        // The "normal" size of the presentation, aspect ratio will be preserved
+        // when the presentation is scaled to fit different resolutions. Can be
+        // specified using percentage units.
+        width: 1280,
+
+        height: 720,
+
+        // Factor of the display size that should remain empty around the content
+        margin: 0.1,
+
+        math: {
+          mathjax: 'https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js',
+          config: 'TeX-AMS_HTML-full',
+          tex2jax: {
+            inlineMath: [['\\(','\\)']],
+            displayMath: [['\\[','\\]']],
+            balanceBraces: true,
+            processEscapes: false,
+            processRefs: true,
+            processEnvironments: true,
+            preview: 'TeX',
+            skipTags: ['script','noscript','style','textarea','pre','code'],
+            ignoreClass: 'tex2jax_ignore',
+            processClass: 'tex2jax_process'
+          },
+        },
+
+        // reveal.js plugins
+        plugins: [QuartoLineHighlight, PdfExport, RevealMenu, RevealChalkboard, QuartoSupport,
+
+          RevealMath,
+          RevealNotes,
+          RevealSearch,
+          RevealZoom
+        ]
+      });
+    </script>
+    <script id="quarto-html-after-body" type="application/javascript">
+    window.document.addEventListener("DOMContentLoaded", function (event) {
+      const toggleBodyColorMode = (bsSheetEl) => {
+        const mode = bsSheetEl.getAttribute("data-mode");
+        const bodyEl = window.document.querySelector("body");
+        if (mode === "dark") {
+          bodyEl.classList.add("quarto-dark");
+          bodyEl.classList.remove("quarto-light");
+        } else {
+          bodyEl.classList.add("quarto-light");
+          bodyEl.classList.remove("quarto-dark");
+        }
+      }
+      const toggleBodyColorPrimary = () => {
+        const bsSheetEl = window.document.querySelector("link#quarto-bootstrap");
+        if (bsSheetEl) {
+          toggleBodyColorMode(bsSheetEl);
+        }
+      }
+      toggleBodyColorPrimary();  
+      const tabsets =  window.document.querySelectorAll(".panel-tabset-tabby")
+      tabsets.forEach(function(tabset) {
+        const tabby = new Tabby('#' + tabset.id);
+      });
+      const isCodeAnnotation = (el) => {
+        for (const clz of el.classList) {
+          if (clz.startsWith('code-annotation-')) {                     
+            return true;
+          }
+        }
+        return false;
+      }
+      const clipboard = new window.ClipboardJS('.code-copy-button', {
+        text: function(trigger) {
+          const codeEl = trigger.previousElementSibling.cloneNode(true);
+          for (const childEl of codeEl.children) {
+            if (isCodeAnnotation(childEl)) {
+              childEl.remove();
+            }
+          }
+          return codeEl.innerText;
+        }
+      });
+      clipboard.on('success', function(e) {
+        // button target
+        const button = e.trigger;
+        // don't keep focus
+        button.blur();
+        // flash "checked"
+        button.classList.add('code-copy-button-checked');
+        var currentTitle = button.getAttribute("title");
+        button.setAttribute("title", "Copied!");
+        let tooltip;
+        if (window.bootstrap) {
+          button.setAttribute("data-bs-toggle", "tooltip");
+          button.setAttribute("data-bs-placement", "left");
+          button.setAttribute("data-bs-title", "Copied!");
+          tooltip = new bootstrap.Tooltip(button, 
+            { trigger: "manual", 
+              customClass: "code-copy-button-tooltip",
+              offset: [0, -8]});
+          tooltip.show();    
+        }
+        setTimeout(function() {
+          if (tooltip) {
+            tooltip.hide();
+            button.removeAttribute("data-bs-title");
+            button.removeAttribute("data-bs-toggle");
+            button.removeAttribute("data-bs-placement");
+          }
+          button.setAttribute("title", currentTitle);
+          button.classList.remove('code-copy-button-checked');
+        }, 1000);
+        // clear code selection
+        e.clearSelection();
+      });
+      function tippyHover(el, contentFn) {
+        const config = {
+          allowHTML: true,
+          content: contentFn,
+          maxWidth: 500,
+          delay: 100,
+          arrow: false,
+          appendTo: function(el) {
+              return el.closest('section.slide') || el.parentElement;
+          },
+          interactive: true,
+          interactiveBorder: 10,
+          theme: 'light-border',
+          placement: 'bottom-start'
+        };
+          config['offset'] = [0,0];
+          config['maxWidth'] = 700;
+        window.tippy(el, config); 
+      }
+      const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+      for (var i=0; i<noterefs.length; i++) {
+        const ref = noterefs[i];
+        tippyHover(ref, function() {
+          // use id or data attribute instead here
+          let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+          try { href = new URL(href).hash; } catch {}
+          const id = href.replace(/^#\/?/, "");
+          const note = window.document.getElementById(id);
+          return note.innerHTML;
+        });
+      }
+      const findCites = (el) => {
+        const parentEl = el.parentElement;
+        if (parentEl) {
+          const cites = parentEl.dataset.cites;
+          if (cites) {
+            return {
+              el,
+              cites: cites.split(' ')
+            };
+          } else {
+            return findCites(el.parentElement)
+          }
+        } else {
+          return undefined;
+        }
+      };
+      var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+      for (var i=0; i<bibliorefs.length; i++) {
+        const ref = bibliorefs[i];
+        const citeInfo = findCites(ref);
+        if (citeInfo) {
+          tippyHover(citeInfo.el, function() {
+            var popup = window.document.createElement('div');
+            citeInfo.cites.forEach(function(cite) {
+              var citeDiv = window.document.createElement('div');
+              citeDiv.classList.add('hanging-indent');
+              citeDiv.classList.add('csl-entry');
+              var biblioDiv = window.document.getElementById('ref-' + cite);
+              if (biblioDiv) {
+                citeDiv.innerHTML = biblioDiv.innerHTML;
+              }
+              popup.appendChild(citeDiv);
+            });
+            return popup.innerHTML;
+          });
+        }
+      }
+    });
+    </script>
+    
+
+</body></html>

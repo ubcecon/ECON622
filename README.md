@@ -80,24 +80,30 @@ See [problemsets.md](problemsets.md).
 
 **JESSE**
 
-8. **October 4th**: Iterative and matrix-free methods, pre-conditioning and regularization
-   - Large-scale linear least squares and eigenvalue problems
-   - Introduction to regularization and implicit bias of algorithms
-   - [Iterative Methods](https://julia.quantecon.org/tools_and_techniques/iterative_methods_sparsity.html)
-   - [Numerical Linear Algebra](https://julia.quantecon.org/tools_and_techniques/numerical_linear_algebra.html) applying generic programming
-   - Assignment in prep for ECON628 two-way fixed effects
-9.  **October 11**: Introduction to Pytorch, JAX, and "ML Devops"
-10. **October 12**: Reverse-mode and forward-mode AD.  Differentiable everything!
+Slides for the lectures can be found [here](https://ubcecon.github.io/ECON622/lectures/index.html)
+
+8. **October 4th**: Factorizations, Direct Methods, and Intro to Regularization
+    - **SLIDES**: [Factorizations and Direct Methods](https://ubcecon.github.io/ECON622/lectures/lectures/factorizations_direct_methods.html)
+    - Introduction to regularization and implicit bias of algorithms
+    - [Numerical Linear Algebra](https://julia.quantecon.org/tools_and_techniques/numerical_linear_algebra.html) applying generic programming
+9.  **October 11**: Iterative Methods, Geometry of Optimization, and Rethinking LLS
+    - **SLIDES**: [Least Squares](https://ubcecon.github.io/ECON622/lectures/lectures/least_squares.html) and [Iterative Methods](https://ubcecon.github.io/ECON622/lectures/lectures/iterative_methods.html)
+    - [Iterative Methods](https://julia.quantecon.org/tools_and_techniques/iterative_methods_sparsity.html)
+10. **October 12**: Preconditioning and Overview of Machine Learning
+    - **SLIDES**:  [Iterative Methods](https://ubcecon.github.io/ECON622/lectures/lectures/iterative_methods.html)
+    - Finalize discussion of iterative methods and preconditioning
+    - Introduce key concepts about supervised, unsupervised, reinforcement learning, semi-supervised, kernel-methods, deep-learning, etc.
+11. **October 16**: JAX/Pytorch/ML-engineering and Auto-Differentiation
     - Implicit differentiation of systems of ODEs, linear systems, etc.
+    - Reverse-mode and forward-mode AD.  Differentiable everything!
     - Differentiable ODEs/SDEs in JAX and Julia
     - Custom jvps and vjps.  Why we need gradients?
-11.  **October 16**: Probabilistic Programming Languages (PPLs), Bayesian methods, and intro to generative models
+12. **October 18** Gaussian Processes and Kernel Methods
+13. **October 23** Intro to Neural Networks, Function Approximation, and Representation Learning
+14. **October 25** Probabilistic Programming Languages (PPLs), Bayesian methods, and intro to generative models
     - Sampling and approximation of model posteriors
     - High-dimensional sampling of latents in practice
     - Variational inference with AD vs. HMC
-12.  **October 18** Gaussian Processes and Intro to Bayesian Optimization
-13.  **October 23** Intro to Neural Networks, Function Approximation, and Representation Learning
-14.  **October 25** Deep Learning and Dynamic Models
 15.  **October 30** Double-descent, regularization, and generalization
 
 **PHIL**
