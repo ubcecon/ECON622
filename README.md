@@ -90,21 +90,24 @@ Slides for the lectures can be found [here](https://ubcecon.github.io/ECON622/le
     - **SLIDES**: [Least Squares](https://ubcecon.github.io/ECON622/lectures/lectures/least_squares.html) and [Iterative Methods](https://ubcecon.github.io/ECON622/lectures/lectures/iterative_methods.html)
     - [Iterative Methods](https://julia.quantecon.org/tools_and_techniques/iterative_methods_sparsity.html)
 10. **October 12**: Preconditioning and Overview of Machine Learning
-    - **SLIDES**:  [Iterative Methods](https://ubcecon.github.io/ECON622/lectures/lectures/iterative_methods.html)
+    - **SLIDES**:  [Iterative Methods](https://ubcecon.github.io/ECON622/lectures/lectures/iterative_methods.html) and [Intro to ML](https://ubcecon.github.io/ECON622/lectures/lectures/intro_to_ml.html)
     - Finalize discussion of iterative methods and preconditioning
     - Introduce key concepts about supervised, unsupervised, reinforcement learning, semi-supervised, kernel-methods, deep-learning, etc.
-11. **October 16**: JAX/Pytorch/ML-engineering and Auto-Differentiation
-    - Implicit differentiation of systems of ODEs, linear systems, etc.
+11. **October 16**: JAX and Auto-Differentiation/JVP/etc.
+    - **SLIDES**: Finish [Intro to ML](https://ubcecon.github.io/ECON622/lectures/lectures/intro_to_ml.html) and start [Differentiation](https://ubcecon.github.io/ECON622/lectures/lectures/differentiation.html)
+    - Core JAX transforms
     - Reverse-mode and forward-mode AD.  Differentiable everything!
-    - Differentiable ODEs/SDEs in JAX and Julia
-    - Custom jvps and vjps.  Why we need gradients?
-12. **October 18** Gaussian Processes and Kernel Methods
-13. **October 23** Intro to Neural Networks, Function Approximation, and Representation Learning
-14. **October 25** Probabilistic Programming Languages (PPLs), Bayesian methods, and intro to generative models
+    - Jvps and vjps
+12. **October 18**: AD of Implicit Functions and Optimization/ML Pipelines
+    - [Differentiation](https://ubcecon.github.io/ECON622/lectures/lectures/differentiation.html)
+    - Implicit differentiation of systems of ODEs, linear systems, etc.
+    - Stochastic Gradient Descent, Learning Rate Schedules, and ML pipelines
+13. **October 25th**: Kernel Methods and Gaussian Processes
+14. **October 23**: Intro to Neural Networks, Function Approximation, and Representation Learning
+15. **October 30**: Probabilistic Programming Languages (PPLs), Bayesian methods, and intro to generative models
     - Sampling and approximation of model posteriors
     - High-dimensional sampling of latents in practice
     - Variational inference with AD vs. HMC
-15.  **October 30** Double-descent, regularization, and generalization
 
 **PHIL**
 
