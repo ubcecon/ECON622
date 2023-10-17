@@ -93,13 +93,13 @@ Slides for the lectures can be found [here](https://ubcecon.github.io/ECON622/le
     - **SLIDES**:  [Iterative Methods](https://ubcecon.github.io/ECON622/lectures/lectures/iterative_methods.html) and [Intro to ML](https://ubcecon.github.io/ECON622/lectures/lectures/intro_to_ml.html)
     - Finalize discussion of iterative methods and preconditioning
     - Introduce key concepts about supervised, unsupervised, reinforcement learning, semi-supervised, kernel-methods, deep-learning, etc.
-11. **October 16**: JAX and Auto-Differentiation/JVP/etc.
+11. **October 16**: Differentiable everything! JAX and Auto-Differentiation/JVP/etc.
     - **SLIDES**: Finish [Intro to ML](https://ubcecon.github.io/ECON622/lectures/lectures/intro_to_ml.html) and start [Differentiation](https://ubcecon.github.io/ECON622/lectures/lectures/differentiation.html)
     - Core JAX transforms
-    - Reverse-mode and forward-mode AD.  Differentiable everything!
+    - Reverse-mode and forward-mode AD.  
     - Jvps and vjps
-12. **October 18**: AD of Implicit Functions and Optimization/ML Pipelines
-    - [Differentiation](https://ubcecon.github.io/ECON622/lectures/lectures/differentiation.html)
+12. **October 18**: AD of Implicit Functions, stochastic optimization, and ML Pipelines
+    - **SLIDES**: Finish [Differentiation](https://ubcecon.github.io/ECON622/lectures/lectures/differentiation.html)
     - Implicit differentiation of systems of ODEs, linear systems, etc.
     - Stochastic Gradient Descent, Learning Rate Schedules, and ML pipelines
 13. **October 25th**: Kernel Methods and Gaussian Processes
