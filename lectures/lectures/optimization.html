@@ -29,71 +29,6 @@
       margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
       vertical-align: middle;
     }
-    /* CSS for syntax highlighting */
-    pre > code.sourceCode { white-space: pre; position: relative; }
-    pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
-    pre > code.sourceCode > span:empty { height: 1.2em; }
-    .sourceCode { overflow: visible; }
-    code.sourceCode > span { color: inherit; text-decoration: inherit; }
-    div.sourceCode { margin: 1em 0; }
-    pre.sourceCode { margin: 0; }
-    @media screen {
-    div.sourceCode { overflow: auto; }
-    }
-    @media print {
-    pre > code.sourceCode { white-space: pre-wrap; }
-    pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
-    }
-    pre.numberSource code
-      { counter-reset: source-line 0; }
-    pre.numberSource code > span
-      { position: relative; left: -4em; counter-increment: source-line; }
-    pre.numberSource code > span > a:first-child::before
-      { content: counter(source-line);
-        position: relative; left: -1em; text-align: right; vertical-align: baseline;
-        border: none; display: inline-block;
-        -webkit-touch-callout: none; -webkit-user-select: none;
-        -khtml-user-select: none; -moz-user-select: none;
-        -ms-user-select: none; user-select: none;
-        padding: 0 4px; width: 4em;
-        color: #aaaaaa;
-      }
-    pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
-    div.sourceCode
-      { color: #003b4f; background-color: #f1f3f5; }
-    @media screen {
-    pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
-    }
-    code span { color: #003b4f; } /* Normal */
-    code span.al { color: #ad0000; } /* Alert */
-    code span.an { color: #5e5e5e; } /* Annotation */
-    code span.at { color: #657422; } /* Attribute */
-    code span.bn { color: #ad0000; } /* BaseN */
-    code span.bu { } /* BuiltIn */
-    code span.cf { color: #003b4f; } /* ControlFlow */
-    code span.ch { color: #20794d; } /* Char */
-    code span.cn { color: #8f5902; } /* Constant */
-    code span.co { color: #5e5e5e; } /* Comment */
-    code span.cv { color: #5e5e5e; font-style: italic; } /* CommentVar */
-    code span.do { color: #5e5e5e; font-style: italic; } /* Documentation */
-    code span.dt { color: #ad0000; } /* DataType */
-    code span.dv { color: #ad0000; } /* DecVal */
-    code span.er { color: #ad0000; } /* Error */
-    code span.ex { } /* Extension */
-    code span.fl { color: #ad0000; } /* Float */
-    code span.fu { color: #4758ab; } /* Function */
-    code span.im { color: #00769e; } /* Import */
-    code span.in { color: #5e5e5e; } /* Information */
-    code span.kw { color: #003b4f; } /* Keyword */
-    code span.op { color: #5e5e5e; } /* Operator */
-    code span.ot { color: #003b4f; } /* Other */
-    code span.pp { color: #ad0000; } /* Preprocessor */
-    code span.sc { color: #5e5e5e; } /* SpecialChar */
-    code span.ss { color: #20794d; } /* SpecialString */
-    code span.st { color: #20794d; } /* String */
-    code span.va { color: #111111; } /* Variable */
-    code span.vs { color: #20794d; } /* VerbatimString */
-    code span.wa { color: #5e5e5e; font-style: italic; } /* Warning */
   </style>
   <link rel="stylesheet" href="../site_libs/revealjs/dist/theme/quarto.css">
   <link href="../site_libs/revealjs/plugin/quarto-line-highlight/line-highlight.css" rel="stylesheet">
@@ -408,7 +343,7 @@
 
 <section id="title-slide" class="quarto-title-block center">
   <h1 class="title">ECON622: Computational Economics with Data Science Applications</h1>
-  <p class="subtitle">Key Terminology and Concepts in Machine Learning</p>
+  <p class="subtitle">Optimization for Machine Learning</p>
 
 <div class="quarto-title-authors">
 <div class="quarto-title-author">
@@ -429,9 +364,9 @@ Jesse Perla
 <h2 id="toc-title">Table of contents</h2>
 <ul>
 <li><a href="#/overview" id="/toc-overview">Overview</a></li>
-<li><a href="#/python" id="/toc-python">Python</a></li>
-<li><a href="#/python-ecosystem" id="/toc-python-ecosystem">Python Ecosystem</a></li>
-<li><a href="#/jax-ecosystem" id="/toc-jax-ecosystem">JAX Ecosystem</a></li>
+<li><a href="#/optimization-crash-course" id="/toc-optimization-crash-course">Optimization Crash Course</a></li>
+<li><a href="#/stochastic-optimization" id="/toc-stochastic-optimization">Stochastic Optimization</a></li>
+<li><a href="#/training-loops" id="/toc-training-loops">Training Loops</a></li>
 </ul>
 </nav>
 </section>
@@ -440,433 +375,518 @@ Jesse Perla
 <h1>Overview</h1>
 
 </section>
-<section id="motivation" class="slide level2">
-<h2>Motivation</h2>
+<section id="summary" class="slide level2">
+<h2>Summary</h2>
 <ul>
-<li>In this lecture we will introduce some key terminology and concepts in machine learning</li>
-<li>We will map these concepts to terminology in economics and statistics</li>
-<li>Finally, we will discuss Python Frameworks</li>
-</ul>
-</section>
-<section id="textbooks" class="slide level2">
-<h2>Textbooks</h2>
+<li>This lecture continues from the previous lecture on gradients to further explore optimization methods in machine learning, and discusses training pipelines and tooling</li>
+<li>Primary reference materials are:
 <ul>
-<li><a href="https://probml.github.io/pml-book/book1.html">Probabilistic Machine Learning: An Introduction</a> by Kevin Murphy</li>
-<li><a href="https://probml.github.io/pml-book/book2.html">Probabilistic Machine Learning: Advanced Topics</a> by Kevin Murphy</li>
-<li>Both have PDFs of the “draft” available</li>
-<li>Code is available on https://github.com/probml/pyprobml
-<ul>
-<li>Much in JAX, some in torch/etc.</li>
+<li><a href="https://probml.github.io/pml-book/book1.html">ProbML Book 1: Introduction</a></li>
+<li><a href="https://probml.github.io/pml-book/book2.html">ProbML Book 2: Advanced Topics</a> including Section 6.3</li>
+<li><a href="https://www.cs.ubc.ca/~schmidtm/Courses/LecturesOnML/">Mark Schmidt’s ML Lecture Notes</a></li>
 </ul></li>
-<li>For some linear algebra/etc. examples, see the <a href="https://ubcecon.github.io/ECON526/lectures/lectures/index.html">ECON526 Lectures</a></li>
+<li>We will also give a sense of a standard machine learning pipeline of training, validation, and test data and discuss generalization, logging, etc.</li>
 </ul>
 </section>
-<section id="relevant-categories-of-machine-learning" class="slide level2">
-<h2>Relevant Categories of Machine Learning</h2>
+<section id="why-the-emphasis-on-optimization-and-gradients" class="slide level2">
+<h2>Why the Emphasis on Optimization and Gradients?</h2>
 <ul>
-<li>Supervised Learning (e.g., Regression and Classification)</li>
-<li>Unsupervised Learning (e.g., Clustering, Auto-encoders)</li>
-<li>Semi-Supervised Learning (e.g., some observations)</li>
-<li>Reinforcement Learning (e.g., policy/control)</li>
-<li>Generative Models/Bayesian Methods (e.g., diffusions, probabilistic programming)</li>
-</ul>
-<p>Instance-based learning (e.g., Kernel Methods) and Deep Learning are somewhat orthogonal</p>
-</section>
-<section id="key-terminology-features-labels-and-latents" class="slide level2">
-<h2>Key Terminology: Features, Labels, and Latents</h2>
-<ul>
-<li><strong>Features</strong> are economists <strong>explanatory or independent variables</strong>. They have the key source of variation to make predictions and conduct counterfactuals</li>
-<li><strong>Labels</strong> correspond to economists <strong>observables or dependent variables</strong></li>
-<li><strong>Latent Variables</strong> are <strong>unobserved variables</strong>, typically sources of heterogeneity or which may drive both the dependent and independent variables</li>
-<li><strong>Feature Engineering</strong> is the process of creating or selecting features from the data that are more useful for the task at hand</li>
-</ul>
-</section>
-<section id="key-concepts" class="slide level2">
-<h2>Key Concepts</h2>
-<ul>
-<li>20th vs.&nbsp;21st Century ML</li>
-<li>Stochastic Gradients and Auto-Differentiation</li>
-<li>Implicit and Explicit Regularization</li>
-<li>Inductive/Implicit Bias</li>
-<li>Generalization</li>
-<li>Overfitting and the Bias-Variance Tradeoff</li>
-<li>Test vs.&nbsp;Train vs.&nbsp;Validation Set</li>
-<li>Hyperparameter Optimization</li>
-<li>Representation Learning</li>
-<li>Transfer Learning</li>
+<li>A huge number of algorithms for economists can be written as optimization problems (e.g., MLE, interpolation) or as something similar in spirit (e.g.&nbsp;Bayesian Sampling, Reinforcement Learning)</li>
+<li>In practice, <strong>all</strong> problems with high-dimensions parameters or latents require gradients</li>
+<li>Previous lectures on AD showed we can find gradients for extremely complicated functions with VJPs</li>
 </ul>
 </section></section>
 <section>
-<section id="python" class="title-slide slide level1 center">
-<h1>Python</h1>
+<section id="optimization-crash-course" class="title-slide slide level1 center">
+<h1>Optimization Crash Course</h1>
 
 </section>
-<section id="why-python" class="slide level2">
-<h2>Why Python?</h2>
+<section id="optimization-methods" class="slide level2">
+<h2>Optimization Methods</h2>
 <ul>
-<li>For “modern” ML: <strong>all</strong> the well-supported frameworks are in Python</li>
-<li>In particular, auto-differentiation is central to many ML algorithms</li>
-<li>Why should you avoid Julia/Matlab/R in these cases?
+<li>Learning continuous optimization methods is an enormous project</li>
+<li>See referenced materials and lecture notes</li>
+<li>Here we will give an overview of some key concepts</li>
+<li>Be warned! The details matter, so more study is required if you want to use these methods in practice</li>
+</ul>
+</section>
+<section id="crash-course-in-unconstrained-optimization" class="slide level2">
+<h2>Crash Course in Unconstrained Optimization</h2>
+<p><span class="math display">\[
+\min_{\theta} \mathcal{L}(\theta)
+\]</span></p>
+<p>Will briefly introduce</p>
 <ul>
-<li>Poor AD, especially for reverse-mode</li>
-<li>Network effects. Very few higher level packages for ML pipeline</li>
-<li>But Julia dominates for many ML topics (e.g.&nbsp;ODEs) and R is outstanding for classic ML</li>
-</ul></li>
-<li>Should you use Python for more things?
+<li>First-order methods</li>
+<li>Second-order methods</li>
+<li>Preconditioning</li>
+<li>Momentum</li>
+<li>Regularization</li>
+</ul>
+</section>
+<section id="first-order-methods" class="slide level2">
+<h2>First-Order Methods</h2>
 <ul>
-<li>Maybe, but it is limited and can be slow unless you jump through hoops</li>
-<li>Personally, if I have algorithms but no need for AD or particular packages, Julia is a much better language and less frustrating</li>
+<li>See <a href="https://probml.github.io/pml-book/book1.html">ProbML Book 1</a> Section 8.2</li>
+<li>Armed with reverse-mode AD for <span class="math inline">\(\mathcal{L} : \mathbb{R}^N \to \mathbb{R}\)</span> we can calculate <span class="math inline">\(\nabla \mathcal{L}(\theta)\)</span> with the same computational order as <span class="math inline">\(\mathcal{L}(\theta)\)</span></li>
+<li>Furthermore, given JVPs we know we can calculate these objective functions for extremely complicated functions (e.g., nested fixed points, and implicit functions)</li>
+<li>Iterative: take <span class="math inline">\(\theta_0\)</span> and provide <span class="math inline">\(\theta_t \to \theta_{t+1}\)</span>
+<ul>
+<li>May converge to a stationary point (hopefully close to a global argmin)</li>
+<li>If it doesn’t converge, the solution may still be an argmin</li>
+<li>See references for details on convergence for convex and non-convex problems</li>
 </ul></li>
 </ul>
 </section>
-<section id="there-is-no-such-thing-as-python" class="slide level2">
-<h2>There is no Such Thing as “Python”!</h2>
+<section id="gradient-descent" class="slide level2">
+<h2>Gradient Descent</h2>
 <ul>
-<li>Many incompatible wrappers around C++ for numerical methods</li>
-<li>Numpy/Scipy is the baseline (a common API)</li>
-<li>Pytorch</li>
-<li>JAX</li>
-<li>Ones to avoid
+<li>See <a href="https://www.cs.ubc.ca/~schmidtm/Courses/340-F22/L13.pdf">Mark Schmidt’s Notes</a></li>
+<li>Gradient descent takes <span class="math inline">\(\theta_0\)</span>, and stepsize <span class="math inline">\(\eta_t\)</span> and iterates until <span class="math inline">\(\nabla \mathcal{L}(\theta_t)\)</span> is small, or <span class="math inline">\(\theta_t\)</span> stationary</li>
+</ul>
+<p><span class="math display">\[
+\theta_{t+1} = \theta_t - \eta_t \nabla \mathcal{L}(\theta_t)
+\]</span></p>
 <ul>
-<li>Tensorflow, common in industry but old</li>
-<li>Numba (for me, reasonable people disagree)</li>
+<li>It is the simplest “first-order” method (i.e., ones using just the gradient of <span class="math inline">\(\mathcal{L}\)</span>)</li>
+<li>Will call <span class="math inline">\(\eta_t\)</span> a “learning rate schedule”</li>
+<li>Think of line-search methods as choosing the stepsize <span class="math inline">\(\eta_t\)</span> optimally. Useful as well for economists, even if used infrequently in M</li>
+</ul>
+</section>
+<section id="when-and-where-does-this-converge" class="slide level2">
+<h2>When and Where Does This Converge?</h2>
+<ul>
+<li><p>Skipping a million details, see <a href="https://probml.github.io/pml-book/book1.html">ProbML Book 1</a> Section 8.2.2 and <a href="https://www.cs.ubc.ca/~schmidtm/Courses/340-F22/L14.pdf">Mark Schmidt’s Notes</a></p></li>
+<li><p>For strictly convex problems this converges to the global minima, though sufficient conditions include Robbins-Monro <span class="math inline">\(\lim_{T\to \infty} \eta_T \to 0\)</span> and</p>
+<p><span class="math display">\[
+\lim_{T\to\infty}\frac{\sum_{t=1}^T \eta_t}{\sum_{t=1}^T \eta_t^2} = 0
+\]</span></p></li>
+<li><p>For problems that not globally convex this may go to local optima, but if the function is locally strictly convex then it will converge to a local optima</p></li>
+<li><p>For other types of functions (e.g., <a href="https://en.wikipedia.org/wiki/Invex_function">invex</a>) it may still converge to the “right” solution in some important sense</p></li>
+</ul>
+</section>
+<section id="preconditioned-gradient-descent" class="slide level2">
+<h2>Preconditioned Gradient Descent</h2>
+<ul>
+<li><p>As we saw analyzing LLS, badly conditioned problems converge slowly with iterative methods</p></li>
+<li><p>We can precondition a problem as we did with linear systems, and it has the same stationary point</p></li>
+<li><p>Choose some <span class="math inline">\(C_t\)</span> for preconditioned gradient descent <span class="math display">\[
+\theta_{t+1} = \theta_t - \eta_t C_t \nabla \mathcal{L}(\theta_t)
+\]</span></p></li>
+<li><p>We saw before that the Hessian tells us the geometry, so the optimal preconditioner must be related to <span class="math inline">\(\nabla^2 \mathcal{L}(\theta_t)\)</span></p></li>
+</ul>
+</section>
+<section id="second-order-methods" class="slide level2">
+<h2>Second-Order Methods</h2>
+<ul>
+<li>See <a href="https://probml.github.io/pml-book/book1.html">ProbML Book 1</a> Section 8.3</li>
+<li>Adapt <span class="math inline">\(\eta_t C_t\)</span> to use the Hessian (e.g., Newton’s Method)</li>
+</ul>
+<p><span class="math display">\[
+\theta_{t+1} = \theta_t - \eta_t \left[\nabla^2 \mathcal{L}(\theta_t) \right]^{-1}\nabla \mathcal{L}(\theta_t)
+\]</span></p>
+<ul>
+<li>Second order methods are rarer because the calculating the Hessian is no longer the same computational order as <span class="math inline">\(\mathcal{L}(\theta)\)</span></li>
+<li>See <a href="https://probml.github.io/pml-book/book1.html">ProbML Book 1</a> Section 8.3.2 for info on Quasi-Newtonian methods which approximation Hessian using gradients like BFGS</li>
+</ul>
+</section>
+<section id="momentum" class="slide level2">
+<h2>Momentum</h2>
+<ul>
+<li>See <a href="https://probml.github.io/pml-book/book1.html">ProbML Book 1</a> Section 8.2.4</li>
+<li>Can use “momentum”, which speeds up convergence, helps avoid local optima, and moves fast in flat regions</li>
+<li>Momentum will be a common feature of many ML optimizers (e.g.&nbsp;Adam, RMSProp, etc.) as it helps with heavily non-convex problems</li>
+<li>A classic method is called Nesterov Accelerated Gradient (NAG), which is a modification of gradient descent for some <span class="math inline">\(\beta_t\in (0,1)\)</span> (e.g., <span class="math inline">\(0.9\)</span>)</li>
+</ul>
+<p><span class="math display">\[
+\begin{aligned}
+\hat{\theta}_{t+1} &amp;= \theta_t + \beta_t(\theta_t - \theta_{t-1})\\
+\theta_{t+1} &amp;= \hat{\theta}_{t+1} - \eta_t \nabla \mathcal{L}(\hat{\theta}_{t+1})
+\end{aligned}
+\]</span></p>
+</section>
+<section id="does-uniqueness-matter" class="slide level2">
+<h2>Does Uniqueness Matter?</h2>
+<ul>
+<li>Remember from our previous lecture on Sobolev norms and regularization that we care about functions, not parameters.</li>
+<li>Consider when <span class="math inline">\(\theta\)</span> is used as parameters for a function (e.g.&nbsp;<span class="math inline">\(\hat{f}_{\theta}\)</span>)
+<ul>
+<li>Then what does a lack of convergence of the <span class="math inline">\(\theta_t\)</span> or multiplicity with multiple <span class="math inline">\(\theta\)</span> solutions mean?</li>
+<li>Maybe nothing! If <span class="math inline">\(||\hat{f}_{\theta_0} - \hat{f}_{\theta_1}||_S\)</span> is small, then the functions themselves may be in the same equivalence class. Depends on the norm, of course.</li>
+</ul></li>
+<li>This topic will be discussed when we consider double-descent curves, but the punchline for now is that the training/optimization is a means to an end (i.e., generalization) and not an end in itself.</li>
+</ul>
+</section>
+<section id="regularization" class="slide level2">
+<h2>Regularization</h2>
+<ul>
+<li>See <a href="https://www.cs.ubc.ca/~schmidtm/Courses/340-F22/L16.pdf">Mark Schmidt’s Notes</a>. For LLS this is the ridge regression</li>
+<li>We discussed regularization as a way to deal with multiplicity</li>
+</ul>
+<p><span class="math display">\[
+\min_{\theta}\left[\mathcal{L}(\theta) + \frac{\alpha}{2} ||\theta||^2\right]
+\]</span></p>
+<ul>
+<li>Gradient descent becomes (called “weight decay” in ML, and “ridge regression” if objective is LLS)</li>
+</ul>
+<p><span class="math display">\[
+\theta_{t+1} = \theta_t - \eta_t \left[\nabla \mathcal{L}(\theta_t) + \alpha \theta_t\right]
+\]</span></p>
+<ul>
+<li>Mapping of regularized <span class="math inline">\(\theta_t\)</span> to a <span class="math inline">\(f_{\theta_t}\)</span> is subtle if nonlinear</li>
+</ul>
+</section></section>
+<section>
+<section id="stochastic-optimization" class="title-slide slide level1 center">
+<h1>Stochastic Optimization</h1>
+
+</section>
+<section id="are-gradients-really-that-cheap-to-calculate" class="slide level2">
+<h2>Are Gradients Really that Cheap to Calculate?</h2>
+<ul>
+<li>Consider that the objective often involves data (or grid points for interpolation)
+<ul>
+<li>Denote <span class="math inline">\(x_n\)</span>, and observables <span class="math inline">\(y_n\)</span> for <span class="math inline">\(n=1, \ldots N\)</span></li>
+</ul></li>
+<li>With VJPs, the computational order of <span class="math inline">\(\nabla_{\theta} \mathcal{L}(\theta;\{x_n, y_n\}_{n=1}^N)\)</span> may be the same as that of <span class="math inline">\(\mathcal{L}\)</span> itself</li>
+<li>However, keep in mind that reverse-mode requires storing the intermediate values in the “primal” calculation (i.e., <span class="math inline">\(\mathcal{L}(\theta;\{x_n, y_n\}_{n=1}^N)\)</span>)
+<ul>
+<li>Hence, the memory requirements grow with <span class="math inline">\(N\)</span></li>
+<li>This may be a big problem for large datasets or complicated calculations, especially with GPUs which have more limited memory</li>
 </ul></li>
 </ul>
 </section>
-<section id="pytorch" class="slide level2">
-<h2>Pytorch</h2>
+<section id="do-we-need-the-full-gradient" class="slide level2">
+<h2>Do We Need the Full Gradient?</h2>
 <ul>
-<li>In recent years, the most flexible and popular ML framework for researchers</li>
-<li>Key features:
+<li><p>In practice, it is impossible to calculate the full gradient for large datasets</p></li>
+<li><p>In GD, the gradient provided the direction of steepest descent</p></li>
+<li><p>Consider an algorithm with a <span class="math inline">\(g_t\)</span> as an unbiased estimate of the gradient</p>
+<p><span class="math display">\[
+\begin{aligned}
+\theta_{t+1} = \theta_t - \eta_t g_t\\
+\mathbb{E}[g_t] = \nabla \mathcal{L}(\theta_t)
+\end{aligned}
+\]</span></p>
 <ul>
-<li>Most of the code is for auto-differentiation/GPUs</li>
-<li>JIT/etc. for GPU and fast kernels for deep learning</li>
-<li>Neural Network libraries and utilities</li>
-<li>A good subset of numpy</li>
-<li>Utilities for ML pipelines optimization/etc.</li>
+<li>Make the <span class="math inline">\(\eta_t\)</span> smaller to deal with noise if this is high-variance</li>
+<li>Choose <span class="math inline">\(g_t\)</span> to be far cheaper to calculate than <span class="math inline">\(\nabla \mathcal{L}(\theta_t)\)</span></li>
+</ul></li>
+<li><p>Will turn out that this also adds additional regularization, which helps with generalization</p></li>
+</ul>
+</section>
+<section id="stochastic-optimization-1" class="slide level2">
+<h2>Stochastic Optimization</h2>
+<ul>
+<li>To formalize: Up until now our optimizers have been “deterministic”</li>
+<li>Now we introduce a source of randomness <span class="math inline">\(z \sim q_{\theta}(z)\)</span>, i.e.&nbsp;it might depend on the estimated parameters <span class="math inline">\(\theta\)</span> later with RL/etc.
+<ul>
+<li><span class="math inline">\(z\)</span> could be a source of uncertainty in the environment</li>
+<li><span class="math inline">\(z\)</span> could involve latent variables</li>
+<li><span class="math inline">\(z\)</span> could come from randomness in the optimization process (e.g., using subsets of data to form <span class="math inline">\(g_t\)</span>)</li>
+</ul></li>
+<li>Denote expectations using this distribution as <span class="math inline">\(\mathbb{E}_{q_{\theta}(z)}\)</span></li>
+<li>For now, drop the dependence on <span class="math inline">\(\theta\)</span> for simplicity, though it becomes crucial for understanding reinforcement learning/etc.</li>
+</ul>
+</section>
+<section id="stochastic-objective" class="slide level2">
+<h2>Stochastic Objective</h2>
+<ul>
+<li>The full optimization problem is then to minimize this stochastic objective</li>
+</ul>
+<p><span class="math display">\[
+\min_{\theta}\overbrace{\mathbb{E}_{q(z)} \tilde{\mathcal{L}}(\theta, z)}^{\equiv \mathcal{L}(\theta)}
+\]</span></p>
+<ul>
+<li>Under appropriate regularity conditions, could use GD on this objective</li>
+</ul>
+<p><span class="math display">\[
+\nabla \mathcal{L}(\theta) = \mathbb{E}_{q(z)}\left[\nabla \tilde{\mathcal{L}}(\theta, z)\right]
+\]</span></p>
+<ul>
+<li>But in practice, it is rare that we can marginalize out the <span class="math inline">\(z\)</span></li>
+</ul>
+</section>
+<section id="unbiased-draws-from-the-gradient" class="slide level2">
+<h2>Unbiased Draws from the Gradient</h2>
+<ul>
+<li>Assume we can sample <span class="math inline">\(z_t \sim q(z)\)</span> IID</li>
+<li>Then with enough regularity the gradient using just <span class="math inline">\(z_t\)</span> is unbiased</li>
+</ul>
+<p><span class="math display">\[
+\mathbb{E}_{q(z)}\left[  \nabla \tilde{\mathcal{L}}(\theta_t, z_t) \right] = \nabla \mathcal{L}(\theta_t)
+\]</span></p>
+<ul>
+<li>That is, on average <span class="math inline">\(\nabla \tilde{\mathcal{L}}(\theta_t, z_t)\)</span> is in the right direction for minimizing <span class="math inline">\(\mathcal{L}(\theta_t)\)</span></li>
+<li>This basic approach of finding unbiased estimators of the gradient (and finding ways to lower the variance) is at the heart of most ML optimization algorithms</li>
+</ul>
+</section>
+<section id="stochastic-gradient-descent" class="slide level2">
+<h2>Stochastic Gradient Descent</h2>
+<ul>
+<li>See <a href="https://probml.github.io/pml-book/book1.html">ProbML Book 1</a> Section 8.4, <a href="https://probml.github.io/pml-book/book2.html">ProbML Book 2</a> Section 6.3, and <a href="https://www.cs.ubc.ca/~schmidtm/Courses/340-F22/L23.pdf">Mark Schmidt’s Notes</a></li>
+<li>Given the previous slide, given IID samples <span class="math inline">\(z_t \sim q\)</span>, the gradient is unbiased and we have the simplest version of stochastic gradient descent (SGD)</li>
+</ul>
+<p><span class="math display">\[
+\theta_{t+1} = \theta_t - \eta_t \nabla \tilde{\mathcal{L}}(\theta_t, z_t)
+\]</span></p>
+<ul>
+<li>Which converges to the minima of <span class="math inline">\(\min_{\theta} \mathcal{L}(\theta)\)</span> under appropriate conditions</li>
+<li>We can layer on all of the other features we discussed (e.g., momentum, preconditioning, etc) with SGD, but some become especially important (e.g.&nbsp;the <span class="math inline">\(\eta_t\)</span> schedule)</li>
+</ul>
+</section>
+<section id="finite-sum-objectives" class="slide level2">
+<h2>Finite-Sum Objectives</h2>
+<ul>
+<li><p>Consider a special case of the loss function which is the sum of <span class="math inline">\(N\)</span> terms. For example with empirical risk minimization used in LLS/etc.</p>
+<ul>
+<li><span class="math inline">\(z_n \equiv (x_n, y_n)\)</span> are typically data, observables, or grid points</li>
+<li><span class="math inline">\(\ell(\theta, x_n, y_n)\)</span> is a loss function for a single data point (e.g., forecasting using some <span class="math inline">\(f_{\theta}\)</span>)</li>
+</ul>
+<p><span class="math display">\[
+\mathcal{L}(\theta) = \frac{1}{N}\sum_{n=1}^N \tilde{\mathcal{L}}(\theta, z_n) \equiv \frac{1}{N}\sum_{n=1}^N \ell(\theta, x_n, y_n)
+\]</span></p>
+<ul>
+<li>For example, LLS is <span class="math inline">\(\ell(\theta, x_n, y_n) = ||y_n - \theta \cdot x_n||^2_2\)</span></li>
+</ul></li>
+<li><p>In this case, the randomness of <span class="math inline">\(z_t\)</span> is which data point is chosen</p></li>
+</ul>
+</section>
+<section id="sgd-for-finite-sum-objectives" class="slide level2">
+<h2>SGD for Finite-Sum Objectives</h2>
+<ul>
+<li>Hence consider sampling <span class="math inline">\(z_t \equiv (x_t, y_t)\)</span> from our data.
+<ul>
+<li>In principle, IID with replacement</li>
+</ul></li>
+<li>Then run SGD on one data point at a time</li>
+</ul>
+<p><span class="math display">\[
+\theta_{t+1} = \theta_t - \eta_t \nabla_{\theta} \ell(\theta_t, x_t, y_t)
+\]</span></p>
+<ul>
+<li>This may converges to the minima of <span class="math inline">\(\mathcal{L}(\theta)\)</span>, and potentially the storage requirements for calculations the gradient are radically reduced</li>
+<li>You can guess that the <span class="math inline">\(\eta_t\)</span> parameter is especially sensitive to the variance of the gradient estimate</li>
+</ul>
+</section>
+<section id="decrease-variance-with-multiple-draws" class="slide level2">
+<h2>Decrease Variance with Multiple Draws</h2>
+<ul>
+<li>With a single draw, the variance of the gradient estimate may be high</li>
+</ul>
+<p><span class="math display">\[
+\mathbb{E}\left[\nabla_{\theta} \ell(\theta_t, x_t, y_t)- \nabla \mathcal{L}(\theta_t)\right]^2
+\]</span></p>
+<ul>
+<li>One tool to decrease the variance is just more monte-carlo draws. With finite-sum objectives draw <span class="math inline">\(B \subseteq \{1,\ldots N\}\)</span> indices</li>
+</ul>
+<p><span class="math display">\[
+\frac{1}{|B|}\sum_{n \in B} \nabla_{\theta} \ell(\theta_t, x_n, y_n)
+\]</span></p>
+<ul>
+<li>Classic SGD: <span class="math inline">\(|B|=1\)</span>; GD: <span class="math inline">\(B = \{1, \ldots N\}\)</span> and in between is called “minibatch SGD”. Usually minibatch is implied with “SGD”</li>
+</ul>
+</section>
+<section id="minibatch-sgd" class="slide level2">
+<h2>Minibatch SGD</h2>
+<ul>
+<li><p>Algorithm is to draw <span class="math inline">\(B_t\)</span> indices at each step and execute SGD <span class="math display">\[
+\begin{aligned}
+g_t \equiv \frac{1}{|B_t|}\sum_{n \in B_t} \nabla_{\theta} \ell(\theta_t, x_n, y_n)\\
+\theta_{t+1} = \theta_t - \eta_t g_t
+\end{aligned}
+\]</span></p></li>
+<li><p>Note that we never need to calculate <span class="math inline">\(\mathcal{L}(\theta_t)\)</span> directly, so can write our code to all operate on batches <span class="math inline">\(B_t\)</span></p></li>
+<li><p>Then layer other tricks on top (e.g., momentum, preconditioning, etc.)</p>
+<ul>
+<li>In principle you could also use minibatch with second-order or quasi-newtonian methods but much rarer</li>
 </ul></li>
 </ul>
 </section>
-<section id="pytorch-key-downsides" class="slide level2">
-<h2>Pytorch Key Downsides</h2>
+<section id="choosing-batches" class="slide level2">
+<h2>Choosing Batches</h2>
 <ul>
-<li>Not really for general purpose programming
+<li>Choosing the <span class="math inline">\(B_t\)</span> process may be tricky. You could sample from <span class="math inline">\(\{1,\ldots N\}\)</span>
 <ul>
-<li>Intended for making auto-differentiation of neural networks easy, and updating gradients for solvers</li>
-<li>May be very slow for simple things or ones which don’t involve high-dimensional AD</li>
+<li>with replacement</li>
+<li>without replacement</li>
+<li>without replacement after shuffling the data, and then ensure you have gone through all of the data before repeating</li>
+<li>etc.</li>
 </ul></li>
-<li>Won’t always have packages you need for general code, and compatibility is ugly</li>
+<li>Just remember the goal: variance reduction on gradient estimates</li>
+<li>You want it to be unbiased in principle (consider partitioning the data into batches and operating sequentially?)</li>
+<li>More art than science in many cases, because it requires many priors</li>
 </ul>
 </section>
-<section id="jax" class="slide level2">
-<h2>JAX</h2>
+<section id="grad-student-descent" class="slide level2">
+<h2>“Grad Student Descent”</h2>
 <ul>
-<li>Compiler that enables layered program transformations
+<li>This is how virtually all deep learning works. Just swap SGD with slightly fancier algorithms using momentum, tinker with parameters, etc.</li>
+<li>In practice, all of these optimizer settings (e.g., how large for <span class="math inline">\(|B_t|\)</span>, <span class="math inline">\(\eta_t\)</span>, convergence criteria, etc.) are fragile and require a lot of tuning
+<ul>
+<li>Part of a a process called <strong>hyperparameter optimization (HPO)</strong> where you try to find the best non-model parameters for your goals</li>
+<li>Same issue with all numerical methods in economics (e.g.&nbsp;convergence criteria of fixed point iteration, initial conditions)</li>
+</ul></li>
+<li>The concern is not just that it is time-consuming for researchers (and ML “Grad Students”), but that it is easy for priors to sneak in and bias results</li>
+</ul>
+</section>
+<section id="what-was-our-goal" class="slide level2">
+<h2>What was our Goal?</h2>
+<ul>
+<li>We will address this more formally next lecture, but it is worth stepping back to think about our goals. Loosely:
+<ul>
+<li>If we are solving an empirical risk minimization problem (like regressions, etc.) or interpolation, then our goal is to use the “data” to find a function <span class="math inline">\(\hat{f}_{\theta}\)</span> that is close to the “true” function <span class="math inline">\(f^*\)</span></li>
+</ul></li>
+<li>Fitting <span class="math inline">\(\hat{f}_{\theta}\)</span> is easy, but we want it to <strong>generalize</strong> within the true distribution
+<ul>
+<li>But we don’t know that distribution (hence the “empirical”)</li>
+<li>So a typical approach is to emulate this by splitting the data we have</li>
+<li>But HPO is dangerous because if we are not careful we can “contaminate” our process for finding <span class="math inline">\(\hat{f}_{\theta}\)</span> using some of the data we intend to check it with. Which might lead to overfitting/etc.</li>
+</ul></li>
+</ul>
+</section></section>
+<section>
+<section id="training-loops" class="title-slide slide level1 center">
+<h1>Training Loops</h1>
+
+</section>
+<section id="splitting-the-data" class="slide level2">
+<h2>Splitting the Data</h2>
+<p>A standard way to do this for Empirical Risk Minimization/Regressions/etc. is to split it into three parts:</p>
 <ol type="1">
-<li><code>jit</code> compiler to <a href="https://www.tensorflow.org/xla/">XLA</a>, including accelerators (e.g.&nbsp;GPUs)</li>
-<li><code>grad</code> Auto-differentiation</li>
-<li><code>vmap</code> vectorization</li>
-<li>Flexibility to add more transformations</li>
+<li><strong>Training</strong> data used in fitting our approximations
+<ul>
+<li>This is just a means to an end in ML and economics</li>
+</ul></li>
+<li><strong>Validation</strong> data used for HPO and checking convergence criteria
+<ul>
+<li>Be cautious to avoid using it for training</li>
+</ul></li>
+<li><strong>Test</strong> data used to evaluate the generalization performance
+<ul>
+<li>Ensure we don’t accidentally use it in training or validation</li>
+</ul></li>
+</ol>
+<p>Not all problems will have this structure, and not all with have validation data.</p>
+</section>
+<section id="why-separate-validation-and-test" class="slide level2">
+<h2>Why Separate Validation and Test?</h2>
+<ul>
+<li>As we will see in deep learning, with massive over-parameterization you typically can interpolate all of the training data.
+<ul>
+<li>Minimizing training loss is a means to an end, which usually ends at zero</li>
+</ul></li>
+<li>The validation data might be used to check stopping criteria by checking how well the approximation generalizes to data outside of training</li>
+<li>But if we are using it for a stopping criteria or HPO, then is is <strong>contaminated</strong>!
+<ul>
+<li>Distorts our picture of generalization if we combine it into test data</li>
+</ul></li>
+</ul>
+</section>
+<section id="what-about-interpolation-problems" class="slide level2">
+<h2>What about Interpolation Problems?</h2>
+<ul>
+<li>When simply trying to find interpolating functions which solve functional equations, the risk of prior contamination is less clear</li>
+<li>However, you may still want to separate out validation and test grid points because any data you use for HPO or convergence criteria can’t be used to understand generalization.</li>
+<li>For example consider:
+<ol type="1">
+<li>Fit until “training” loss is zero</li>
+<li>Keep running stochastic optimizer until “validation” loss is zero</li>
 </ol></li>
-<li><a href="https://jax.readthedocs.io/en/latest/jax-101/05.1-pytrees.html">JAX Pytrees</a> provide a nested tree structure for compiler passes</li>
-<li>Closer to being a full JIT for general code than pytorch</li>
-<li>For ML, not full-featured like pytorch. Need to shop for other libraries</li>
-</ul>
-</section>
-<section id="jax-key-downsides" class="slide level2">
-<h2>JAX Key Downsides</h2>
+<li>In that case, it crudely interpolating the validation data, which makes it equivalent to training data? Not useful for generalization
 <ul>
-<li>Tough to trust Google, especially since it is a research project
-<ul>
-<li>Too ingrained in DeepMind research to disappear, but might have intermittent support</li>
-</ul></li>
-<li>Different operating system support is limited, but they are making progress</li>
-<li>Subset of python. Can’t really use loops, etc. Functional-style programming
-<ul>
-<li>Much more restrictive than it seems, and far more restrictive than pytorch</li>
+<li>May find that the model generalized better if you <strong>stopped earlier</strong></li>
 </ul></li>
 </ul>
-</section></section>
-<section>
-<section id="python-ecosystem" class="title-slide slide level1 center">
-<h1>Python Ecosystem</h1>
-
 </section>
-<section id="environments" class="slide level2">
-<h2>Environments</h2>
+<section id="level-of-abstraction-for-optimizers" class="slide level2">
+<h2>Level of Abstraction for Optimizers</h2>
 <ul>
-<li>Hate it, but nevertheless <a href="https://www.anaconda.com/download">install conda</a></li>
-<li><strong>Always</strong> use a virtual environment to hate conda slightly less</li>
-<li>Keep dependencies in <code>requirements.txt</code> for <code>pip</code>, conda <code>environment.yml</code> if necessary</li>
-<li>To create, activate, and install packages</li>
-</ul>
-<div class="sourceCode" id="cb1"><pre class="sourceCode numberSource {{bash}} number-lines code-with-copy"><code class="sourceCode"><span id="cb1-1"><a href="#cb1-1"></a>conda create -n econ622 python=3.11</span>
-<span id="cb1-2"><a href="#cb1-2"></a>conda activate econ622</span>
-<span id="cb1-3"><a href="#cb1-3"></a>pip install -r requirements.txt</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<li>While you can setup a standard optimization objective and optimizer, most ML frameworks work at a lower level</li>
+<li>The key reasons are that:
 <ul>
-<li>In vscode, you can go <code>&gt; Python: Select Interpreter</code>, choose <code>econ622</code> and it will automatically activate</li>
-</ul>
-</section>
-<section id="development-environment" class="slide level2">
-<h2>Development Environment</h2>
-<ul>
-<li>pip/anaconda with virtual environments</li>
-<li>Use VSCode for debugging, testing, etc.</li>
-<li>Github Copilot. Install <a href="https://docs.github.com/en/copilot/github-copilot-chat/using-github-copilot-chat">Github Copilot Chat</a></li>
-<li>Format with <code>black</code>. See <a href="https://code.visualstudio.com/docs/python/formatting">here</a> for setup</li>
-</ul>
-</section>
-<section id="baseline-safe-packages-to-use" class="slide level2">
-<h2>Baseline, Safe Packages to Use</h2>
-<ul>
-<li><a href="https://numpy.org/doc/stable/">Numpy</a> and <a href="https://docs.scipy.org/doc/scipy/reference/">Scipy</a></li>
-<li><a href="https://pandas.pydata.org/docs/">Pandas</a> for dataframes</li>
-<li><a href="https://matplotlib.org/stable/contents.html">Matplotlib</a> for general plotting</li>
-<li><a href="https://seaborn.pydata.org/">Seaborn</a> for plotting data</li>
-<li><a href="https://www.statsmodels.org/stable/index.html">Statsmodels</a> for classic econometrics</li>
-<li><a href="https://scikit-learn.org/stable/">Scikit-learn</a> for classic ML</li>
-</ul>
-</section>
-<section id="numpyscipy-basics" class="slide level2">
-<h2>Numpy/Scipy Basics</h2>
-<ul>
-<li>Using some examples from <a href="https://ubcecon.github.io/ECON526/lectures/lectures/index.html">ECON526</a></li>
-</ul>
-</section>
-<section id="general-tools-for-ml-pipelines" class="slide level2">
-<h2>General Tools for ML Pipelines</h2>
-<ul>
-<li>Logging/visualization: <a href="https://wandb.ai/site">Weights and Biases</a>
-<ul>
-<li>Sign up for an account! Built in hyperparameter optimization tools</li>
+<li>Minibatching (usually just called “batches”) requires more flexibility in implementation to be efficient</li>
+<li>Stopping criteria is more complicated with highly overparameterized models</li>
+<li>Logging and validation logic requires more flexibility</li>
+<li>Often you will want to take a snapshot of the current best solution and continue later for refinement (or to solve in parallel)</li>
 </ul></li>
-<li>CLI useful for many pipelines and HPO. See <a href="https://github.com/shadawck/awesome-cli-frameworks#python">here</a></li>
-<li>For more end-to-end frameworks for deep-learning
+</ul>
+</section>
+<section id="steps-and-epochs" class="slide level2">
+<h2>Steps and Epochs</h2>
 <ul>
-<li><a href="https://www.pytorchlightning.ai/">Pytorch Lightning</a> is extremely easy and flexble, eliminating a lot of boilerplate for CLI, optimizers, GPUs, etc.</li>
-<li><a href="https://keras.io/">Keras</a> is a higher-level framework for deep learning. Traditionally tensorflow, but now many. Also <a href="https://www.fast.ai/">FastAI</a></li>
+<li>There is a great deal of flexibility in how you setup the optimizer</li>
+<li>But a common approach is to randomly shuffle the data, create a set of batches <span class="math inline">\(B_t\)</span> (without replacement), and then iterate through them</li>
+<li>Terminology (when relevant)
+<ul>
+<li>Every iteration of SGD for a given batch is a <strong>step</strong></li>
+<li>If you have gone through the entire dataset once, we say that you have completed an <strong>epoch</strong></li>
 </ul></li>
-<li><a href="https://huggingface.co/">HuggingFace</a> is a great resource for NLP and transformers</li>
-<li><a href="https://optuna.org/">Optuna</a> is a great hyperparameter optimization framework, etc.</li>
+<li>At the end of an epoch is a good time to log, check the validation loss, and potentially stop the training</li>
 </ul>
-</section></section>
-<section>
-<section id="jax-ecosystem" class="title-slide slide level1 center">
-<h1>JAX Ecosystem</h1>
-
 </section>
-<section id="examples-of-core-transformations" class="slide level2">
-<h2>Examples of Core Transformations</h2>
-<p>From <a href="https://jax.readthedocs.io/en/latest/notebooks/quickstart.html">JAX quickstart</a></p>
-<p>Builtin composable transformations: <code>jit</code>, <code>grad</code> and <code>vmap</code></p>
-<div class="cell" data-execution_count="2">
-<div class="sourceCode cell-code" id="cb2"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb2-1"><a href="#cb2-1"></a><span class="im">import</span> jax</span>
-<span id="cb2-2"><a href="#cb2-2"></a><span class="im">import</span> jax.numpy <span class="im">as</span> jnp</span>
-<span id="cb2-3"><a href="#cb2-3"></a><span class="im">import</span> numpy <span class="im">as</span> np</span>
-<span id="cb2-4"><a href="#cb2-4"></a><span class="im">from</span> jax <span class="im">import</span> grad, jit, vmap, random</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-</div>
+<section id="software-components-used-in-ml" class="slide level2">
+<h2>Software Components used in ML</h2>
+<p>Some common software components for optimization are</p>
+<ol type="1">
+<li><strong>Autodifferentiation</strong> and libraries of functions provide the approximation class</li>
+<li><strong>Data loaders</strong> which will take care of providing batches to the optimizers</li>
+<li><strong>Optimizers</strong> are typically iterative, have an internal state, and you can update with one sample of the gradient for that batch</li>
+<li><strong>Logging</strong> and visualization tools to track progress because the optimization process may be slow and you want to do HPO</li>
+<li><strong>HPO</strong> software using training, validation, and possibly test loss</li>
+</ol>
 </section>
-<section id="compiling-with-jit" class="slide level2">
-<h2>Compiling with <code>jit</code></h2>
-<div class="cell" data-execution_count="3">
-<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1"></a><span class="kw">def</span> selu(x, alpha<span class="op">=</span><span class="fl">1.67</span>, lmbda<span class="op">=</span><span class="fl">1.05</span>):</span>
-<span id="cb3-2"><a href="#cb3-2"></a>  <span class="cf">return</span> lmbda <span class="op">*</span> jnp.where(x <span class="op">&gt;</span> <span class="dv">0</span>, x, alpha <span class="op">*</span> jnp.exp(x) <span class="op">-</span> alpha)</span>
-<span id="cb3-3"><a href="#cb3-3"></a>key <span class="op">=</span> random.PRNGKey(<span class="dv">0</span>)  </span>
-<span id="cb3-4"><a href="#cb3-4"></a>x <span class="op">=</span> random.normal(key, (<span class="dv">1000000</span>,))</span>
-<span id="cb3-5"><a href="#cb3-5"></a><span class="op">%</span>timeit selu(x).block_until_ready()</span>
-<span id="cb3-6"><a href="#cb3-6"></a>selu_jit <span class="op">=</span> jit(selu)</span>
-<span id="cb3-7"><a href="#cb3-7"></a><span class="op">%</span>timeit selu_jit(x).block_until_ready()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-stdout">
-<pre><code>2.93 ms ± 176 µs per loop (mean ± std. dev. of 7 runs, 100 loops each)
-555 µs ± 6.84 µs per loop (mean ± std. dev. of 7 runs, 1,000 loops each)</code></pre>
-</div>
-</div>
-</section>
-<section id="convenience-decorators-for-jit" class="slide level2">
-<h2>Convenience Decorators for <code>jit</code></h2>
+<section id="logging-and-visualization" class="slide level2">
+<h2>Logging and Visualization</h2>
 <ul>
-<li>Convenience python decorator <code>@jit</code></li>
-</ul>
-<div class="cell" data-execution_count="4">
-<div class="sourceCode cell-code" id="cb5"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb5-1"><a href="#cb5-1"></a><span class="at">@jit</span></span>
-<span id="cb5-2"><a href="#cb5-2"></a><span class="kw">def</span> selu(x, alpha<span class="op">=</span><span class="fl">1.67</span>, lmbda<span class="op">=</span><span class="fl">1.05</span>):</span>
-<span id="cb5-3"><a href="#cb5-3"></a>  <span class="cf">return</span> lmbda <span class="op">*</span> jnp.where(x <span class="op">&gt;</span> <span class="dv">0</span>, x, alpha <span class="op">*</span> jnp.exp(x) <span class="op">-</span> alpha)</span>
-<span id="cb5-4"><a href="#cb5-4"></a><span class="op">%</span>timeit selu(x).block_until_ready()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-stdout">
-<pre><code>601 µs ± 28.4 µs per loop (mean ± std. dev. of 7 runs, 1,000 loops each)</code></pre>
-</div>
-</div>
-</section>
-<section id="differentiation-with-grad" class="slide level2">
-<h2>Differentiation with <code>grad</code></h2>
-<div class="cell" data-execution_count="5">
-<div class="sourceCode cell-code" id="cb7"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb7-1"><a href="#cb7-1"></a><span class="kw">def</span> sum_logistic(x):</span>
-<span id="cb7-2"><a href="#cb7-2"></a>  <span class="cf">return</span> jnp.<span class="bu">sum</span>(<span class="fl">1.0</span> <span class="op">/</span> (<span class="fl">1.0</span> <span class="op">+</span> jnp.exp(<span class="op">-</span>x)))</span>
-<span id="cb7-3"><a href="#cb7-3"></a></span>
-<span id="cb7-4"><a href="#cb7-4"></a>x_small <span class="op">=</span> jnp.arange(<span class="fl">3.</span>)</span>
-<span id="cb7-5"><a href="#cb7-5"></a>derivative_fn <span class="op">=</span> grad(sum_logistic)</span>
-<span id="cb7-6"><a href="#cb7-6"></a><span class="bu">print</span>(derivative_fn(x_small))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-stdout">
-<pre><code>[0.25       0.19661197 0.10499357]</code></pre>
-</div>
-</div>
-</section>
-<section id="manual-batchingvectorization" class="slide level2">
-<h2>Manual “Batching”/Vectorization</h2>
-<p>Common to run the same function along one dimension of an array</p>
-<div class="cell" data-execution_count="6">
-<div class="sourceCode cell-code" id="cb9"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb9-1"><a href="#cb9-1"></a>mat <span class="op">=</span> random.normal(key, (<span class="dv">150</span>, <span class="dv">100</span>))</span>
-<span id="cb9-2"><a href="#cb9-2"></a>batched_x <span class="op">=</span> random.normal(key, (<span class="dv">10</span>, <span class="dv">100</span>))</span>
-<span id="cb9-3"><a href="#cb9-3"></a></span>
-<span id="cb9-4"><a href="#cb9-4"></a><span class="kw">def</span> f(v):</span>
-<span id="cb9-5"><a href="#cb9-5"></a>  <span class="cf">return</span> jnp.dot(mat, v)</span>
-<span id="cb9-6"><a href="#cb9-6"></a><span class="kw">def</span> naively_batched_f(v_batched):</span>
-<span id="cb9-7"><a href="#cb9-7"></a>  <span class="cf">return</span> jnp.stack([f(v) <span class="cf">for</span> v <span class="kw">in</span> v_batched])</span>
-<span id="cb9-8"><a href="#cb9-8"></a><span class="op">%</span>timeit naively_batched_f(batched_x).block_until_ready()  </span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-stdout">
-<pre><code>1.15 ms ± 4.7 µs per loop (mean ± std. dev. of 7 runs, 1,000 loops each)</code></pre>
-</div>
-</div>
-</section>
-<section id="using-vmap" class="slide level2">
-<h2>Using <code>vmap</code></h2>
-<p>The <a href="https://jax.readthedocs.io/en/latest/_autosummary/jax.vmap.html#jax.vmap">vmap</a> applies across a dimension</p>
-<div class="cell" data-execution_count="7">
-<div class="sourceCode cell-code" id="cb11"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb11-1"><a href="#cb11-1"></a><span class="at">@jit</span></span>
-<span id="cb11-2"><a href="#cb11-2"></a><span class="kw">def</span> vmap_batched_f(v_batched):</span>
-<span id="cb11-3"><a href="#cb11-3"></a>  <span class="cf">return</span> vmap(f)(v_batched)</span>
-<span id="cb11-4"><a href="#cb11-4"></a></span>
-<span id="cb11-5"><a href="#cb11-5"></a><span class="bu">print</span>(<span class="st">'Auto-vectorized with vmap'</span>)</span>
-<span id="cb11-6"><a href="#cb11-6"></a><span class="op">%</span>timeit vmap_batched_f(batched_x).block_until_ready()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-stdout">
-<pre><code>Auto-vectorized with vmap
-22.1 µs ± 33.4 ns per loop (mean ± std. dev. of 7 runs, 10,000 loops each)</code></pre>
-</div>
-</div>
-</section>
-<section id="basic-jax-packages" class="slide level2">
-<h2>Basic JAX Packages</h2>
-<p>Anything from <a href="https://github.com/patrick-kidger">Patrick</a> is gold</p>
+<li>Several tools exist for logging to babysit optimizers, find good hyperparameters, etc. including <a href="https://www.tensorflow.org/tensorboard">Tensorboard</a>
 <ul>
-<li>Basic program passes/etc: <a href="https://jax.readthedocs.io/en/latest/index.html">JAX</a>
-<ul>
-<li><a href="https://jax.readthedocs.io/en/latest/jax.numpy.html#module-jax.numpy">jax.numpy</a> built in and <a href="https://jax.readthedocs.io/en/latest/jax.scipy.html">jax.scipy</a> which is a subset of scipy</li>
+<li>But we will use <a href="https://wandb.ai/site">Weights and Biases</a> (W&amp;B) because it is a market leader, free for academics and seems to be the frontrunner</li>
 </ul></li>
-<li>Neural Network Libraries
+<li>Many algorithms and frameworks exist for HPO:
 <ul>
-<li><a href="https://flax.readthedocs.io/en/latest/index.html">Flax</a> and <a href="https://dm-haiku.readthedocs.io/en/latest/index.html">Haiku</a></li>
-<li><a href="https://github.com/patrick-kidger/equinox">Equinox</a> is my favorite</li>
+<li><a href="https://wandb.ai/site">Weights and Biases</a> (W&amp;B) has a built-in HPO framework using random search and bayesian optimization</li>
+<li><a href="https://optuna.org/">Optuna</a> and <a href="https://docs.ray.io/en/master/tune/index.html">Ray Tune</a> is a popular open-source HPO framework</li>
+<li><a href="https://docs.ray.io/en/master/tune/index.html">Ray Tune</a> is a popular open-source HPO framework</li>
 </ul></li>
-<li>First-order optimizers for training: <a href="https://github.com/google-deepmind/optax">Optax</a></li>
-<li>Typechecking: <a href="https://github.com/google/jaxtyping">jaxtyping</a></li>
-<li>Checkpointing and serialization: <a href="https://orbax.readthedocs.io/en/latest/">obax</a></li>
+<li>HPO frameworks will often use the <a href="https://github.com/shadawck/awesome-cli-frameworks#python">command-line</a> to run new jobs. <a href="https://github.com/google/python-fire">Python Fire</a></li>
 </ul>
 </section>
-<section id="more-scientific-computing" class="slide level2">
-<h2>More Scientific Computing</h2>
+<section id="broad-frameworks-for-machine-learning" class="slide level2">
+<h2>Broad Frameworks for Machine Learning</h2>
 <ul>
-<li>Nonlinear Systems/Least Squares: <a href="https://github.com/patrick-kidger/optimistix">Optimistix</a></li>
-<li>Linear Systems of Equations: <a href="https://docs.kidger.site/lineax/">Lineax</a></li>
-<li>Matrix-free operators for iterative solvers: <a href="https://github.com/wilson-labs/cola">COLA</a></li>
-<li>Differential Equations: <a href="https://github.com/patrick-kidger/diffrax">diffrax</a></li>
-<li>More general optimization and solvers: <a href="https://jaxopt.github.io/stable/#">JAXopt</a></li>
-</ul>
-</section>
-<section id="jax-challenges" class="slide level2">
-<h2>JAX Challenges</h2>
+<li>You can just hand-code loops/etc. which seems the best approach for JAX
 <ul>
-<li>Basically only pure functional programming
-<ul>
-<li>No “mutation” of vectors</li>
-<li>Loops/conditionals are tough</li>
-<li>Rules for what is <code>jit</code>able are tricky</li>
+<li>Even with Pytorch, it isn’t obvious that a framework is better ex-post, though ex-ante it can help you try different permutations easily</li>
 </ul></li>
-<li>See <a href="https://jax.readthedocs.io/en/latest/notebooks/Common_Gotchas_in_JAX.html">JAX - The Sharp Bits</a></li>
-<li>May not be faster on CPUs or for “normal” things</li>
-<li>Debugging</li>
-</ul>
-</section>
-<section id="pytrees" class="slide level2">
-<h2>Pytrees</h2>
+<li><a href="https://www.pytorchlightning.ai/">Pytorch Lightning</a> is a popular framework which will formalize the training loops even across distributed systems and make CLI, HPO, logging, etc. convenient
 <ul>
-<li>JAX uses a generic <a href="https://jax.readthedocs.io/en/latest/jax-101/05.1-pytrees.html">tree structure</a>. Powerful but takes time to understand: Examples from: <a href="https://jax.readthedocs.io/en/latest/pytrees.html">here</a> and <a href="https://jax.readthedocs.io/en/latest/_autosummary/jax.vmap.html#jax.vmap">here</a></li>
+<li>It remains fairly flexible because it is just wrapping Pytorch</li>
+</ul></li>
+<li><a href="https://keras.io/">Keras</a> is a similar framework with the ability to target multiple backends (e.g., Pytorch, JAX)
+<ul>
+<li>The challenge is that it is much less flexible for non-typical research</li>
+</ul></li>
+<li><a href="https://github.com/facebookresearch/hydra">Hydra</a> is a framework for more serious engineering code</li>
 </ul>
-<div class="cell" data-execution_count="8">
-<div class="sourceCode cell-code" id="cb13"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb13-1"><a href="#cb13-1"></a>f <span class="op">=</span> <span class="kw">lambda</span> x, y: jnp.vdot(x, y)</span>
-<span id="cb13-2"><a href="#cb13-2"></a>X <span class="op">=</span> jnp.array([[<span class="fl">1.0</span>, <span class="fl">2.0</span>],</span>
-<span id="cb13-3"><a href="#cb13-3"></a>               [<span class="fl">3.0</span>, <span class="fl">4.0</span>]])</span>
-<span id="cb13-4"><a href="#cb13-4"></a>y <span class="op">=</span> jnp.array([<span class="fl">3.0</span>, <span class="fl">4.0</span>])</span>
-<span id="cb13-5"><a href="#cb13-5"></a><span class="bu">print</span>(f(X[<span class="dv">0</span>], y))</span>
-<span id="cb13-6"><a href="#cb13-6"></a><span class="bu">print</span>(f(X[<span class="dv">1</span>], y))</span>
-<span id="cb13-7"><a href="#cb13-7"></a></span>
-<span id="cb13-8"><a href="#cb13-8"></a>mv <span class="op">=</span> vmap(f, in_axes <span class="op">=</span> (</span>
-<span id="cb13-9"><a href="#cb13-9"></a>  <span class="dv">0</span>, <span class="co"># broadcast over 1st index of first argument</span></span>
-<span id="cb13-10"><a href="#cb13-10"></a>  <span class="va">None</span> <span class="co"># don't broadcast over anything of second argument</span></span>
-<span id="cb13-11"><a href="#cb13-11"></a>  ), out_axes<span class="op">=</span><span class="dv">0</span>)</span>
-<span id="cb13-12"><a href="#cb13-12"></a><span class="bu">print</span>(mv(X, y))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-stdout">
-<pre><code>11.0
-25.0
-[11. 25.]</code></pre>
-</div>
-</div>
 </section>
-<section id="pytree-example-1" class="slide level2">
-<h2>Pytree Example 1</h2>
-<p>The <code>in_axes</code> can match more complicated structures</p>
-<div class="cell" data-execution_count="9">
-<div class="sourceCode cell-code" id="cb15"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb15-1"><a href="#cb15-1"></a>dct <span class="op">=</span> {<span class="st">'a'</span>: <span class="fl">0.</span>, <span class="st">'b'</span>: jnp.arange(<span class="fl">5.</span>)}</span>
-<span id="cb15-2"><a href="#cb15-2"></a><span class="kw">def</span> foo(dct, x):</span>
-<span id="cb15-3"><a href="#cb15-3"></a> <span class="cf">return</span> dct[<span class="st">'a'</span>] <span class="op">+</span> dct[<span class="st">'b'</span>] <span class="op">+</span> x</span>
-<span id="cb15-4"><a href="#cb15-4"></a><span class="co"># axes must match shape of the pytree</span></span>
-<span id="cb15-5"><a href="#cb15-5"></a>x <span class="op">=</span> <span class="fl">1.</span></span>
-<span id="cb15-6"><a href="#cb15-6"></a>out <span class="op">=</span> vmap(foo, in_axes<span class="op">=</span>(</span>
-<span id="cb15-7"><a href="#cb15-7"></a>  {<span class="st">'a'</span>: <span class="va">None</span>, <span class="st">'b'</span>: <span class="dv">0</span>}, <span class="co">#broadcast over the 'b'</span></span>
-<span id="cb15-8"><a href="#cb15-8"></a>  <span class="va">None</span> <span class="co"># no broadcasting over the "x"</span></span>
-<span id="cb15-9"><a href="#cb15-9"></a>  ))(dct, x)</span>
-<span id="cb15-10"><a href="#cb15-10"></a><span class="co"># example now: {'a': 0, 'b': 0} etc.</span></span>
-<span id="cb15-11"><a href="#cb15-11"></a><span class="bu">print</span>(out)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-stdout">
-<pre><code>[1. 2. 3. 4. 5.]</code></pre>
-</div>
-</div>
+<section id="linear-regression-with-sgd-in-pytorch" class="slide level2">
+<h2>Linear Regression with SGD in Pytorch</h2>
+<p>See Pytorch implementations of solving LLS in repository</p>
+<ol type="1">
+<li>Baseline: GD with full gradient</li>
+<li>SGD with minibatches</li>
+<li>Linear Model as a “Neural Network”</li>
+<li>Logging</li>
+<li>CLI</li>
+</ol>
 </section>
-<section id="pytree-example-2" class="slide level2">
-<h2>Pytree Example 2</h2>
-<div class="cell" data-execution_count="10">
-<div class="sourceCode cell-code" id="cb17"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb17-1"><a href="#cb17-1"></a>dct <span class="op">=</span> {<span class="st">'a'</span>: jnp.array([<span class="fl">3.0</span>, <span class="fl">5.0</span>]), <span class="st">'b'</span>: jnp.array([<span class="fl">2.0</span>, <span class="fl">4.0</span>])}</span>
-<span id="cb17-2"><a href="#cb17-2"></a><span class="kw">def</span> foo2(dct, x):</span>
-<span id="cb17-3"><a href="#cb17-3"></a> <span class="cf">return</span> dct[<span class="st">'a'</span>] <span class="op">+</span> dct[<span class="st">'b'</span>] <span class="op">+</span> x</span>
-<span id="cb17-4"><a href="#cb17-4"></a><span class="co"># axes must match shape of the pytree</span></span>
-<span id="cb17-5"><a href="#cb17-5"></a>x <span class="op">=</span> <span class="fl">1.</span></span>
-<span id="cb17-6"><a href="#cb17-6"></a>out <span class="op">=</span> vmap(foo2, in_axes<span class="op">=</span>(</span>
-<span id="cb17-7"><a href="#cb17-7"></a>  {<span class="st">'a'</span>: <span class="dv">0</span>, <span class="st">'b'</span>: <span class="dv">0</span>}, <span class="co">#broadcast over the 'a' and 'b'</span></span>
-<span id="cb17-8"><a href="#cb17-8"></a>  <span class="va">None</span> <span class="co"># no broadcasting over the "x"</span></span>
-<span id="cb17-9"><a href="#cb17-9"></a>  ))(dct, x)</span>
-<span id="cb17-10"><a href="#cb17-10"></a><span class="co"># example now: {'a': 3.0, 'b': 2.0} etc.</span></span>
-<span id="cb17-11"><a href="#cb17-11"></a><span class="bu">print</span>(out)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-stdout">
-<pre><code>[ 6. 10.]</code></pre>
-</div>
-</div>
-</section>
-<section id="pytree-example-3" class="slide level2">
-<h2>Pytree Example 3</h2>
-<div class="cell" data-execution_count="11">
-<div class="sourceCode cell-code" id="cb19"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb19-1"><a href="#cb19-1"></a>dct <span class="op">=</span> {<span class="st">'a'</span>: jnp.array([<span class="fl">3.0</span>, <span class="fl">5.0</span>]), <span class="st">'b'</span>: jnp.arange(<span class="fl">5.</span>)}</span>
-<span id="cb19-2"><a href="#cb19-2"></a><span class="kw">def</span> foo3(dct, x):</span>
-<span id="cb19-3"><a href="#cb19-3"></a> <span class="cf">return</span> dct[<span class="st">'a'</span>][<span class="dv">0</span>] <span class="op">*</span> dct[<span class="st">'a'</span>][<span class="dv">1</span>] <span class="op">+</span> dct[<span class="st">'b'</span>] <span class="op">+</span> x</span>
-<span id="cb19-4"><a href="#cb19-4"></a><span class="co"># axes must match shape of the pytree</span></span>
-<span id="cb19-5"><a href="#cb19-5"></a>out <span class="op">=</span> vmap(foo3, in_axes<span class="op">=</span>(</span>
-<span id="cb19-6"><a href="#cb19-6"></a>  {<span class="st">'a'</span>: <span class="va">None</span>, <span class="st">'b'</span>: <span class="dv">0</span>}, <span class="co">#broadcast over the 'b'</span></span>
-<span id="cb19-7"><a href="#cb19-7"></a>  <span class="va">None</span> <span class="co"># no broadcasting over the "x"</span></span>
-<span id="cb19-8"><a href="#cb19-8"></a>  ))(dct, x)</span>
-<span id="cb19-9"><a href="#cb19-9"></a><span class="co"># example now: {'a': [3.0, 5.0], 'b': 0} etc.</span></span>
-<span id="cb19-10"><a href="#cb19-10"></a><span class="bu">print</span>(out)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-stdout">
-<pre><code>[16. 17. 18. 19. 20.]</code></pre>
-</div>
-</div>
+<section id="linear-regression-with-sgd-in-jax" class="slide level2">
+<h2>Linear Regression with SGD in JAX</h2>
+<ol type="1">
+<li>Using JAX and <code>vmap</code></li>
+<li>Using JAX and equinox</li>
+</ol>
 
 <div class="footer footer-default">
 

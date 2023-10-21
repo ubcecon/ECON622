@@ -98,16 +98,24 @@ Slides for the lectures can be found [here](https://ubcecon.github.io/ECON622/le
     - Core JAX transforms
     - Reverse-mode and forward-mode AD.  
     - Jvps and vjps
-12. **October 18**: AD of Implicit Functions, stochastic optimization, and ML Pipelines
-    - **SLIDES**: Finish [Differentiation](https://ubcecon.github.io/ECON622/lectures/lectures/differentiation.html)
+12. **October 18**: AD of Implicit Functions, Optimization Methods for High-Dimensional Problems
+    - **SLIDES**: Finish [Differentiation](https://ubcecon.github.io/ECON622/lectures/lectures/differentiation.html) and start [Optimization](https://ubcecon.github.io/ECON622/lectures/lectures/optimization.html)
     - Implicit differentiation of systems of ODEs, linear systems, etc.
-    - Stochastic Gradient Descent, Learning Rate Schedules, and ML pipelines
-13. **October 25th**: Kernel Methods and Gaussian Processes
-14. **October 23**: Intro to Neural Networks, Function Approximation, and Representation Learning
-15. **October 30**: Probabilistic Programming Languages (PPLs), Bayesian methods, and intro to generative models
+    - Gradient descent variations
+13. **October 23th**: Stochastic Optimization Methods and Machine Learning Pipelines
+    - **SLIDES**: Finish [Optimization](https://ubcecon.github.io/ECON622/lectures/lectures/optimization.html)
+    - SGD and methods for variance reduction in gradient estimates
+    - Using SGD-variants in practice within ML pipelines in JAX and Pytorch
+14. **October 25th**: ERM, Interpolation, Generalization, and Double-Descent in Deep Learning
+15. **October 30**: Intro to Kernel Methods and Gaussian Processes
+
+<!--
+Probabilistic Programming Languages (PPLs), Bayesian methods, and intro to generative models
     - Sampling and approximation of model posteriors
     - High-dimensional sampling of latents in practice
     - Variational inference with AD vs. HMC
+
+-->
 
 **PHIL**
 
