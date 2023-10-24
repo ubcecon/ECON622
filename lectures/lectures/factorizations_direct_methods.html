@@ -627,11 +627,11 @@ nnz(A' * A) / 21 ^ 2 = 0.9229024943310657</code></pre>
 <span id="cb11-10"><a href="#cb11-10"></a><span class="fu">benchmark_solve</span>(A_dense, b);</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>A\b for typeof(A) = Tridiagonal{Float64, Vector{Float64}}
-  16.600 μs (8 allocations: 47.72 KiB)
+  17.000 μs (8 allocations: 47.72 KiB)
 A\b for typeof(A) = SparseMatrixCSC{Float64, Int64}
-  447.600 μs (79 allocations: 1.03 MiB)
+  476.500 μs (79 allocations: 1.03 MiB)
 A\b for typeof(A) = Matrix{Float64}
-  11.250 ms (4 allocations: 7.64 MiB)</code></pre>
+  13.271 ms (4 allocations: 7.64 MiB)</code></pre>
 </div>
 </div>
 </section>
@@ -788,10 +788,10 @@ inv(Af) * b = [1.5676310938350828, -1.8670423474177873, -0.7020922312927873, 1.0
 <span id="cb22-7"><a href="#cb22-7"></a><span class="pp">@btime</span> <span class="fu">cholesky</span>(<span class="op">$</span>A, check <span class="op">=</span> <span class="cn">false</span>) <span class="op">\</span> <span class="op">$</span>b;</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>A\b for typeof(A) = Symmetric{Float64, Matrix{Float64}}
-  14.908 ms (6 allocations: 2.16 MiB)
+  14.784 ms (6 allocations: 2.16 MiB)
 A\b for typeof(A) = Matrix{Float64}
-  6.158 ms (4 allocations: 1.92 MiB)
-  2.712 ms (3 allocations: 1.91 MiB)</code></pre>
+  5.954 ms (4 allocations: 1.92 MiB)
+  3.157 ms (3 allocations: 1.91 MiB)</code></pre>
 </div>
 </div>
 </section>

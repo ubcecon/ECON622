@@ -70,12 +70,12 @@ See [problemsets.md](problemsets.md).
 6. **September 25**: Testing and Package Development
    - In class: development of [our random coefficients demand package as an example](https://github.com/ubcecon/ECON622_BLP.jl)
    - Self-study: [Testing and Packages](https://julia.quantecon.org/software_engineering/testing.html)
-   - Self-study: [Git and Github](https://julia.quantecon.org/software_engineering/version_control.html
+   - Self-study: [Git and Github](https://julia.quantecon.org/software_engineering/version_control.html)
 7. **September 27**: Code Performance
    - [Coding for performance](https://github.com/schrimpf/ARGridBootstrap) be sure to look at the 2023 branch for the recent additions
    - [GPU usage](https://github.com/schrimpf/ARGridBootstrap)
    - Self-study: [SIMDscan](https://github.com/schrimpf/SIMDscan.jl/): since it briefly came up in class, and I was curious about it, I made a little package for calculating things like cumulative sums and autoregressive simulations using SIMD
-   - Self-study: [Need for speed](https://julia.quantecon.org/software_engineering/need_for_speed.html
+   - Self-study: [Need for speed](https://julia.quantecon.org/software_engineering/need_for_speed.html)
    - Self-study: [Performance Tips](https://docs.julialang.org/en/v1/manual/performance-tips/)
 
 **JESSE**
@@ -106,21 +106,20 @@ Slides for the lectures can be found [here](https://ubcecon.github.io/ECON622/le
     - **SLIDES**: Finish [Optimization](https://ubcecon.github.io/ECON622/lectures/lectures/optimization.html)
     - SGD and methods for variance reduction in gradient estimates
     - Using SGD-variants in practice within ML pipelines in JAX and Pytorch
-14. **October 25th**: ERM, Interpolation, Generalization, and Double-Descent in Deep Learning
-15. **October 30**: Intro to Kernel Methods and Gaussian Processes
+14. **October 25th**: ERM, Interpolation, Generalization
+15. **October 30**: Double-Descent, Representation Learning and Intro to Kernel Methods
+16. **November 1** Kernel Methods and Gaussian Processes
+17. **November 6** GUEST LECTURE [GEOFF PLEISS](https://geoffpleiss.com/) FROM UBC STATS
+**PHIL**
 
 <!--
 Probabilistic Programming Languages (PPLs), Bayesian methods, and intro to generative models
     - Sampling and approximation of model posteriors
     - High-dimensional sampling of latents in practice
     - Variational inference with AD vs. HMC
-
+NLP, Attention/Transformers, Tuning Foundation Models
 -->
 
-**PHIL**
-
-16.  **November 1** NLP, Attention/Transformers, Tuning Foundation Models
-17.  **November 6** GUEST LECTURE [GEOFF PLEISS](https://geoffpleiss.com/) FROM UBC STATS
 18. **November 8** Uncertainty Quantification (UQ) and the Unreasonable Effectiveness of Monte-Carlo
 19. **November 10** ODEs; Linear dynamical systems, Linear Quadratic (LQ) Control, Nonlinear systems, Stability
 20. **November 20** [Dynamic discrete choice](https://github.com/UBCECON567/DynamicDiscreteChoice.jl), Nested fixed-point, Heterogeneity and mixture models (E-M algorithm)

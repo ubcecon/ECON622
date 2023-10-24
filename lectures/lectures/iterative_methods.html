@@ -721,7 +721,7 @@ norm(v - v_direct, Inf) = 9.052314453583676e-12</code></pre>
 <span id="cb11-9"><a href="#cb11-9"></a>sol[<span class="kw">end</span>]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div><div class="column">
 <div class="cell-output cell-output-stdout">
-<pre><code>cond(Matrix(A * A')) = 1.0375717932571539e12</code></pre>
+<pre><code>cond(Matrix(A * A')) = 1.0375714541179441e12</code></pre>
 </div>
 <div class="cell-output cell-output-display" data-execution_count="7">
 <pre><code>Converged after 183 iterations.</code></pre>
@@ -757,7 +757,7 @@ norm(v - v_direct, Inf) = 9.052314453583676e-12</code></pre>
 <span id="cb14-11"><a href="#cb14-11"></a><span class="pp">@show</span> <span class="fu">norm</span>(beta_direct <span class="op">-</span> beta_lsmr)</span>
 <span id="cb14-12"><a href="#cb14-12"></a><span class="fu">println</span>(<span class="st">"</span><span class="sc">$</span>(results[<span class="kw">end</span>])<span class="st">"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>norm(beta_direct - beta_lsmr) = 1.0615184241157149e-5
+<pre><code>norm(beta_direct - beta_lsmr) = 1.0615184239078498e-5
 Converged after 15 iterations.</code></pre>
 </div>
 </div>
@@ -898,7 +898,7 @@ P x &amp;= y
 <span id="cb25-6"><a href="#cb25-6"></a>sol <span class="op">=</span> <span class="fu">cg</span>(A, b, log <span class="op">=</span> <span class="cn">true</span>, maxiter <span class="op">=</span> <span class="fl">1000</span>)</span>
 <span id="cb25-7"><a href="#cb25-7"></a>sol[<span class="kw">end</span>]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>cond(Matrix(A)) = 972303.1119354621</code></pre>
+<pre><code>cond(Matrix(A)) = 972303.1119396036</code></pre>
 </div>
 <div class="cell-output cell-output-display" data-execution_count="13">
 <pre><code>Converged after 389 iterations.</code></pre>

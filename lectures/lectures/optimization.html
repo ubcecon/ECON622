@@ -29,6 +29,71 @@
       margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
       vertical-align: middle;
     }
+    /* CSS for syntax highlighting */
+    pre > code.sourceCode { white-space: pre; position: relative; }
+    pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+    pre > code.sourceCode > span:empty { height: 1.2em; }
+    .sourceCode { overflow: visible; }
+    code.sourceCode > span { color: inherit; text-decoration: inherit; }
+    div.sourceCode { margin: 1em 0; }
+    pre.sourceCode { margin: 0; }
+    @media screen {
+    div.sourceCode { overflow: auto; }
+    }
+    @media print {
+    pre > code.sourceCode { white-space: pre-wrap; }
+    pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+    }
+    pre.numberSource code
+      { counter-reset: source-line 0; }
+    pre.numberSource code > span
+      { position: relative; left: -4em; counter-increment: source-line; }
+    pre.numberSource code > span > a:first-child::before
+      { content: counter(source-line);
+        position: relative; left: -1em; text-align: right; vertical-align: baseline;
+        border: none; display: inline-block;
+        -webkit-touch-callout: none; -webkit-user-select: none;
+        -khtml-user-select: none; -moz-user-select: none;
+        -ms-user-select: none; user-select: none;
+        padding: 0 4px; width: 4em;
+        color: #aaaaaa;
+      }
+    pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+    div.sourceCode
+      { color: #003b4f; background-color: #f1f3f5; }
+    @media screen {
+    pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+    }
+    code span { color: #003b4f; } /* Normal */
+    code span.al { color: #ad0000; } /* Alert */
+    code span.an { color: #5e5e5e; } /* Annotation */
+    code span.at { color: #657422; } /* Attribute */
+    code span.bn { color: #ad0000; } /* BaseN */
+    code span.bu { } /* BuiltIn */
+    code span.cf { color: #003b4f; } /* ControlFlow */
+    code span.ch { color: #20794d; } /* Char */
+    code span.cn { color: #8f5902; } /* Constant */
+    code span.co { color: #5e5e5e; } /* Comment */
+    code span.cv { color: #5e5e5e; font-style: italic; } /* CommentVar */
+    code span.do { color: #5e5e5e; font-style: italic; } /* Documentation */
+    code span.dt { color: #ad0000; } /* DataType */
+    code span.dv { color: #ad0000; } /* DecVal */
+    code span.er { color: #ad0000; } /* Error */
+    code span.ex { } /* Extension */
+    code span.fl { color: #ad0000; } /* Float */
+    code span.fu { color: #4758ab; } /* Function */
+    code span.im { color: #00769e; } /* Import */
+    code span.in { color: #5e5e5e; } /* Information */
+    code span.kw { color: #003b4f; } /* Keyword */
+    code span.op { color: #5e5e5e; } /* Operator */
+    code span.ot { color: #003b4f; } /* Other */
+    code span.pp { color: #ad0000; } /* Preprocessor */
+    code span.sc { color: #5e5e5e; } /* SpecialChar */
+    code span.ss { color: #20794d; } /* SpecialString */
+    code span.st { color: #20794d; } /* String */
+    code span.va { color: #111111; } /* Variable */
+    code span.vs { color: #20794d; } /* VerbatimString */
+    code span.wa { color: #5e5e5e; font-style: italic; } /* Warning */
   </style>
   <link rel="stylesheet" href="../site_libs/revealjs/dist/theme/quarto.css">
   <link href="../site_libs/revealjs/plugin/quarto-line-highlight/line-highlight.css" rel="stylesheet">
@@ -245,7 +310,6 @@
     }
     .reveal .slide:not(.center) {
       height: 100%;
-      overflow-y: auto;
     }
     .reveal .slide.scrollable {
       overflow-y: auto;
@@ -367,6 +431,9 @@ Jesse Perla
 <li><a href="#/optimization-crash-course" id="/toc-optimization-crash-course">Optimization Crash Course</a></li>
 <li><a href="#/stochastic-optimization" id="/toc-stochastic-optimization">Stochastic Optimization</a></li>
 <li><a href="#/training-loops" id="/toc-training-loops">Training Loops</a></li>
+<li><a href="#/linear-regression-examples-with-end-to-end" id="/toc-linear-regression-examples-with-end-to-end">Linear Regression Examples with End-to-End</a></li>
+<li><a href="#/full-pytorch-linear-regression-examples" id="/toc-full-pytorch-linear-regression-examples">Full Pytorch Linear Regression Examples</a></li>
+<li><a href="#/linear-regression-examples-with-jax" id="/toc-linear-regression-examples-with-jax">Linear Regression Examples with JAX</a></li>
 </ul>
 </nav>
 </section>
@@ -392,8 +459,9 @@ Jesse Perla
 <h2>Why the Emphasis on Optimization and Gradients?</h2>
 <ul>
 <li>A huge number of algorithms for economists can be written as optimization problems (e.g., MLE, interpolation) or as something similar in spirit (e.g.&nbsp;Bayesian Sampling, Reinforcement Learning)</li>
-<li>In practice, <strong>all</strong> problems with high-dimensions parameters or latents require gradients</li>
-<li>Previous lectures on AD showed we can find gradients for extremely complicated functions with VJPs</li>
+<li>Previous lectures on AD showed ways to find VJPs for extremely complicated functions. <strong>Differentiate everything, no excuses!</strong></li>
+<li>In practice, <strong>all</strong> problems with high-dimensions parameters or latents require gradients for algorithms to be feasible</li>
+<li>We will soon take a further step: <strong>are (unbiased) estimates of the gradient good enough for many algorithms?</strong></li>
 </ul>
 </section></section>
 <section>
@@ -456,7 +524,7 @@ Jesse Perla
 <section id="when-and-where-does-this-converge" class="slide level2">
 <h2>When and Where Does This Converge?</h2>
 <ul>
-<li><p>Skipping a million details, see <a href="https://probml.github.io/pml-book/book1.html">ProbML Book 1</a> Section 8.2.2 and <a href="https://www.cs.ubc.ca/~schmidtm/Courses/340-F22/L14.pdf">Mark Schmidt’s Notes</a></p></li>
+<li><p>Skipping a million details, see <a href="https://probml.github.io/pml-book/book1.html">ProbML Book 1</a> Section 8.2.2 and <a href="https://www.cs.ubc.ca/~schmidtm/Courses/340-F22/L14.pdf">Mark Schmidt’s basic</a> and <a href="https://www.cs.ubc.ca/~schmidtm/Courses/5XX-S22/S1.pdf">more advanced notes</a></p></li>
 <li><p>For strictly convex problems this converges to the global minima, though sufficient conditions include Robbins-Monro <span class="math inline">\(\lim_{T\to \infty} \eta_T \to 0\)</span> and</p>
 <p><span class="math display">\[
 \lim_{T\to\infty}\frac{\sum_{t=1}^T \eta_t}{\sum_{t=1}^T \eta_t^2} = 0
@@ -479,7 +547,7 @@ Jesse Perla
 <section id="second-order-methods" class="slide level2">
 <h2>Second-Order Methods</h2>
 <ul>
-<li>See <a href="https://probml.github.io/pml-book/book1.html">ProbML Book 1</a> Section 8.3</li>
+<li>See <a href="https://probml.github.io/pml-book/book1.html">ProbML Book 1</a> Section 8.3 and <a href="https://www.cs.ubc.ca/~schmidtm/Courses/5XX-S22/S2.pdf">Mark Schmidt’s Notes</a></li>
 <li>Adapt <span class="math inline">\(\eta_t C_t\)</span> to use the Hessian (e.g., Newton’s Method)</li>
 </ul>
 <p><span class="math display">\[
@@ -493,7 +561,7 @@ Jesse Perla
 <section id="momentum" class="slide level2">
 <h2>Momentum</h2>
 <ul>
-<li>See <a href="https://probml.github.io/pml-book/book1.html">ProbML Book 1</a> Section 8.2.4</li>
+<li>See <a href="https://probml.github.io/pml-book/book1.html">ProbML Book 1</a> Section 8.2.4 and <a href="https://www.cs.ubc.ca/~schmidtm/Courses/5XX-S22/S2.pdf">Mark Schmidt’s Notes</a></li>
 <li>Can use “momentum”, which speeds up convergence, helps avoid local optima, and moves fast in flat regions</li>
 <li>Momentum will be a common feature of many ML optimizers (e.g.&nbsp;Adam, RMSProp, etc.) as it helps with heavily non-convex problems</li>
 <li>A classic method is called Nesterov Accelerated Gradient (NAG), which is a modification of gradient descent for some <span class="math inline">\(\beta_t\in (0,1)\)</span> (e.g., <span class="math inline">\(0.9\)</span>)</li>
@@ -869,17 +937,244 @@ g_t \equiv \frac{1}{|B_t|}\sum_{n \in B_t} \nabla_{\theta} \ell(\theta_t, x_n, y
 </ul></li>
 <li><a href="https://github.com/facebookresearch/hydra">Hydra</a> is a framework for more serious engineering code</li>
 </ul>
+</section></section>
+<section>
+<section id="linear-regression-examples-with-end-to-end" class="title-slide slide level1 center">
+<h1>Linear Regression Examples with End-to-End</h1>
+
 </section>
-<section id="linear-regression-with-sgd-in-pytorch" class="slide level2">
-<h2>Linear Regression with SGD in Pytorch</h2>
-<p>See Pytorch implementations of solving LLS in repository</p>
+<section id="linear-regression-examples" class="slide level2">
+<h2>Linear Regression Examples</h2>
+<ul>
+<li>Of course SGD is a terrible way to do a standard linear regression, but it will help us understand the mechanics with a well-understood problem</li>
+<li>These examples simulate data for some: <span class="math inline">\(y_n = x_n \cdot \theta + \sigma \epsilon\)</span> for <span class="math inline">\(\epsilon \sim N(0,1)\)</span></li>
+<li>They then show various features of the optimization pipeline and software to implement the LLS ERM objective</li>
+</ul>
+<p><span class="math display">\[
+\min_{\theta} \frac{1}{N} \sum_{n=1}^N \left[y_n - x_n \cdot \theta\right]^2
+\]</span></p>
+<ul>
+<li>Which we note has a finite-sum objective, which lets us use minibatch SGD with gradient estimates</li>
+<li>Install in your environment with <code>pip install -r requirements.txt</code></li>
+</ul>
+</section>
+<section id="packages" class="slide level2">
+<h2>Packages</h2>
+<ul>
+<li>Before showing all of the variations, here we will implement an inline SGD version with minibatches</li>
+</ul>
+<div class="cell" data-execution_count="1">
+<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1"></a><span class="im">import</span> torch</span>
+<span id="cb1-2"><a href="#cb1-2"></a><span class="im">import</span> torch.nn <span class="im">as</span> nn</span>
+<span id="cb1-3"><a href="#cb1-3"></a><span class="im">import</span> torch.optim <span class="im">as</span> optim</span>
+<span id="cb1-4"><a href="#cb1-4"></a><span class="im">from</span> torch.utils.data <span class="im">import</span> TensorDataset, DataLoader, TensorDataset</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</section>
+<section id="simulate-data" class="slide level2">
+<h2>Simulate Data</h2>
+<p><span class="math display">\[
+y \sim N(x \cdot \theta, \sigma^2)
+\]</span></p>
+<div class="cell" data-execution_count="2">
+<div class="sourceCode cell-code" id="cb2"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb2-1"><a href="#cb2-1"></a>N <span class="op">=</span> <span class="dv">500</span>  <span class="co"># samples</span></span>
+<span id="cb2-2"><a href="#cb2-2"></a>M <span class="op">=</span> <span class="dv">2</span></span>
+<span id="cb2-3"><a href="#cb2-3"></a>sigma <span class="op">=</span> <span class="fl">0.001</span></span>
+<span id="cb2-4"><a href="#cb2-4"></a>theta <span class="op">=</span> torch.randn(M)</span>
+<span id="cb2-5"><a href="#cb2-5"></a>X <span class="op">=</span> torch.randn(N, M)</span>
+<span id="cb2-6"><a href="#cb2-6"></a>Y <span class="op">=</span> X <span class="op">@</span> theta <span class="op">+</span> sigma <span class="op">*</span> torch.randn(N)</span>
+<span id="cb2-7"><a href="#cb2-7"></a>dataset <span class="op">=</span> TensorDataset(X, Y)</span>
+<span id="cb2-8"><a href="#cb2-8"></a><span class="bu">print</span>(dataset[<span class="dv">0</span>]) <span class="co"># returns tuples of (x_n, y_n)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>(tensor([-1.6464, -1.9748]), tensor(2.0238))</code></pre>
+</div>
+</div>
+</section>
+<section id="dataloaders-provide-batches" class="slide level2">
+<h2>Dataloaders Provide Batches</h2>
+<ul>
+<li>Code which serves up random batches of data for gradient estimates are called “dataloaders”</li>
+<li>The following code shuffles the data and provides batches of size <code>batch_size</code></li>
+<li>It returns a <a href="https://docs.python.org/3/howto/functional.html#generator-expressions-and-list-comprehensions">Python generator</a> which can be iterated until it hits the end of the data</li>
+</ul>
+<div class="cell columns column-output-location" data-execution_count="3">
+<div class="column">
+<div class="sourceCode cell-code" id="cb4"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb4-1"><a href="#cb4-1"></a>batch_size <span class="op">=</span> <span class="dv">8</span></span>
+<span id="cb4-2"><a href="#cb4-2"></a>train_loader <span class="op">=</span> DataLoader(dataset,</span>
+<span id="cb4-3"><a href="#cb4-3"></a>                batch_size<span class="op">=</span>batch_size,</span>
+<span id="cb4-4"><a href="#cb4-4"></a>                shuffle<span class="op">=</span><span class="va">True</span>)</span>
+<span id="cb4-5"><a href="#cb4-5"></a><span class="co"># e.g. iterate and get first element</span></span>
+<span id="cb4-6"><a href="#cb4-6"></a><span class="bu">print</span>(<span class="bu">next</span>(<span class="bu">iter</span>(train_loader)))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div><div class="column">
+<div class="cell-output cell-output-stdout">
+<pre><code>[tensor([[-0.3266, -1.6693],
+        [-0.2486,  1.6521],
+        [ 0.3657,  0.7354],
+        [ 0.0810, -0.2879],
+        [ 0.5448, -1.6967],
+        [-1.2530,  1.5368],
+        [-0.4714, -0.7282],
+        [ 0.5641,  2.4518]]), tensor([ 1.9815, -2.1029, -0.8162,  0.3766,  2.2345, -2.2181,  0.7822, -2.8881])]</code></pre>
+</div>
+</div>
+</div>
+</section>
+<section id="loss-function-for-gradient-descent" class="slide level2">
+<h2>Loss Function for Gradient Descent</h2>
+<ul>
+<li>The loss function should be compatible with gradient estimates.</li>
+<li>In particular, for LLS we simply can find the MSE between the prediction and the data for the batch itself</li>
+<li>Just to repeat again: our goal is to provide auto-differentiable functions which give a gradient estimate for first-order optimizers, not necessarily the objective itself</li>
+</ul>
+<div class="cell" data-execution_count="4">
+<div class="sourceCode cell-code" id="cb6"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb6-1"><a href="#cb6-1"></a><span class="kw">def</span> residuals(model, X, Y):  <span class="co"># batches or full data</span></span>
+<span id="cb6-2"><a href="#cb6-2"></a>    Y_hat <span class="op">=</span> model(X).squeeze()</span>
+<span id="cb6-3"><a href="#cb6-3"></a>    <span class="cf">return</span> ((Y_hat <span class="op">-</span> Y) <span class="op">**</span> <span class="dv">2</span>).mean()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</section>
+<section id="hypothesis-class" class="slide level2">
+<h2>Hypothesis Class</h2>
+<ul>
+<li>The “Hypothesis Class” for our ERM approximation is linear in this case.</li>
+<li>Anything with differentiable parameters is a sub-class of the <code>nn.Module</code> in Pytorch</li>
+<li>In this case, we can just use a prebuilt linear approximation from <span class="math inline">\(\mathbb{R}^M \to \mathbb{R}^1\)</span> without an affine constant term.</li>
+<li>The underlying parameters will have a random initialization, which becomes <strong>crucial</strong> with overparameterized models (but wouldn’t be important here)</li>
+</ul>
+<div class="cell" data-execution_count="5">
+<div class="sourceCode cell-code" id="cb7"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb7-1"><a href="#cb7-1"></a>model <span class="op">=</span> nn.Linear(M, <span class="dv">1</span>, bias<span class="op">=</span><span class="va">False</span>)  <span class="co"># random initialization</span></span>
+<span id="cb7-2"><a href="#cb7-2"></a><span class="bu">print</span>(model)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Linear(in_features=2, out_features=1, bias=False)</code></pre>
+</div>
+</div>
+</section>
+<section id="optimizer" class="slide level2">
+<h2>Optimizer</h2>
+<ul>
+<li>First-order optimizers take steps using gradient estimates</li>
+<li>In many ML applications you will want control over the process, so will manually call the function to collect the gradient estimate then call the optimizer to take the next step</li>
+<li>Here we will just use SGD with a fixed learning rate</li>
+<li>Note that the optimizer is constructed to look directly at the <code>parameters</code> for your underlying model(s)</li>
+</ul>
+<div class="cell columns column-output-location" data-execution_count="6">
+<div class="column">
+<div class="sourceCode cell-code" id="cb9"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb9-1"><a href="#cb9-1"></a>optimizer <span class="op">=</span> optim.SGD(</span>
+<span id="cb9-2"><a href="#cb9-2"></a>    model.parameters(), lr<span class="op">=</span><span class="fl">0.001</span></span>
+<span id="cb9-3"><a href="#cb9-3"></a>)</span>
+<span id="cb9-4"><a href="#cb9-4"></a><span class="bu">print</span>(optimizer)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div><div class="column">
+<div class="cell-output cell-output-stdout">
+<pre><code>SGD (
+Parameter Group 0
+    dampening: 0
+    differentiable: False
+    foreach: None
+    lr: 0.001
+    maximize: False
+    momentum: 0
+    nesterov: False
+    weight_decay: 0
+)</code></pre>
+</div>
+</div>
+</div>
+</section>
+<section id="training-loop" class="slide level2">
+<h2>Training Loop</h2>
+<ul>
+<li>Finally, we can loop for multiple “epochs” of passes through the data with the dataloader, calling the optimizer to update each time</li>
+<li>The <code>for ... in train_loader:</code> will repeat until the end of the data and continue to the next epoch (i.e., pass through data)</li>
+<li>Each batch updates a <code>step</code> using the optimizer, which is unaware of epochs/batches/etc.</li>
+</ul>
+<div class="cell" data-execution_count="7">
+<div class="sourceCode cell-code" id="cb11"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb11-1"><a href="#cb11-1"></a><span class="cf">for</span> epoch <span class="kw">in</span> <span class="bu">range</span>(<span class="dv">300</span>):</span>
+<span id="cb11-2"><a href="#cb11-2"></a>    <span class="cf">for</span> X_batch, Y_batch <span class="kw">in</span> train_loader:</span>
+<span id="cb11-3"><a href="#cb11-3"></a>        optimizer.zero_grad() </span>
+<span id="cb11-4"><a href="#cb11-4"></a>        loss <span class="op">=</span> residuals(model, X_batch, Y_batch)  <span class="co"># primal</span></span>
+<span id="cb11-5"><a href="#cb11-5"></a>        loss.backward()  <span class="co"># backprop/reverse-mode AD</span></span>
+<span id="cb11-6"><a href="#cb11-6"></a>        <span class="co"># Now the model.parameters have gradients updated, so...</span></span>
+<span id="cb11-7"><a href="#cb11-7"></a>        optimizer.step()  <span class="co"># Update the optimizers internal parameters</span></span>
+<span id="cb11-8"><a href="#cb11-8"></a><span class="bu">print</span>(<span class="ss">f"||theta - theta_hat|| = </span><span class="sc">{</span>torch<span class="sc">.</span>norm(theta <span class="op">-</span> model.weight.squeeze())<span class="sc">}</span><span class="ss">"</span>)        </span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>||theta - theta_hat|| = 7.569613899249816e-06</code></pre>
+</div>
+</div>
+</section></section>
+<section>
+<section id="full-pytorch-linear-regression-examples" class="title-slide slide level1 center">
+<h1>Full Pytorch Linear Regression Examples</h1>
+
+</section>
+<section id="gradient-descent-1" class="slide level2">
+<h2>Gradient Descent</h2>
+<ul>
+<li>See <a href="examples/linear_regression_pytorch_gd.py">examples/linear_regression_pytorch_gd.py</a></li>
+<li>Simulates data and shows the basic training loop</li>
+<li>Using the “full batch” to calculate the residuals</li>
+</ul>
+</section>
+<section id="stochastic-gradient-descent-1" class="slide level2">
+<h2>Stochastic Gradient Descent</h2>
+<ul>
+<li>See <a href="examples/linear_regression_pytorch_sgd.py">examples/linear_regression_pytorch_sgd.py</a></li>
+<li>This takes the existing code, but adds in code to calculate gradient estimates using minibatches</li>
+<li>Note that this is creating batches by shuffling the data and the going through it <code>batch_size</code> chunks at a time</li>
+<li>When it gets to the end of that data, it is the end of the <code>epoch</code></li>
+</ul>
+</section>
+<section id="adam-bells-and-whistles" class="slide level2">
+<h2>Adam + Bells and Whistles</h2>
+<ul>
+<li>See <a href="examples/linear_regression_pytorch_adam.py">examples/linear_regression_pytorch_adam.py</a></li>
+<li>This extends the previous version and adds in the full train/val/test datasplit
+<ul>
+<li>The <code>val_loss</code> is collected and displayed at the end of each epoch</li>
+</ul></li>
+<li>It also shows a learning rate scheduler and a few utilities for logging and early stopping</li>
+</ul>
+</section>
+<section id="logging-with-weights-and-biases" class="slide level2">
+<h2>Logging with Weights and Biases</h2>
+<ul>
+<li><p>See <a href="examples/linear_regression_pytorch_logging.py">examples/linear_regression_pytorch_logging.py</a></p></li>
+<li><p>This adds in support for Weights and Biases, and also demonstrates the use of a custom <code>nn.Module</code> for the hypothesis class</p>
 <ol type="1">
-<li>Baseline: GD with full gradient</li>
-<li>SGD with minibatches</li>
-<li>Linear Model as a “Neural Network”</li>
-<li>Logging</li>
-<li>CLI</li>
-</ol>
+<li>Go to <a href="https://wandb.ai/">wandb.ai</a> and create an account, ideally linked to your github</li>
+<li>Ensure you have installed the packages with <code>pip install -r requirements.txt</code></li>
+<li>Run <code>wandb login</code> in terminal to connect to your account</li>
+</ol></li>
+<li><p>You will then be able to run these files and see results on <a href="https://wandb.ai/">wandb.ai</a></p></li>
+</ul>
+</section>
+<section id="pytorch-lightning" class="slide level2">
+<h2>Pytorch Lightning</h2>
+<ul>
+<li>See <a href="examples/linear_regression_pytorch_lightning.py">examples/linear_regression_pytorch_lightning.py</a></li>
+<li>See <a href="examples/linear_regression_pytorch_lightning_defaults.yaml">examples/linear_regression_pytorch_lightning_defaults.yaml</a> for default HPO and parameters</li>
+<li>This is using many features in <a href="https://www.pytorchlightning.ai/">Pytorch Lightning</a> to simplify the code</li>
+<li>The optimizer, stopping rules, logging, learning rate scheduler, etc. are all handled by the framework and can be configured in that file or on the CLI.</li>
+<li>Can change values on commandline to override the <code>yaml</code> file,</li>
+</ul>
+<div class="sourceCode" id="cb13"><pre class="sourceCode numberSource bash number-lines code-with-copy"><code class="sourceCode bash"><span id="cb13-1"><a href="#cb13-1"></a><span class="ex">python</span> lectures/examples/linear_regression_pytorch_lightning.py <span class="at">--optimizer.lr</span><span class="op">=</span>0.0001 <span class="at">--model.N</span><span class="op">=</span>500</span>
+<span id="cb13-2"><a href="#cb13-2"></a><span class="ex">python</span> lectures/examples/linear_regression_pytorch_lightning.py <span class="at">--trainer.max_epochs</span><span class="op">=</span>500</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</section>
+<section id="sweeps-with-wb" class="slide level2">
+<h2>Sweeps with W&amp;B</h2>
+<ul>
+<li>See <a href="lectures/examples/linear_regression_pytorch_sweep.yaml">lectures/examples/linear_regression_pytorch_sweep.yaml</a> for a <a href="https://docs.wandb.ai/guides/sweeps">sweep file</a> which provides a HPO experiment to run and log
+<ul>
+<li>Executes variations on <code>--model.batch_size=32</code> and <code>--model.lr=0.001</code> etc</li>
+<li>Tries to choose them to minimize the <code>val_loss</code> as a HPO objective</li>
+<li>First, create the sweep, <code>wandb sweep lectures/examples/linear_regression_pytorch_sweep.yaml</code></li>
+<li>Then run <code>wandb agent &lt;sweep_id&gt;</code> with returned sweep id</li>
+<li>Call <code>wandb agent &lt;sweep_id&gt;</code> on multiple computers to run in parallel</li>
+</ul></li>
+<li>Any CLI implementation can be used with these sorts of frameworks</li>
+</ul>
+</section></section>
+<section>
+<section id="linear-regression-examples-with-jax" class="title-slide slide level1 center">
+<h1>Linear Regression Examples with JAX</h1>
+
 </section>
 <section id="linear-regression-with-sgd-in-jax" class="slide level2">
 <h2>Linear Regression with SGD in JAX</h2>

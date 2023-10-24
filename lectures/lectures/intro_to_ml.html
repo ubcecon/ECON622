@@ -677,8 +677,8 @@ Jesse Perla
 <span id="cb3-6"><a href="#cb3-6"></a>selu_jit <span class="op">=</span> jit(selu)</span>
 <span id="cb3-7"><a href="#cb3-7"></a><span class="op">%</span>timeit selu_jit(x).block_until_ready()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>2.93 ms ± 176 µs per loop (mean ± std. dev. of 7 runs, 100 loops each)
-555 µs ± 6.84 µs per loop (mean ± std. dev. of 7 runs, 1,000 loops each)</code></pre>
+<pre><code>4.7 ms ± 452 µs per loop (mean ± std. dev. of 7 runs, 100 loops each)
+847 µs ± 28.8 µs per loop (mean ± std. dev. of 7 runs, 1,000 loops each)</code></pre>
 </div>
 </div>
 </section>
@@ -693,7 +693,7 @@ Jesse Perla
 <span id="cb5-3"><a href="#cb5-3"></a>  <span class="cf">return</span> lmbda <span class="op">*</span> jnp.where(x <span class="op">&gt;</span> <span class="dv">0</span>, x, alpha <span class="op">*</span> jnp.exp(x) <span class="op">-</span> alpha)</span>
 <span id="cb5-4"><a href="#cb5-4"></a><span class="op">%</span>timeit selu(x).block_until_ready()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>601 µs ± 28.4 µs per loop (mean ± std. dev. of 7 runs, 1,000 loops each)</code></pre>
+<pre><code>867 µs ± 36.2 µs per loop (mean ± std. dev. of 7 runs, 1,000 loops each)</code></pre>
 </div>
 </div>
 </section>
@@ -724,7 +724,7 @@ Jesse Perla
 <span id="cb9-7"><a href="#cb9-7"></a>  <span class="cf">return</span> jnp.stack([f(v) <span class="cf">for</span> v <span class="kw">in</span> v_batched])</span>
 <span id="cb9-8"><a href="#cb9-8"></a><span class="op">%</span>timeit naively_batched_f(batched_x).block_until_ready()  </span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>1.15 ms ± 4.7 µs per loop (mean ± std. dev. of 7 runs, 1,000 loops each)</code></pre>
+<pre><code>1.24 ms ± 7.8 µs per loop (mean ± std. dev. of 7 runs, 1,000 loops each)</code></pre>
 </div>
 </div>
 </section>
@@ -740,7 +740,7 @@ Jesse Perla
 <span id="cb11-6"><a href="#cb11-6"></a><span class="op">%</span>timeit vmap_batched_f(batched_x).block_until_ready()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>Auto-vectorized with vmap
-22.1 µs ± 33.4 ns per loop (mean ± std. dev. of 7 runs, 10,000 loops each)</code></pre>
+25 µs ± 179 ns per loop (mean ± std. dev. of 7 runs, 10,000 loops each)</code></pre>
 </div>
 </div>
 </section>

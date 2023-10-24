@@ -25,3 +25,7 @@ lightning
 wandb
 jaxopt
 cola-ml
+tqdm
+python-fire
+jsonargparse[signatures]
+gpytorch
