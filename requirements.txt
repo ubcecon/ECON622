@@ -26,6 +26,6 @@ wandb
 jaxopt
 cola-ml
 tqdm
-python-fire
+fire
 jsonargparse[signatures]
 gpytorch

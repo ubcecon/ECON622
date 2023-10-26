@@ -102,13 +102,15 @@ Slides for the lectures can be found [here](https://ubcecon.github.io/ECON622/le
     - **SLIDES**: Finish [Differentiation](https://ubcecon.github.io/ECON622/lectures/lectures/differentiation.html) and start [Optimization](https://ubcecon.github.io/ECON622/lectures/lectures/optimization.html)
     - Implicit differentiation of systems of ODEs, linear systems, etc.
     - Gradient descent variations
-13. **October 23th**: Stochastic Optimization Methods and Machine Learning Pipelines
-    - **SLIDES**: Finish [Optimization](https://ubcecon.github.io/ECON622/lectures/lectures/optimization.html)
+13. **October 23th**: Stochastic Optimization Methods
+    - **SLIDES**: SGD variations in [Optimization](https://ubcecon.github.io/ECON622/lectures/lectures/optimization.html)
     - SGD and methods for variance reduction in gradient estimates
     - Using SGD-variants in practice within ML pipelines in JAX and Pytorch
-14. **October 25th**: ERM, Interpolation, Generalization
-15. **October 30**: Double-Descent, Representation Learning and Intro to Kernel Methods
-16. **November 1** Kernel Methods and Gaussian Processes
+14. **October 25th**: Machine Learning Pipelines, HPO, and ERM
+    - **SLIDES**: Finished example code of pipelines in [Optimization](https://ubcecon.github.io/ECON622/lectures/lectures/optimization.html), W&B sweeps, and code in `lectures/lectures/examples`
+    - **Readings**: [Probabilistic Machine Learning: An Introduction](https://probml.github.io/pml-book/book1.html) Section 5.4
+15. **October 30**: Neural Networks, Representation Learning, Double-Descent, an Intro to Kernel Methods
+16. **November 1** Finish Double-Descent and Intro to Kernel Methods and Gaussian Processes
 17. **November 6** GUEST LECTURE [GEOFF PLEISS](https://geoffpleiss.com/) FROM UBC STATS
 **PHIL**
 
@@ -117,7 +119,7 @@ Probabilistic Programming Languages (PPLs), Bayesian methods, and intro to gener
     - Sampling and approximation of model posteriors
     - High-dimensional sampling of latents in practice
     - Variational inference with AD vs. HMC
-NLP, Attention/Transformers, Tuning Foundation Models
+    NLP, Attention/Transformers, Tuning Foundation Models
 -->
 
 18. **November 8** Uncertainty Quantification (UQ) and the Unreasonable Effectiveness of Monte-Carlo
