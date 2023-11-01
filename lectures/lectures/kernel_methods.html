@@ -245,7 +245,6 @@
     }
     .reveal .slide:not(.center) {
       height: 100%;
-      overflow-y: auto;
     }
     .reveal .slide.scrollable {
       overflow-y: auto;
@@ -621,14 +620,45 @@ In future iterations, add stuff on the mercer kernel, positive definite kernel, 
 <section id="gaussian-processes-1" class="slide level2">
 <h2>Gaussian Processes</h2>
 <ul>
-<li>A Gaussian process is a function where for any finite set of points <span class="math inline">\(x_1, ..., x_N \in \mathcal{D}\)</span>, the marginal distribution <span class="math inline">\(f(x_1), ..., f(x_N)\)</span> is a multivariate Gaussian distribution</li>
+<li>A Gaussian processes are <strong>random functions</strong> where for any finite set of points <span class="math inline">\(x_1, ..., x_N \in \mathcal{D}\)</span>, the marginal distribution <span class="math inline">\(f(x_1), ..., f(x_N)\)</span> is a multivariate Gaussian distribution</li>
 <li>Another way to think about a GP is that it is a <a href="https://gaussianprocess.org/gpml/chapters/RW2.pdf">collection of random variables, any finite number of which have a joint Gaussian</a></li>
-<li>Unsurprisingly, since Gaussian random variables can be characterized by the first two moments, so can a GP</li>
+</ul>
+</section>
+<section id="why-random-functions" class="slide level2">
+<h2>Why Random Functions?</h2>
+<ul>
+<li>The random functions with GPs enable us to have
+<ul>
+<li>distributions over functions</li>
+<li>priors and posteriors in function spaces</li>
+<li>meaningful notions of norms to compare functions and regularize them</li>
+</ul></li>
+<li><strong>Uncertainty Quantification</strong>: An issue with ERM-methods (including deep learning) is that they find a single function (think MLE or MAP solutions)
+<ul>
+<li>Alternatives like sample-splitting, cross-validation are limited in their ability to quantify uncertainty</li>
+</ul></li>
+<li><strong>Surrogates:</strong> GPs can be used to form probabilistic surrogate functions given data. Then we can use those surrogates for optimization, uncertainty quantification, etc.</li>
+</ul>
+</section>
+<section id="bayesian-optimization-and-its-generalizations" class="slide level2">
+<h2>Bayesian Optimization and Its Generalizations</h2>
+<ul>
+<li>One particularly useful application is Bayesian optimization</li>
+<li>The idea, used in <a href="https://en.wikipedia.org/wiki/Kriging">Kriging</a> and many <a href="https://docs.wandb.ai/tutorials/sweeps">HPO methods</a>
+<ul>
+<li>For <span class="math inline">\(y = f(x)\)</span> function, which is expensive and blackbox</li>
+<li>Take observables <span class="math inline">\((y_i, x_i)\)</span> and form a GP surrogate</li>
+<li>Optimize that surrogate instead of the original function to get a new <span class="math inline">\(\tilde{x}\)</span></li>
+<li>Evaluate the true function <span class="math inline">\(f(\tilde{x})\)</span> to get <span class="math inline">\(\tilde{y}\)</span></li>
+<li>Update the surrogate with the new data and repeat</li>
+</ul></li>
+<li>The idea of bayesian optimization and information aquisition (i.e.&nbsp;the next point to evaluate) is very general and can be applied <a href="https://willieneis.github.io/bax-website/">to many problems</a></li>
 </ul>
 </section>
 <section id="mean-and-covariance-functions" class="slide level2">
 <h2>Mean and Covariance Functions</h2>
 <ul>
+<li><p>Unsurprisingly, since Gaussian random variables can be characterized by the first two moments, so can GPs</p></li>
 <li><p>Let the mean function be</p>
 <p><span class="math display">\[
 m(x) = \mathbb{E}[f(x)]
@@ -659,17 +689,18 @@ K_{XX} &amp;\equiv [\mathcal{K}(x_i, x_j)]_{i,j=1}^N
 <section id="conditional-forecasts" class="slide level2">
 <h2>Conditional Forecasts</h2>
 <ul>
-<li>Let <span class="math inline">\(X\)</span> and <span class="math inline">\(f_X\)</span> be observable (without noise in simplest case)</li>
-<li>Let <span class="math inline">\(\tilde{X}\)</span> be new data where we want to forecast the distribution of <span class="math inline">\(f_{\tilde{X}}\)</span></li>
-<li>See <a href="https://probml.github.io/pml-book/book2.html">ProbML Book 2</a> Section 18.3 for more details</li>
-</ul>
+<li><p>Let <span class="math inline">\(X\)</span> and <span class="math inline">\(f_X\)</span> be observable (without noise in simplest case)</p></li>
+<li><p>Let <span class="math inline">\(\tilde{X}\)</span> be new data where we want to forecast the distribution of <span class="math inline">\(f_{\tilde{X}}\)</span></p></li>
+<li><p>See <a href="https://probml.github.io/pml-book/book2.html">ProbML Book 2</a> Section 18.3 for more details</p>
 <p><span class="math display">\[
 \begin{aligned}
 f_{\tilde{X}}\,|\,X, f_X, \tilde{X} &amp;\sim \mathcal{N}(\mu_{\tilde{X}}, \Sigma_{\tilde{X}})\\
 \mu_{\tilde{X}} &amp;\equiv \mu_{\tilde{X}} + K_{X\tilde{X}}^{\top} K_{XX}^{-1} (f_X - \mu_X)\\
 \Sigma_{\tilde{X}} &amp;\equiv K_{\tilde{X}\tilde{X}} - K_{X\tilde{X}}^{\top} K_{XX}^{-1} K_{X\tilde{X}}
 \end{aligned}
-\]</span> - Can adjust for noisy observation <span class="math inline">\(y = f(x) + \sigma^2 \epsilon\)</span> for <span class="math inline">\(\epsilon \sim \mathcal{N}(0,I)\)</span> easily</p>
+\]</span></p></li>
+<li><p>Can adjust for noisy observation <span class="math inline">\(y = f(x) + \sigma^2 \epsilon\)</span> for <span class="math inline">\(\epsilon \sim \mathcal{N}(0,I)\)</span> easily</p></li>
+</ul>
 </section>
 <section id="example-posteriors-probml-book-2-section-18.3.2" class="slide level2">
 <h2>Example Posteriors (ProbML Book 2 Section 18.3.2)</h2>
@@ -682,7 +713,7 @@ f_{\tilde{X}}\,|\,X, f_X, \tilde{X} &amp;\sim \mathcal{N}(\mu_{\tilde{X}}, \Sigm
 <li>Since we are working with function spaces, and there is an implicit inner product <span class="math inline">\(\phi(x)\)</span> associated with the kernel <span class="math inline">\(\mathcal{K}(x,x')\)</span></li>
 <li>We can construct a <a href="https://en.wikipedia.org/wiki/Hilbert_space">Hilbert Space</a> using those inner products
 <ul>
-<li>Call the it <span class="math inline">\(\mathcal{H}_{\mathcal{K}}\)</span> for kernel <span class="math inline">\(\mathcal{K}\)</span></li>
+<li>Denote the space <span class="math inline">\(\mathcal{H}_{\mathcal{K}}\)</span> for kernel <span class="math inline">\(\mathcal{K}\)</span></li>
 <li>All inner product spaces induce a norm, so we can write <span class="math inline">\(||f||_{\mathcal{H}_{\mathcal{K}}}\)</span></li>
 </ul></li>
 </ul>
@@ -690,16 +721,16 @@ f_{\tilde{X}}\,|\,X, f_X, \tilde{X} &amp;\sim \mathcal{N}(\mu_{\tilde{X}}, \Sigm
 <section id="erm-in-a-function-space" class="slide level2">
 <h2>ERM in a Function Space</h2>
 <ul>
-<li>Now, consider if we want to write a function space equivalent to ridge regression</li>
+<li>ERM in a function space with LLS and a norm <span class="math inline">\(||f||\)</span></li>
 </ul>
 <p><span class="math display">\[
-\min_{f \in \mathcal{F}} \left\{(y_n - f(x_n))^2 + \frac{\lambda}{2}||f||\right\}
+\min_{f \in \mathcal{F}} \left\{\sum_{n=1}^N (y_n - f(x_n))^2 + \frac{\lambda}{2}||f||\right\}
 \]</span></p>
 <ul>
 <li>If we use the RKHS function space associated with our kernel, we have the <strong>kernel ridge regression</strong></li>
 </ul>
 <p><span class="math display">\[
-\min_{f \in \mathcal{H}_{\mathcal{K}}} \left\{(y_n - f(x_n))^2 + \frac{\lambda}{2}||f||_{\mathcal{H}_{\mathcal{K}}}\right\}
+\min_{f \in \mathcal{H}_{\mathcal{K}}} \left\{\sum_{n=1}^N(y_n - f(x_n))^2 + \frac{\lambda}{2}||f||_{\mathcal{H}_{\mathcal{K}}}\right\}
 \]</span></p>
 </section>
 <section id="representer-theorem" class="slide level2">
@@ -708,7 +739,7 @@ f_{\tilde{X}}\,|\,X, f_X, \tilde{X} &amp;\sim \mathcal{N}(\mu_{\tilde{X}}, \Sigm
 <li><p>See <a href="https://probml.github.io/pml-book/book2.html">ProbML Book 2</a> Section 18.3.7.3 for more details</p></li>
 <li><p>The <strong>representer theorem</strong> says that a solution to ERM in a function space</p>
 <p><span class="math display">\[
-f^* = \arg\min_{f \in \mathcal{H}_{\mathcal{K}}} \left\{\ell(f, x_n, y_n) + \frac{\lambda}{2}||f||_{\mathcal{H}_{\mathcal{K}}}\right\}
+f^* = \arg\min_{f \in \mathcal{H}_{\mathcal{K}}} \left\{\sum_{n=1}^N\ell(f, x_n, y_n) + \frac{\lambda}{2}||f||_{\mathcal{H}_{\mathcal{K}}}\right\}
 \]</span></p>
 <ul>
 <li>Has a solution, for some coefficients <span class="math inline">\(\alpha_n\)</span> a function of the data</li>

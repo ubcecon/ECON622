@@ -129,6 +129,7 @@ Slides for the lectures can be found [here](https://ubcecon.github.io/ECON622/le
       - Researchers working in GPs love the online textbook [Gaussian Processes for Machine Learning](https://gaussianprocess.org/gpml/chapters/), so you may want to read the intro section on [GP Regression](https://gaussianprocess.org/gpml/chapters/RW2.pdf)
 
 17. **November 6** GUEST LECTURE [GEOFF PLEISS](https://geoffpleiss.com/) FROM UBC STATS
+
 **PHIL**
 
 <!--
