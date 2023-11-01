@@ -29,71 +29,6 @@
       margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
       vertical-align: middle;
     }
-    /* CSS for syntax highlighting */
-    pre > code.sourceCode { white-space: pre; position: relative; }
-    pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
-    pre > code.sourceCode > span:empty { height: 1.2em; }
-    .sourceCode { overflow: visible; }
-    code.sourceCode > span { color: inherit; text-decoration: inherit; }
-    div.sourceCode { margin: 1em 0; }
-    pre.sourceCode { margin: 0; }
-    @media screen {
-    div.sourceCode { overflow: auto; }
-    }
-    @media print {
-    pre > code.sourceCode { white-space: pre-wrap; }
-    pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
-    }
-    pre.numberSource code
-      { counter-reset: source-line 0; }
-    pre.numberSource code > span
-      { position: relative; left: -4em; counter-increment: source-line; }
-    pre.numberSource code > span > a:first-child::before
-      { content: counter(source-line);
-        position: relative; left: -1em; text-align: right; vertical-align: baseline;
-        border: none; display: inline-block;
-        -webkit-touch-callout: none; -webkit-user-select: none;
-        -khtml-user-select: none; -moz-user-select: none;
-        -ms-user-select: none; user-select: none;
-        padding: 0 4px; width: 4em;
-        color: #aaaaaa;
-      }
-    pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
-    div.sourceCode
-      { color: #003b4f; background-color: #f1f3f5; }
-    @media screen {
-    pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
-    }
-    code span { color: #003b4f; } /* Normal */
-    code span.al { color: #ad0000; } /* Alert */
-    code span.an { color: #5e5e5e; } /* Annotation */
-    code span.at { color: #657422; } /* Attribute */
-    code span.bn { color: #ad0000; } /* BaseN */
-    code span.bu { } /* BuiltIn */
-    code span.cf { color: #003b4f; } /* ControlFlow */
-    code span.ch { color: #20794d; } /* Char */
-    code span.cn { color: #8f5902; } /* Constant */
-    code span.co { color: #5e5e5e; } /* Comment */
-    code span.cv { color: #5e5e5e; font-style: italic; } /* CommentVar */
-    code span.do { color: #5e5e5e; font-style: italic; } /* Documentation */
-    code span.dt { color: #ad0000; } /* DataType */
-    code span.dv { color: #ad0000; } /* DecVal */
-    code span.er { color: #ad0000; } /* Error */
-    code span.ex { } /* Extension */
-    code span.fl { color: #ad0000; } /* Float */
-    code span.fu { color: #4758ab; } /* Function */
-    code span.im { color: #00769e; } /* Import */
-    code span.in { color: #5e5e5e; } /* Information */
-    code span.kw { color: #003b4f; } /* Keyword */
-    code span.op { color: #5e5e5e; } /* Operator */
-    code span.ot { color: #003b4f; } /* Other */
-    code span.pp { color: #ad0000; } /* Preprocessor */
-    code span.sc { color: #5e5e5e; } /* SpecialChar */
-    code span.ss { color: #20794d; } /* SpecialString */
-    code span.st { color: #20794d; } /* String */
-    code span.va { color: #111111; } /* Variable */
-    code span.vs { color: #20794d; } /* VerbatimString */
-    code span.wa { color: #5e5e5e; font-style: italic; } /* Warning */
   </style>
   <link rel="stylesheet" href="../site_libs/revealjs/dist/theme/quarto.css">
   <link href="../site_libs/revealjs/plugin/quarto-line-highlight/line-highlight.css" rel="stylesheet">
@@ -310,6 +245,7 @@
     }
     .reveal .slide:not(.center) {
       height: 100%;
+      overflow-y: auto;
     }
     .reveal .slide.scrollable {
       overflow-y: auto;
@@ -407,7 +343,7 @@
 
 <section id="title-slide" class="quarto-title-block center">
   <h1 class="title">ECON622: Computational Economics with Data Science Applications</h1>
-  <p class="subtitle">Key Terminology and Concepts in Machine Learning</p>
+  <p class="subtitle">Introduction to Kernel Methods and Gaussian Processes</p>
 
 <div class="quarto-title-authors">
 <div class="quarto-title-author">
@@ -428,9 +364,10 @@ Jesse Perla
 <h2 id="toc-title">Table of contents</h2>
 <ul>
 <li><a href="#/overview" id="/toc-overview">Overview</a></li>
-<li><a href="#/python" id="/toc-python">Python</a></li>
-<li><a href="#/python-ecosystem" id="/toc-python-ecosystem">Python Ecosystem</a></li>
-<li><a href="#/jax-ecosystem" id="/toc-jax-ecosystem">JAX Ecosystem</a></li>
+<li><a href="#/normal-equations" id="/toc-normal-equations">Normal Equations</a></li>
+<li><a href="#/features-and-the-kernel-trick" id="/toc-features-and-the-kernel-trick">Features and The Kernel Trick</a></li>
+<li><a href="#/kernels" id="/toc-kernels">Kernels</a></li>
+<li><a href="#/gaussian-processes" id="/toc-gaussian-processes">Gaussian Processes</a></li>
 </ul>
 </nav>
 </section>
@@ -442,430 +379,359 @@ Jesse Perla
 <section id="motivation" class="slide level2">
 <h2>Motivation</h2>
 <ul>
-<li>In this lecture we will introduce some key terminology and concepts in machine learning</li>
-<li>We will map these concepts to terminology in economics and statistics</li>
-<li>Finally, we will discuss Python Frameworks</li>
-</ul>
-</section>
-<section id="textbooks" class="slide level2">
-<h2>Textbooks</h2>
+<li>We have discussed various forms of representation learning and function approximation including neural networks, LLS, etc.</li>
+<li>Another type of approach is called “Instance (or Exemplar) Based Learning” of which Kernel Methods and Gaussian Processes are a special case
 <ul>
-<li><a href="https://probml.github.io/pml-book/book1.html">Probabilistic Machine Learning: An Introduction</a> by Kevin Murphy</li>
-<li><a href="https://probml.github.io/pml-book/book2.html">Probabilistic Machine Learning: Advanced Topics</a> by Kevin Murphy</li>
-<li>Both have PDFs of the “draft” available</li>
-<li>Code is available on https://github.com/probml/pyprobml
-<ul>
-<li>Much in JAX, some in torch/etc.</li>
+<li>The idea there is that we find approximations from the data by keeping track of all observations and use them for inference</li>
+<li>These methods are non-parametric in the sense that the number of parameters grows with the number of data points</li>
+<li>Often Bayesian in practice, which provides regularization and inference</li>
 </ul></li>
-<li>For some linear algebra/etc. examples, see the <a href="https://ubcecon.github.io/ECON526/lectures/lectures/index.html">ECON526 Lectures</a></li>
 </ul>
 </section>
-<section id="relevant-categories-of-machine-learning" class="slide level2">
-<h2>Relevant Categories of Machine Learning</h2>
+<section id="limitations-and-advantages" class="slide level2">
+<h2>Limitations and Advantages</h2>
 <ul>
-<li>Supervised Learning (e.g., Regression and Classification)</li>
-<li>Unsupervised Learning (e.g., Clustering, Auto-encoders)</li>
-<li>Semi-Supervised Learning (e.g., some observations)</li>
-<li>Reinforcement Learning (e.g., policy/control)</li>
-<li>Generative Models/Bayesian Methods (e.g., diffusions, probabilistic programming)</li>
-</ul>
-<p>Instance-based learning (e.g., Kernel Methods) and Deep Learning are somewhat orthogonal</p>
-</section>
-<section id="key-terminology-features-labels-and-latents" class="slide level2">
-<h2>Key Terminology: Features, Labels, and Latents</h2>
+<li>While it seems like this is limiting to cases with small amounts of data
 <ul>
-<li><strong>Features</strong> are economists <strong>explanatory or independent variables</strong>. They have the key source of variation to make predictions and conduct counterfactuals</li>
-<li><strong>Labels</strong> correspond to economists <strong>observables or dependent variables</strong></li>
-<li><strong>Latent Variables</strong> are <strong>unobserved variables</strong>, typically sources of heterogeneity or which may drive both the dependent and independent variables</li>
-<li><strong>Feature Engineering</strong> is the process of creating or selecting features from the data that are more useful for the task at hand</li>
+<li>We have already explored high-dimensional linear algebra methods (e.g., matrix-free, iterative methods, preconditioning)</li>
+<li>Many problems in economics do not have an enormous number of observations, or we have choice on where the observations occur</li>
+</ul></li>
+<li>Typically these methods are used without any “representation learning”, but at the end we will give some pointers to how these methods generalize to allow representation learning</li>
+<li>One major benefit of these methods to economists is that they will provide <strong>posteriors in a function space</strong>, which we can use for inference</li>
 </ul>
 </section>
-<section id="key-concepts" class="slide level2">
-<h2>Key Concepts</h2>
+<section id="references" class="slide level2">
+<h2>References</h2>
 <ul>
-<li>20th vs.&nbsp;21st Century ML</li>
-<li>Stochastic Gradients and Auto-Differentiation</li>
-<li>Implicit and Explicit Regularization</li>
-<li>Inductive/Implicit Bias</li>
-<li>Generalization</li>
-<li>Overfitting and the Bias-Variance Tradeoff</li>
-<li>Test vs.&nbsp;Train vs.&nbsp;Validation Set</li>
-<li>Hyperparameter Optimization</li>
-<li>Representation Learning</li>
-<li>Transfer Learning</li>
+<li>These notes are a barebones introduction. Look to other references</li>
+<li><a href="https://probml.github.io/pml-book/book1.html">ProbML Book 1</a> Section 17 and <a href="https://probml.github.io/pml-book/book2.html">ProbML Book 2</a> Section 18</li>
+<li><a href="http://gaussianprocess.org/gpml/chapters/">Gaussian Processes for Machine Learning</a> a beloved textbook available online</li>
+<li><a href="https://www.cs.ubc.ca/~schmidtm/Courses/340-F22/L22.pdf">UBC CPSC 340</a> and <a href="https://www.cs.ubc.ca/~schmidtm/Courses/5XX-S22/S8.5.pdf">Mark Schmidt’s Topics Notes</a></li>
+<li><a href="https://members.cbio.mines-paristech.fr/~jvert/svn/kernelcourse/slides/master2017/master2017.pdf">Machine Learning with Kernel Methods</a> course with <a href="https://www.youtube.com/channel/UCotztBOmGVl9pPGIN4YqcRw/videos">youtube lectures</a></li>
 </ul>
 </section></section>
 <section>
-<section id="python" class="title-slide slide level1 center">
-<h1>Python</h1>
+<section id="normal-equations" class="title-slide slide level1 center">
+<h1>Normal Equations</h1>
 
 </section>
-<section id="why-python" class="slide level2">
-<h2>Why Python?</h2>
+<section id="reminder-normal-equations-for-ridge-regression" class="slide level2">
+<h2>Reminder: Normal Equations for Ridge Regression</h2>
 <ul>
-<li>For “modern” ML: <strong>all</strong> the well-supported frameworks are in Python</li>
-<li>In particular, auto-differentiation is central to many ML algorithms</li>
-<li>Why should you avoid Julia/Matlab/R in these cases?
+<li><p>Let <span class="math inline">\(x \in \mathbb{R}^M\)</span> be observations and <span class="math inline">\(X \in \mathbb{R}^{N \times M}\)</span> be the “design” matrix</p></li>
+<li><p>To solve <span class="math inline">\(\min_{\theta}\left\{||X \theta - y||^2 + \frac{\lambda}{2}||\theta||^2\right\}\)</span> for <span class="math inline">\(\lambda \geq 0\)</span>, form normal eqs.</p>
+<p><span class="math display">\[
+  \theta = (X^{\top}X + \lambda I)^{-1} X^{\top} y
+  \]</span></p>
 <ul>
-<li>Poor AD, especially for reverse-mode</li>
-<li>Network effects. Very few higher level packages for ML pipeline</li>
-<li>But Julia dominates for many ML topics (e.g.&nbsp;ODEs) and R is outstanding for classic ML</li>
-</ul></li>
-<li>Should you use Python for more things?
-<ul>
-<li>Maybe, but it is limited and can be slow unless you jump through hoops</li>
-<li>Personally, if I have algorithms but no need for AD or particular packages, Julia is a much better language and less frustrating</li>
+<li>The <span class="math inline">\(X^{\top}X \in \mathbb{R}^{M\times M}\)</span> is often called the covariance matrix</li>
+<li>Covariance matrix in the “feature” space of size <span class="math inline">\(M\)</span></li>
 </ul></li>
 </ul>
 </section>
-<section id="there-is-no-such-thing-as-python" class="slide level2">
-<h2>There is no Such Thing as “Python”!</h2>
+<section id="the-other-normal-equations" class="slide level2">
+<h2>The “Other” Normal Equations</h2>
 <ul>
-<li>Many incompatible wrappers around C++ for numerical methods</li>
-<li>Numpy/Scipy is the baseline (a common API)</li>
-<li>Pytorch</li>
-<li>JAX</li>
-<li>Ones to avoid
+<li><p>Without proof, terms out you can rearrange this expression to get the “other” normal equations</p>
+<p><span class="math display">\[
+  \theta = X^{\top} (X X^{\top} + \lambda I)^{-1} y
+  \]</span></p>
 <ul>
-<li>Tensorflow, common in industry but old</li>
-<li>Numba (for me, reasonable people disagree)</li>
+<li><span class="math inline">\(X X^{\top} \in \mathbb{R}^{N\times N}\)</span> is called the Gram matrix</li>
+<li><span class="math inline">\([X X^{\top}]_{ij} = x_i \cdot x_j\)</span>. i.e., pairwise comparisons of all data</li>
+</ul></li>
+<li><p>Since <span class="math inline">\(M \ll N\)</span> typically, often a bigger system to solve</p>
+<ul>
+<li>But note that we we have rewritten as pairwise comparisons</li>
 </ul></li>
 </ul>
 </section>
-<section id="pytorch" class="slide level2">
-<h2>Pytorch</h2>
+<section id="prediction-with-kernels" class="slide level2">
+<h2>Prediction with Kernels</h2>
 <ul>
-<li>In recent years, the most flexible and popular ML framework for researchers</li>
-<li>Key features:
+<li>Define <span class="math inline">\(\mathcal{K}(x,x') \equiv x \cdot x'\)</span>, then</li>
+</ul>
+<p><span class="math display">\[
+K_{ij} \equiv [X X^{\top}]_{ij} = \mathcal{K}(x_i, x_j)\,\text{ for i = 1, ..., N and j = 1, ..., N}
+\]</span></p>
 <ul>
-<li>Most of the code is for auto-differentiation/GPUs</li>
-<li>JIT/etc. for GPU and fast kernels for deep learning</li>
-<li>Neural Network libraries and utilities</li>
-<li>A good subset of numpy</li>
-<li>Utilities for ML pipelines optimization/etc.</li>
+<li>Now, assume we received <span class="math inline">\(P\)</span> new points of data <span class="math inline">\(\tilde{X}\)</span> and want to predict <span class="math inline">\(\tilde{y}\)</span></li>
+</ul>
+<p><span class="math display">\[
+\tilde{K}_{ij} \equiv \mathcal{K}(\tilde{x}_i, x_j),\,\text{ for i = 1, ..., P and j = 1, ..., N}
+\]</span></p>
+<ul>
+<li>Finally (see linked derivations), can predict with</li>
+</ul>
+<p><span class="math display">\[
+\tilde{y} = \tilde{K} (K + \lambda I)^{-1} y
+\]</span></p>
+</section>
+<section id="are-working-with-pairwise-comparisons-better" class="slide level2">
+<h2>Are Working with Pairwise Comparisons Better?</h2>
+<ul>
+<li>We have rewritten the normal equations in terms of pairwise comparisons (the Gram matrix) using some function <span class="math inline">\(\mathcal{K}(x,x')\equiv x \cdot x'\)</span></li>
+<li>Is this computationally preferable for standard applications of OLS?
+<ul>
+<li>Probably not unless <span class="math inline">\(M\)</span> is very large</li>
+</ul></li>
+<li>The real advantage is that by rewriting the problem in terms of pairwise comparisons we can generalize to other functions <span class="math inline">\(\mathcal{K}(x,x')\)</span>
+<ul>
+<li>This is the basis of kernel methods and Gaussian processes</li>
+</ul></li>
+</ul>
+</section></section>
+<section>
+<section id="features-and-the-kernel-trick" class="title-slide slide level1 center">
+<h1>Features and The Kernel Trick</h1>
+
+</section>
+<section id="motivation-from-classification" class="slide level2">
+<h2>Motivation from Classification</h2>
+<ul>
+<li>One starting point here is to consider simple problems of separating hyperplanes and binary classification</li>
+<li>If we transform our data, sometimes into higher dimensions, then we can find separating hyperplanes
+<ul>
+<li>i.e., with the right “features”, many problems become linear</li>
+</ul></li>
+<li>See <a href="https://www.cs.ubc.ca/~schmidtm/Courses/340-F22/L22.pdf">CPSC 340</a></li>
+</ul>
+</section>
+<section id="transforming-with-polynomials" class="slide level2">
+<h2>Transforming with Polynomials</h2>
+
+<img data-src="figures/polynomial_classification.png" class="r-stretch quarto-figure-center"><p class="caption">https://members.cbio.mines-paristech.fr/~jvert/svn/kernelcourse/slides/master2017/master2017.pdf</p></section>
+<section id="do-we-need-to-form-the-features" class="slide level2">
+<h2>Do we Need to Form the Features?</h2>
+<ul>
+<li>In the previous with <span class="math inline">\(x \in \mathcal{D}\)</span>, we could have:
+<ul>
+<li>For all <span class="math inline">\(x\equiv \begin{bmatrix}x_1 &amp; x_2\end{bmatrix}^{\top}\)</span></li>
+<li>Calculate <span class="math inline">\(x \mapsto \phi(x) \equiv \begin{bmatrix}x_1^2 &amp; \sqrt{2} x_1 x_2 &amp; x_2^2 &amp;\end{bmatrix}^{\top}\)</span></li>
+<li>This is creating our new “features”</li>
+<li>Then run standard classification algorithms on the new features</li>
+</ul></li>
+<li>Define <span class="math inline">\(\mathcal{K}(x,x') \equiv \phi(x) \cdot \phi(x')\)</span>
+<ul>
+<li>Then use <span class="math inline">\(\mathcal{K}(x,x')\)</span> rather than explicitly designing the <span class="math inline">\(\phi(\cdot)\)</span> or calculating <span class="math inline">\(\phi(x)\)</span> for <span class="math inline">\(x\in \mathcal{D}\)</span></li>
 </ul></li>
 </ul>
 </section>
-<section id="pytorch-key-downsides" class="slide level2">
-<h2>Pytorch Key Downsides</h2>
+<section id="example-with-polynomial-kernels" class="slide level2">
+<h2>Example with Polynomial Kernels</h2>
 <ul>
-<li>Not really for general purpose programming
-<ul>
-<li>Intended for making auto-differentiation of neural networks easy, and updating gradients for solvers</li>
-<li>May be very slow for simple things or ones which don’t involve high-dimensional AD</li>
-</ul></li>
-<li>Won’t always have packages you need for general code, and compatibility is ugly</li>
+<li><p>Generalizing our previous case, <span class="math inline">\(\mathcal{K}(x,x') \equiv (x \cdot x')^2\)</span>, to polynomial order <span class="math inline">\(p\)</span> with cross-products <span class="math display">\[
+\mathcal{K}(x,x') \equiv (x \cdot x' + c)^p
+\]</span></p></li>
+<li><p>The dimensionality of the underlying <span class="math inline">\(\phi(x)\)</span> is combinatorial in <span class="math inline">\(p\)</span></p></li>
+<li><p>But now we can just evaluate pairwise <span class="math inline">\(\mathcal{K}(x,x')\)</span>, just an inner product in <span class="math inline">\(M\)</span> independent of <span class="math inline">\(p\)</span>!</p></li>
+<li><p>The cost will be that we need to store the <span class="math inline">\(N \times N\)</span> matrix of pairwise comparisons</p></li>
 </ul>
 </section>
-<section id="jax" class="slide level2">
-<h2>JAX</h2>
+<section id="the-kernel-trick" class="slide level2">
+<h2>The Kernel Trick</h2>
 <ul>
-<li>Compiler that enables layered program transformations
+<li>Note in the previous examples that we never formed the <span class="math inline">\([\phi(x_i)]_{i=1}^N\)</span></li>
+<li>Even further, we didn’t need to even write down the <span class="math inline">\(\phi(x)\)</span> function explicitly</li>
+<li>This is called the “Kernel Trick” and is the basis of Kernel Methods
+<ul>
+<li>By choosing a <span class="math inline">\(\mathcal{K}(x,x')\)</span> and using “the other normal equations” or similar formulations in other algorithms, you implicitly define features <span class="math inline">\(\phi(x)\)</span></li>
+<li>In fact, the <span class="math inline">\(\phi(x)\)</span> may be infinite dimensional!</li>
+</ul></li>
+<li>The downside is that this will require keeping track of all previous observations (as we did with the normal equations forming <span class="math inline">\(\tilde{K}\)</span>)</li>
+</ul>
+</section>
+<section id="kernelized-methods" class="slide level2">
+<h2>Kernelized Methods</h2>
+<ul>
+<li>Many ML methods are “kernelized”, which means that they are written in terms of pairwise comparisons for a given kernel
+<ul>
+<li>A kernelized regression just takes the standard <span class="math inline">\(\mathcal{K}(x,x') = x \cdot x'\)</span> and lets us swap out with other <span class="math inline">\(\mathcal{K}(x,x')\)</span></li>
+</ul></li>
+<li>For example, the <a href="https://en.wikipedia.org/wiki/Support_vector_machine">Support Vector Machines (SVM)</a> are just kernelized linear classifiers. There kernelized versions of PCA, etc.</li>
+<li>These are powerful because they enable us to work with (often linear) methods in a richer feature space
+<ul>
+<li>But we have to choose the right sorts of kernels to deliver those features</li>
+</ul></li>
+<li>Next we build a little intuition on kernels before formalizing GPs</li>
+</ul>
+</section></section>
+<section>
+<section id="kernels" class="title-slide slide level1 center">
+<h1>Kernels</h1>
+
+</section>
+<section id="kernels-as-similarity-measures" class="slide level2">
+<h2>Kernels as Similarity Measures</h2>
+<ul>
+<li><p>Our canonical example is <span class="math inline">\(\mathcal{K}(x,x') = x \cdot x'\)</span>, which is a measure of similarity between <span class="math inline">\(x\)</span> and <span class="math inline">\(x'\)</span>. Note that <span class="math display">\[
+  ||x - x'||_2 = \sqrt{\mathcal{K}(x, x) - 2 \mathcal{K}(x,x') + \mathcal{K}(x', x')}
+  \]</span></p></li>
+<li><p>Fix the lengths <span class="math inline">\(||x||_2 = ||x'||_2 = 1\)</span> then notice that <span class="math inline">\(||x - x'||_2 = \sqrt{2 (1 - \mathcal{K}(x,x'))}\)</span></p></li>
+<li><p>As <span class="math inline">\(\mathcal{K}(x,x')\)</span> increases, the distance between <span class="math inline">\(x\)</span> and <span class="math inline">\(x'\)</span> decreases</p></li>
+<li><p>Also notice that when <span class="math inline">\(\mathcal{K}(x,x') = 0\)</span> (i.e.&nbsp;orthogonal since <span class="math inline">\(x \cdot x' = 0\)</span>) we maximize the distance between <span class="math inline">\(x\)</span> and <span class="math inline">\(x'\)</span></p></li>
+</ul>
+</section>
+<section id="gaussian-kernel" class="slide level2">
+<h2>Gaussian Kernel</h2>
+<ul>
+<li>One of the most commonly used kernels is called the <strong>radial basis function(RBF)</strong> kernel, also known as the Gaussian kernel</li>
+</ul>
+<p><span class="math display">\[
+\mathcal{K}(x, x';\ell) \equiv \exp(-\frac{||x - x'||_2^2}{2 \ell^2})
+\]</span></p>
+<ul>
+<li>Note that this uses the Euclidean norm, but we could use other norms</li>
+<li>The <span class="math inline">\(\ell\)</span> is a scale which determines the distances over which we expect differences to matter</li>
+<li>Kernels which are only a function of some distance between <span class="math inline">\(x\)</span> and <span class="math inline">\(x'\)</span> (where the location is irrelevant) are called <strong>stationary kernels</strong></li>
+</ul>
+</section>
+<section id="example-kernels" class="slide level2">
+<h2>Example Kernels</h2>
+<ul>
+<li>See <a href="https://probml.github.io/pml-book/book2.html">ProbML Book 2</a> Section 18.2 for more and <a href="https://en.wikipedia.org/wiki/Mercer%27s_theorem">Mercer’s Theorem</a> - which shows all kernels are associated with an inner product in some orthonormal feature space</li>
+<li>Polynomial kernel <span class="math inline">\(\mathcal{K}(x,x') = (x \cdot x' + c)^p\)</span> for <span class="math inline">\(p \in \mathbb{N}\)</span> the polynomial order, including <span class="math inline">\(p=1\)</span> which is just the linear kernel</li>
+<li>Other kernels can be richer and depend on the data (e.g., for network, text, image data). Pick your <span class="math inline">\(\mathcal{K}(x,x')\)</span> to implement similarity measures</li>
+<li>Can construct kernels from other kernels (e.g.&nbsp;<span class="math inline">\(\exp(\mathcal{K}(x,x'))\)</span> is a valid kernel)</li>
+<li>Kernel functions could even be neural networks (Deep Kernels)</li>
+<li>Kernels typically have parameters (e.g., <span class="math inline">\(\ell\)</span> in the Gaussian kernel) which must be fit - usually by maximizing the marginal likelihood</li>
+</ul>
+<!--
+In future iterations, add stuff on the mercer kernel, positive definite kernel, etc.
+-->
+</section></section>
+<section>
+<section id="gaussian-processes" class="title-slide slide level1 center">
+<h1>Gaussian Processes</h1>
+
+</section>
+<section id="parameter-space-vs.-function-space" class="slide level2">
+<h2>Parameter Space vs.&nbsp;Function Space</h2>
+<ul>
+<li>There are two basic approaches to understanding Gaussian Processes (GPs)
 <ol type="1">
-<li><code>jit</code> compiler to <a href="https://www.tensorflow.org/xla/">XLA</a>, including accelerators (e.g.&nbsp;GPUs)</li>
-<li><code>grad</code> Auto-differentiation</li>
-<li><code>vmap</code> vectorization</li>
-<li>Flexibility to add more transformations</li>
+<li>The parameter (or weight) space</li>
+<li>The function space</li>
 </ol></li>
-<li><a href="https://jax.readthedocs.io/en/latest/jax-101/05.1-pytrees.html">JAX PyTrees</a> provide a nested tree structure for compiler passes</li>
-<li>Closer to being a full JIT for general code than pytorch</li>
-<li>For ML, not full-featured like pytorch. Need to shop for other libraries</li>
+<li>See the <a href="https://gaussianprocess.org/gpml/chapters/RW2.pdf">Gaussian Processes for Machine Learning</a> chapter 2 for more details</li>
+<li>Given what you have learned about the kernel trick, you can probably understand a lot of the “parameter space” approach yourself.</li>
+<li>Read both, but we will focus on the function space - which is its main advantage</li>
 </ul>
 </section>
-<section id="jax-key-downsides" class="slide level2">
-<h2>JAX Key Downsides</h2>
+<section id="gaussian-processes-1" class="slide level2">
+<h2>Gaussian Processes</h2>
 <ul>
-<li>Tough to trust Google, especially since it is a research project
-<ul>
-<li>Too ingrained in DeepMind research to disappear, but might have intermittent support</li>
-</ul></li>
-<li>Different operating system support is limited, but they are making progress</li>
-<li>Subset of python. Can’t really use loops, etc. Functional-style programming
-<ul>
-<li>Much more restrictive than it seems, and far more restrictive than pytorch</li>
-</ul></li>
+<li>A Gaussian process is a function where for any finite set of points <span class="math inline">\(x_1, ..., x_N \in \mathcal{D}\)</span>, the marginal distribution <span class="math inline">\(f(x_1), ..., f(x_N)\)</span> is a multivariate Gaussian distribution</li>
+<li>Another way to think about a GP is that it is a <a href="https://gaussianprocess.org/gpml/chapters/RW2.pdf">collection of random variables, any finite number of which have a joint Gaussian</a></li>
+<li>Unsurprisingly, since Gaussian random variables can be characterized by the first two moments, so can a GP</li>
 </ul>
-</section></section>
-<section>
-<section id="python-ecosystem" class="title-slide slide level1 center">
-<h1>Python Ecosystem</h1>
+</section>
+<section id="mean-and-covariance-functions" class="slide level2">
+<h2>Mean and Covariance Functions</h2>
+<ul>
+<li><p>Let the mean function be</p>
+<p><span class="math display">\[
+m(x) = \mathbb{E}[f(x)]
+\]</span></p></li>
+<li><p>And the covariance function (kernel) be</p>
+<p><span class="math display">\[
+\mathcal{K}(x,x') = \mathbb{E}[(f(x) - m(x))(f(x') - m(x'))]
+\]</span></p></li>
+<li><p>Then we can denote a GP as</p>
+<p><span class="math display">\[
+f(x) \sim GP(m(x), \mathcal{K}(x,x'))
+\]</span></p></li>
+</ul>
+</section>
+<section id="probability-of-observables" class="slide level2">
+<h2>Probability of Observables</h2>
+<ul>
+<li>Let <span class="math inline">\(f_X \equiv [f(x_i)]_{i=1}^N\)</span>, then because it is jointly Gaussian, we can write the probability of the observables as</li>
+</ul>
+<p><span class="math display">\[
+\begin{aligned}
+f_X\,|\,X &amp;\sim \mathcal{N}(\mu_X, K_{XX})\\
+\mu_X &amp;\equiv [m(x_i)]_{i=1}^N\\
+K_{XX} &amp;\equiv [\mathcal{K}(x_i, x_j)]_{i,j=1}^N
+\end{aligned}
+\]</span></p>
+</section>
+<section id="conditional-forecasts" class="slide level2">
+<h2>Conditional Forecasts</h2>
+<ul>
+<li>Let <span class="math inline">\(X\)</span> and <span class="math inline">\(f_X\)</span> be observable (without noise in simplest case)</li>
+<li>Let <span class="math inline">\(\tilde{X}\)</span> be new data where we want to forecast the distribution of <span class="math inline">\(f_{\tilde{X}}\)</span></li>
+<li>See <a href="https://probml.github.io/pml-book/book2.html">ProbML Book 2</a> Section 18.3 for more details</li>
+</ul>
+<p><span class="math display">\[
+\begin{aligned}
+f_{\tilde{X}}\,|\,X, f_X, \tilde{X} &amp;\sim \mathcal{N}(\mu_{\tilde{X}}, \Sigma_{\tilde{X}})\\
+\mu_{\tilde{X}} &amp;\equiv \mu_{\tilde{X}} + K_{X\tilde{X}}^{\top} K_{XX}^{-1} (f_X - \mu_X)\\
+\Sigma_{\tilde{X}} &amp;\equiv K_{\tilde{X}\tilde{X}} - K_{X\tilde{X}}^{\top} K_{XX}^{-1} K_{X\tilde{X}}
+\end{aligned}
+\]</span> - Can adjust for noisy observation <span class="math inline">\(y = f(x) + \sigma^2 \epsilon\)</span> for <span class="math inline">\(\epsilon \sim \mathcal{N}(0,I)\)</span> easily</p>
+</section>
+<section id="example-posteriors-probml-book-2-section-18.3.2" class="slide level2">
+<h2>Example Posteriors (ProbML Book 2 Section 18.3.2)</h2>
 
-</section>
-<section id="environments" class="slide level2">
-<h2>Environments</h2>
+<img data-src="figures/GP_posteriors.png" class="r-stretch"></section>
+<section id="reproducing-kernel-hilbert-spaces-rkhs" class="slide level2">
+<h2>Reproducing Kernel Hilbert Spaces (RKHS)</h2>
 <ul>
-<li>Hate it, but nevertheless <a href="https://www.anaconda.com/download">install conda</a></li>
-<li><strong>Always</strong> use a virtual environment to hate conda slightly less</li>
-<li>Keep dependencies in <code>requirements.txt</code> for <code>pip</code>, conda <code>environment.yml</code> if necessary</li>
-<li>To create, activate, and install packages</li>
-</ul>
-<div class="sourceCode" id="cb1"><pre class="sourceCode numberSource {{bash}} number-lines code-with-copy"><code class="sourceCode"><span id="cb1-1"><a href="#cb1-1"></a>conda create -n econ622 python=3.11</span>
-<span id="cb1-2"><a href="#cb1-2"></a>conda activate econ622</span>
-<span id="cb1-3"><a href="#cb1-3"></a>pip install -r requirements.txt</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<li>See <a href="https://probml.github.io/pml-book/book2.html">ProbML Book 2</a> Section 18.3.7 for more details</li>
+<li>Since we are working with function spaces, and there is an implicit inner product <span class="math inline">\(\phi(x)\)</span> associated with the kernel <span class="math inline">\(\mathcal{K}(x,x')\)</span></li>
+<li>We can construct a <a href="https://en.wikipedia.org/wiki/Hilbert_space">Hilbert Space</a> using those inner products
 <ul>
-<li>In vscode, you can go <code>&gt; Python: Select Interpreter</code>, choose <code>econ622</code> and it will automatically activate</li>
-</ul>
-</section>
-<section id="development-environment" class="slide level2">
-<h2>Development Environment</h2>
-<ul>
-<li>pip/anaconda with virtual environments</li>
-<li>Use VSCode for debugging, testing, etc.</li>
-<li>Github Copilot. Install <a href="https://docs.github.com/en/copilot/github-copilot-chat/using-github-copilot-chat">Github Copilot Chat</a></li>
-<li>Format with <code>black</code>. See <a href="https://code.visualstudio.com/docs/python/formatting">here</a> for setup</li>
-</ul>
-</section>
-<section id="baseline-safe-packages-to-use" class="slide level2">
-<h2>Baseline, Safe Packages to Use</h2>
-<ul>
-<li><a href="https://numpy.org/doc/stable/">Numpy</a> and <a href="https://docs.scipy.org/doc/scipy/reference/">Scipy</a></li>
-<li><a href="https://pandas.pydata.org/docs/">Pandas</a> for dataframes</li>
-<li><a href="https://matplotlib.org/stable/contents.html">Matplotlib</a> for general plotting</li>
-<li><a href="https://seaborn.pydata.org/">Seaborn</a> for plotting data</li>
-<li><a href="https://www.statsmodels.org/stable/index.html">Statsmodels</a> for classic econometrics</li>
-<li><a href="https://scikit-learn.org/stable/">Scikit-learn</a> for classic ML</li>
-</ul>
-</section>
-<section id="numpyscipy-basics" class="slide level2">
-<h2>Numpy/Scipy Basics</h2>
-<ul>
-<li>Using some examples from <a href="https://ubcecon.github.io/ECON526/lectures/lectures/index.html">ECON526</a></li>
-</ul>
-</section>
-<section id="general-tools-for-ml-pipelines" class="slide level2">
-<h2>General Tools for ML Pipelines</h2>
-<ul>
-<li>Logging/visualization: <a href="https://wandb.ai/site">Weights and Biases</a>
-<ul>
-<li>Sign up for an account! Built in hyperparameter optimization tools</li>
+<li>Call the it <span class="math inline">\(\mathcal{H}_{\mathcal{K}}\)</span> for kernel <span class="math inline">\(\mathcal{K}\)</span></li>
+<li>All inner product spaces induce a norm, so we can write <span class="math inline">\(||f||_{\mathcal{H}_{\mathcal{K}}}\)</span></li>
 </ul></li>
-<li>CLI useful for many pipelines and HPO. See <a href="https://github.com/shadawck/awesome-cli-frameworks#python">here</a></li>
-<li>For more end-to-end frameworks for deep-learning
+</ul>
+</section>
+<section id="erm-in-a-function-space" class="slide level2">
+<h2>ERM in a Function Space</h2>
 <ul>
-<li><a href="https://www.pytorchlightning.ai/">Pytorch Lightning</a> is extremely easy and flexble, eliminating a lot of boilerplate for CLI, optimizers, GPUs, etc.</li>
-<li><a href="https://keras.io/">Keras</a> is a higher-level framework for deep learning. Traditionally tensorflow, but now many. Also <a href="https://www.fast.ai/">FastAI</a></li>
+<li>Now, consider if we want to write a function space equivalent to ridge regression</li>
+</ul>
+<p><span class="math display">\[
+\min_{f \in \mathcal{F}} \left\{(y_n - f(x_n))^2 + \frac{\lambda}{2}||f||\right\}
+\]</span></p>
+<ul>
+<li>If we use the RKHS function space associated with our kernel, we have the <strong>kernel ridge regression</strong></li>
+</ul>
+<p><span class="math display">\[
+\min_{f \in \mathcal{H}_{\mathcal{K}}} \left\{(y_n - f(x_n))^2 + \frac{\lambda}{2}||f||_{\mathcal{H}_{\mathcal{K}}}\right\}
+\]</span></p>
+</section>
+<section id="representer-theorem" class="slide level2">
+<h2>Representer Theorem</h2>
+<ul>
+<li><p>See <a href="https://probml.github.io/pml-book/book2.html">ProbML Book 2</a> Section 18.3.7.3 for more details</p></li>
+<li><p>The <strong>representer theorem</strong> says that a solution to ERM in a function space</p>
+<p><span class="math display">\[
+f^* = \arg\min_{f \in \mathcal{H}_{\mathcal{K}}} \left\{\ell(f, x_n, y_n) + \frac{\lambda}{2}||f||_{\mathcal{H}_{\mathcal{K}}}\right\}
+\]</span></p>
+<ul>
+<li>Has a solution, for some coefficients <span class="math inline">\(\alpha_n\)</span> a function of the data</li>
+</ul>
+<p><span class="math display">\[
+f^*(x) = \sum_{n=1}^N \alpha_n \mathcal{K}(x, x_n)
+\]</span></p>
+<ul>
+<li>See <a href="https://probml.github.io/pml-book/book2.html">ProbML Book 2</a> for solutions for kernel ridge regression</li>
 </ul></li>
-<li><a href="https://huggingface.co/">HuggingFace</a> is a great resource for NLP and transformers</li>
-<li><a href="https://optuna.org/">Optuna</a> is a great hyperparameter optimization framework, etc.</li>
 </ul>
-</section></section>
-<section>
-<section id="jax-ecosystem" class="title-slide slide level1 center">
-<h1>JAX Ecosystem</h1>
-
 </section>
-<section id="examples-of-core-transformations" class="slide level2">
-<h2>Examples of Core Transformations</h2>
-<p>From <a href="https://jax.readthedocs.io/en/latest/notebooks/quickstart.html">JAX quickstart</a></p>
-<p>Builtin composable transformations: <code>jit</code>, <code>grad</code> and <code>vmap</code></p>
-<div class="cell" data-execution_count="2">
-<div class="sourceCode cell-code" id="cb2"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb2-1"><a href="#cb2-1"></a><span class="im">import</span> jax</span>
-<span id="cb2-2"><a href="#cb2-2"></a><span class="im">import</span> jax.numpy <span class="im">as</span> jnp</span>
-<span id="cb2-3"><a href="#cb2-3"></a><span class="im">import</span> numpy <span class="im">as</span> np</span>
-<span id="cb2-4"><a href="#cb2-4"></a><span class="im">from</span> jax <span class="im">import</span> grad, jit, vmap, random</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-</div>
-</section>
-<section id="compiling-with-jit" class="slide level2">
-<h2>Compiling with <code>jit</code></h2>
-<div class="cell" data-execution_count="3">
-<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1"></a><span class="kw">def</span> selu(x, alpha<span class="op">=</span><span class="fl">1.67</span>, lmbda<span class="op">=</span><span class="fl">1.05</span>):</span>
-<span id="cb3-2"><a href="#cb3-2"></a>  <span class="cf">return</span> lmbda <span class="op">*</span> jnp.where(x <span class="op">&gt;</span> <span class="dv">0</span>, x, alpha <span class="op">*</span> jnp.exp(x) <span class="op">-</span> alpha)</span>
-<span id="cb3-3"><a href="#cb3-3"></a>key <span class="op">=</span> random.PRNGKey(<span class="dv">0</span>)  </span>
-<span id="cb3-4"><a href="#cb3-4"></a>x <span class="op">=</span> random.normal(key, (<span class="dv">1000000</span>,))</span>
-<span id="cb3-5"><a href="#cb3-5"></a><span class="op">%</span>timeit selu(x).block_until_ready()</span>
-<span id="cb3-6"><a href="#cb3-6"></a>selu_jit <span class="op">=</span> jit(selu)</span>
-<span id="cb3-7"><a href="#cb3-7"></a><span class="op">%</span>timeit selu_jit(x).block_until_ready()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-stdout">
-<pre><code>1.08 ms ± 22.7 µs per loop (mean ± std. dev. of 7 runs, 1,000 loops each)
-359 µs ± 1.55 µs per loop (mean ± std. dev. of 7 runs, 1,000 loops each)</code></pre>
-</div>
-</div>
-</section>
-<section id="convenience-decorators-for-jit" class="slide level2">
-<h2>Convenience Decorators for <code>jit</code></h2>
+<section id="fitting-gps" class="slide level2">
+<h2>Fitting GPs</h2>
 <ul>
-<li>Convenience python decorator <code>@jit</code></li>
-</ul>
-<div class="cell" data-execution_count="4">
-<div class="sourceCode cell-code" id="cb5"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb5-1"><a href="#cb5-1"></a><span class="at">@jit</span></span>
-<span id="cb5-2"><a href="#cb5-2"></a><span class="kw">def</span> selu(x, alpha<span class="op">=</span><span class="fl">1.67</span>, lmbda<span class="op">=</span><span class="fl">1.05</span>):</span>
-<span id="cb5-3"><a href="#cb5-3"></a>  <span class="cf">return</span> lmbda <span class="op">*</span> jnp.where(x <span class="op">&gt;</span> <span class="dv">0</span>, x, alpha <span class="op">*</span> jnp.exp(x) <span class="op">-</span> alpha)</span>
-<span id="cb5-4"><a href="#cb5-4"></a><span class="op">%</span>timeit selu(x).block_until_ready()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-stdout">
-<pre><code>358 µs ± 2.54 µs per loop (mean ± std. dev. of 7 runs, 1,000 loops each)</code></pre>
-</div>
-</div>
-</section>
-<section id="differentiation-with-grad" class="slide level2">
-<h2>Differentiation with <code>grad</code></h2>
-<div class="cell" data-execution_count="5">
-<div class="sourceCode cell-code" id="cb7"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb7-1"><a href="#cb7-1"></a><span class="kw">def</span> sum_logistic(x):</span>
-<span id="cb7-2"><a href="#cb7-2"></a>  <span class="cf">return</span> jnp.<span class="bu">sum</span>(<span class="fl">1.0</span> <span class="op">/</span> (<span class="fl">1.0</span> <span class="op">+</span> jnp.exp(<span class="op">-</span>x)))</span>
-<span id="cb7-3"><a href="#cb7-3"></a></span>
-<span id="cb7-4"><a href="#cb7-4"></a>x_small <span class="op">=</span> jnp.arange(<span class="fl">3.</span>)</span>
-<span id="cb7-5"><a href="#cb7-5"></a>derivative_fn <span class="op">=</span> grad(sum_logistic)</span>
-<span id="cb7-6"><a href="#cb7-6"></a><span class="bu">print</span>(derivative_fn(x_small))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-stdout">
-<pre><code>[0.25       0.19661197 0.10499357]</code></pre>
-</div>
-</div>
-</section>
-<section id="manual-batchingvectorization" class="slide level2">
-<h2>Manual “Batching”/Vectorization</h2>
-<p>Common to run the same function along one dimension of an array</p>
-<div class="cell" data-execution_count="6">
-<div class="sourceCode cell-code" id="cb9"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb9-1"><a href="#cb9-1"></a>mat <span class="op">=</span> random.normal(key, (<span class="dv">150</span>, <span class="dv">100</span>))</span>
-<span id="cb9-2"><a href="#cb9-2"></a>batched_x <span class="op">=</span> random.normal(key, (<span class="dv">10</span>, <span class="dv">100</span>))</span>
-<span id="cb9-3"><a href="#cb9-3"></a></span>
-<span id="cb9-4"><a href="#cb9-4"></a><span class="kw">def</span> f(v):</span>
-<span id="cb9-5"><a href="#cb9-5"></a>  <span class="cf">return</span> jnp.dot(mat, v)</span>
-<span id="cb9-6"><a href="#cb9-6"></a><span class="kw">def</span> naively_batched_f(v_batched):</span>
-<span id="cb9-7"><a href="#cb9-7"></a>  <span class="cf">return</span> jnp.stack([f(v) <span class="cf">for</span> v <span class="kw">in</span> v_batched])</span>
-<span id="cb9-8"><a href="#cb9-8"></a><span class="op">%</span>timeit naively_batched_f(batched_x).block_until_ready()  </span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-stdout">
-<pre><code>340 µs ± 1.4 µs per loop (mean ± std. dev. of 7 runs, 1,000 loops each)</code></pre>
-</div>
-</div>
-</section>
-<section id="using-vmap" class="slide level2">
-<h2>Using <code>vmap</code></h2>
-<p>The <a href="https://jax.readthedocs.io/en/latest/_autosummary/jax.vmap.html#jax.vmap">vmap</a> applies across a dimension</p>
-<div class="cell" data-execution_count="7">
-<div class="sourceCode cell-code" id="cb11"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb11-1"><a href="#cb11-1"></a><span class="at">@jit</span></span>
-<span id="cb11-2"><a href="#cb11-2"></a><span class="kw">def</span> vmap_batched_f(v_batched):</span>
-<span id="cb11-3"><a href="#cb11-3"></a>  <span class="cf">return</span> vmap(f)(v_batched)</span>
-<span id="cb11-4"><a href="#cb11-4"></a></span>
-<span id="cb11-5"><a href="#cb11-5"></a><span class="bu">print</span>(<span class="st">'Auto-vectorized with vmap'</span>)</span>
-<span id="cb11-6"><a href="#cb11-6"></a><span class="op">%</span>timeit vmap_batched_f(batched_x).block_until_ready()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-stdout">
-<pre><code>Auto-vectorized with vmap
-13.4 µs ± 77.8 ns per loop (mean ± std. dev. of 7 runs, 100,000 loops each)</code></pre>
-</div>
-</div>
-</section>
-<section id="basic-jax-packages" class="slide level2">
-<h2>Basic JAX Packages</h2>
-<p>Anything from <a href="https://github.com/patrick-kidger">Patrick</a> is gold</p>
+<li>Kernels themselves typically have parameters which must be fit/learned/etc. from the data
 <ul>
-<li>Basic program passes/etc: <a href="https://jax.readthedocs.io/en/latest/index.html">JAX</a>
-<ul>
-<li><a href="https://jax.readthedocs.io/en/latest/jax.numpy.html#module-jax.numpy">jax.numpy</a> built in and <a href="https://jax.readthedocs.io/en/latest/jax.scipy.html">jax.scipy</a> which is a subset of scipy</li>
+<li>e.g.&nbsp;the <span class="math inline">\(\ell\)</span> bandwidth in the Gaussian kernel</li>
 </ul></li>
-<li>Neural Network Libraries
-<ul>
-<li><a href="https://flax.readthedocs.io/en/latest/index.html">Flax</a> and <a href="https://dm-haiku.readthedocs.io/en/latest/index.html">Haiku</a></li>
-<li><a href="https://github.com/patrick-kidger/equinox">Equinox</a> is my favorite</li>
-</ul></li>
-<li>First-order optimizers for training: <a href="https://github.com/google-deepmind/optax">Optax</a></li>
-<li>Typechecking: <a href="https://github.com/google/jaxtyping">jaxtyping</a></li>
-<li>Checkpointing and serialization: <a href="https://orbax.readthedocs.io/en/latest/">obax</a></li>
+<li>This is typically done with maximum marginal likelihood or MAP</li>
+<li>See <a href="https://probml.github.io/pml-book/book2.html">ProbML Book 2</a> Section 18.3.5 and 18.6 for more details</li>
+<li>Crucially, we can “learn the kernel” to mix <strong>representation learning</strong> with kernel methods/GPs</li>
 </ul>
-</section>
-<section id="more-scientific-computing" class="slide level2">
-<h2>More Scientific Computing</h2>
-<ul>
-<li>Nonlinear Systems/Least Squares: <a href="https://github.com/patrick-kidger/optimistix">Optimistix</a></li>
-<li>Linear Systems of Equations: <a href="https://docs.kidger.site/lineax/">Lineax</a></li>
-<li>Matrix-free operators for iterative solvers: <a href="https://github.com/wilson-labs/cola">COLA</a></li>
-<li>Differential Equations: <a href="https://github.com/patrick-kidger/diffrax">diffrax</a></li>
-<li>More general optimization and solvers: <a href="https://jaxopt.github.io/stable/#">JAXopt</a></li>
-</ul>
-</section>
-<section id="jax-challenges" class="slide level2">
-<h2>JAX Challenges</h2>
-<ul>
-<li>Basically only pure functional programming
-<ul>
-<li>No “mutation” of vectors</li>
-<li>Loops/conditionals are tough</li>
-<li>Rules for what is <code>jit</code>able are tricky</li>
-</ul></li>
-<li>See <a href="https://jax.readthedocs.io/en/latest/notebooks/Common_Gotchas_in_JAX.html">JAX - The Sharp Bits</a></li>
-<li>May not be faster on CPUs or for “normal” things</li>
-<li>Debugging</li>
-</ul>
-</section>
-<section id="pytrees" class="slide level2">
-<h2>PyTrees</h2>
-<ul>
-<li>JAX uses a generic <a href="https://jax.readthedocs.io/en/latest/jax-101/05.1-pytrees.html">tree structure</a>. Powerful but takes time to understand: Examples from: <a href="https://jax.readthedocs.io/en/latest/pytrees.html">here</a> and <a href="https://jax.readthedocs.io/en/latest/_autosummary/jax.vmap.html#jax.vmap">here</a></li>
-</ul>
-<div class="cell" data-execution_count="8">
-<div class="sourceCode cell-code" id="cb13"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb13-1"><a href="#cb13-1"></a>f <span class="op">=</span> <span class="kw">lambda</span> x, y: jnp.vdot(x, y)</span>
-<span id="cb13-2"><a href="#cb13-2"></a>X <span class="op">=</span> jnp.array([[<span class="fl">1.0</span>, <span class="fl">2.0</span>],</span>
-<span id="cb13-3"><a href="#cb13-3"></a>               [<span class="fl">3.0</span>, <span class="fl">4.0</span>]])</span>
-<span id="cb13-4"><a href="#cb13-4"></a>y <span class="op">=</span> jnp.array([<span class="fl">3.0</span>, <span class="fl">4.0</span>])</span>
-<span id="cb13-5"><a href="#cb13-5"></a><span class="bu">print</span>(f(X[<span class="dv">0</span>], y))</span>
-<span id="cb13-6"><a href="#cb13-6"></a><span class="bu">print</span>(f(X[<span class="dv">1</span>], y))</span>
-<span id="cb13-7"><a href="#cb13-7"></a></span>
-<span id="cb13-8"><a href="#cb13-8"></a>mv <span class="op">=</span> vmap(f, in_axes <span class="op">=</span> (</span>
-<span id="cb13-9"><a href="#cb13-9"></a>  <span class="dv">0</span>, <span class="co"># broadcast over 1st index of first argument</span></span>
-<span id="cb13-10"><a href="#cb13-10"></a>  <span class="va">None</span> <span class="co"># don't broadcast over anything of second argument</span></span>
-<span id="cb13-11"><a href="#cb13-11"></a>  ), out_axes<span class="op">=</span><span class="dv">0</span>)</span>
-<span id="cb13-12"><a href="#cb13-12"></a><span class="bu">print</span>(mv(X, y))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-stdout">
-<pre><code>11.0
-25.0
-[11. 25.]</code></pre>
-</div>
-</div>
-</section>
-<section id="pytree-example-1" class="slide level2">
-<h2>PyTree Example 1</h2>
-<p>The <code>in_axes</code> can match more complicated structures</p>
-<div class="cell" data-execution_count="9">
-<div class="sourceCode cell-code" id="cb15"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb15-1"><a href="#cb15-1"></a>dct <span class="op">=</span> {<span class="st">'a'</span>: <span class="fl">0.</span>, <span class="st">'b'</span>: jnp.arange(<span class="fl">5.</span>)}</span>
-<span id="cb15-2"><a href="#cb15-2"></a><span class="kw">def</span> foo(dct, x):</span>
-<span id="cb15-3"><a href="#cb15-3"></a> <span class="cf">return</span> dct[<span class="st">'a'</span>] <span class="op">+</span> dct[<span class="st">'b'</span>] <span class="op">+</span> x</span>
-<span id="cb15-4"><a href="#cb15-4"></a><span class="co"># axes must match shape of the PyTree</span></span>
-<span id="cb15-5"><a href="#cb15-5"></a>x <span class="op">=</span> <span class="fl">1.</span></span>
-<span id="cb15-6"><a href="#cb15-6"></a>out <span class="op">=</span> vmap(foo, in_axes<span class="op">=</span>(</span>
-<span id="cb15-7"><a href="#cb15-7"></a>  {<span class="st">'a'</span>: <span class="va">None</span>, <span class="st">'b'</span>: <span class="dv">0</span>}, <span class="co">#broadcast over the 'b'</span></span>
-<span id="cb15-8"><a href="#cb15-8"></a>  <span class="va">None</span> <span class="co"># no broadcasting over the "x"</span></span>
-<span id="cb15-9"><a href="#cb15-9"></a>  ))(dct, x)</span>
-<span id="cb15-10"><a href="#cb15-10"></a><span class="co"># example now: {'a': 0, 'b': 0} etc.</span></span>
-<span id="cb15-11"><a href="#cb15-11"></a><span class="bu">print</span>(out)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-stdout">
-<pre><code>[1. 2. 3. 4. 5.]</code></pre>
-</div>
-</div>
-</section>
-<section id="pytree-example-2" class="slide level2">
-<h2>PyTree Example 2</h2>
-<div class="cell" data-execution_count="10">
-<div class="sourceCode cell-code" id="cb17"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb17-1"><a href="#cb17-1"></a>dct <span class="op">=</span> {<span class="st">'a'</span>: jnp.array([<span class="fl">3.0</span>, <span class="fl">5.0</span>]), <span class="st">'b'</span>: jnp.array([<span class="fl">2.0</span>, <span class="fl">4.0</span>])}</span>
-<span id="cb17-2"><a href="#cb17-2"></a><span class="kw">def</span> foo2(dct, x):</span>
-<span id="cb17-3"><a href="#cb17-3"></a> <span class="cf">return</span> dct[<span class="st">'a'</span>] <span class="op">+</span> dct[<span class="st">'b'</span>] <span class="op">+</span> x</span>
-<span id="cb17-4"><a href="#cb17-4"></a><span class="co"># axes must match shape of the PyTree</span></span>
-<span id="cb17-5"><a href="#cb17-5"></a>x <span class="op">=</span> <span class="fl">1.</span></span>
-<span id="cb17-6"><a href="#cb17-6"></a>out <span class="op">=</span> vmap(foo2, in_axes<span class="op">=</span>(</span>
-<span id="cb17-7"><a href="#cb17-7"></a>  {<span class="st">'a'</span>: <span class="dv">0</span>, <span class="st">'b'</span>: <span class="dv">0</span>}, <span class="co">#broadcast over the 'a' and 'b'</span></span>
-<span id="cb17-8"><a href="#cb17-8"></a>  <span class="va">None</span> <span class="co"># no broadcasting over the "x"</span></span>
-<span id="cb17-9"><a href="#cb17-9"></a>  ))(dct, x)</span>
-<span id="cb17-10"><a href="#cb17-10"></a><span class="co"># example now: {'a': 3.0, 'b': 2.0} etc.</span></span>
-<span id="cb17-11"><a href="#cb17-11"></a><span class="bu">print</span>(out)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-stdout">
-<pre><code>[ 6. 10.]</code></pre>
-</div>
-</div>
-</section>
-<section id="pytree-example-3" class="slide level2">
-<h2>PyTree Example 3</h2>
-<div class="cell" data-execution_count="11">
-<div class="sourceCode cell-code" id="cb19"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb19-1"><a href="#cb19-1"></a>dct <span class="op">=</span> {<span class="st">'a'</span>: jnp.array([<span class="fl">3.0</span>, <span class="fl">5.0</span>]), <span class="st">'b'</span>: jnp.arange(<span class="fl">5.</span>)}</span>
-<span id="cb19-2"><a href="#cb19-2"></a><span class="kw">def</span> foo3(dct, x):</span>
-<span id="cb19-3"><a href="#cb19-3"></a> <span class="cf">return</span> dct[<span class="st">'a'</span>][<span class="dv">0</span>] <span class="op">*</span> dct[<span class="st">'a'</span>][<span class="dv">1</span>] <span class="op">+</span> dct[<span class="st">'b'</span>] <span class="op">+</span> x</span>
-<span id="cb19-4"><a href="#cb19-4"></a><span class="co"># axes must match shape of the PyTree</span></span>
-<span id="cb19-5"><a href="#cb19-5"></a>out <span class="op">=</span> vmap(foo3, in_axes<span class="op">=</span>(</span>
-<span id="cb19-6"><a href="#cb19-6"></a>  {<span class="st">'a'</span>: <span class="va">None</span>, <span class="st">'b'</span>: <span class="dv">0</span>}, <span class="co">#broadcast over the 'b'</span></span>
-<span id="cb19-7"><a href="#cb19-7"></a>  <span class="va">None</span> <span class="co"># no broadcasting over the "x"</span></span>
-<span id="cb19-8"><a href="#cb19-8"></a>  ))(dct, x)</span>
-<span id="cb19-9"><a href="#cb19-9"></a><span class="co"># example now: {'a': [3.0, 5.0], 'b': 0} etc.</span></span>
-<span id="cb19-10"><a href="#cb19-10"></a><span class="bu">print</span>(out)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-stdout">
-<pre><code>[16. 17. 18. 19. 20.]</code></pre>
-</div>
-</div>
 
 <div class="footer footer-default">
 

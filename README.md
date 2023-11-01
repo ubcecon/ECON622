@@ -109,7 +109,8 @@ Slides for the lectures can be found [here](https://ubcecon.github.io/ECON622/le
 14. **October 25th**: Machine Learning Pipelines, HPO, and ERM
     - **SLIDES**: Finished example code of pipelines in [Optimization](https://ubcecon.github.io/ECON622/lectures/lectures/optimization.html), W&B sweeps, and code in `lectures/lectures/examples`
     - **Readings**: [Probabilistic Machine Learning: An Introduction](https://probml.github.io/pml-book/book1.html) Section 5.4 on ERM
-15. **October 30**: Neural Networks, Representation Learning, Double-Descent, an Intro to Kernel Methods
+15. **October 30**: Neural Networks, Representation Learning, Double-Descent
+    - **SLIDES**: [Deep Learning and Representation Learning](https://ubcecon.github.io/ECON622/lectures/lectures/deep_learning.html) and started [Double-Descent and Regularization](https://ubcecon.github.io/ECON622/lectures/lectures/overparameterization.html)
     - **Readings**
       - [Probabilistic Machine Learning: An Introduction](https://probml.github.io/pml-book/book1.html) Section 13.2.1 to 13.2.6 on MLPs and the importance of depth
       - [Probabilistic Machine Learning: An Introduction](https://probml.github.io/pml-book/book1.html) Section 13.5.1 to 13.5.6 on regularization
@@ -118,12 +119,12 @@ Slides for the lectures can be found [here](https://ubcecon.github.io/ECON622/le
     - **Optional Extra Material**
       - [Probabilistic Machine Learning: Advanced Topics](https://probml.github.io/pml-book/book2.html) Section 32 on representation learning
 16. **November 1** Finish Double-Descent and Intro to Kernel Methods and Gaussian Processes
+    - **SLIDES**: [Kernel Methods and Gaussian Processes](https://ubcecon.github.io/ECON622/lectures/lectures/kernel_methods.html) and finish [Double-Descent and Regularization](https://ubcecon.github.io/ECON622/lectures/lectures/overparameterization.html)
     - **Readings**
       - If you didn't do it already, read [Mark Schmidt's CPSC440 Notes on Double-Descent Curves and Overparameterization](https://www.cs.ubc.ca/~schmidtm/Courses/440-W22/L7.pdf) (see [CPSC340](https://www.cs.ubc.ca/~schmidtm/Courses/340-F22/L32.pdf) lectures for a more basic treatment of these topics)
       - [Probabilistic Machine Learning: An Introduction](https://probml.github.io/pml-book/book1.html) Section 17.1 and 17.2 on Kernel methods and Gaussian Processes
       - [CPSC340](https://www.cs.ubc.ca/~schmidtm/Courses/340-F22/L22.pdf) has some notes on the "kernel trick", and you can skip over the details on images.  Also see [more advanced notes](https://www.cs.ubc.ca/~schmidtm/Courses/5XX-S22/S8.5.pdf) on kernel methods
       - Finally, your problem set will involve running some simple Gaussian Processes with [GPyTorch](https://docs.gpytorch.ai/en/stable/examples/01_Exact_GPs/Simple_GP_Regression.html), which will become easier to understand after seeing the theory.
-    - **Optional Extra Material**
       -  [Probabilistic Machine Learning: Advanced Topics](https://probml.github.io/pml-book/book2.html) Section 18.1 to 18.3 on GPs and kernels
       - Researchers working in GPs love the online textbook [Gaussian Processes for Machine Learning](https://gaussianprocess.org/gpml/chapters/), so you may want to read the intro section on [GP Regression](https://gaussianprocess.org/gpml/chapters/RW2.pdf)
 

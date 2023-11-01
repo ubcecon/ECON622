@@ -29,71 +29,6 @@
       margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
       vertical-align: middle;
     }
-    /* CSS for syntax highlighting */
-    pre > code.sourceCode { white-space: pre; position: relative; }
-    pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
-    pre > code.sourceCode > span:empty { height: 1.2em; }
-    .sourceCode { overflow: visible; }
-    code.sourceCode > span { color: inherit; text-decoration: inherit; }
-    div.sourceCode { margin: 1em 0; }
-    pre.sourceCode { margin: 0; }
-    @media screen {
-    div.sourceCode { overflow: auto; }
-    }
-    @media print {
-    pre > code.sourceCode { white-space: pre-wrap; }
-    pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
-    }
-    pre.numberSource code
-      { counter-reset: source-line 0; }
-    pre.numberSource code > span
-      { position: relative; left: -4em; counter-increment: source-line; }
-    pre.numberSource code > span > a:first-child::before
-      { content: counter(source-line);
-        position: relative; left: -1em; text-align: right; vertical-align: baseline;
-        border: none; display: inline-block;
-        -webkit-touch-callout: none; -webkit-user-select: none;
-        -khtml-user-select: none; -moz-user-select: none;
-        -ms-user-select: none; user-select: none;
-        padding: 0 4px; width: 4em;
-        color: #aaaaaa;
-      }
-    pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
-    div.sourceCode
-      { color: #003b4f; background-color: #f1f3f5; }
-    @media screen {
-    pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
-    }
-    code span { color: #003b4f; } /* Normal */
-    code span.al { color: #ad0000; } /* Alert */
-    code span.an { color: #5e5e5e; } /* Annotation */
-    code span.at { color: #657422; } /* Attribute */
-    code span.bn { color: #ad0000; } /* BaseN */
-    code span.bu { } /* BuiltIn */
-    code span.cf { color: #003b4f; } /* ControlFlow */
-    code span.ch { color: #20794d; } /* Char */
-    code span.cn { color: #8f5902; } /* Constant */
-    code span.co { color: #5e5e5e; } /* Comment */
-    code span.cv { color: #5e5e5e; font-style: italic; } /* CommentVar */
-    code span.do { color: #5e5e5e; font-style: italic; } /* Documentation */
-    code span.dt { color: #ad0000; } /* DataType */
-    code span.dv { color: #ad0000; } /* DecVal */
-    code span.er { color: #ad0000; } /* Error */
-    code span.ex { } /* Extension */
-    code span.fl { color: #ad0000; } /* Float */
-    code span.fu { color: #4758ab; } /* Function */
-    code span.im { color: #00769e; } /* Import */
-    code span.in { color: #5e5e5e; } /* Information */
-    code span.kw { color: #003b4f; } /* Keyword */
-    code span.op { color: #5e5e5e; } /* Operator */
-    code span.ot { color: #003b4f; } /* Other */
-    code span.pp { color: #ad0000; } /* Preprocessor */
-    code span.sc { color: #5e5e5e; } /* SpecialChar */
-    code span.ss { color: #20794d; } /* SpecialString */
-    code span.st { color: #20794d; } /* String */
-    code span.va { color: #111111; } /* Variable */
-    code span.vs { color: #20794d; } /* VerbatimString */
-    code span.wa { color: #5e5e5e; font-style: italic; } /* Warning */
   </style>
   <link rel="stylesheet" href="../site_libs/revealjs/dist/theme/quarto.css">
   <link href="../site_libs/revealjs/plugin/quarto-line-highlight/line-highlight.css" rel="stylesheet">
@@ -407,7 +342,7 @@
 
 <section id="title-slide" class="quarto-title-block center">
   <h1 class="title">ECON622: Computational Economics with Data Science Applications</h1>
-  <p class="subtitle">Key Terminology and Concepts in Machine Learning</p>
+  <p class="subtitle">Overparameterization, Implicit Bias, and Double-Descent</p>
 
 <div class="quarto-title-authors">
 <div class="quarto-title-author">
@@ -428,9 +363,10 @@ Jesse Perla
 <h2 id="toc-title">Table of contents</h2>
 <ul>
 <li><a href="#/overview" id="/toc-overview">Overview</a></li>
-<li><a href="#/python" id="/toc-python">Python</a></li>
-<li><a href="#/python-ecosystem" id="/toc-python-ecosystem">Python Ecosystem</a></li>
-<li><a href="#/jax-ecosystem" id="/toc-jax-ecosystem">JAX Ecosystem</a></li>
+<li><a href="#/double-descent-and-the-bias-variance-tradeoff" id="/toc-double-descent-and-the-bias-variance-tradeoff">Double-Descent and the Bias-Variance Tradeoff</a></li>
+<li><a href="#/loss-landscapes-in-overparameterized-models" id="/toc-loss-landscapes-in-overparameterized-models">Loss Landscapes in Overparameterized Models</a></li>
+<li><a href="#/regularization" id="/toc-regularization">Regularization</a></li>
+<li><a href="#/no-free-lunch" id="/toc-no-free-lunch">No Free Lunch!</a></li>
 </ul>
 </nav>
 </section>
@@ -439,433 +375,271 @@ Jesse Perla
 <h1>Overview</h1>
 
 </section>
-<section id="motivation" class="slide level2">
-<h2>Motivation</h2>
+<section id="summary" class="slide level2">
+<h2>Summary</h2>
 <ul>
-<li>In this lecture we will introduce some key terminology and concepts in machine learning</li>
-<li>We will map these concepts to terminology in economics and statistics</li>
-<li>Finally, we will discuss Python Frameworks</li>
-</ul>
-</section>
-<section id="textbooks" class="slide level2">
-<h2>Textbooks</h2>
-<ul>
-<li><a href="https://probml.github.io/pml-book/book1.html">Probabilistic Machine Learning: An Introduction</a> by Kevin Murphy</li>
-<li><a href="https://probml.github.io/pml-book/book2.html">Probabilistic Machine Learning: Advanced Topics</a> by Kevin Murphy</li>
-<li>Both have PDFs of the “draft” available</li>
-<li>Code is available on https://github.com/probml/pyprobml
-<ul>
-<li>Much in JAX, some in torch/etc.</li>
-</ul></li>
-<li>For some linear algebra/etc. examples, see the <a href="https://ubcecon.github.io/ECON526/lectures/lectures/index.html">ECON526 Lectures</a></li>
-</ul>
-</section>
-<section id="relevant-categories-of-machine-learning" class="slide level2">
-<h2>Relevant Categories of Machine Learning</h2>
-<ul>
-<li>Supervised Learning (e.g., Regression and Classification)</li>
-<li>Unsupervised Learning (e.g., Clustering, Auto-encoders)</li>
-<li>Semi-Supervised Learning (e.g., some observations)</li>
-<li>Reinforcement Learning (e.g., policy/control)</li>
-<li>Generative Models/Bayesian Methods (e.g., diffusions, probabilistic programming)</li>
-</ul>
-<p>Instance-based learning (e.g., Kernel Methods) and Deep Learning are somewhat orthogonal</p>
-</section>
-<section id="key-terminology-features-labels-and-latents" class="slide level2">
-<h2>Key Terminology: Features, Labels, and Latents</h2>
-<ul>
-<li><strong>Features</strong> are economists <strong>explanatory or independent variables</strong>. They have the key source of variation to make predictions and conduct counterfactuals</li>
-<li><strong>Labels</strong> correspond to economists <strong>observables or dependent variables</strong></li>
-<li><strong>Latent Variables</strong> are <strong>unobserved variables</strong>, typically sources of heterogeneity or which may drive both the dependent and independent variables</li>
-<li><strong>Feature Engineering</strong> is the process of creating or selecting features from the data that are more useful for the task at hand</li>
-</ul>
-</section>
-<section id="key-concepts" class="slide level2">
-<h2>Key Concepts</h2>
-<ul>
-<li>20th vs.&nbsp;21st Century ML</li>
-<li>Stochastic Gradients and Auto-Differentiation</li>
-<li>Implicit and Explicit Regularization</li>
-<li>Inductive/Implicit Bias</li>
-<li>Generalization</li>
-<li>Overfitting and the Bias-Variance Tradeoff</li>
-<li>Test vs.&nbsp;Train vs.&nbsp;Validation Set</li>
-<li>Hyperparameter Optimization</li>
-<li>Representation Learning</li>
-<li>Transfer Learning</li>
-</ul>
-</section></section>
-<section>
-<section id="python" class="title-slide slide level1 center">
-<h1>Python</h1>
-
-</section>
-<section id="why-python" class="slide level2">
-<h2>Why Python?</h2>
-<ul>
-<li>For “modern” ML: <strong>all</strong> the well-supported frameworks are in Python</li>
-<li>In particular, auto-differentiation is central to many ML algorithms</li>
-<li>Why should you avoid Julia/Matlab/R in these cases?
-<ul>
-<li>Poor AD, especially for reverse-mode</li>
-<li>Network effects. Very few higher level packages for ML pipeline</li>
-<li>But Julia dominates for many ML topics (e.g.&nbsp;ODEs) and R is outstanding for classic ML</li>
-</ul></li>
-<li>Should you use Python for more things?
-<ul>
-<li>Maybe, but it is limited and can be slow unless you jump through hoops</li>
-<li>Personally, if I have algorithms but no need for AD or particular packages, Julia is a much better language and less frustrating</li>
-</ul></li>
-</ul>
-</section>
-<section id="there-is-no-such-thing-as-python" class="slide level2">
-<h2>There is no Such Thing as “Python”!</h2>
-<ul>
-<li>Many incompatible wrappers around C++ for numerical methods</li>
-<li>Numpy/Scipy is the baseline (a common API)</li>
-<li>Pytorch</li>
-<li>JAX</li>
-<li>Ones to avoid
-<ul>
-<li>Tensorflow, common in industry but old</li>
-<li>Numba (for me, reasonable people disagree)</li>
-</ul></li>
-</ul>
-</section>
-<section id="pytorch" class="slide level2">
-<h2>Pytorch</h2>
-<ul>
-<li>In recent years, the most flexible and popular ML framework for researchers</li>
-<li>Key features:
-<ul>
-<li>Most of the code is for auto-differentiation/GPUs</li>
-<li>JIT/etc. for GPU and fast kernels for deep learning</li>
-<li>Neural Network libraries and utilities</li>
-<li>A good subset of numpy</li>
-<li>Utilities for ML pipelines optimization/etc.</li>
-</ul></li>
-</ul>
-</section>
-<section id="pytorch-key-downsides" class="slide level2">
-<h2>Pytorch Key Downsides</h2>
-<ul>
-<li>Not really for general purpose programming
-<ul>
-<li>Intended for making auto-differentiation of neural networks easy, and updating gradients for solvers</li>
-<li>May be very slow for simple things or ones which don’t involve high-dimensional AD</li>
-</ul></li>
-<li>Won’t always have packages you need for general code, and compatibility is ugly</li>
-</ul>
-</section>
-<section id="jax" class="slide level2">
-<h2>JAX</h2>
-<ul>
-<li>Compiler that enables layered program transformations
+<li>Given the previous lectures on deep-learning, we can now come back to optimization methods and regularization</li>
+<li>At this point you should be convinced that:
 <ol type="1">
-<li><code>jit</code> compiler to <a href="https://www.tensorflow.org/xla/">XLA</a>, including accelerators (e.g.&nbsp;GPUs)</li>
-<li><code>grad</code> Auto-differentiation</li>
-<li><code>vmap</code> vectorization</li>
-<li>Flexibility to add more transformations</li>
+<li>It is possible to fit very approximations with high-dimensional parameters, far more than the number of data points (i.e., <strong>overparameterized</strong>)</li>
+<li>Having flexible functional forms in our <span class="math inline">\(\mathcal{H}\)</span> lets us use representations which may help us in many ways</li>
 </ol></li>
-<li><a href="https://jax.readthedocs.io/en/latest/jax-101/05.1-pytrees.html">JAX PyTrees</a> provide a nested tree structure for compiler passes</li>
-<li>Closer to being a full JIT for general code than pytorch</li>
-<li>For ML, not full-featured like pytorch. Need to shop for other libraries</li>
 </ul>
 </section>
-<section id="jax-key-downsides" class="slide level2">
-<h2>JAX Key Downsides</h2>
+<section id="remain-skeptical" class="slide level2">
+<h2>Remain Skeptical!</h2>
+<ol type="1">
+<li><p>Given our understanding of the classic bias-variance tradeoff</p>
 <ul>
-<li>Tough to trust Google, especially since it is a research project
-<ul>
-<li>Too ingrained in DeepMind research to disappear, but might have intermittent support</li>
+<li>What about overfitting?</li>
 </ul></li>
-<li>Different operating system support is limited, but they are making progress</li>
-<li>Subset of python. Can’t really use loops, etc. Functional-style programming
+<li><p>The ERM process for complicated problems is not globally convex</p>
 <ul>
-<li>Much more restrictive than it seems, and far more restrictive than pytorch</li>
+<li>First-order methods only help me go to (convex)local optima?</li>
+<li>With overparameterization, are local optima even convex?</li>
+</ul></li>
+</ol>
+</section>
+<section id="overview-1" class="slide level2">
+<h2>Overview</h2>
+<p><strong>Warning:</strong> active, incomplete literature in math, CS, and statistics.</p>
+<p>But we can still give some intuition:</p>
+<ol type="1">
+<li>First explore why the bias-variance tradeoff breaks down and give a mental model for how we can solve problems in high dimensions</li>
+<li>Then explore the optimization process in high dimensions and explain why with enough dimensions (and randomness) it becomes easier</li>
+<li>Finally, explain different sources of regularization (implicit and explicit) that occur during optimization, which helps explain why double descent can occur</li>
+</ol>
+</section></section>
+<section>
+<section id="double-descent-and-the-bias-variance-tradeoff" class="title-slide slide level1 center">
+<h1>Double-Descent and the Bias-Variance Tradeoff</h1>
+
+</section>
+<section id="recall-the-decomposition-of-errors-from-erm" class="slide level2">
+<h2>Recall the Decomposition of Errors from ERM</h2>
+<ul>
+<li><p>Without repeating the entire notation, we established our goal as minimizing the difference between the ideal <span class="math display">\[
+\mathbb{E}_{\mathcal{D} \sim p^*}\left[\min_{f \in \mathcal{H}} R(f, \mathcal{D}) - \min_{f \in \mathcal{F}} R(f, p^*)\right] = \varepsilon_{app}(\mathcal{H}) + \varepsilon_{est}(\mathcal{H})
+\]</span></p></li>
+<li><p>That is, a classic tradeoff between approximation error and estimation error given some true distribution <span class="math inline">\(p^*\)</span> and some samples <span class="math inline">\(\mathcal{D}\)</span></p></li>
+</ul>
+</section>
+<section id="the-bias-variance-tradeoff" class="slide level2">
+<h2>The Bias-Variance Tradeoff</h2>
+<ul>
+<li>Richer, deeper models enable better representations
+<ul>
+<li>Can we find them given the massive number of parameters?</li>
+<li>Or do they overfit, find spurious patterns which fail to generalize?</li>
+</ul></li>
+<li>Classic Bias-Variance tradeoff in statistics suggests a suite spot
+<ul>
+<li>Too few parameters and you get too much “bias”, high <span class="math inline">\(\varepsilon_{app}(\mathcal{H})\)</span></li>
+<li>As you approach the number of parameters to the number of data points, you get too much “variance”, high <span class="math inline">\(\varepsilon_{est}(\mathcal{H})\)</span></li>
+<li>At the “interpolation threshold” it fits perfectly (i.e., the training error is zero) but the generalization is terrible</li>
+</ul></li>
+<li>So classic statistics suggests looking for the sweet spot below the interpolation threshold</li>
+</ul>
+</section>
+<section id="classic-statistics-is-often-wrong" class="slide level2">
+<h2>Classic Statistics is (Often) Wrong!</h2>
+<p><strong>The solution to overfitting is to keep adding more parameters</strong></p>
+<ul>
+<li>The evaluation criteria here is the correct one: generalization performance</li>
+<li>Your intuition should be that this requires some sort of regularization</li>
+<li>In most of these methods you will “interpolate” the training data for zero training loss</li>
+</ul>
+</section>
+<section id="some-references" class="slide level2">
+<h2>Some References</h2>
+<ul>
+<li><a href="https://arxiv.org/abs/1812.11118">Reconciling modern machine-learning practice and the classical bias–variance trade-off</a></li>
+<li><a href="https://arxiv.org/pdf/1912.02292.pdf">Deep Double Descent: Where Bigger Models and More Data Hurt</a></li>
+<li><a href="https://arxiv.org/pdf/2003.00307.pdf">Loss landscapes and optimization in over-parameterized non-linear systems and neural networks</a></li>
+<li><a href="https://arxiv.org/pdf/2105.14368.pdf">Fit without fear: remarkable mathematical phenomena of deep learning through the prism of interpolation</a></li>
+<li>Also includes Linear models:
+<ul>
+<li><a href="https://arxiv.org/pdf/1906.11300.pdf">Benign Overfitting in Linear Regression</a></li>
+<li><a href="https://arxiv.org/pdf/1903.08560.pdf">Surprises in High-Dimensional Ridgeless Least Squares Interpolation</a></li>
+</ul></li>
+</ul>
+</section>
+<section id="classic-statistics-single-descent" class="slide level2">
+<h2>Classic Statistics: Single Descent</h2>
+
+<img data-src="figures/single_descent.png" class="r-stretch quarto-figure-center"><p class="caption">from https://arxiv.org/abs/1812.11118</p></section>
+<section id="double-descent" class="slide level2">
+<h2>Double Descent</h2>
+
+<img data-src="figures/double_descent.png" class="r-stretch quarto-figure-center"><p class="caption">from https://arxiv.org/abs/1812.11118</p></section>
+<section id="example-fitting-small-number-of-data-points" class="slide level2">
+<h2>Example Fitting Small Number of Data Points</h2>
+
+<img data-src="figures/random_features.png" class="r-stretch quarto-figure-center"><p class="caption">from https://arxiv.org/pdf/2105.14368.pdf</p></section>
+<section id="example-with-increasing-width-of-neural-network" class="slide level2">
+<h2>Example with Increasing “Width” of Neural Network</h2>
+
+<img data-src="figures/deep_double_descent_cifar.png" class="r-stretch quarto-figure-center"><p class="caption">from https://arxiv.org/pdf/1912.02292.pdf</p></section>
+<section id="overparameterized-models-interpolate" class="slide level2">
+<h2>Overparameterized Models Interpolate</h2>
+<ul>
+<li><p>One interpretation is that ML optimization methods with sufficient parameters find a min-norm interpolating solution. Minimizing ERM: <span class="math display">\[
+\min_{f \in \mathcal{H}} \frac{1}{N}\sum_{n=1}^N \ell(f, x_n, y_n)
+\]</span></p></li>
+<li><p>With large enough <span class="math inline">\(\mathcal{H}\)</span> this interpolates, i.e.&nbsp;<span class="math inline">\(\ell(f, x_n, y_n) = 0\)</span> for all <span class="math inline">\(n\)</span></p></li>
+<li><p>Remember overdetermined LLS and the ridgeless regression</p>
+<ul>
+<li>This did not require enormous amounts of data</li>
+</ul></li>
+</ul>
+</section>
+<section id="min-norm-interpretation" class="slide level2">
+<h2>Min-Norm Interpretation</h2>
+<ul>
+<li>With first-order optimizers can often interpret as solving</li>
+</ul>
+<p><span class="math display">\[
+\begin{aligned}
+\min_{f \in \mathcal{H}} &amp;||f||_S\\
+&amp;\text{ s.t. } \ell(f, x, y) = 0,\,\text{ for all } (x, y) \in \mathcal{D}
+\end{aligned}
+\]</span></p>
+<ul>
+<li>Where <span class="math inline">\(S\)</span> is some (semi-)norm we generally cannot characterize
+<ul>
+<li>In some cases we can prove this is Sobolev 1,2 (e.g.,with LLS)</li>
+<li>In practice, chooses smooth functions (Occam’s Razor)</li>
+</ul></li>
+<li>Whether these are the correct (i.e., generalizable) solutions depends on whether the <span class="math inline">\(S\)</span> aligns with the properties of the true <span class="math inline">\(p^*(x,y)\)</span>
+<ul>
+<li>Having lots of data is neither necessary nor sufficient</li>
 </ul></li>
 </ul>
 </section></section>
 <section>
-<section id="python-ecosystem" class="title-slide slide level1 center">
-<h1>Python Ecosystem</h1>
+<section id="loss-landscapes-in-overparameterized-models" class="title-slide slide level1 center">
+<h1>Loss Landscapes in Overparameterized Models</h1>
 
 </section>
-<section id="environments" class="slide level2">
-<h2>Environments</h2>
-<ul>
-<li>Hate it, but nevertheless <a href="https://www.anaconda.com/download">install conda</a></li>
-<li><strong>Always</strong> use a virtual environment to hate conda slightly less</li>
-<li>Keep dependencies in <code>requirements.txt</code> for <code>pip</code>, conda <code>environment.yml</code> if necessary</li>
-<li>To create, activate, and install packages</li>
-</ul>
-<div class="sourceCode" id="cb1"><pre class="sourceCode numberSource {{bash}} number-lines code-with-copy"><code class="sourceCode"><span id="cb1-1"><a href="#cb1-1"></a>conda create -n econ622 python=3.11</span>
-<span id="cb1-2"><a href="#cb1-2"></a>conda activate econ622</span>
-<span id="cb1-3"><a href="#cb1-3"></a>pip install -r requirements.txt</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<ul>
-<li>In vscode, you can go <code>&gt; Python: Select Interpreter</code>, choose <code>econ622</code> and it will automatically activate</li>
+<section id="overparameterized-erm-has-many-global-minima" class="slide level2">
+<h2>Overparameterized ERM Has Many Global Minima</h2>
+
+<img data-src="figures/multiple_global_minima_1.png" class="r-stretch quarto-figure-center"><p class="caption">See https://www.cs.ubc.ca/~schmidtm/Courses/440-W22/L7.pdf</p><ul>
+<li>With overparameterization, there are many global minima</li>
+<li>In high dimensions the global minima become increasingly connected</li>
 </ul>
 </section>
-<section id="development-environment" class="slide level2">
-<h2>Development Environment</h2>
-<ul>
-<li>pip/anaconda with virtual environments</li>
-<li>Use VSCode for debugging, testing, etc.</li>
-<li>Github Copilot. Install <a href="https://docs.github.com/en/copilot/github-copilot-chat/using-github-copilot-chat">Github Copilot Chat</a></li>
-<li>Format with <code>black</code>. See <a href="https://code.visualstudio.com/docs/python/formatting">here</a> for setup</li>
+<section id="not-all-global-minima-are-alike" class="slide level2">
+<h2>Not All Global Minima are Alike</h2>
+
+<img data-src="figures/multiple_global_minima_2.png" class="r-stretch quarto-figure-center"><p class="caption">See https://www.cs.ubc.ca/~schmidtm/Courses/440-W22/L7.pdf</p><ul>
+<li>Some parameters generalize (estimated with test error) better than others</li>
+<li>Intuition: better with more “volume” of parameters at low test error</li>
 </ul>
 </section>
-<section id="baseline-safe-packages-to-use" class="slide level2">
-<h2>Baseline, Safe Packages to Use</h2>
+<section id="flat-vs.-sharp-geometry" class="slide level2">
+<h2>Flat vs.&nbsp;Sharp Geometry</h2>
+
+<img data-src="figures/flat_vs_sharp.png" class="r-stretch quarto-figure-center"><p class="caption">from ProbML Book 1 Section 13.5.6</p><ul>
+<li>We often think of flatter geometry near minima as worse (e.g., not identified)</li>
+<li>With overparameterization this is the wrong intuition.
 <ul>
-<li><a href="https://numpy.org/doc/stable/">Numpy</a> and <a href="https://docs.scipy.org/doc/scipy/reference/">Scipy</a></li>
-<li><a href="https://pandas.pydata.org/docs/">Pandas</a> for dataframes</li>
-<li><a href="https://matplotlib.org/stable/contents.html">Matplotlib</a> for general plotting</li>
-<li><a href="https://seaborn.pydata.org/">Seaborn</a> for plotting data</li>
-<li><a href="https://www.statsmodels.org/stable/index.html">Statsmodels</a> for classic econometrics</li>
-<li><a href="https://scikit-learn.org/stable/">Scikit-learn</a> for classic ML</li>
-</ul>
-</section>
-<section id="numpyscipy-basics" class="slide level2">
-<h2>Numpy/Scipy Basics</h2>
-<ul>
-<li>Using some examples from <a href="https://ubcecon.github.io/ECON526/lectures/lectures/index.html">ECON526</a></li>
-</ul>
-</section>
-<section id="general-tools-for-ml-pipelines" class="slide level2">
-<h2>General Tools for ML Pipelines</h2>
-<ul>
-<li>Logging/visualization: <a href="https://wandb.ai/site">Weights and Biases</a>
-<ul>
-<li>Sign up for an account! Built in hyperparameter optimization tools</li>
+<li>Flat minima generalize better because they have similar loss over a larger volumes of parameter space. Less dependent on individual data</li>
 </ul></li>
-<li>CLI useful for many pipelines and HPO. See <a href="https://github.com/shadawck/awesome-cli-frameworks#python">here</a></li>
-<li>For more end-to-end frameworks for deep-learning
+</ul>
+</section>
+<section id="sgd-finds-flat-minima" class="slide level2">
+<h2>SGD Finds Flat Minima</h2>
+
+<img data-src="figures/flat_sharp_minibatch.png" class="r-stretch quarto-figure-center"><p class="caption">from ProbML Book 1 Section 13.5.6</p><ul>
+<li>SGD finds finds more stable local minima, less sensitive to underlying data</li>
+</ul>
+</section>
+<section id="overparameterized-loss-landscapes" class="slide level2">
+<h2>Overparameterized Loss Landscapes</h2>
+
+<img data-src="figures/overparameterized_loss_landscapes.png" class="r-stretch quarto-figure-center"><p class="caption">from https://arxiv.org/pdf/2003.00307.pdf</p><ul>
+<li>Intuition of optimization in low dimensions often breaks down in high dimensions and with overparameterization</li>
+<li>Many classic examples where adding in more parameters makes optimization easier (e.g., more degrees of freedom to move)</li>
+</ul>
+</section>
+<section id="loose-intuition-from-this-literature" class="slide level2">
+<h2>Loose Intuition from this Literature</h2>
 <ul>
-<li><a href="https://www.pytorchlightning.ai/">Pytorch Lightning</a> is extremely easy and flexble, eliminating a lot of boilerplate for CLI, optimizers, GPUs, etc.</li>
-<li><a href="https://keras.io/">Keras</a> is a higher-level framework for deep learning. Traditionally tensorflow, but now many. Also <a href="https://www.fast.ai/">FastAI</a></li>
+<li><strong>Warning:</strong> this literature is a work in progress, and hard to prove things formally for general problems</li>
+<li>However some loose intuition from <a href="https://arxiv.org/pdf/2003.00307.pdf">Loss landscapes and optimization in over-parameterized non-linear systems and neural networks</a> and others</li>
+<li>As you move from low-dimensional, underparameterized to high-dimensional overparameterized problems:
+<ul>
+<li>All local minima increasingly become global minima (i.e., interpolation)</li>
+<li>Global minima are increasingly connected</li>
+<li>Nothing is convex, but increasingly the minima seem to fulfill a related condition (<span class="math inline">\(PL^*\)</span>) which is all we need</li>
 </ul></li>
-<li><a href="https://huggingface.co/">HuggingFace</a> is a great resource for NLP and transformers</li>
-<li><a href="https://optuna.org/">Optuna</a> is a great hyperparameter optimization framework, etc.</li>
+</ul>
+</section>
+<section id="interpretations-on-the-importance-of-flatness" class="slide level2">
+<h2>Interpretations on the Importance of Flatness</h2>
+<ul>
+<li>Bayesian Interpretations:
+<ul>
+<li>Flat corresponds to more posterior uncertainty (see <a href="https://probml.github.io/pml-book/book1.html">ProbML Book 1</a> Section 13.5.6 and <a href="https://probml.github.io/pml-book/book2.html">ProbML Book 2</a> Section 17.4.1)</li>
+<li>Larger region in parameter space with similar loss</li>
+<li>Less sensitive to small changes in the data (i.e., overfitting)</li>
+</ul></li>
 </ul>
 </section></section>
 <section>
-<section id="jax-ecosystem" class="title-slide slide level1 center">
-<h1>JAX Ecosystem</h1>
+<section id="regularization" class="title-slide slide level1 center">
+<h1>Regularization</h1>
 
 </section>
-<section id="examples-of-core-transformations" class="slide level2">
-<h2>Examples of Core Transformations</h2>
-<p>From <a href="https://jax.readthedocs.io/en/latest/notebooks/quickstart.html">JAX quickstart</a></p>
-<p>Builtin composable transformations: <code>jit</code>, <code>grad</code> and <code>vmap</code></p>
-<div class="cell" data-execution_count="2">
-<div class="sourceCode cell-code" id="cb2"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb2-1"><a href="#cb2-1"></a><span class="im">import</span> jax</span>
-<span id="cb2-2"><a href="#cb2-2"></a><span class="im">import</span> jax.numpy <span class="im">as</span> jnp</span>
-<span id="cb2-3"><a href="#cb2-3"></a><span class="im">import</span> numpy <span class="im">as</span> np</span>
-<span id="cb2-4"><a href="#cb2-4"></a><span class="im">from</span> jax <span class="im">import</span> grad, jit, vmap, random</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-</div>
-</section>
-<section id="compiling-with-jit" class="slide level2">
-<h2>Compiling with <code>jit</code></h2>
-<div class="cell" data-execution_count="3">
-<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1"></a><span class="kw">def</span> selu(x, alpha<span class="op">=</span><span class="fl">1.67</span>, lmbda<span class="op">=</span><span class="fl">1.05</span>):</span>
-<span id="cb3-2"><a href="#cb3-2"></a>  <span class="cf">return</span> lmbda <span class="op">*</span> jnp.where(x <span class="op">&gt;</span> <span class="dv">0</span>, x, alpha <span class="op">*</span> jnp.exp(x) <span class="op">-</span> alpha)</span>
-<span id="cb3-3"><a href="#cb3-3"></a>key <span class="op">=</span> random.PRNGKey(<span class="dv">0</span>)  </span>
-<span id="cb3-4"><a href="#cb3-4"></a>x <span class="op">=</span> random.normal(key, (<span class="dv">1000000</span>,))</span>
-<span id="cb3-5"><a href="#cb3-5"></a><span class="op">%</span>timeit selu(x).block_until_ready()</span>
-<span id="cb3-6"><a href="#cb3-6"></a>selu_jit <span class="op">=</span> jit(selu)</span>
-<span id="cb3-7"><a href="#cb3-7"></a><span class="op">%</span>timeit selu_jit(x).block_until_ready()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-stdout">
-<pre><code>1.08 ms ± 22.7 µs per loop (mean ± std. dev. of 7 runs, 1,000 loops each)
-359 µs ± 1.55 µs per loop (mean ± std. dev. of 7 runs, 1,000 loops each)</code></pre>
-</div>
-</div>
-</section>
-<section id="convenience-decorators-for-jit" class="slide level2">
-<h2>Convenience Decorators for <code>jit</code></h2>
+<section id="implicitinductive-regularization" class="slide level2">
+<h2>Implicit/Inductive Regularization</h2>
 <ul>
-<li>Convenience python decorator <code>@jit</code></li>
+<li>The theme of much of this literature is on the idea of “hidden/implicit/inductive” bias/regularization that occurs during optimization of ML models</li>
+<li>We saw this already in the LLS section where we showed how underdetermined LLS solved with most algorithms ends up at the ridgeless regression solution</li>
+<li>This does not mean that implicit regularization is always enough, but it helps us understand its role (and whether it fights against us).</li>
 </ul>
-<div class="cell" data-execution_count="4">
-<div class="sourceCode cell-code" id="cb5"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb5-1"><a href="#cb5-1"></a><span class="at">@jit</span></span>
-<span id="cb5-2"><a href="#cb5-2"></a><span class="kw">def</span> selu(x, alpha<span class="op">=</span><span class="fl">1.67</span>, lmbda<span class="op">=</span><span class="fl">1.05</span>):</span>
-<span id="cb5-3"><a href="#cb5-3"></a>  <span class="cf">return</span> lmbda <span class="op">*</span> jnp.where(x <span class="op">&gt;</span> <span class="dv">0</span>, x, alpha <span class="op">*</span> jnp.exp(x) <span class="op">-</span> alpha)</span>
-<span id="cb5-4"><a href="#cb5-4"></a><span class="op">%</span>timeit selu(x).block_until_ready()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-stdout">
-<pre><code>358 µs ± 2.54 µs per loop (mean ± std. dev. of 7 runs, 1,000 loops each)</code></pre>
-</div>
-</div>
 </section>
-<section id="differentiation-with-grad" class="slide level2">
-<h2>Differentiation with <code>grad</code></h2>
-<div class="cell" data-execution_count="5">
-<div class="sourceCode cell-code" id="cb7"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb7-1"><a href="#cb7-1"></a><span class="kw">def</span> sum_logistic(x):</span>
-<span id="cb7-2"><a href="#cb7-2"></a>  <span class="cf">return</span> jnp.<span class="bu">sum</span>(<span class="fl">1.0</span> <span class="op">/</span> (<span class="fl">1.0</span> <span class="op">+</span> jnp.exp(<span class="op">-</span>x)))</span>
-<span id="cb7-3"><a href="#cb7-3"></a></span>
-<span id="cb7-4"><a href="#cb7-4"></a>x_small <span class="op">=</span> jnp.arange(<span class="fl">3.</span>)</span>
-<span id="cb7-5"><a href="#cb7-5"></a>derivative_fn <span class="op">=</span> grad(sum_logistic)</span>
-<span id="cb7-6"><a href="#cb7-6"></a><span class="bu">print</span>(derivative_fn(x_small))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-stdout">
-<pre><code>[0.25       0.19661197 0.10499357]</code></pre>
-</div>
-</div>
-</section>
-<section id="manual-batchingvectorization" class="slide level2">
-<h2>Manual “Batching”/Vectorization</h2>
-<p>Common to run the same function along one dimension of an array</p>
-<div class="cell" data-execution_count="6">
-<div class="sourceCode cell-code" id="cb9"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb9-1"><a href="#cb9-1"></a>mat <span class="op">=</span> random.normal(key, (<span class="dv">150</span>, <span class="dv">100</span>))</span>
-<span id="cb9-2"><a href="#cb9-2"></a>batched_x <span class="op">=</span> random.normal(key, (<span class="dv">10</span>, <span class="dv">100</span>))</span>
-<span id="cb9-3"><a href="#cb9-3"></a></span>
-<span id="cb9-4"><a href="#cb9-4"></a><span class="kw">def</span> f(v):</span>
-<span id="cb9-5"><a href="#cb9-5"></a>  <span class="cf">return</span> jnp.dot(mat, v)</span>
-<span id="cb9-6"><a href="#cb9-6"></a><span class="kw">def</span> naively_batched_f(v_batched):</span>
-<span id="cb9-7"><a href="#cb9-7"></a>  <span class="cf">return</span> jnp.stack([f(v) <span class="cf">for</span> v <span class="kw">in</span> v_batched])</span>
-<span id="cb9-8"><a href="#cb9-8"></a><span class="op">%</span>timeit naively_batched_f(batched_x).block_until_ready()  </span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-stdout">
-<pre><code>340 µs ± 1.4 µs per loop (mean ± std. dev. of 7 runs, 1,000 loops each)</code></pre>
-</div>
-</div>
-</section>
-<section id="using-vmap" class="slide level2">
-<h2>Using <code>vmap</code></h2>
-<p>The <a href="https://jax.readthedocs.io/en/latest/_autosummary/jax.vmap.html#jax.vmap">vmap</a> applies across a dimension</p>
-<div class="cell" data-execution_count="7">
-<div class="sourceCode cell-code" id="cb11"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb11-1"><a href="#cb11-1"></a><span class="at">@jit</span></span>
-<span id="cb11-2"><a href="#cb11-2"></a><span class="kw">def</span> vmap_batched_f(v_batched):</span>
-<span id="cb11-3"><a href="#cb11-3"></a>  <span class="cf">return</span> vmap(f)(v_batched)</span>
-<span id="cb11-4"><a href="#cb11-4"></a></span>
-<span id="cb11-5"><a href="#cb11-5"></a><span class="bu">print</span>(<span class="st">'Auto-vectorized with vmap'</span>)</span>
-<span id="cb11-6"><a href="#cb11-6"></a><span class="op">%</span>timeit vmap_batched_f(batched_x).block_until_ready()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-stdout">
-<pre><code>Auto-vectorized with vmap
-13.4 µs ± 77.8 ns per loop (mean ± std. dev. of 7 runs, 100,000 loops each)</code></pre>
-</div>
-</div>
-</section>
-<section id="basic-jax-packages" class="slide level2">
-<h2>Basic JAX Packages</h2>
-<p>Anything from <a href="https://github.com/patrick-kidger">Patrick</a> is gold</p>
+<section id="sources-of-regularization" class="slide level2">
+<h2>Sources of Regularization</h2>
 <ul>
-<li>Basic program passes/etc: <a href="https://jax.readthedocs.io/en/latest/index.html">JAX</a>
+<li>We see this with just gradient descent in LLS, so not specific to nonlinear, having lots of parameters, or stochastic optimization</li>
+<li>SGD itself has regularizing effects</li>
+<li>Sometimes manual regularization is needed
 <ul>
-<li><a href="https://jax.readthedocs.io/en/latest/jax.numpy.html#module-jax.numpy">jax.numpy</a> built in and <a href="https://jax.readthedocs.io/en/latest/jax.scipy.html">jax.scipy</a> which is a subset of scipy</li>
+<li>Early stopping, Weight decay (L2 regularization), etc.</li>
 </ul></li>
-<li>Neural Network Libraries
+<li>See <a href="https://probml.github.io/pml-book/book1.html">ProbML Book 1</a> Section 13.5.6</li>
+<li>See <a href="https://www.cs.ubc.ca/~schmidtm/Courses/440-W22/L7.pdf">Mark Schmidt’s CPSC440 Notes on Double-Descent Curves</a> for more on regularization</li>
+</ul>
+</section>
+<section id="stochastic-gradients" class="slide level2">
+<h2>Stochastic Gradients</h2>
 <ul>
-<li><a href="https://flax.readthedocs.io/en/latest/index.html">Flax</a> and <a href="https://dm-haiku.readthedocs.io/en/latest/index.html">Haiku</a></li>
-<li><a href="https://github.com/patrick-kidger/equinox">Equinox</a> is my favorite</li>
+<li>See <a href="https://probml.github.io/pml-book/book1.html">ProbML Book 1</a> Section 13.5.6</li>
+<li>As we saw before, randomness in SGD and its variants can help us find flatter minima</li>
+<li>The key is that it is the right sort of noise, which helps us avoid sharp minima and concentrate on flatter minima</li>
+<li>This is true even if all local minima are global minima and connected
+<ul>
+<li>The connected minima might even make it easier to traverse to the flatter regions</li>
 </ul></li>
-<li>First-order optimizers for training: <a href="https://github.com/google-deepmind/optax">Optax</a></li>
-<li>Typechecking: <a href="https://github.com/google/jaxtyping">jaxtyping</a></li>
-<li>Checkpointing and serialization: <a href="https://orbax.readthedocs.io/en/latest/">obax</a></li>
 </ul>
+</section></section>
+<section>
+<section id="no-free-lunch" class="title-slide slide level1 center">
+<h1>No Free Lunch!</h1>
+
 </section>
-<section id="more-scientific-computing" class="slide level2">
-<h2>More Scientific Computing</h2>
+<section id="choose-algorithms-for-the-problem-class" class="slide level2">
+<h2>Choose Algorithms for the Problem Class</h2>
 <ul>
-<li>Nonlinear Systems/Least Squares: <a href="https://github.com/patrick-kidger/optimistix">Optimistix</a></li>
-<li>Linear Systems of Equations: <a href="https://docs.kidger.site/lineax/">Lineax</a></li>
-<li>Matrix-free operators for iterative solvers: <a href="https://github.com/wilson-labs/cola">COLA</a></li>
-<li>Differential Equations: <a href="https://github.com/patrick-kidger/diffrax">diffrax</a></li>
-<li>More general optimization and solvers: <a href="https://jaxopt.github.io/stable/#">JAXopt</a></li>
-</ul>
-</section>
-<section id="jax-challenges" class="slide level2">
-<h2>JAX Challenges</h2>
+<li>It is worth ending with a restatement of the <a href="https://www.cs.ubc.ca/~hutter/earg/papers07/00585893.pdf">no free lunch theorems</a>
 <ul>
-<li>Basically only pure functional programming
-<ul>
-<li>No “mutation” of vectors</li>
-<li>Loops/conditionals are tough</li>
-<li>Rules for what is <code>jit</code>able are tricky</li>
+<li>No optimization algorithm is universally superior; any algorithm’s performance is problem-dependent, such that its average performance across all possible problems is the same as that of any other algorithm.</li>
 </ul></li>
-<li>See <a href="https://jax.readthedocs.io/en/latest/notebooks/Common_Gotchas_in_JAX.html">JAX - The Sharp Bits</a></li>
-<li>May not be faster on CPUs or for “normal” things</li>
-<li>Debugging</li>
+<li>In practice, this means that we will need to carefully choose the optimization methods, hypothesis classes, and regularization with a particular problem in mind by understanding the problem class well</li>
+<li>Luckily: it seems many problems in economics are very similar, so we can use priors to choose methods, and HPO software lets us experiment</li>
 </ul>
-</section>
-<section id="pytrees" class="slide level2">
-<h2>PyTrees</h2>
-<ul>
-<li>JAX uses a generic <a href="https://jax.readthedocs.io/en/latest/jax-101/05.1-pytrees.html">tree structure</a>. Powerful but takes time to understand: Examples from: <a href="https://jax.readthedocs.io/en/latest/pytrees.html">here</a> and <a href="https://jax.readthedocs.io/en/latest/_autosummary/jax.vmap.html#jax.vmap">here</a></li>
-</ul>
-<div class="cell" data-execution_count="8">
-<div class="sourceCode cell-code" id="cb13"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb13-1"><a href="#cb13-1"></a>f <span class="op">=</span> <span class="kw">lambda</span> x, y: jnp.vdot(x, y)</span>
-<span id="cb13-2"><a href="#cb13-2"></a>X <span class="op">=</span> jnp.array([[<span class="fl">1.0</span>, <span class="fl">2.0</span>],</span>
-<span id="cb13-3"><a href="#cb13-3"></a>               [<span class="fl">3.0</span>, <span class="fl">4.0</span>]])</span>
-<span id="cb13-4"><a href="#cb13-4"></a>y <span class="op">=</span> jnp.array([<span class="fl">3.0</span>, <span class="fl">4.0</span>])</span>
-<span id="cb13-5"><a href="#cb13-5"></a><span class="bu">print</span>(f(X[<span class="dv">0</span>], y))</span>
-<span id="cb13-6"><a href="#cb13-6"></a><span class="bu">print</span>(f(X[<span class="dv">1</span>], y))</span>
-<span id="cb13-7"><a href="#cb13-7"></a></span>
-<span id="cb13-8"><a href="#cb13-8"></a>mv <span class="op">=</span> vmap(f, in_axes <span class="op">=</span> (</span>
-<span id="cb13-9"><a href="#cb13-9"></a>  <span class="dv">0</span>, <span class="co"># broadcast over 1st index of first argument</span></span>
-<span id="cb13-10"><a href="#cb13-10"></a>  <span class="va">None</span> <span class="co"># don't broadcast over anything of second argument</span></span>
-<span id="cb13-11"><a href="#cb13-11"></a>  ), out_axes<span class="op">=</span><span class="dv">0</span>)</span>
-<span id="cb13-12"><a href="#cb13-12"></a><span class="bu">print</span>(mv(X, y))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-stdout">
-<pre><code>11.0
-25.0
-[11. 25.]</code></pre>
-</div>
-</div>
-</section>
-<section id="pytree-example-1" class="slide level2">
-<h2>PyTree Example 1</h2>
-<p>The <code>in_axes</code> can match more complicated structures</p>
-<div class="cell" data-execution_count="9">
-<div class="sourceCode cell-code" id="cb15"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb15-1"><a href="#cb15-1"></a>dct <span class="op">=</span> {<span class="st">'a'</span>: <span class="fl">0.</span>, <span class="st">'b'</span>: jnp.arange(<span class="fl">5.</span>)}</span>
-<span id="cb15-2"><a href="#cb15-2"></a><span class="kw">def</span> foo(dct, x):</span>
-<span id="cb15-3"><a href="#cb15-3"></a> <span class="cf">return</span> dct[<span class="st">'a'</span>] <span class="op">+</span> dct[<span class="st">'b'</span>] <span class="op">+</span> x</span>
-<span id="cb15-4"><a href="#cb15-4"></a><span class="co"># axes must match shape of the PyTree</span></span>
-<span id="cb15-5"><a href="#cb15-5"></a>x <span class="op">=</span> <span class="fl">1.</span></span>
-<span id="cb15-6"><a href="#cb15-6"></a>out <span class="op">=</span> vmap(foo, in_axes<span class="op">=</span>(</span>
-<span id="cb15-7"><a href="#cb15-7"></a>  {<span class="st">'a'</span>: <span class="va">None</span>, <span class="st">'b'</span>: <span class="dv">0</span>}, <span class="co">#broadcast over the 'b'</span></span>
-<span id="cb15-8"><a href="#cb15-8"></a>  <span class="va">None</span> <span class="co"># no broadcasting over the "x"</span></span>
-<span id="cb15-9"><a href="#cb15-9"></a>  ))(dct, x)</span>
-<span id="cb15-10"><a href="#cb15-10"></a><span class="co"># example now: {'a': 0, 'b': 0} etc.</span></span>
-<span id="cb15-11"><a href="#cb15-11"></a><span class="bu">print</span>(out)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-stdout">
-<pre><code>[1. 2. 3. 4. 5.]</code></pre>
-</div>
-</div>
-</section>
-<section id="pytree-example-2" class="slide level2">
-<h2>PyTree Example 2</h2>
-<div class="cell" data-execution_count="10">
-<div class="sourceCode cell-code" id="cb17"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb17-1"><a href="#cb17-1"></a>dct <span class="op">=</span> {<span class="st">'a'</span>: jnp.array([<span class="fl">3.0</span>, <span class="fl">5.0</span>]), <span class="st">'b'</span>: jnp.array([<span class="fl">2.0</span>, <span class="fl">4.0</span>])}</span>
-<span id="cb17-2"><a href="#cb17-2"></a><span class="kw">def</span> foo2(dct, x):</span>
-<span id="cb17-3"><a href="#cb17-3"></a> <span class="cf">return</span> dct[<span class="st">'a'</span>] <span class="op">+</span> dct[<span class="st">'b'</span>] <span class="op">+</span> x</span>
-<span id="cb17-4"><a href="#cb17-4"></a><span class="co"># axes must match shape of the PyTree</span></span>
-<span id="cb17-5"><a href="#cb17-5"></a>x <span class="op">=</span> <span class="fl">1.</span></span>
-<span id="cb17-6"><a href="#cb17-6"></a>out <span class="op">=</span> vmap(foo2, in_axes<span class="op">=</span>(</span>
-<span id="cb17-7"><a href="#cb17-7"></a>  {<span class="st">'a'</span>: <span class="dv">0</span>, <span class="st">'b'</span>: <span class="dv">0</span>}, <span class="co">#broadcast over the 'a' and 'b'</span></span>
-<span id="cb17-8"><a href="#cb17-8"></a>  <span class="va">None</span> <span class="co"># no broadcasting over the "x"</span></span>
-<span id="cb17-9"><a href="#cb17-9"></a>  ))(dct, x)</span>
-<span id="cb17-10"><a href="#cb17-10"></a><span class="co"># example now: {'a': 3.0, 'b': 2.0} etc.</span></span>
-<span id="cb17-11"><a href="#cb17-11"></a><span class="bu">print</span>(out)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-stdout">
-<pre><code>[ 6. 10.]</code></pre>
-</div>
-</div>
-</section>
-<section id="pytree-example-3" class="slide level2">
-<h2>PyTree Example 3</h2>
-<div class="cell" data-execution_count="11">
-<div class="sourceCode cell-code" id="cb19"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb19-1"><a href="#cb19-1"></a>dct <span class="op">=</span> {<span class="st">'a'</span>: jnp.array([<span class="fl">3.0</span>, <span class="fl">5.0</span>]), <span class="st">'b'</span>: jnp.arange(<span class="fl">5.</span>)}</span>
-<span id="cb19-2"><a href="#cb19-2"></a><span class="kw">def</span> foo3(dct, x):</span>
-<span id="cb19-3"><a href="#cb19-3"></a> <span class="cf">return</span> dct[<span class="st">'a'</span>][<span class="dv">0</span>] <span class="op">*</span> dct[<span class="st">'a'</span>][<span class="dv">1</span>] <span class="op">+</span> dct[<span class="st">'b'</span>] <span class="op">+</span> x</span>
-<span id="cb19-4"><a href="#cb19-4"></a><span class="co"># axes must match shape of the PyTree</span></span>
-<span id="cb19-5"><a href="#cb19-5"></a>out <span class="op">=</span> vmap(foo3, in_axes<span class="op">=</span>(</span>
-<span id="cb19-6"><a href="#cb19-6"></a>  {<span class="st">'a'</span>: <span class="va">None</span>, <span class="st">'b'</span>: <span class="dv">0</span>}, <span class="co">#broadcast over the 'b'</span></span>
-<span id="cb19-7"><a href="#cb19-7"></a>  <span class="va">None</span> <span class="co"># no broadcasting over the "x"</span></span>
-<span id="cb19-8"><a href="#cb19-8"></a>  ))(dct, x)</span>
-<span id="cb19-9"><a href="#cb19-9"></a><span class="co"># example now: {'a': [3.0, 5.0], 'b': 0} etc.</span></span>
-<span id="cb19-10"><a href="#cb19-10"></a><span class="bu">print</span>(out)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-stdout">
-<pre><code>[16. 17. 18. 19. 20.]</code></pre>
-</div>
-</div>
 
 <div class="footer footer-default">
 

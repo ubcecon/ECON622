@@ -522,7 +522,7 @@ Jesse Perla
 <pre><code>cond(I(2)) = 1.0
 cond(A2) = 2.0000000000005004e6
 cond(A2') = 2.0000000000004997e6
-cond(inv(A2)) = 2.0000000002323308e6</code></pre>
+cond(inv(A2)) = 2.0000000002463197e6</code></pre>
 </div>
 </div>
 </div>
@@ -544,8 +544,8 @@ cond(inv(A2)) = 2.0000000002323308e6</code></pre>
 <span id="cb4-7"><a href="#cb4-7"></a>L</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div><div class="column">
 <div class="cell-output cell-output-stdout">
-<pre><code>cond(L) = 1.732050807568878e8
-cond(L' * L) = 2.8104131146758097e32</code></pre>
+<pre><code>cond(L) = 1.7320508075688776e8
+cond(L' * L) = 5.345191558726545e32</code></pre>
 </div>
 <div class="cell-output cell-output-display" data-execution_count="4">
 <pre><code>3×4 Matrix{Float64}:
@@ -610,7 +610,7 @@ cond(L' * L) = 2.8104131146758097e32</code></pre>
 <span id="cb7-11"><a href="#cb7-11"></a>v_direct <span class="op">=</span> A <span class="op">\</span> r</span>
 <span id="cb7-12"><a href="#cb7-12"></a><span class="fu">mean</span>(v_direct)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-display" data-execution_count="5">
-<pre><code>101.96306207828795</code></pre>
+<pre><code>101.96306207828796</code></pre>
 </div>
 </div>
 </section>
@@ -721,10 +721,10 @@ norm(v - v_direct, Inf) = 9.052314453583676e-12</code></pre>
 <span id="cb11-9"><a href="#cb11-9"></a>sol[<span class="kw">end</span>]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div><div class="column">
 <div class="cell-output cell-output-stdout">
-<pre><code>cond(Matrix(A * A')) = 1.0375714541179441e12</code></pre>
+<pre><code>cond(Matrix(A * A')) = 1.0375716311726034e12</code></pre>
 </div>
 <div class="cell-output cell-output-display" data-execution_count="7">
-<pre><code>Converged after 183 iterations.</code></pre>
+<pre><code>Converged after 181 iterations.</code></pre>
 </div>
 </div>
 </div>
@@ -757,7 +757,7 @@ norm(v - v_direct, Inf) = 9.052314453583676e-12</code></pre>
 <span id="cb14-11"><a href="#cb14-11"></a><span class="pp">@show</span> <span class="fu">norm</span>(beta_direct <span class="op">-</span> beta_lsmr)</span>
 <span id="cb14-12"><a href="#cb14-12"></a><span class="fu">println</span>(<span class="st">"</span><span class="sc">$</span>(results[<span class="kw">end</span>])<span class="st">"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>norm(beta_direct - beta_lsmr) = 1.0615184239078498e-5
+<pre><code>norm(beta_direct - beta_lsmr) = 1.0615740581442885e-5
 Converged after 15 iterations.</code></pre>
 </div>
 </div>
@@ -805,7 +805,7 @@ Converged after 15 iterations.</code></pre>
 <span id="cb18-11"><a href="#cb18-11"></a><span class="pp">@show</span> <span class="fu">mean</span>(phi);</span>
 <span id="cb18-12"><a href="#cb18-12"></a>Q<span class="op">'</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>lambda = ComplexF64[-9.270990685613062e-18 + 0.0im]
+<pre><code>lambda = ComplexF64[6.432750464792071e-18 + 0.0im]
 mean(phi) = 0.25</code></pre>
 </div>
 <div class="cell-output cell-output-display" data-execution_count="10">
@@ -849,7 +849,7 @@ mean(phi) = 0.25</code></pre>
 <span id="cb23-5"><a href="#cb23-5"></a><span class="pp">@show</span> lambda</span>
 <span id="cb23-6"><a href="#cb23-6"></a><span class="pp">@show</span> <span class="fu">mean</span>(phi);</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>lambda = ComplexF64[1.6525994004046e-17 + 0.0im]
+<pre><code>lambda = ComplexF64[-2.5563930513500514e-17 + 0.0im]
 mean(phi) = 0.25</code></pre>
 </div>
 </div>
@@ -898,7 +898,7 @@ P x &amp;= y
 <span id="cb25-6"><a href="#cb25-6"></a>sol <span class="op">=</span> <span class="fu">cg</span>(A, b, log <span class="op">=</span> <span class="cn">true</span>, maxiter <span class="op">=</span> <span class="fl">1000</span>)</span>
 <span id="cb25-7"><a href="#cb25-7"></a>sol[<span class="kw">end</span>]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>cond(Matrix(A)) = 972303.1119396036</code></pre>
+<pre><code>cond(Matrix(A)) = 972303.1119268853</code></pre>
 </div>
 <div class="cell-output cell-output-display" data-execution_count="13">
 <pre><code>Converged after 389 iterations.</code></pre>
@@ -932,7 +932,7 @@ P x &amp;= y
 <span id="cb30-2"><a href="#cb30-2"></a>sol <span class="op">=</span> <span class="fu">cg</span>(A, b; Pl <span class="op">=</span> P, log <span class="op">=</span> <span class="cn">true</span>, maxiter <span class="op">=</span> <span class="fl">1000</span>)</span>
 <span id="cb30-3"><a href="#cb30-3"></a>sol[<span class="kw">end</span>]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-display" data-execution_count="15">
-<pre><code>Converged after 151 iterations.</code></pre>
+<pre><code>Converged after 149 iterations.</code></pre>
 </div>
 </div>
 </section>
