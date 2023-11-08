@@ -140,9 +140,9 @@ Probabilistic Programming Languages (PPLs), Bayesian methods, and intro to gener
     NLP, Attention/Transformers, Tuning Foundation Models
 -->
 
-18. **November 8** Graphical models
+18. **November 8** Graphical models introduction
     - [Probabilistic Machine Learning: Advanced Topics](https://probml.github.io/pml-book/book2.html) Chapter 4
-20. **November 10** Message passing
+20. **November 10** Message passing, Belief propagation, EM
     - [Probabilistic Machine Learning: Advanced Topics](https://probml.github.io/pml-book/book2.html) Chapter 9
 22. **November 20** Markov Chain Monte-Carlo methods, Probabilistic Programming Languages (PPLs)
     - [Probabilistic Machine Learning: Advanced Topics](https://probml.github.io/pml-book/book2.html) Chapter 12
