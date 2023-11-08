@@ -140,16 +140,19 @@ Probabilistic Programming Languages (PPLs), Bayesian methods, and intro to gener
     NLP, Attention/Transformers, Tuning Foundation Models
 -->
 
-18. **November 8** Uncertainty Quantification (UQ) and the Unreasonable Effectiveness of Monte-Carlo
-19. **November 10** ODEs; Linear dynamical systems, Linear Quadratic (LQ) Control, Nonlinear systems, Stability
-20. **November 20** [Dynamic discrete choice](https://github.com/UBCECON567/DynamicDiscreteChoice.jl), Nested fixed-point, Heterogeneity and mixture models (E-M algorithm)
-21. **November 22** Discrete dynamic games, Conditional Choice Probabilities Estimation
-22. **November 27** Graph theory, Graph spectrum, Network games
-23. **November 29** Graphical models in machine learning
-24. **December 4** Network econometrics, Exponential family (Ising) models, Homophily, Embeddings, Graph Neural Networks
-25. **December 6** Variational inference for network models, Mean-field approximations, Graphons and limit games
+18. **November 8** Graphical models
+    - [Probabilistic Machine Learning: Advanced Topics](https://probml.github.io/pml-book/book2.html) Chapter 4
+20. **November 10** Message passing
+    - [Probabilistic Machine Learning: Advanced Topics](https://probml.github.io/pml-book/book2.html) Chapter 9
+22. **November 20** Markov Chain Monte-Carlo methods, Probabilistic Programming Languages (PPLs)
+    - [Probabilistic Machine Learning: Advanced Topics](https://probml.github.io/pml-book/book2.html) Chapter 12
+24. **November 22** Discrete dynamic games, Conditional Choice Probabilities Estimation
+25. **November 27** ODE's, Linear dynamical systems, Nonlinear systems, Stability
+26. **November 29** Graph theory, Graph spectrum, Network games
+27. **December 4** Network econometrics, Exponential family (Ising) models, Homophily, Embeddings, Graph Neural Networks
+28. **December 6** Mean-field approximations, Graphons and limit games
 
-26. **Decemeber 20**
+29. **Decemeber 20**
     - Final Project due
 
 
