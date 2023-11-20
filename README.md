@@ -142,20 +142,20 @@ Probabilistic Programming Languages (PPLs), Bayesian methods, and intro to gener
 
 18. **November 8** Graphical models introduction
     - [Probabilistic Machine Learning: Advanced Topics](https://probml.github.io/pml-book/book2.html) Chapter 4.1-4.5
-20. **November 10** Undirected graphical models, Variable elimination algorithm, Potential games example
+19. **November 10** Undirected graphical models, Variable elimination algorithm, Potential games example
     - **Slides**: [First set of slides](https://ubcecon.github.io/ECON526/lectures/lectures/using_dags.html#/factorizing-the-joint-distribution), [Second set](http://ai.stanford.edu/~paskin/gm-short-course/lec2.pdf)
     - **Readings**:
         - [Probabilistic Machine Learning: Advanced Topics](https://probml.github.io/pml-book/book2.html) Chapter 4.1-4.5
         - [Probabilistic Machine Learning: Advanced Topics](https://probml.github.io/pml-book/book2.html) Chapter 9.5 (Variable elimination)
-22. **November 20** Markov Chain Monte-Carlo methods, Probabilistic Programming Languages (PPLs)
+20. **November 20** Markov Chain Monte-Carlo methods, Probabilistic Programming Languages (PPLs)
     - [Probabilistic Machine Learning: Advanced Topics](https://probml.github.io/pml-book/book2.html) Chapter 12
-24. **November 22** Discrete dynamic games, Conditional Choice Probabilities Estimation
-25. **November 27** ODE's, Linear dynamical systems, Nonlinear systems, Stability
-26. **November 29** Graph theory, Graph spectrum, Network games
-27. **December 4** Network econometrics, Exponential family (Ising) models, Homophily, Embeddings, Graph Neural Networks
-28. **December 6** Mean-field approximations, Graphons and limit games
+21. **November 22** Discrete dynamic games, Conditional Choice Probabilities Estimation
+22. **November 27** ODE's, Linear dynamical systems, Nonlinear systems, Stability
+23. **November 29** Graph theory, Graph spectrum, Network games
+24. **December 4** Student presentations
+25. **December 6** Student presentations
 
-29. **Decemeber 20**
+26. **Decemeber 20**
     - Final Project due
 
 
