@@ -141,9 +141,12 @@ Probabilistic Programming Languages (PPLs), Bayesian methods, and intro to gener
 -->
 
 18. **November 8** Graphical models introduction
-    - [Probabilistic Machine Learning: Advanced Topics](https://probml.github.io/pml-book/book2.html) Chapter 4
-20. **November 10** Message passing, Belief propagation, EM
-    - [Probabilistic Machine Learning: Advanced Topics](https://probml.github.io/pml-book/book2.html) Chapter 9
+    - [Probabilistic Machine Learning: Advanced Topics](https://probml.github.io/pml-book/book2.html) Chapter 4.1-4.5
+20. **November 10** Undirected graphical models, Variable elimination algorithm, Potential games example
+    - **Slides**: [First set of slides](https://ubcecon.github.io/ECON526/lectures/lectures/using_dags.html#/factorizing-the-joint-distribution), [Second set](http://ai.stanford.edu/~paskin/gm-short-course/lec2.pdf)
+    - **Readings**:
+        - [Probabilistic Machine Learning: Advanced Topics](https://probml.github.io/pml-book/book2.html) Chapter 4.1-4.5
+        - [Probabilistic Machine Learning: Advanced Topics](https://probml.github.io/pml-book/book2.html) Chapter 9.5 (Variable elimination)
 22. **November 20** Markov Chain Monte-Carlo methods, Probabilistic Programming Languages (PPLs)
     - [Probabilistic Machine Learning: Advanced Topics](https://probml.github.io/pml-book/book2.html) Chapter 12
 24. **November 22** Discrete dynamic games, Conditional Choice Probabilities Estimation
