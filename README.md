@@ -150,13 +150,16 @@ Probabilistic Programming Languages (PPLs), Bayesian methods, and intro to gener
         - [Probabilistic Machine Learning: Advanced Topics](https://probml.github.io/pml-book/book2.html) Chapter 4.1-4.5
         - [Probabilistic Machine Learning: Advanced Topics](https://probml.github.io/pml-book/book2.html) Chapter 9.5 (Variable elimination)
 22. **November 22** Sampling; Inverse CDF, Rejection/importance sampling, MCMC/Metropolis-Hastings algorithm
-        - [Probabilistic Machine Learning: Advanced Topics](https://probml.github.io/pml-book/book2.html) Chapter 12
+    - **Readings**
+        - [Probabilistic Machine Learning: Advanced Topics](https://probml.github.io/pml-book/book2.html) Chapter 11
 24. **November 27** Local (Gibbs) sampling, Hamiltonian Monte-Carlo, ODE solvers, Probabilistic programming languages (PPLs)
-25. **November 29** Graph theory, Graph spectrum, Network games
-26. **December 4** NLP (short), Student presentations 1
-27. **December 6** Student presentations 2
+    - **Readings**
+        - [Probabilistic Machine Learning: Advanced Topics](https://probml.github.io/pml-book/book2.html) Chapter 12
+26. **November 29** Graph theory, Graph spectrum, Network games
+27. **December 4** NLP (short), Student presentations 1
+28. **December 6** Student presentations 2
 
-28. **Decemeber 20**
+29. **Decemeber 20**
     - Final Project due
 
 
