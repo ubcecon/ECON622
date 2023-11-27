@@ -141,25 +141,30 @@ Probabilistic Programming Languages (PPLs), Bayesian methods, and intro to gener
 -->
 
 18. **November 8** Graphical models introduction
-    - [Probabilistic Machine Learning: Advanced Topics](https://probml.github.io/pml-book/book2.html) Chapter 4.1-4.5
-19. **November 13** Fall break
-20. **November 15** Fall break
-21. **November 20** Using graphical models, Identification, Variable elimination, Undirected graphical models
+    - **Notes** [Course notes on graphical models](https://raw.githubusercontent.com/ubcecon/ECON622/master/phil_notes/GM_notes.pdf)
+    - **Readings** [Probabilistic Machine Learning: Advanced Topics](https://probml.github.io/pml-book/book2.html) Chapter 4.1-4.5
+20. **November 13** Fall break
+21. **November 15** Fall break
+22. **November 20** Using graphical models, Identification, Variable elimination, Undirected graphical models
+    - **Notes** [Course notes on graphical models](https://raw.githubusercontent.com/ubcecon/ECON622/master/phil_notes/GM_notes.pdf)
     - **Slides**: [First set of slides](https://ubcecon.github.io/ECON526/lectures/lectures/using_dags.html#/factorizing-the-joint-distribution), [Second set](http://ai.stanford.edu/~paskin/gm-short-course/lec2.pdf)
     - **Readings**:
         - [Probabilistic Machine Learning: Advanced Topics](https://probml.github.io/pml-book/book2.html) Chapter 4.1-4.5
         - [Probabilistic Machine Learning: Advanced Topics](https://probml.github.io/pml-book/book2.html) Chapter 9.5 (Variable elimination)
-22. **November 22** Sampling; Inverse CDF, Rejection/importance sampling, MCMC/Metropolis-Hastings algorithm
+24. **November 22** Sampling; Inverse CDF, Rejection/importance sampling, MCMC/Metropolis-Hastings algorithm
+    - **Notes** [Course notes on Monte-Carlo methods](https://raw.githubusercontent.com/ubcecon/ECON622/master/phil_notes/MCMC_notes.pdf)
     - **Readings**
         - [Probabilistic Machine Learning: Advanced Topics](https://probml.github.io/pml-book/book2.html) Chapter 11
-24. **November 27** Local (Gibbs) sampling, Hamiltonian Monte-Carlo, ODE solvers, Probabilistic programming languages (PPLs)
+26. **November 27** Local (Gibbs) sampling, Hamiltonian Monte-Carlo, ODE solvers, Probabilistic programming languages (PPLs)
+    - **Notes** [Course notes on Monte-Carlo methods](https://raw.githubusercontent.com/ubcecon/ECON622/master/phil_notes/MCMC_notes.pdf)
     - **Readings**
         - [Probabilistic Machine Learning: Advanced Topics](https://probml.github.io/pml-book/book2.html) Chapter 12
-26. **November 29** Graph theory, Graph spectrum, Network games
-27. **December 4** NLP (short), Student presentations 1
-28. **December 6** Student presentations 2
+        - Hidden Markov Models in [Turing.jl](https://turing.ml/dev/tutorials/04-hidden-markov-model) and [Pyro](https://pyro.ai/examples/hmm.html)
+28. **November 29** Graph theory, Graph spectrum, Network games
+29. **December 4** NLP (short), Student presentations 1
+30. **December 6** Student presentations 2
 
-29. **Decemeber 20**
+31. **Decemeber 20**
     - Final Project due
 
 
