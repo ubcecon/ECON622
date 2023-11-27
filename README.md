@@ -142,20 +142,21 @@ Probabilistic Programming Languages (PPLs), Bayesian methods, and intro to gener
 
 18. **November 8** Graphical models introduction
     - [Probabilistic Machine Learning: Advanced Topics](https://probml.github.io/pml-book/book2.html) Chapter 4.1-4.5
-19. **November 10** Undirected graphical models, Variable elimination algorithm, Potential games example
+19. **November 13** Fall break
+20. **November 15** Fall break
+21. **November 20** Using graphical models, Identification, Variable elimination, Undirected graphical models
     - **Slides**: [First set of slides](https://ubcecon.github.io/ECON526/lectures/lectures/using_dags.html#/factorizing-the-joint-distribution), [Second set](http://ai.stanford.edu/~paskin/gm-short-course/lec2.pdf)
     - **Readings**:
         - [Probabilistic Machine Learning: Advanced Topics](https://probml.github.io/pml-book/book2.html) Chapter 4.1-4.5
         - [Probabilistic Machine Learning: Advanced Topics](https://probml.github.io/pml-book/book2.html) Chapter 9.5 (Variable elimination)
-20. **November 20** Markov Chain Monte-Carlo methods, Probabilistic Programming Languages (PPLs)
-    - [Probabilistic Machine Learning: Advanced Topics](https://probml.github.io/pml-book/book2.html) Chapter 12
-21. **November 22** Discrete dynamic games, Conditional Choice Probabilities Estimation
-22. **November 27** ODE's, Linear dynamical systems, Nonlinear systems, Stability
-23. **November 29** Graph theory, Graph spectrum, Network games
-24. **December 4** Student presentations
-25. **December 6** Student presentations
+22. **November 22** Sampling; Inverse CDF, Rejection/importance sampling, MCMC/Metropolis-Hastings algorithm
+        - [Probabilistic Machine Learning: Advanced Topics](https://probml.github.io/pml-book/book2.html) Chapter 12
+24. **November 27** Local (Gibbs) sampling, Hamiltonian Monte-Carlo, ODE solvers, Probabilistic programming languages (PPLs)
+25. **November 29** Graph theory, Graph spectrum, Network games
+26. **December 4** NLP (short), Student presentations 1
+27. **December 6** Student presentations 2
 
-26. **Decemeber 20**
+28. **Decemeber 20**
     - Final Project due
 
 
