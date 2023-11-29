@@ -171,7 +171,7 @@ Probabilistic Programming Languages (PPLs), Bayesian methods, and intro to gener
     - Xilin Song - Extension of BLP with product space similarities
     - Jacky Tan - Agent-based models of market microstructure
 27. **December 6** Student presentations 2
-    - Yidan Chen - TBA
+    - Yidan Chen - Digitization of patent data using NLP
     - Kisho Hoshi - Replication of discrete choice paper with recommender systems
     - Bruno Esposito - Optimizing the code from [Balke and Lamadon (2022)](https://www.aeaweb.org/articles?id=10.1257/aer.20161622) using JAX
     - James Yu - Within-tier heterogeneity in directed search
