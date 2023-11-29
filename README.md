@@ -151,20 +151,31 @@ Probabilistic Programming Languages (PPLs), Bayesian methods, and intro to gener
     - **Readings**:
         - [Probabilistic Machine Learning: Advanced Topics](https://probml.github.io/pml-book/book2.html) Chapter 4.1-4.5
         - [Probabilistic Machine Learning: Advanced Topics](https://probml.github.io/pml-book/book2.html) Chapter 9.5 (Variable elimination)
-24. **November 22** Sampling; Inverse CDF, Rejection/importance sampling, MCMC/Metropolis-Hastings algorithm
+23. **November 22** Sampling; Inverse CDF, Rejection/importance sampling, MCMC/Metropolis-Hastings algorithm
     - **Notes** [Course notes on Monte-Carlo methods](https://raw.githubusercontent.com/ubcecon/ECON622/master/phil_notes/MCMC_notes.pdf)
     - **Readings**
         - [Probabilistic Machine Learning: Advanced Topics](https://probml.github.io/pml-book/book2.html) Chapter 11
-26. **November 27** Local (Gibbs) sampling, Hamiltonian Monte-Carlo, ODE solvers, Probabilistic programming languages (PPLs)
+24. **November 27** Local (Gibbs) sampling, Hamiltonian Monte-Carlo, ODE solvers, Probabilistic programming languages (PPLs)
     - **Notes** [Course notes on Monte-Carlo methods](https://raw.githubusercontent.com/ubcecon/ECON622/master/phil_notes/MCMC_notes.pdf)
     - **Readings**
         - [Probabilistic Machine Learning: Advanced Topics](https://probml.github.io/pml-book/book2.html) Chapter 12
         - Hidden Markov Models in [Turing.jl](https://turing.ml/dev/tutorials/04-hidden-markov-model) and [Pyro](https://pyro.ai/examples/hmm.html)
-28. **November 29** Graph theory, Graph spectrum, Network games
-29. **December 4** NLP (short), Student presentations 1
-30. **December 6** Student presentations 2
-
-31. **Decemeber 20**
+25. **November 29** NLP (short), Tuning foundation models, Graph theory, Graph spectrum, Network games
+    - **Readings** 
+      - [Course notes on network games](https://raw.githubusercontent.com/ubcecon/ECON622/master/phil_notes/graph_theory_notes.pdf)
+      - [Datascience notebook on social & economic networks](https://datascience.quantecon.org/applications/networks.html)
+      - [Huggingface fine-tuning demo](https://huggingface.co/docs/transformers/training)
+      - Melissa Dell's packages [LinkTransformer](https://github.com/dell-research-harvard/linktransformer) (for merging datasets) and [LayoutParser](https://github.com/Layout-Parser/layout-parser) (for OCR/digitization)
+26. **December 4** Student presentations 1
+    - Eileen Bian - Application of linear programming
+    - Xilin Song - Extension of BLP with product space similarities
+    - Jacky Tan - Agent-based models of market microstructure
+27. **December 6** Student presentations 2
+    - Yidan Chen - TBA
+    - Kisho Hoshi - Replication of discrete choice paper with recommender systems
+    - Bruno Esposito - Optimizing the code from [Balke and Lamadon (2022)](https://www.aeaweb.org/articles?id=10.1257/aer.20161622) using JAX
+    - James Yu - Within-tier heterogeneity in directed search
+28. **Decemeber 20**
     - Final Project due
 
 
