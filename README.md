@@ -169,7 +169,7 @@ Probabilistic Programming Languages (PPLs), Bayesian methods, and intro to gener
 26. **December 4** Student presentations 1
     - Eileen Bian - Application of linear programming
     - Xilin Song - Extension of BLP with product space similarities
-    - Jacky Tan - Agent-based models of market microstructure
+    - Jacky Tan - Heterogeneous agent models of market microstructure
 27. **December 6** Student presentations 2
     - Yidan Chen - Digitization of patent data using NLP
     - Kisho Hoshi - Replication of discrete choice paper with recommender systems
