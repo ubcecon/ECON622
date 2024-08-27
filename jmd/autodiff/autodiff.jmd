@@ -104,7 +104,7 @@ db
 
 - Documentation is not suited to beginners
 - Does not work on all Julia code, but cases where it fails are not well documented. Calling `Enzyme.API.runtimeActivity!(true)` works around some errors.
-- Crytic error messages. Enzyme operates on LLVM IR, and error messages often reference the point in the LLVM IR where the error occurred. Figuring out what Julia code the LLVM IR corresponds to is not easy.
+- Cryptic error messages. Enzyme operates on LLVM IR, and error messages often reference the point in the LLVM IR where the error occurred. Figuring out what Julia code the LLVM IR corresponds to is not easy.
 
 ```julia
 Enzyme.API.runtimeActivity!(false)

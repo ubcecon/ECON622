@@ -5,14 +5,12 @@
 - **Instructors:**
   - Paul Schrimpf, schrimpf@mail.ubc.ca
   - Jesse Perla, jesse.perla@ubc.cas
-  - Phil Solimine,
 - **Office Hours:**
-- **Class Time** Mondays & Wednesdays 9:30-11:00 in [Buchanon D301](https://learningspaces.ubc.ca/classrooms/buch-d301)
+- **Class Time** Mondays & Wednesdays 9:30-11:00 in Iona 533
 
 
 Classes will held in-person.
 <!-- In-person attendance is preferred, but classes will be streamed and recorded as well. -->
-
 
 ## Course Description
 
@@ -55,6 +53,10 @@ While the problem sets will be frequent, many will be short to force
 practice (and will not be weighed identically) Assume you will get the
 full participation mark if you rarely miss class.
 
+Students may work together on assignments, but each student should write their own answers. If you work closely together with someone and consquently have very similar code, you should state with whom you worked on your assignment.
+
+The use of generative AI tools such as GitHub Copilot or ChatGPT is allowed as long as you disclose their use.
+
 The final project topics are very open, and the main criteria is that
 you either (1) learn/use/apply a computational tool to a research
 topic of your interest or (2) contribute to an open-source
@@ -81,7 +83,7 @@ paper on a technique that might be useful for your project.
 
 ## Topics
 
-The course will be taught in 3 parts, one with each instructor.
+The course will be taught in 2 parts, one with each instructor.
 
 We may not cover all these topics. A tentative schedule, based on last
 year's course is availabe on the course webpage.
@@ -119,10 +121,6 @@ This section will concentration on machine learning and deep learning techniques
 7. Intro to Neural Networks, Function Approximation, and Representation Learning
 8. Deep Learning and Dynamic Models
 9. Double-descent, regularization, and generalization
-
-## Phil
-
-See schedule on [README.md](README.md).
 
 
 ## UBC values and policies
