@@ -14,16 +14,14 @@ See [Syllabus](syllabus.md) for more details
 
 See [problemsets.md](problemsets.md).
 
-
-
 ## Lectures
 
 **Paul**
 
 1. **September 4**: Environment and Introduction to Julia
     - Environment: read one or both of these on your own and install Julia, IJulia, and VSCode, preferrably before the first class
+        - [MoJuWo: Writing your code](https://modernjuliaworkflows.org/writing/)
         - [Julia Environment](https://quantecon.github.io/lecture-julia.myst/getting_started_julia/getting_started.html)
-        - [MoJuWo: Writing your code](https://modernjuliaworkflows.github.io/pages/writing/)
     - In class: Motivating econometric examples
     - Self-study: [Introductory Examples](https://quantecon.github.io/lecture-julia.myst/getting_started_julia/julia_by_example.html)
 2. **September 9**: From Economic Models to Code
