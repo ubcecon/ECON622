@@ -1,0 +1,219 @@
+---
+title: Introduction
+author: Paul Schrimpf
+date: last-modified
+bibliography: 622.bib
+format:
+  revealjs:
+    theme: blood
+    smaller: true
+    min-scale: 0.1
+    max-scale: 3.0
+    chalkboard:
+      theme: whiteboard
+      boardmarker-width: 2
+      chalk-width: 2
+      chalk-effect: 0.0
+engine: julia
+---
+
+$$
+\def\Er{{\mathrm{E}}}
+\def\En{{\mathbb{E}_n}}
+\def\cov{{\mathrm{Cov}}}
+\def\var{{\mathrm{Var}}}
+\def\R{{\mathbb{R}}}
+\def\arg{{\mathrm{arg}}}
+\newcommand\norm[1]{\left\lVert#1\right\rVert}
+\def\rank{{\mathrm{rank}}}
+\newcommand{\inpr}{ \overset{p^*_{\scriptscriptstyle n}}{\longrightarrow}}
+\def\inprob{{\,{\buildrel p \over \rightarrow}\,}}
+\def\indist{\,{\buildrel d \over \rightarrow}\,}
+\DeclareMathOperator*{\plim}{plim}
+\DeclareMathOperator*{\argmax}{argmax}
+\DeclareMathOperator*{\argmin}{argmin}
+$$
+
+
+# Some Motivating Examples
+
+::: {.notes}
+
+To give some motivation and a common thread for the material that we will cover, we will focus on learning computational techniques useful for structural econometrics. Most of these techniques will be applicable to computational economics and scientific computing more broadly.
+
+:::
+
+# Extremum Estimators
+
+$$
+\begin{align*}
+\hat{\theta} \in \argmin_{\theta \in \Theta} Q_n(\theta)
+\end{align*}
+$$
+
+- Parameter $\theta \in \Theta$
+- Data-dependent objective function $Q_n: \Theta \to \R$
+
+## Example: Least-Squares
+
+- Model:
+  $$
+  y_i = x_i'\beta + \epsilon_i
+  $$
+- $Q_n(\beta) = \frac{1}{n} \sum_{i=1} (y_i - x_i'\beta)^2
+
+## Example: Maximum Likelihood
+
+- Model: $y_i$ has conditional pdf $f(y|x_i;\theta)$, independent across $i$
+- $Q_n(\theta) = -\frac{1}{n} \sum_{i=1}^n \log\left(f(y_i | x_i; \theta)\right)$
+
+
+## Example: Generalized Method of Moments
+
+- Model:
+  $$
+  \Er\left[g(y_i,x_i,\theta_0) \right] = 0
+  $$
+  for moment function $g(y_i,x_i,\cdot): \Theta \to \R^k$
+- $Q_n(\theta) = \left(\frac{1}{n}\sum_{i=1}^n g(y_i,x_i,\theta)\right)' W \left(\frac{1}{n}\sum_{i=1}^n g(y_i,x_i,\theta)\right)
+
+::: {.notes}
+
+Moment function or conditional density come from some economic model. We will briefly look at some more detailed examples to illustrate.
+
+:::
+
+# Example: Consumption and Assets
+
+## Example: Consumption and Assets
+
+- @hs1982
+- Model
+$$
+\begin{align*}
+\max_{c_t, q_t} & \Er\left[ \sum_{t=0}^\infty \beta^t u(c_t) | \mathcal{I}_0 \right] \\
+\text{s.t. } & \;\; p_t q_t + c_t \leq (p_t + d_t)q_{t-1} + y_t
+\end{align*}
+$$
+
+## Example: Consumption and Assets
+
+- Cleverly rearrange first order conditions:
+$$
+\Er\left[\beta \frac{u'(c_{t+1})}{u'(c_t)} \underbrace{\frac{p_{t+1} + d_{t+1}}{p_t}}_{R_t} | \mathcal{I}_s \right] = 1 \text{ for } s \leq t
+$$
+
+## Example: Consumption and Assets
+
+- Assume $u(c) = \frac{c^{1-\gamma}}{1-\gamma}$
+$$
+\Er\left[\beta \frac{c_{t+1}^{-\gamma}}{c_t^{-\gamma}} R_t | \mathcal{I}_s \right] = 1 \text{ for } s \leq t
+$$
+- Model implies
+$$
+\Er\left[\left(\beta \frac{c_{t+1}^{-\gamma}}{c_t^{-\gamma}} R_t -1 \right)Z_t \right] = 0
+$$
+for any $Z_t \in \mathcal{I}_t$
+- I.e.
+$$
+g(\overbrace{X_t}^{(c_t,c_{t+1},R_t,Z_t)}, \underbrace{\theta}_{(\beta,\gamma)}) = \left(\beta \frac{c_{t+1}^{-\gamma}}{c_t^{-\gamma}} R_t -1 \right)Z_t
+$$
+
+# Example: Random Coefficients Demand
+
+## Example: Random Coefficients Demand
+
+- @blp1995
+- Consumers choose product:
+  $$
+  j = \argmax_{j \in \{0, ..., J\}} x_{jt}' (\bar{\beta} + \Sigma \nu_i) + \xi_{jt} + \epsilon_{ijt}
+  $$
+  - $\nu_i \sim N(0,I_k)$, $\epsilon_{ijt} \sim$ Type I Extreme Value
+  - Unobserved demand shock $\xi_{jt}$
+
+## Example: Random Coefficients Demand
+
+- Aggregate demand:
+$$
+s_{jt} = \int \frac{e^{x_{jt}'(\bar{\beta} + \Sigma \nu) + \xi_{jt}}} {\sum_{k = 0}^J e^{x_{kt}'(\bar{\beta} + \Sigma \nu) + \xi_{kt}} } dF\nu
+$$
+
+
+## Example: Random Coefficients Demand
+
+- Instruments $Z_{jt}$ with $E[\xi_{jt} Z_{jt}] = 0$
+- $g(s_{jt},x_{jt}, Z_{jt}, \bar{\beta},\Sigma) = \left(\delta_{jt}(s_{\cdot t}, x_{\cdot t},\beta,\Sigma) - x_{jt}'\bar{\beta}\right) Z_{jt}$
+- where $\delta_{jt}$ solves
+$$
+s_{jt} = \int \frac{e^{\delta_{jt} + x_{jt}'\Sigma \nu}} {\sum_{k = 0}^J e^{\delta_{kt} + x_{kt}'\Sigma \nu}} dF\nu
+$$
+
+# Example: Insurance and Drug Demand
+
+## Example: Insurance and Drug Demand
+
+- @efs2015
+- Risk-neutral forward-looking individual faces uncertain health shocks, choose whether or not to fill prescriptions
+- Prescriptions are defined by $(\theta ,\omega )$
+   - $\theta >0$ is
+      the prescription's (total)\ cost
+   - $\omega >0$ is the monetized cost of
+      not taking the drug
+
+   - Arrive at weekly rate $\lambda$, drawn from $G(\theta ,\omega)=G_{2}(\omega |\theta )G_{1}(\theta )$
+
+    - $\lambda$ follows a Markov process $H(\lambda |\lambda ^{\prime })$
+
+- Insurance defines $c(\theta ,x)$ -- the out-of-pocket cost
+   associated with a prescription that costs $\theta $ when total spending so far is $x$
+
+## Example: Insurance and Drug Demand
+
+- Flow utility
+    $$
+    u(\theta ,\omega ;x)=\left \{
+      \begin{array}{ll}
+        -c(\theta ,x) & if\text{ }filled \\
+        -\omega & if\text{ }not\text{ }filled%
+      \end{array}%
+    \right.
+    $$
+
+- Bellman equation:
+    $$
+    \begin{eqnarray*}
+      v(x,t,\lambda _{t+1}) &=&E_{\lambda |\lambda _{t+1}} \\
+      &&\hspace{-1.35in}\left[
+        \begin{array}{c}
+          (1-\lambda )\delta v(x,t-1,\lambda )+ \\
+          \lambda \int \max\left \{
+            \begin{array}{l}
+              -c(\theta ,x)+\delta v(x+\theta ,t-1,\lambda ), \\
+              -\omega +\delta v(x,t-1,\lambda )%
+            \end{array}%
+          \right \} dG(\theta ,\omega )%
+        \end{array}%
+      \right]
+    \end{eqnarray*}
+    $$
+    with terminal condition $v(x,0)=0$ for all $x$
+
+
+## Example: Insurance and Drug Demand
+
+- Estimate by simulated method of moments
+  - Simulate model
+  - Minimize difference between observed summary statistics and summary statistics in simulated data
+
+# Implementing
+
+## Implementing
+
+- Need to go from mathematical description of model to code
+- All examples need to minimize an objective function
+  - Helpful to compute both objective function and its derivatives
+- Random coefficients demand model also needs to solve nonlinear equations and compute integrals
+- Drug example needs numeric dynamic programming - function approximation and numeric integration
+
+
+# References
