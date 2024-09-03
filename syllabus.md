@@ -1,4 +1,4 @@
-# ECON622 - Fall 2023
+# ECON622 - Fall 2024
 
 ## Computational Economics with Data Science Applications
 
