@@ -23,11 +23,11 @@ See [problemsets.md](problemsets.md).
         - [MoJuWo: Writing your code](https://modernjuliaworkflows.org/writing/)
         - [Julia Environment](https://quantecon.github.io/lecture-julia.myst/getting_started_julia/getting_started.html)
     - In class: Motivating econometric examples
-    - Self-study: [Introductory Examples](https://quantecon.github.io/lecture-julia.myst/getting_started_julia/julia_by_example.html)
+    - Self-study: [Introductory Examples](https://quantecon.github.io/lecture-julia.myst/getting_started_julia/julia_by_example.html) or [Chapter 1 of *Scientific Programming in Julia*](https://juliateachingctu.github.io/Scientific-Programming-in-Julia/stable/lecture_01/motivation/)
 2. **September 9**: From Economic Models to Code
-   - In class: [Implementing random coefficient demand \& numeric integration methods](https://github.com/ubcecon/ECON622_BLP.jl/blob/main/docs/blp.jmd)
-   - Self-study: [Julia Essentials](https://quantecon.github.io/lecture-julia.myst/getting_started_julia/julia_essentials.html)
-   - Self-study: [Fundamental Types](https://quantecon.github.io/lecture-julia.myst/getting_started_julia/fundamental_types.html)
+   - In class continue: [Implementing random coefficient demand \& numeric integration methods](https://github.com/ubcecon/ECON622_BLP.jl/blob/main/docs/blp.jmd)
+   - Self-study: [Julia Essentials](https://quantecon.github.io/lecture-julia.myst/getting_started_julia/julia_essentials.html) and [Fundamental Types](https://quantecon.github.io/lecture-julia.myst/getting_started_julia/fundamental_types.html)
+   - Self-study: [Chapter 2 of *Scientific Programming in Julia*](https://juliateachingctu.github.io/Scientific-Programming-in-Julia/stable/lecture_02/lecture/)
 3. **September 11**: Optimization
    - In class: discussion of types and using them to [reorganize numeric integration code from last time](https://github.com/ubcecon/ECON622_BLP.jl/blob/main/src/integrate.jl) and [testing them](https://github.com/ubcecon/ECON622_BLP.jl/blob/main/test/runtests.jl)
    - [Optimization algorithms](https://schrimpf.github.io/AnimatedOptimization.jl/optimization/)
