@@ -6,7 +6,8 @@ bibliography: 622.bib
 format:
   revealjs:
     theme: blood
-    smaller: true
+    width: 1600
+    height: 1000
     min-scale: 0.1
     max-scale: 3.0
     chalkboard:
