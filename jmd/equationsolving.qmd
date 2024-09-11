@@ -1,0 +1,153 @@
+---
+title: Solving Nonlinear Equations
+author: Paul Schrimpf
+date: last-modified
+bibliography: 622.bib
+format:
+  revealjs:
+    theme: blood
+    smaller: true
+    min-scale: 0.1
+    max-scale: 3.0
+    chalkboard:
+      theme: whiteboard
+      boardmarker-width: 2
+      chalk-width: 2
+      chalk-effect: 0.0
+engine: julia
+---
+
+$$
+\def\Er{{\mathrm{E}}}
+\def\En{{\mathbb{E}_n}}
+\def\cov{{\mathrm{Cov}}}
+\def\var{{\mathrm{Var}}}
+\def\R{{\mathbb{R}}}
+\def\arg{{\mathrm{arg}}}
+\newcommand\norm[1]{\left\lVert#1\right\rVert}
+\def\rank{{\mathrm{rank}}}
+\newcommand{\inpr}{ \overset{p^*_{\scriptscriptstyle n}}{\longrightarrow}}
+\def\inprob{{\,{\buildrel p \over \rightarrow}\,}}
+\def\indist{\,{\buildrel d \over \rightarrow}\,}
+\DeclareMathOperator*{\plim}{plim}
+\DeclareMathOperator*{\argmax}{argmax}
+\DeclareMathOperator*{\argmin}{argmin}
+$$
+
+# Nonlinear Equations
+
+## Nonlinear Equations
+
+- $F: \R^n \to \R^n$
+- Want to solve for $x$
+$$
+F(x) = 0
+$$
+
+
+## Example: BLP
+
+- Share equation
+$$
+s_{j} = \int \frac{e^{\delta_{j} + x_{j}'\Sigma \nu}} {\sum_{k = 0}^J e^{\delta_{k} + x_{k}'\Sigma \nu}} dF\nu
+$$
+- $J$ equations to solve for $\delta = (\delta_{1t}, ..., \delta_{Jt})$
+
+## Newton's Method
+
+- $F(x)$ differentiable with Jacobian $F'(x)$
+- Algorithm:
+  1. Initial guess $x_0$
+  2. Update based on first order expansion
+  $$
+  \begin{align*}
+  F(x_{s+1}) \approx F(x_s) + F'(x_s)(x_{s+1} - x_s) = & 0
+  x_{s+1} = x_s + F'(x_s) \ F(x_s)
+  \end{align*}
+  $$
+  3. Repeat until $\Vert F(x_s) \Vert \approx 0$
+
+## Simple Idea, Many Variations
+
+- Step size
+  1. Initial guess $x_0$
+  2. Update based on first order expansion
+  $$
+  \begin{align*}
+  F(x_{s+1}) \approx F(x_s) + F'(x_s)(x_{s+1} - x_s) = & 0
+  x_{s+1} = x_s + {\color{red}{\lambda}} F'(x_s) \ F(x_s)
+  \end{align*}
+  $$
+  3. Repeat until $\Vert F(x_s) \Vert \approx 0$
+
+- line search or trust region
+
+## Simple Idea, Many Variations
+
+-
+  1. Initial guess $x_0$
+  2. Update based on first order expansion
+  $$
+  \begin{align*}
+  F(x_{s+1}) \approx F(x_s) + F'(x_s)(x_{s+1} - x_s) = & 0
+  \end{align*}
+  $$
+  approximately solve
+  $$
+  F'(x_s) A = F(x_s)
+  $$
+  update
+  $$
+  x_{s+1} = x_s + \lambda {\color{red}{A}}
+  $$
+  3. Repeat until $\Vert F(x_s) \Vert \approx 0$
+
+- Especially if $F'(x_s)$ is large and/or sparse
+
+## Simple Idea, Many Variations
+
+-
+  1. Initial guess $x_0$
+  2. Update based on first order expansion
+  $$
+  \begin{align*}
+  F(x_{s+1}) \approx F(x_s) + F'(x_s)(x_{s+1} - x_s) = & 0
+  x_{s+1} = x_s + F'(x_s) \ F(x_s)
+  \end{align*}
+  $$
+  3. Repeat until ${\color{red}{\Vert F(x_{s+1}) \Vert < rtol \Vert
+      F(x_0) \Vert + atol }}$
+
+## Simple Idea, Many Variations
+
+-
+  1. Initial guess $x_0$
+  2. Update based on first order expansion
+     - compute $F'(x_s)$ using:
+       - hand written code or
+       - finite differences or
+       - secant method $F'(x_s) \approx \frac{F(x_s) - F(x_{s-1})}{\Vert x_s - x_{s-1} \Vert}$ or
+       - automatic differentiation
+  $$
+  \begin{align*}
+  F(x_{s+1}) \approx F(x_s) + F'(x_s)(x_{s+1} - x_s) = & 0
+  x_{s+1} = x_s + F'(x_s) \ F(x_s)
+  \end{align*}
+  $$
+  3. Repeat until $\Vert F(x_{s+1}) \Vert \approx 0$
+
+## Simple Idea, Many Variations
+
+- @kelley2022 is thorough reference for nonlinear equation solving methods and their properties
+- [NonlinearSolve.jl](https://docs.sciml.ai/NonlinearSolve/stable/) gives unified interface for many methods
+
+# Examples
+
+## BLP share equation
+
+```{julia}
+
+```
+
+
+# References
