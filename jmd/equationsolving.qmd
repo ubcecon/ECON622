@@ -146,7 +146,89 @@ $$
 ## BLP share equation
 
 ```{julia}
+@doc raw"""
+    share(δ, Σ, dFν, x)
 
+Computes shares in random coefficient logit with mean tastes `δ`, observed characteristics `x`, unobserved taste distribution `dFν`, and taste covariances `Σ`.
+
+# Arguments
+
+- `δ` vector of length `J`
+- `Σ` `K` by `K` matrix
+- `dFν` distribution of length `K` vector
+- `x` `J` by `K` array
+
+# Returns
+
+- vector of length `J` consisting of $s_1$, ..., $s_J$
+"""
+function share(δ, Σ, dFν, x, ∫ = ∫cuba)
+  J,K = size(x)
+  (length(δ) == J) || error("length(δ)=$(length(δ)) != size(x,1)=$J")
+  (K,K) === size(Σ) || error("size(x,2)=$K != size(Σ)=$(size(Σ))")
+  function shareν(ν)
+    s = δ + x*Σ*ν
+    s .-= maximum(s)
+    s .= exp.(s)
+    s ./= sum(s)
+    return(s)
+  end
+  return(∫(shareν, dFν))
+end
+
+using HCubature
+function ∫cuba(f, dx; rtol=1e-4)
+  D = length(dx)
+  x(t) = t./(1 .- t.^2)
+  Dx(t) = prod((1 .+ t.^2)./(1 .- t.^2).^2)
+  hcubature(t->f(x(t))*pdf(dx,x(t))*Dx(t), -ones(D),ones(D), rtol=rtol)[1]
+end
+
+using SparseGrids, FastGaussQuadrature, Distributions
+function ∫sgq(f, dx::MvNormal; order=5)
+  X, W = sparsegrid(length(dx), order, gausshermite, sym=true)
+  L = cholesky(dx.Σ).L
+  sum(f(√2*L*x + dx.μ)*w for (x,w) ∈ zip(X,W))/(π^(length(dx)/2))
+end
+```
+
+## Solving for $\delta$
+
+```{julia}
+# create a problem to solve
+using LinearAlgebra
+J = 3
+K = 2
+x = randn(J,K)
+C = randn(K,K)
+Σ = C'*C + I
+δ = randn(J)
+dFν = MvNormal(zeros(K), I)
+s = share(δ, Σ, dFν, x, ∫sgq)
+
+# try to recover δ
+using NonlinearSolve, LinearAlgebra
+F(δ, Σ) = share(δ,Σ,dFν, x,∫sgq) - s
+δ0 = zero(δ)
+prob = NonlinearProblem(F, δ0, Σ)
+sol = solve(prob)
+
+
+println("True δ: $δ")
+println("Solved δ: $(sol.u)")
+println("||F(sol.u)||: $(norm(sol.resid))")
+println("Error: $(norm(sol.u - δ))")
+```
+
+## Alternative algorithms
+
+```{julia}
+solr = solve(prob, RobustMultiNewton(), show_trace=Val(true), trace_level=TraceAll())
+```
+
+```{julia}
+using FixedPointAcceleration
+solfp = solve(prob, FixedPointAccelerationJL() , show_trace=Val(true), trace_level=TraceAll())
 ```
 
 
