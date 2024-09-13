@@ -1,0 +1,247 @@
+[
+  {
+    "objectID": "intro.html#example-least-squares",
+    "href": "intro.html#example-least-squares",
+    "title": "Introduction",
+    "section": "Example: Least-Squares",
+    "text": "Example: Least-Squares\n\nModel: \\[\ny_i = x_i'\\beta + \\epsilon_i\n\\]\n$Q_n() = _{i=1} (y_i - x_i’)^2"
+  },
+  {
+    "objectID": "intro.html#example-maximum-likelihood",
+    "href": "intro.html#example-maximum-likelihood",
+    "title": "Introduction",
+    "section": "Example: Maximum Likelihood",
+    "text": "Example: Maximum Likelihood\n\nModel: \\(y_i\\) has conditional pdf \\(f(y|x_i;\\theta)\\), independent across \\(i\\)\n\\(Q_n(\\theta) = -\\frac{1}{n} \\sum_{i=1}^n \\log\\left(f(y_i | x_i; \\theta)\\right)\\)"
+  },
+  {
+    "objectID": "intro.html#example-generalized-method-of-moments",
+    "href": "intro.html#example-generalized-method-of-moments",
+    "title": "Introduction",
+    "section": "Example: Generalized Method of Moments",
+    "text": "Example: Generalized Method of Moments\n\nModel: \\[\n\\Er\\left[g(y_i,x_i,\\theta_0) \\right] = 0\n\\] for moment function \\(g(y_i,x_i,\\cdot): \\Theta \\to \\R^k\\)\n$Q_n() = ({i=1}^n g(y_i,x_i,))’ W ({i=1}^n g(y_i,x_i,))\n\n\nMoment function or conditional density come from some economic model. We will briefly look at some more detailed examples to illustrate."
+  },
+  {
+    "objectID": "intro.html#example-consumption-and-assets-1",
+    "href": "intro.html#example-consumption-and-assets-1",
+    "title": "Introduction",
+    "section": "Example: Consumption and Assets",
+    "text": "Example: Consumption and Assets\n\nHansen and Singleton (1982)\nModel \\[\n\\begin{align*}\n\\max_{c_t, q_t} & \\Er\\left[ \\sum_{t=0}^\\infty \\beta^t u(c_t) | \\mathcal{I}_0 \\right] \\\\\n\\text{s.t. } & \\;\\; p_t q_t + c_t \\leq (p_t + d_t)q_{t-1} + y_t\n\\end{align*}\n\\]"
+  },
+  {
+    "objectID": "intro.html#example-consumption-and-assets-2",
+    "href": "intro.html#example-consumption-and-assets-2",
+    "title": "Introduction",
+    "section": "Example: Consumption and Assets",
+    "text": "Example: Consumption and Assets\n\nCleverly rearrange first order conditions: \\[\n\\Er\\left[\\beta \\frac{u'(c_{t+1})}{u'(c_t)} \\underbrace{\\frac{p_{t+1} + d_{t+1}}{p_t}}_{R_t} | \\mathcal{I}_s \\right] = 1 \\text{ for } s \\leq t\n\\]"
+  },
+  {
+    "objectID": "intro.html#example-consumption-and-assets-3",
+    "href": "intro.html#example-consumption-and-assets-3",
+    "title": "Introduction",
+    "section": "Example: Consumption and Assets",
+    "text": "Example: Consumption and Assets\n\nAssume \\(u(c) = \\frac{c^{1-\\gamma}}{1-\\gamma}\\) \\[\n\\Er\\left[\\beta \\frac{c_{t+1}^{-\\gamma}}{c_t^{-\\gamma}} R_t | \\mathcal{I}_s \\right] = 1 \\text{ for } s \\leq t\n\\]\nModel implies \\[\n\\Er\\left[\\left(\\beta \\frac{c_{t+1}^{-\\gamma}}{c_t^{-\\gamma}} R_t -1 \\right)Z_t \\right] = 0\n\\] for any \\(Z_t \\in \\mathcal{I}_t\\)\nI.e. \\[\ng(\\overbrace{X_t}^{(c_t,c_{t+1},R_t,Z_t)}, \\underbrace{\\theta}_{(\\beta,\\gamma)}) = \\left(\\beta \\frac{c_{t+1}^{-\\gamma}}{c_t^{-\\gamma}} R_t -1 \\right)Z_t\n\\]"
+  },
+  {
+    "objectID": "intro.html#example-random-coefficients-demand-1",
+    "href": "intro.html#example-random-coefficients-demand-1",
+    "title": "Introduction",
+    "section": "Example: Random Coefficients Demand",
+    "text": "Example: Random Coefficients Demand\n\nBerry, Levinsohn, and Pakes (1995)\nConsumers choose product: \\[\nj = \\argmax_{j \\in \\{0, ..., J\\}} x_{jt}' (\\bar{\\beta} + \\Sigma \\nu_i) + \\xi_{jt} + \\epsilon_{ijt}\n\\]\n\n\\(\\nu_i \\sim N(0,I_k)\\), \\(\\epsilon_{ijt} \\sim\\) Type I Extreme Value\nUnobserved demand shock \\(\\xi_{jt}\\)"
+  },
+  {
+    "objectID": "intro.html#example-random-coefficients-demand-2",
+    "href": "intro.html#example-random-coefficients-demand-2",
+    "title": "Introduction",
+    "section": "Example: Random Coefficients Demand",
+    "text": "Example: Random Coefficients Demand\n\nAggregate demand: \\[\ns_{jt} = \\int \\frac{e^{x_{jt}'(\\bar{\\beta} + \\Sigma \\nu) + \\xi_{jt}}} {\\sum_{k = 0}^J e^{x_{kt}'(\\bar{\\beta} + \\Sigma \\nu) + \\xi_{kt}} } dF\\nu\n\\]"
+  },
+  {
+    "objectID": "intro.html#example-random-coefficients-demand-3",
+    "href": "intro.html#example-random-coefficients-demand-3",
+    "title": "Introduction",
+    "section": "Example: Random Coefficients Demand",
+    "text": "Example: Random Coefficients Demand\n\nInstruments \\(Z_{jt}\\) with \\(E[\\xi_{jt} Z_{jt}] = 0\\)\n\\(g(s_{jt},x_{jt}, Z_{jt}, \\bar{\\beta},\\Sigma) = \\left(\\delta_{jt}(s_{\\cdot t}, x_{\\cdot t},\\beta,\\Sigma) - x_{jt}'\\bar{\\beta}\\right) Z_{jt}\\)\nwhere \\(\\delta_{jt}\\) solves \\[\ns_{jt} = \\int \\frac{e^{\\delta_{jt} + x_{jt}'\\Sigma \\nu}} {\\sum_{k = 0}^J e^{\\delta_{kt} + x_{kt}'\\Sigma \\nu}} dF\\nu\n\\]"
+  },
+  {
+    "objectID": "intro.html#example-insurance-and-drug-demand-1",
+    "href": "intro.html#example-insurance-and-drug-demand-1",
+    "title": "Introduction",
+    "section": "Example: Insurance and Drug Demand",
+    "text": "Example: Insurance and Drug Demand\n\nEinav, Finkelstein, and Schrimpf (2015)\nRisk-neutral forward-looking individual faces uncertain health shocks, choose whether or not to fill prescriptions\nPrescriptions are defined by \\((\\theta ,\\omega )\\)\n\n\\(\\theta &gt;0\\) is the prescription’s (total) cost\n\\(\\omega &gt;0\\) is the monetized cost of not taking the drug\nArrive at weekly rate \\(\\lambda\\), drawn from \\(G(\\theta ,\\omega)=G_{2}(\\omega |\\theta )G_{1}(\\theta )\\)\n\\(\\lambda\\) follows a Markov process \\(H(\\lambda |\\lambda ^{\\prime })\\)\n\nInsurance defines \\(c(\\theta ,x)\\) – the out-of-pocket cost associated with a prescription that costs $$ when total spending so far is \\(x\\)"
+  },
+  {
+    "objectID": "intro.html#example-insurance-and-drug-demand-2",
+    "href": "intro.html#example-insurance-and-drug-demand-2",
+    "title": "Introduction",
+    "section": "Example: Insurance and Drug Demand",
+    "text": "Example: Insurance and Drug Demand\n\nFlow utility \\[\n  u(\\theta ,\\omega ;x)=\\left \\{\n    \\begin{array}{ll}\n      -c(\\theta ,x) & if\\text{ }filled \\\\\n      -\\omega & if\\text{ }not\\text{ }filled%\n    \\end{array}%\n  \\right.\n  \\]\nBellman equation: \\[\n  \\begin{eqnarray*}\n    v(x,t,\\lambda _{t+1}) &=&E_{\\lambda |\\lambda _{t+1}} \\\\\n    &&\\hspace{-1.35in}\\left[\n      \\begin{array}{c}\n        (1-\\lambda )\\delta v(x,t-1,\\lambda )+ \\\\\n        \\lambda \\int \\max\\left \\{\n          \\begin{array}{l}\n            -c(\\theta ,x)+\\delta v(x+\\theta ,t-1,\\lambda ), \\\\\n            -\\omega +\\delta v(x,t-1,\\lambda )%\n          \\end{array}%\n        \\right \\} dG(\\theta ,\\omega )%\n      \\end{array}%\n    \\right]\n  \\end{eqnarray*}\n  \\] with terminal condition \\(v(x,0)=0\\) for all \\(x\\)"
+  },
+  {
+    "objectID": "intro.html#example-insurance-and-drug-demand-3",
+    "href": "intro.html#example-insurance-and-drug-demand-3",
+    "title": "Introduction",
+    "section": "Example: Insurance and Drug Demand",
+    "text": "Example: Insurance and Drug Demand\n\nEstimate by simulated method of moments\n\nSimulate model\nMinimize difference between observed summary statistics and summary statistics in simulated data"
+  },
+  {
+    "objectID": "intro.html#implementing-1",
+    "href": "intro.html#implementing-1",
+    "title": "Introduction",
+    "section": "Implementing",
+    "text": "Implementing\n\nNeed to go from mathematical description of model to code\nAll examples need to minimize an objective function\n\nHelpful to compute both objective function and its derivatives\n\nRandom coefficients demand model also needs to solve nonlinear equations and compute integrals\nDrug example needs numeric dynamic programming - function approximation and numeric integration"
+  },
+  {
+    "objectID": "equationsolving.html#nonlinear-equations-1",
+    "href": "equationsolving.html#nonlinear-equations-1",
+    "title": "Solving Nonlinear Equations",
+    "section": "Nonlinear Equations",
+    "text": "Nonlinear Equations\n\n\\(F: \\R^n \\to \\R^n\\)\nWant to solve for \\(x\\) \\[\nF(x) = 0\n\\]"
+  },
+  {
+    "objectID": "equationsolving.html#example-blp",
+    "href": "equationsolving.html#example-blp",
+    "title": "Solving Nonlinear Equations",
+    "section": "Example: BLP",
+    "text": "Example: BLP\n\nShare equation \\[\ns_{j} = \\int \\frac{e^{\\delta_{j} + x_{j}'\\Sigma \\nu}} {\\sum_{k = 0}^J e^{\\delta_{k} + x_{k}'\\Sigma \\nu}} dF\\nu\n\\]\n\\(J\\) equations to solve for \\(\\delta = (\\delta_{1t}, ..., \\delta_{Jt})\\)"
+  },
+  {
+    "objectID": "equationsolving.html#newtons-method",
+    "href": "equationsolving.html#newtons-method",
+    "title": "Solving Nonlinear Equations",
+    "section": "Newton’s Method",
+    "text": "Newton’s Method\n\n\\(F(x)\\) differentiable with Jacobian \\(F'(x)\\)\nAlgorithm:\n\nInitial guess \\(x_0\\)\nUpdate based on first order expansion \\[\n\\begin{align*}\nF(x_{s+1}) \\approx F(x_s) + F'(x_s)(x_{s+1} - x_s) = & 0 \\\\\nx_{s+1} = & x_s + F'(x_s)^{-1} F(x_s)\n\\end{align*}\n\\]\nRepeat until \\(\\Vert F(x_s) \\Vert \\approx 0\\)"
+  },
+  {
+    "objectID": "equationsolving.html#simple-idea-many-variations",
+    "href": "equationsolving.html#simple-idea-many-variations",
+    "title": "Solving Nonlinear Equations",
+    "section": "Simple Idea, Many Variations",
+    "text": "Simple Idea, Many Variations\n\nStep size\n\nInitial guess \\(x_0\\)\nUpdate based on first order expansion \\[\n\\begin{align*}\nF(x_{s+1}) \\approx F(x_s) + F'(x_s)(x_{s+1} - x_s) = & 0 \\\\\nx_{s+1} = x_s + {\\color{red}{\\lambda}} F'(x_s)^{-1} F(x_s)\n\\end{align*}\n\\]\nRepeat until \\(\\Vert F(x_s) \\Vert \\approx 0\\)\n\nline search or trust region"
+  },
+  {
+    "objectID": "equationsolving.html#simple-idea-many-variations-1",
+    "href": "equationsolving.html#simple-idea-many-variations-1",
+    "title": "Solving Nonlinear Equations",
+    "section": "Simple Idea, Many Variations",
+    "text": "Simple Idea, Many Variations\n\n\nInitial guess \\(x_0\\)\nUpdate based on first order expansion \\[\n\\begin{align*}\nF(x_{s+1}) \\approx F(x_s) + F'(x_s)(x_{s+1} - x_s) = & 0\n\\end{align*}\n\\] approximately solve \\[\nF'(x_s) A = F(x_s)\n\\] update \\[\nx_{s+1} = x_s + \\lambda {\\color{red}{A}}\n\\]\nRepeat until \\(\\Vert F(x_s) \\Vert \\approx 0\\)\n\nEspecially if \\(F'(x_s)\\) is large and/or sparse"
+  },
+  {
+    "objectID": "equationsolving.html#simple-idea-many-variations-2",
+    "href": "equationsolving.html#simple-idea-many-variations-2",
+    "title": "Solving Nonlinear Equations",
+    "section": "Simple Idea, Many Variations",
+    "text": "Simple Idea, Many Variations\n\n\nInitial guess \\(x_0\\)\nUpdate based on first order expansion \\[\n\\begin{align*}\nF(x_{s+1}) \\approx F(x_s) + F'(x_s)(x_{s+1} - x_s) = & 0 \\\\\nx_{s+1} = x_s + F'(x_s)^{-1} F(x_s)\n\\end{align*}\n\\]\nRepeat until \\({\\color{red}{\\Vert F(x_{s+1}) \\Vert &lt; rtol \\Vert\nF(x_0) \\Vert + atol }}\\)"
+  },
+  {
+    "objectID": "equationsolving.html#simple-idea-many-variations-3",
+    "href": "equationsolving.html#simple-idea-many-variations-3",
+    "title": "Solving Nonlinear Equations",
+    "section": "Simple Idea, Many Variations",
+    "text": "Simple Idea, Many Variations\n\n\nInitial guess \\(x_0\\)\nUpdate based on first order expansion\n\ncompute \\(F'(x_s)\\) using:\n\nhand written code or\nfinite differences or\nsecant method \\(F'(x_s) \\approx \\frac{F(x_s) - F(x_{s-1})}{\\Vert x_s - x_{s-1} \\Vert}\\) or\nautomatic differentiation \\[\n\\begin{align*}\nF(x_{s+1}) \\approx F(x_s) + F'(x_s)(x_{s+1} - x_s) = & 0 \\\\\nx_{s+1} = x_s + F'(x_s)^{-1} F(x_s)\n\\end{align*}\n\\]\n\n\nRepeat until \\(\\Vert F(x_{s+1}) \\Vert \\approx 0\\)"
+  },
+  {
+    "objectID": "equationsolving.html#simple-idea-many-variations-4",
+    "href": "equationsolving.html#simple-idea-many-variations-4",
+    "title": "Solving Nonlinear Equations",
+    "section": "Simple Idea, Many Variations",
+    "text": "Simple Idea, Many Variations\n\nKelley (2022) is thorough reference for nonlinear equation solving methods and their properties\nNonlinearSolve.jl gives unified interface for many methods"
+  },
+  {
+    "objectID": "equationsolving.html#blp-share-equation",
+    "href": "equationsolving.html#blp-share-equation",
+    "title": "Solving Nonlinear Equations",
+    "section": "BLP share equation",
+    "text": "BLP share equation\n\n\n∫sgq (generic function with 1 method)"
+  },
+  {
+    "objectID": "equationsolving.html#solving-for-delta",
+    "href": "equationsolving.html#solving-for-delta",
+    "title": "Solving Nonlinear Equations",
+    "section": "Solving for \\(\\delta\\)",
+    "text": "Solving for \\(\\delta\\)\n\n\n\nAlgorithm: NewtonRaphson(\n   descent = NewtonDescent()\n)\n\n----     -------------        -----------          -------             \nIter     f(u) inf-norm        Step 2-norm          cond(J)             \n----     -------------        -----------          -------             \n0        1.32106254e-01       NaN                  Inf                 \n1        2.28370023e-02       1.57055587e+00       1.69464412e+00      \n2        1.58314855e-03       2.30783635e-01       1.58519618e+00      \n3        1.73753216e-06       1.75363003e-02       2.02158044e+00      \n4        1.84295357e-11       2.96353001e-05       2.03232821e+00      \n5        1.66533454e-16       3.02225272e-10       2.03237728e+00      \nFinal    1.66533454e-16      \n----------------------      \nTrue δ: [-1.4810149353861357, -0.6580150684068118]\nSolved δ: [-1.4810149353861368, -0.658015068406811]\n||F(sol.u)||: 2.0770370905276122e-16\nError: 1.355199909595506e-15"
+  },
+  {
+    "objectID": "equationsolving.html#alternative-algorithms",
+    "href": "equationsolving.html#alternative-algorithms",
+    "title": "Solving Nonlinear Equations",
+    "section": "Alternative algorithms",
+    "text": "Alternative algorithms\n\n\n\nAlgorithm: TrustRegion(\n   trustregion = GenericTrustRegionScheme(method = RadiusUpdateSchemes.Simple),\n   descent = Dogleg(newton_descent = NewtonDescent(), steepest_descent = SteepestDescent())\n)\n\n----     -------------        -----------          -------             \nIter     f(u) inf-norm        Step 2-norm          cond(J)             \n----     -------------        -----------          -------             \n0        1.32106254e-01       4.94065646e-324      Inf                 \n1        1.30961430e-01       1.57070803e-02       1.69464412e+00      \n2        1.28651613e-01       3.14141605e-02       1.68465021e+00      \n3        1.23949436e-01       6.28283211e-02       1.66516627e+00      \n4        1.14204850e-01       1.25656642e-01       1.62830668e+00      \n5        9.99088533e-02       1.72777883e-01       1.56365408e+00      \n6        8.46719851e-02       1.72777883e-01       1.49355997e+00      \n7        6.88764757e-02       1.72777883e-01       1.44473596e+00      \n8        5.28610125e-02       1.72777883e-01       1.42091746e+00      \n9        3.69983546e-02       1.72777883e-01       1.42657340e+00      \n10       2.40091165e-02       1.72777883e-01       1.46689868e+00      \n11       1.34316668e-02       1.72777883e-01       1.55113631e+00      \n12       1.93242469e-03       1.72777883e-01       1.70355299e+00      \n13       2.19221537e-05       3.26511986e-02       1.98003044e+00      \n14       2.93791574e-09       3.58400805e-04       2.03172613e+00      \n15       5.55111512e-17       4.87668833e-08       2.03237719e+00      \nFinal    5.55111512e-17      \n----------------------      \n\n\nretcode: Success\nu: 2-element Vector{Float64}:\n -1.481014935386135\n -0.6580150684068116\n\n\n\n\nretcode: Failure\nu: 2-element Vector{Float64}:\n 0.0\n 0.0"
+  },
+  {
+    "objectID": "integration.html#example-random-coefficients-demand-1",
+    "href": "integration.html#example-random-coefficients-demand-1",
+    "title": "Integration",
+    "section": "Example: Random Coefficients Demand",
+    "text": "Example: Random Coefficients Demand\n\nBerry, Levinsohn, and Pakes (1995)\nConsumers choose product: \\[\nj = \\argmax_{j \\in \\{0, ..., J\\}} x_{jt}' (\\bar{\\beta} + \\Sigma \\nu_i) + \\xi_{jt} + \\epsilon_{ijt}\n\\]\n\n\\(\\nu_i \\sim N(0,I_k)\\), \\(\\epsilon_{ijt} \\sim\\) Type I Extreme Value\nUnobserved demand shock \\(\\xi_{jt}\\)"
+  },
+  {
+    "objectID": "integration.html#example-random-coefficients-demand-2",
+    "href": "integration.html#example-random-coefficients-demand-2",
+    "title": "Integration",
+    "section": "Example: Random Coefficients Demand",
+    "text": "Example: Random Coefficients Demand\n\nAggregate demand: \\[\ns_{jt} = \\int \\frac{e^{x_{jt}'(\\bar{\\beta} + \\Sigma \\nu) + \\xi_{jt}}} {\\sum_{k = 0}^J e^{x_{kt}'(\\bar{\\beta} + \\Sigma \\nu) + \\xi_{kt}} } dF\\nu\n\\]"
+  },
+  {
+    "objectID": "integration.html#example-random-coefficients-demand-3",
+    "href": "integration.html#example-random-coefficients-demand-3",
+    "title": "Integration",
+    "section": "Example: Random Coefficients Demand",
+    "text": "Example: Random Coefficients Demand\n\nInstruments \\(Z_{jt}\\) with \\(E[\\xi_{jt} Z_{jt}] = 0\\)\n\\(g(s_{jt},x_{jt}, Z_{jt}, \\bar{\\beta},\\Sigma) = \\left(\\delta_{jt}(s_{\\cdot t}, x_{\\cdot t},\\beta,\\Sigma) - x_{jt}'\\bar{\\beta}\\right) Z_{jt}\\)\nwhere \\(\\delta_{jt}\\) solves \\[\ns_{jt} = \\int \\frac{e^{\\delta_{jt} + x_{jt}'\\Sigma \\nu}} {\\sum_{k = 0}^J e^{\\delta_{kt} + x_{kt}'\\Sigma \\nu}} dF\\nu\n\\]"
+  },
+  {
+    "objectID": "integration.html#shares-version-1",
+    "href": "integration.html#shares-version-1",
+    "title": "Integration",
+    "section": "Shares: version 1",
+    "text": "Shares: version 1\n\n\nshare (generic function with 1 method)\n\n\n\n\n∫(shareν, dFν) is not a function that exists, will create it next\nclear?\ncorrect?\nrobust?"
+  },
+  {
+    "objectID": "integration.html#shares-version-2",
+    "href": "integration.html#shares-version-2",
+    "title": "Integration",
+    "section": "Shares: version 2",
+    "text": "Shares: version 2\n\n\nMain.Notebook.share\n\n\n\n\nadds documentation\nsome error checking on inputs\nprotects against overflow in exp\nAre these changes needed & desirable?"
+  },
+  {
+    "objectID": "integration.html#integration-monte-carlo",
+    "href": "integration.html#integration-monte-carlo",
+    "title": "Integration",
+    "section": "Integration: Monte-Carlo",
+    "text": "Integration: Monte-Carlo\n\n\n∫mc (generic function with 1 method)\n\n\n\n\n(intmc, trueint, intmc - trueint) = (0.8640016424248849, 1.0, -0.13599835757511514)\nf = evaluated #6 100 times\n\n\n0"
+  },
+  {
+    "objectID": "integration.html#integration-quasi-monte-carlo",
+    "href": "integration.html#integration-quasi-monte-carlo",
+    "title": "Integration",
+    "section": "Integration: Quasi-Monte-Carlo",
+    "text": "Integration: Quasi-Monte-Carlo\n\nUse “low discrepency sequences” to reduce variance of Monte-Carlo integrals\nError is \\(O\\left(\\frac{\\log(n)^d}{n})\\) for integrating \\(d\\) dimensional function with \\(n\\) draws\nSee Owen (2023) for details\n\n\n\n∫s (generic function with 2 methods)\n\n\n\n\nmean((abs(∫s(f, dx, ndraw = 100) - trueint) for s = 1:S)) = 0.02875751885407857\nmean((abs(∫mc(f, dx, ndraw = 100) - trueint) for s = 1:S)) = 0.11103311354729319\n\n\n0.11103311354729319"
+  },
+  {
+    "objectID": "integration.html#integration-quadrature",
+    "href": "integration.html#integration-quadrature",
+    "title": "Integration",
+    "section": "Integration: Quadrature",
+    "text": "Integration: Quadrature\n\n\n∫q (generic function with 1 method)"
+  },
+  {
+    "objectID": "integration.html#integration-sparse-grid-quadrature",
+    "href": "integration.html#integration-sparse-grid-quadrature",
+    "title": "Integration",
+    "section": "Integration: Sparse Grid Quadrature",
+    "text": "Integration: Sparse Grid Quadrature\n\n\n∫sgq (generic function with 1 method)"
+  },
+  {
+    "objectID": "integration.html#integration-adaptive-cubature",
+    "href": "integration.html#integration-adaptive-cubature",
+    "title": "Integration",
+    "section": "Integration: Adaptive Cubature",
+    "text": "Integration: Adaptive Cubature\n\n\n∫cuba (generic function with 1 method)\n\n\n““” share(δ, Σ, dFν, x)\nComputes\ns_{j} = \\int \\frac{e^{\\delta_{j} + x_{j}'\\Sigma \\nu}} {\\sum_{k = 0}^J e^{\\delta_{k} + x_{k}'\\Sigma \\nu}} dF\\nu"
+  },
+  {
+    "objectID": "index.html",
+    "href": "index.html",
+    "title": "ECON 622: Computational Economics",
+    "section": "",
+    "text": "Slides\n\nIntroduction\nIntegration\nNonlinear Equation Solving"
+  }
+]
