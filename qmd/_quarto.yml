@@ -1,0 +1,20 @@
+project:
+  type: website
+  render:
+    - "*.qmd"
+  output-dir: ../docs/paul
+
+website:
+  title: "ECON 622"
+  navbar:
+    left:
+      - href: index.qmd
+        text: Contents
+      - href: https://github.com/ubcecon/econ622
+        text: Schedule
+
+format:
+  html:
+    theme: cosmo
+    css: styles.css
+    toc: true

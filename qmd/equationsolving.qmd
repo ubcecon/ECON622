@@ -214,7 +214,7 @@ d0 = zeros(length(δ)-1)
 prob = NonlinearProblem(F, d0, p)
 sol = solve(prob, show_trace=Val(true), trace_level=TraceAll())
 
-δ .-= δ[1]
+δ = δ[2:end].-δ[1]
 println("True δ: $(δ)")
 println("Solved δ: $(sol.u)")
 println("||F(sol.u)||: $(norm(sol.resid))")

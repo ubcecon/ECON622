@@ -1,0 +1,24 @@
+/* css styles */
+.reveal.smaller .slides section,
+.reveal .slides section.smaller,
+.reveal .slides section .callout {
+   font-size:1.0em;
+}
+
+
+
+/*
+.reveal .callout.callout-style-default div.callout-body div.callout-content {
+ 	  font-size: 1.0em
+}
+ */
+
+ /*
+.reveal.smaller .slides section, .reveal .slides section.smaller, .reveal .slides section .callout {
+    font-size: 1.0em;
+}
+*/
+
+/*
+html.reveal-full-page body.quarto-dark.reveal-viewport div.reveal.focused.has-vertical-slides.has-horizontal-slides.ready.none div.slides section.stack.present section#convergence-in-probability-1.slide.level2.present div.callout.callout-tip.no-icon.callout-titled.callout-style-default div.callout-body div.callout-content
+*/

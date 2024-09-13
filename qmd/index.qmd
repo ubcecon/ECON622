@@ -1,0 +1,12 @@
+---
+title: "ECON 622: Computational Economics"
+author: "Paul Schrimpf"
+---
+
+# Slides
+
+1. [Introduction](intro.qmd)
+
+2. [Integration](integration.qmd)
+
+3. [Nonlinear Equation Solving](equationsolving.qmd)
