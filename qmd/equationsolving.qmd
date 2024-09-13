@@ -61,8 +61,8 @@ $$
   2. Update based on first order expansion
   $$
   \begin{align*}
-  F(x_{s+1}) \approx F(x_s) + F'(x_s)(x_{s+1} - x_s) = & 0
-  x_{s+1} = x_s + F'(x_s) \ F(x_s)
+  F(x_{s+1}) \approx F(x_s) + F'(x_s)(x_{s+1} - x_s) = & 0 \\
+  x_{s+1} = & x_s + F'(x_s)^{-1} F(x_s)
   \end{align*}
   $$
   3. Repeat until $\Vert F(x_s) \Vert \approx 0$
@@ -74,8 +74,8 @@ $$
   2. Update based on first order expansion
   $$
   \begin{align*}
-  F(x_{s+1}) \approx F(x_s) + F'(x_s)(x_{s+1} - x_s) = & 0
-  x_{s+1} = x_s + {\color{red}{\lambda}} F'(x_s) \ F(x_s)
+  F(x_{s+1}) \approx F(x_s) + F'(x_s)(x_{s+1} - x_s) = & 0 \\
+  x_{s+1} = x_s + {\color{red}{\lambda}} F'(x_s)^{-1} F(x_s)
   \end{align*}
   $$
   3. Repeat until $\Vert F(x_s) \Vert \approx 0$
@@ -111,8 +111,8 @@ $$
   2. Update based on first order expansion
   $$
   \begin{align*}
-  F(x_{s+1}) \approx F(x_s) + F'(x_s)(x_{s+1} - x_s) = & 0
-  x_{s+1} = x_s + F'(x_s) \ F(x_s)
+  F(x_{s+1}) \approx F(x_s) + F'(x_s)(x_{s+1} - x_s) = & 0 \\
+  x_{s+1} = x_s + F'(x_s)^{-1} F(x_s)
   \end{align*}
   $$
   3. Repeat until ${\color{red}{\Vert F(x_{s+1}) \Vert < rtol \Vert
@@ -130,8 +130,8 @@ $$
        - automatic differentiation
   $$
   \begin{align*}
-  F(x_{s+1}) \approx F(x_s) + F'(x_s)(x_{s+1} - x_s) = & 0
-  x_{s+1} = x_s + F'(x_s) \ F(x_s)
+  F(x_{s+1}) \approx F(x_s) + F'(x_s)(x_{s+1} - x_s) = & 0 \\
+  x_{s+1} = x_s + F'(x_s)^{-1} F(x_s)
   \end{align*}
   $$
   3. Repeat until $\Vert F(x_{s+1}) \Vert \approx 0$
@@ -208,13 +208,14 @@ s = share(δ, Σ, dFν, x, ∫sgq)
 
 # try to recover δ
 using NonlinearSolve, LinearAlgebra
-F(δ, Σ) = share(δ,Σ,dFν, x,∫sgq) - s
-δ0 = zero(δ)
-prob = NonlinearProblem(F, δ0, Σ)
-sol = solve(prob)
+p = (Σ=Σ, x=x)
+F(d, p) = share([0, d...],p.Σ,dFν, p.x,∫sgq) - s
+d0 = zeros(length(δ)-1)
+prob = NonlinearProblem(F, d0, p)
+sol = solve(prob, show_trace=Val(true), trace_level=TraceAll())
 
-
-println("True δ: $δ")
+δ .-= δ[1]
+println("True δ: $(δ)")
 println("Solved δ: $(sol.u)")
 println("||F(sol.u)||: $(norm(sol.resid))")
 println("Error: $(norm(sol.u - δ))")
@@ -228,7 +229,9 @@ solr = solve(prob, RobustMultiNewton(), show_trace=Val(true), trace_level=TraceA
 
 ```{julia}
 using FixedPointAcceleration
-solfp = solve(prob, FixedPointAccelerationJL() , show_trace=Val(true), trace_level=TraceAll())
+G(δ,p) = log.(s) - log.(share([0,δ...], Σ, dFν, x, ∫sgq))
+probfp = NonlinearProblem(G, d0, nothing)
+solfp = solve(probfp, FixedPointAccelerationJL(algorithm=:Anderson, m=1) )
 ```
 
 
