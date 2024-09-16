@@ -1,0 +1,179 @@
+---
+title: Best Practices
+author: Paul Schrimpf
+date: last-modified
+bibliography: 622.bib
+format:
+  revealjs:
+    theme: blood
+    smaller: true
+    min-scale: 0.1
+    max-scale: 3.0
+    chalkboard:
+      theme: whiteboard
+      boardmarker-width: 2
+      chalk-width: 2
+      chalk-effect: 0.0
+engine: julia
+---
+
+$$
+\def\Er{{\mathrm{E}}}
+\def\En{{\mathbb{E}_n}}
+\def\cov{{\mathrm{Cov}}}
+\def\var{{\mathrm{Var}}}
+\def\R{{\mathbb{R}}}
+\def\arg{{\mathrm{arg}}}
+\newcommand\norm[1]{\left\lVert#1\right\rVert}
+\def\rank{{\mathrm{rank}}}
+\newcommand{\inpr}{ \overset{p^*_{\scriptscriptstyle n}}{\longrightarrow}}
+\def\inprob{{\,{\buildrel p \over \rightarrow}\,}}
+\def\indist{\,{\buildrel d \over \rightarrow}\,}
+\DeclareMathOperator*{\plim}{plim}
+\DeclareMathOperator*{\argmax}{argmax}
+\DeclareMathOperator*{\argmin}{argmin}
+$$
+
+# Overview
+
+## Goals
+
+- Correct
+- Maintainable & Extensible
+  - Clear
+  - Contained
+  - Consistent
+- Efficient
+
+
+## Tools
+
+| Goal | Tool(s) |
+|------|---------|
+|Correct | tests, static analysis |
+|Maintainable | version control, CI, documentation, dependency management |
+|Efficient | benchmarks, profiler |
+
+
+# Version Control
+
+## Version Control
+
+- essential
+- git is by far the most popular and what I recommend
+- git hosting services
+  - github.com
+  - gitlab.com
+  - bitbucket.org
+- Benefits:
+  - backup
+  - edit history
+  - coordination
+
+## git
+
+- Use it
+- [git intro and tutorial](https://mint.westdri.ca/git/intro_intro) and [webinar](https://www.youtube.com/watch?v=nulmjJq5Fz0)
+
+
+# Julia Tools
+
+## Tool Setup for Julia
+
+- Organize code into a package
+- Good advice aimed at scientific computing projects: [Julia: Project Workflow](https://j-fu.github.io/marginalia/julia/project-workflow/)
+- Setup your package with a project skeleton
+  - [`PkgTemplates.jl`](https://github.com/JuliaCI/PkgTemplates.jl)
+  - [`BestieTemplate.jl`](https://github.com/abelsiqueira/BestieTemplate.jl)
+  - [`DoctorWatson.jl`](https://juliadynamics.github.io/DrWatson.jl/stable/)
+  - @haider2021 for similar idea for other languages
+
+## PkgTemplates.jl
+
+```{julia}
+#| eval: false
+using PkgTemplates
+Template(interactive=true)("SomeNewPackage")
+```
+
+or
+
+```{julia}
+using PkgTemplates
+tpl = Template(; dir=pwd(),
+               user="schrimpf", # github username
+               authors=["Paul Schrimpf"],
+               plugins=[ProjectFile(), SrcDir(),
+                        Tests(project=true, aqua=true, jet=true),
+                        License(; name="MIT"),
+                        Git(),
+                        GitHubActions(),
+                        Codecov(),
+                        Citation(),
+                        Documenter{GitHubActions}(),
+                        PkgBenchmark(),
+                        Formatter()]
+               )
+tpl("SomeNewPackage")
+```
+
+```{julia}
+#| echo: false
+rm("SomeNewPackage", recursive=true)
+```
+
+## BestieTemplate.jl
+
+```{julia}
+#| eval: false
+using BestieTemplate
+BestieTemplate.generate("SomeNewPackage")
+```
+
+## Tests
+
+- essential
+- organize code into small functions, test them all
+- test both your code and code from others that you rely on
+
+## Documentation
+
+- create it for others and your future self
+
+## Continuous Integration
+
+- Automatically execute some actions in the cloud after git commits or pull requests or merges
+  - Run tests
+  - Build documentation
+  - Run static code analysis / Linter
+  - Check test coverage
+  - etc
+- Many providers
+  - GitHub Actions
+  - TravisCI
+  - etc
+
+## Test Coverage
+
+- Automatically try to determine which lines of code were executed during testing and produce a summary and report
+- app.codecov.io
+- coveralls.io
+
+## Static Code Analysis
+
+- "linters" analyze code to detect errors and possible bugs
+  - built into VSCode and other editors
+  - JET.jl for detecting type stability problems (advanced)
+- formatters check for following text formatting standards around indentation and such
+
+
+## Further Reading
+
+- @gentzkow2014
+- @prium2023
+- @wilson2017
+- @haider2021
+- @orozco2020
+
+
+## References

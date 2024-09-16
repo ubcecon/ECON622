@@ -10,3 +10,5 @@ author: "Paul Schrimpf"
 2. [Integration](integration.qmd)
 
 3. [Nonlinear Equation Solving](equationsolving.qmd)
+
+4. [Best Practices](bestpractices.qmd)

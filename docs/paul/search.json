@@ -158,14 +158,14 @@
     "href": "equationsolving.html#solving-for-delta",
     "title": "Solving Nonlinear Equations",
     "section": "Solving for \\(\\delta\\)",
-    "text": "Solving for \\(\\delta\\)\n\n\n\nAlgorithm: NewtonRaphson(\n   descent = NewtonDescent()\n)\n\n----     -------------        -----------          -------             \nIter     f(u) inf-norm        Step 2-norm          cond(J)             \n----     -------------        -----------          -------             \n0        1.32106254e-01       NaN                  Inf                 \n1        2.28370023e-02       1.57055587e+00       1.69464412e+00      \n2        1.58314855e-03       2.30783635e-01       1.58519618e+00      \n3        1.73753216e-06       1.75363003e-02       2.02158044e+00      \n4        1.84295357e-11       2.96353001e-05       2.03232821e+00      \n5        1.66533454e-16       3.02225272e-10       2.03237728e+00      \nFinal    1.66533454e-16      \n----------------------      \nTrue δ: [-1.4810149353861357, -0.6580150684068118]\nSolved δ: [-1.4810149353861368, -0.658015068406811]\n||F(sol.u)||: 2.0770370905276122e-16\nError: 1.355199909595506e-15"
+    "text": "Solving for \\(\\delta\\)\n\n\n\nAlgorithm: NewtonRaphson(\n   descent = NewtonDescent()\n)\n\n----     -------------        -----------          -------             \nIter     f(u) inf-norm        Step 2-norm          cond(J)             \n----     -------------        -----------          -------             \n0        1.82428101e-01       9.65211049e-310      Inf                 \n1        3.01273299e-02       1.70789122e+00       2.63744218e+00      \n2        5.94098292e-03       5.27569311e-01       1.91424031e+00      \n3        1.53494624e-03       2.04661414e-01       2.16526016e+00      \n4        3.70822861e-04       7.85896918e-02       3.05654249e+00      \n5        7.95079980e-05       3.47582862e-02       5.16317447e+00      \n6        1.10785423e-05       1.29706541e-02       8.59340657e+00      \n7        4.11936788e-07       2.50335989e-03       1.17139946e+01      \n8        6.64506047e-10       1.00551122e-04       1.26157467e+01      \n9        1.76247905e-15       1.62724342e-07       1.26550054e+01      \nFinal    1.76247905e-15      \n----------------------      \nTrue δ: [-2.031557154931929, -1.57397420333144]\nSolved δ: [-1.9689272217047142, -1.5772302971336]\n||F(sol.u)||: 2.2888254720986747e-15\nError: 0.06271451732170019"
   },
   {
     "objectID": "equationsolving.html#alternative-algorithms",
     "href": "equationsolving.html#alternative-algorithms",
     "title": "Solving Nonlinear Equations",
     "section": "Alternative algorithms",
-    "text": "Alternative algorithms\n\n\n\nAlgorithm: TrustRegion(\n   trustregion = GenericTrustRegionScheme(method = RadiusUpdateSchemes.Simple),\n   descent = Dogleg(newton_descent = NewtonDescent(), steepest_descent = SteepestDescent())\n)\n\n----     -------------        -----------          -------             \nIter     f(u) inf-norm        Step 2-norm          cond(J)             \n----     -------------        -----------          -------             \n0        1.32106254e-01       4.94065646e-324      Inf                 \n1        1.30961430e-01       1.57070803e-02       1.69464412e+00      \n2        1.28651613e-01       3.14141605e-02       1.68465021e+00      \n3        1.23949436e-01       6.28283211e-02       1.66516627e+00      \n4        1.14204850e-01       1.25656642e-01       1.62830668e+00      \n5        9.99088533e-02       1.72777883e-01       1.56365408e+00      \n6        8.46719851e-02       1.72777883e-01       1.49355997e+00      \n7        6.88764757e-02       1.72777883e-01       1.44473596e+00      \n8        5.28610125e-02       1.72777883e-01       1.42091746e+00      \n9        3.69983546e-02       1.72777883e-01       1.42657340e+00      \n10       2.40091165e-02       1.72777883e-01       1.46689868e+00      \n11       1.34316668e-02       1.72777883e-01       1.55113631e+00      \n12       1.93242469e-03       1.72777883e-01       1.70355299e+00      \n13       2.19221537e-05       3.26511986e-02       1.98003044e+00      \n14       2.93791574e-09       3.58400805e-04       2.03172613e+00      \n15       5.55111512e-17       4.87668833e-08       2.03237719e+00      \nFinal    5.55111512e-17      \n----------------------      \n\n\nretcode: Success\nu: 2-element Vector{Float64}:\n -1.481014935386135\n -0.6580150684068116\n\n\n\n\nretcode: Failure\nu: 2-element Vector{Float64}:\n 0.0\n 0.0"
+    "text": "Alternative algorithms\n\n\n\nAlgorithm: TrustRegion(\n   trustregion = GenericTrustRegionScheme(method = RadiusUpdateSchemes.Simple),\n   descent = Dogleg(newton_descent = NewtonDescent(), steepest_descent = SteepestDescent())\n)\n\n----     -------------        -----------          -------             \nIter     f(u) inf-norm        Step 2-norm          cond(J)             \n----     -------------        -----------          -------             \n0        1.82428101e-01       8.99199475e-322      Inf                 \n1        1.80268916e-01       2.03270424e-02       2.63744218e+00      \n2        1.75950002e-01       4.06540847e-02       2.61484193e+00      \n3        1.67320264e-01       8.13081694e-02       2.57133226e+00      \n4        1.50175269e-01       1.62616339e-01       2.49059505e+00      \n5        1.27131120e-01       2.23597466e-01       2.35089605e+00      \n6        1.05114341e-01       2.23597466e-01       2.19830531e+00      \n7        8.45131473e-02       2.23597466e-01       2.07739511e+00      \n8        6.56501612e-02       2.23597466e-01       1.98541863e+00      \n9        4.87654269e-02       2.23597466e-01       1.92260572e+00      \n10       3.40038617e-02       2.23597466e-01       1.88993542e+00      \n11       2.14335419e-02       2.23597466e-01       1.89041487e+00      \n12       1.11200296e-02       2.23597466e-01       1.93076944e+00      \n13       3.91957617e-03       2.23597466e-01       2.03331527e+00      \n14       9.85989520e-04       1.52709011e-01       2.34858093e+00      \n15       2.32730958e-04       6.07253397e-02       3.57108395e+00      \n16       4.58856484e-05       2.63832618e-02       6.13013075e+00      \n17       4.82159425e-06       8.56024120e-03       9.75569775e+00      \n18       8.51618883e-08       1.13831686e-03       1.22173784e+01      \n19       2.85474283e-11       2.08407016e-05       1.26469083e+01      \n20       3.74700271e-16       6.99080226e-09       1.26550664e+01      \nFinal    3.74700271e-16      \n----------------------      \n\n\nretcode: Success\nu: 2-element Vector{Float64}:\n -1.9689272217051998\n -1.5772302971335839\n\n\n\n\nWARNING: method definition for #fixed_point#13 at /home/paul/.julia/packages/FixedPointAcceleration/ahazt/src/1_MainFunctions.jl:163 declares type variable R but does not use it.\n\n\nretcode: Failure\nu: 2-element Vector{Float64}:\n 0.0\n 0.0"
   },
   {
     "objectID": "integration.html#example-random-coefficients-demand-1",
@@ -207,14 +207,14 @@
     "href": "integration.html#integration-monte-carlo",
     "title": "Integration",
     "section": "Integration: Monte-Carlo",
-    "text": "Integration: Monte-Carlo\n\n\n∫mc (generic function with 1 method)\n\n\n\n\n(intmc, trueint, intmc - trueint) = (0.8640016424248849, 1.0, -0.13599835757511514)\nf = evaluated #6 100 times\n\n\n0"
+    "text": "Integration: Monte-Carlo\n\n\n∫mc (generic function with 1 method)\n\n\n\n\n(intmc, trueint, intmc - trueint) = (0.9280595764921347, 1.0, -0.07194042350786534)\nf = evaluated #6 100 times\n\n\n0"
   },
   {
     "objectID": "integration.html#integration-quasi-monte-carlo",
     "href": "integration.html#integration-quasi-monte-carlo",
     "title": "Integration",
     "section": "Integration: Quasi-Monte-Carlo",
-    "text": "Integration: Quasi-Monte-Carlo\n\nUse “low discrepency sequences” to reduce variance of Monte-Carlo integrals\nError is \\(O\\left(\\frac{\\log(n)^d}{n})\\) for integrating \\(d\\) dimensional function with \\(n\\) draws\nSee Owen (2023) for details\n\n\n\n∫s (generic function with 2 methods)\n\n\n\n\nmean((abs(∫s(f, dx, ndraw = 100) - trueint) for s = 1:S)) = 0.02875751885407857\nmean((abs(∫mc(f, dx, ndraw = 100) - trueint) for s = 1:S)) = 0.11103311354729319\n\n\n0.11103311354729319"
+    "text": "Integration: Quasi-Monte-Carlo\n\nUse “low discrepency sequences” to reduce variance of Monte-Carlo integrals\nError is \\(O\\left(\\frac{\\log(n)^d}{n})\\) for integrating \\(d\\) dimensional function with \\(n\\) draws\nSee Owen (2023) for details\n\n\n\n∫s (generic function with 2 methods)\n\n\n\n\nmean((abs(∫s(f, dx, ndraw = 100) - trueint) for s = 1:S)) = 0.02875751885407857\nmean((abs(∫mc(f, dx, ndraw = 100) - trueint) for s = 1:S)) = 0.11192792226826767\n\n\n0.11192792226826767"
   },
   {
     "objectID": "integration.html#integration-quadrature",
@@ -242,6 +242,104 @@
     "href": "index.html",
     "title": "ECON 622: Computational Economics",
     "section": "",
-    "text": "Slides\n\nIntroduction\nIntegration\nNonlinear Equation Solving"
+    "text": "Slides\n\nIntroduction\nIntegration\nNonlinear Equation Solving\nBest Practices"
+  },
+  {
+    "objectID": "bestpractices.html#goals",
+    "href": "bestpractices.html#goals",
+    "title": "Best Practices",
+    "section": "Goals",
+    "text": "Goals\n\nCorrect\nMaintainable & Extensible\n\nClear\nContained\nConsistent\n\nEfficient"
+  },
+  {
+    "objectID": "bestpractices.html#tools",
+    "href": "bestpractices.html#tools",
+    "title": "Best Practices",
+    "section": "Tools",
+    "text": "Tools\n\n\n\n\n\n\n\nGoal\nTool(s)\n\n\n\n\nCorrect\ntests, static analysis\n\n\nMaintainable\nversion control, CI, documentation, dependency management\n\n\nEfficient\nbenchmarks, profiler"
+  },
+  {
+    "objectID": "bestpractices.html#version-control-1",
+    "href": "bestpractices.html#version-control-1",
+    "title": "Best Practices",
+    "section": "Version Control",
+    "text": "Version Control\n\nessential\ngit is by far the most popular and what I recommend\ngit hosting services\n\ngithub.com\ngitlab.com\nbitbucket.org\n\nBenefits:\n\nbackup\nedit history\ncoordination"
+  },
+  {
+    "objectID": "bestpractices.html#git",
+    "href": "bestpractices.html#git",
+    "title": "Best Practices",
+    "section": "git",
+    "text": "git\n\nUse it\ngit intro and tutorial and webinar"
+  },
+  {
+    "objectID": "bestpractices.html#tool-setup-for-julia",
+    "href": "bestpractices.html#tool-setup-for-julia",
+    "title": "Best Practices",
+    "section": "Tool Setup for Julia",
+    "text": "Tool Setup for Julia\n\nOrganize code into a package\nGood advice aimed at scientific computing projects: Julia: Project Workflow\nSetup your package with a project skeleton\n\nPkgTemplates.jl\nBestieTemplate.jl\nDoctorWatson.jl\nHaider, Riesch, and Jirauschek (2021) for similar idea for other languages"
+  },
+  {
+    "objectID": "bestpractices.html#pkgtemplates.jl",
+    "href": "bestpractices.html#pkgtemplates.jl",
+    "title": "Best Practices",
+    "section": "PkgTemplates.jl",
+    "text": "PkgTemplates.jl\nor\n\n\n[ Info: Running prehooks\n[ Info: Running hooks\n  Activating new project at `~/ECON622/qmd/SomeNewPackage/test`\n    Updating registry at `~/.julia/registries/General.toml`\n   Resolving package versions...\n    Updating `~/ECON622/qmd/SomeNewPackage/test/Project.toml`\n  [8dfed614] + Test\n    Updating `~/ECON622/qmd/SomeNewPackage/test/Manifest.toml`\n  [2a0f44e3] + Base64\n  [b77e0a4c] + InteractiveUtils\n  [56ddb016] + Logging\n  [d6f4376e] + Markdown\n  [9a3f8284] + Random\n  [ea8e919c] + SHA v0.7.0\n  [9e88b42a] + Serialization\n  [8dfed614] + Test\n  Activating project at `~/ECON622/qmd`\n  Activating project at `~/ECON622/qmd/SomeNewPackage/test`\n   Resolving package versions...\n    Updating `~/ECON622/qmd/SomeNewPackage/test/Project.toml`\n  [4c88cf16] + Aqua v0.8.7\n    Updating `~/ECON622/qmd/SomeNewPackage/test/Manifest.toml`\n  [4c88cf16] + Aqua v0.8.7\n  [34da2185] + Compat v4.16.0\n  [0dad84c5] + ArgTools v1.1.1\n  [56f22d72] + Artifacts\n  [ade2ca70] + Dates\n  [f43a241f] + Downloads v1.6.0\n  [7b1f6079] + FileWatching\n  [b27032c2] + LibCURL v0.6.4\n  [76f85450] + LibGit2\n  [8f399da3] + Libdl\n  [ca575930] + NetworkOptions v1.2.0\n  [44cfe95a] + Pkg v1.10.0\n  [de0858da] + Printf\n  [3fa0cd96] + REPL\n  [6462fe0b] + Sockets\n  [fa267f1f] + TOML v1.0.3\n  [a4e569a6] + Tar v1.10.0\n  [cf7118a7] + UUIDs\n  [4ec0a83e] + Unicode\n  [deac9b47] + LibCURL_jll v8.4.0+0\n  [e37daf67] + LibGit2_jll v1.6.4+0\n  [29816b5a] + LibSSH2_jll v1.11.0+1\n  [c8ffd9c3] + MbedTLS_jll v2.28.2+1\n  [14a3606d] + MozillaCACerts_jll v2023.1.10\n  [83775a58] + Zlib_jll v1.2.13+1\n  [8e850ede] + nghttp2_jll v1.52.0+1\n  [3f19e933] + p7zip_jll v17.4.0+2\n  Activating project at `~/ECON622/qmd`\n  Activating project at `~/ECON622/qmd/SomeNewPackage/test`\n   Resolving package versions...\n    Updating `~/ECON622/qmd/SomeNewPackage/test/Project.toml`\n  [c3a54625] + JET v0.9.9\n    Updating `~/ECON622/qmd/SomeNewPackage/test/Manifest.toml`\n  [da1fd8a2] + CodeTracking v1.3.6\n  [c3a54625] + JET v0.9.9\n  [aa1ae85d] + JuliaInterpreter v0.9.36\n  [6f1432cf] + LoweredCodeUtils v3.0.2\n  [1914dd2f] + MacroTools v0.5.13\n  [aea7be01] + PrecompileTools v1.2.1\n  [21216c6a] + Preferences v1.4.3\n  Activating project at `~/ECON622/qmd`\n  Activating new project at `~/ECON622/qmd/SomeNewPackage/docs`\n   Resolving package versions...\n    Updating `~/ECON622/qmd/SomeNewPackage/docs/Project.toml`\n  [e30172f5] + Documenter v1.7.0\n    Updating `~/ECON622/qmd/SomeNewPackage/docs/Manifest.toml`\n  [a4c015fc] + ANSIColoredPrinters v0.0.1\n  [1520ce14] + AbstractTrees v0.4.5\n  [944b1d66] + CodecZlib v0.7.6\n  [ffbed154] + DocStringExtensions v0.9.3\n  [e30172f5] + Documenter v1.7.0\n  [d7ba0133] + Git v1.3.1\n  [b5f81e59] + IOCapture v0.2.5\n  [692b3bcd] + JLLWrappers v1.6.0\n  [682c06a0] + JSON v0.21.4\n  [0e77f7df] + LazilyInitializedFields v1.2.2\n  [d0879d2d] + MarkdownAST v0.1.2\n  [69de0a69] + Parsers v2.8.1\n  [aea7be01] + PrecompileTools v1.2.1\n  [21216c6a] + Preferences v1.4.3\n  [2792f1a3] + RegistryInstances v0.1.0\n  [3bb67fe8] + TranscodingStreams v0.11.2\n  [2e619515] + Expat_jll v2.6.2+0\n  [f8c6e375] + Git_jll v2.44.0+2\n  [94ce4f54] + Libiconv_jll v1.17.0+0\n  [458c3c95] + OpenSSL_jll v3.0.15+0\n  [0dad84c5] + ArgTools v1.1.1\n  [56f22d72] + Artifacts\n  [2a0f44e3] + Base64\n  [ade2ca70] + Dates\n  [f43a241f] + Downloads v1.6.0\n  [7b1f6079] + FileWatching\n  [b77e0a4c] + InteractiveUtils\n  [b27032c2] + LibCURL v0.6.4\n  [76f85450] + LibGit2\n  [8f399da3] + Libdl\n  [56ddb016] + Logging\n  [d6f4376e] + Markdown\n  [a63ad114] + Mmap\n  [ca575930] + NetworkOptions v1.2.0\n  [44cfe95a] + Pkg v1.10.0\n  [de0858da] + Printf\n  [3fa0cd96] + REPL\n  [9a3f8284] + Random\n  [ea8e919c] + SHA v0.7.0\n  [9e88b42a] + Serialization\n  [6462fe0b] + Sockets\n  [fa267f1f] + TOML v1.0.3\n  [a4e569a6] + Tar v1.10.0\n  [8dfed614] + Test\n  [cf7118a7] + UUIDs\n  [4ec0a83e] + Unicode\n  [deac9b47] + LibCURL_jll v8.4.0+0\n  [e37daf67] + LibGit2_jll v1.6.4+0\n  [29816b5a] + LibSSH2_jll v1.11.0+1\n  [c8ffd9c3] + MbedTLS_jll v2.28.2+1\n  [14a3606d] + MozillaCACerts_jll v2023.1.10\n  [efcefdf7] + PCRE2_jll v10.42.0+1\n  [83775a58] + Zlib_jll v1.2.13+1\n  [8e850ede] + nghttp2_jll v1.52.0+1\n  [3f19e933] + p7zip_jll v17.4.0+2\n   Resolving package versions...\n    Updating `~/ECON622/qmd/SomeNewPackage/docs/Project.toml`\n  [c350c594] + SomeNewPackage v1.0.0-DEV `..`\n    Updating `~/ECON622/qmd/SomeNewPackage/docs/Manifest.toml`\n  [c350c594] + SomeNewPackage v1.0.0-DEV `..`\n  Activating project at `~/ECON622/qmd`\n[ Info: Running posthooks\n[ Info: New package is at /home/paul/ECON622/qmd/SomeNewPackage\n\n\n\"/home/paul/ECON622/qmd/SomeNewPackage\""
+  },
+  {
+    "objectID": "bestpractices.html#bestietemplate.jl",
+    "href": "bestpractices.html#bestietemplate.jl",
+    "title": "Best Practices",
+    "section": "BestieTemplate.jl",
+    "text": "BestieTemplate.jl"
+  },
+  {
+    "objectID": "bestpractices.html#tests",
+    "href": "bestpractices.html#tests",
+    "title": "Best Practices",
+    "section": "Tests",
+    "text": "Tests\n\nessential\norganize code into small functions, test them all\ntest both your code and code from others that you rely on"
+  },
+  {
+    "objectID": "bestpractices.html#documentation",
+    "href": "bestpractices.html#documentation",
+    "title": "Best Practices",
+    "section": "Documentation",
+    "text": "Documentation\n\ncreate it for others and your future self"
+  },
+  {
+    "objectID": "bestpractices.html#continuous-integration",
+    "href": "bestpractices.html#continuous-integration",
+    "title": "Best Practices",
+    "section": "Continuous Integration",
+    "text": "Continuous Integration\n\nAutomatically execute some actions in the cloud after git commits or pull requests or merges\n\nRun tests\nBuild documentation\nRun static code analysis / Linter\nCheck test coverage\netc\n\nMany providers\n\nGitHub Actions\nTravisCI\netc"
+  },
+  {
+    "objectID": "bestpractices.html#test-coverage",
+    "href": "bestpractices.html#test-coverage",
+    "title": "Best Practices",
+    "section": "Test Coverage",
+    "text": "Test Coverage\n\nAutomatically try to determine which lines of code were executed during testing and produce a summary and report\napp.codecov.io\ncoveralls.io"
+  },
+  {
+    "objectID": "bestpractices.html#static-code-analysis",
+    "href": "bestpractices.html#static-code-analysis",
+    "title": "Best Practices",
+    "section": "Static Code Analysis",
+    "text": "Static Code Analysis\n\n“linters” analyze code to detect errors and possible bugs\n\nbuilt into VSCode and other editors\nJET.jl for detecting type stability problems (advanced)\n\nformatters check for following text formatting standards around indentation and such"
+  },
+  {
+    "objectID": "bestpractices.html#further-reading",
+    "href": "bestpractices.html#further-reading",
+    "title": "Best Practices",
+    "section": "Further Reading",
+    "text": "Further Reading\n\nGentzkow and Shapiro (2014)\n(prium2023?)\nWilson (2017)\nHaider, Riesch, and Jirauschek (2021)\nOrozco et al. (2020)"
+  },
+  {
+    "objectID": "bestpractices.html#references",
+    "href": "bestpractices.html#references",
+    "title": "Best Practices",
+    "section": "References",
+    "text": "References\n\n\n\n\n\n\n\n\nGentzkow, Matthew, and Jesse M. Shapiro. 2014. “Code and Data for the Social Sciences: A Practitioner’s Guide.” In. https://api.semanticscholar.org/CorpusID:62408223.\n\n\nHaider, Michael, Michael Riesch, and Christian Jirauschek. 2021. “Realization of Best Practices in Software Engineering and Scientific Writing Through Ready-to-Use Project Skeletons.” Optical and Quantum Electronics 53 (10): 568. https://doi.org/10.1007/s11082-021-03192-4.\n\n\nOrozco, Valérie, Christophe Bontemps, Elise Maigné, Virginie Piguet, Annie Hofstetter, Anne Lacroix, Fabrice Levert, and Jean-Marc Rousselle. 2020. “HOW TO MAKE a PIE: REPRODUCIBLE RESEARCH FOR EMPIRICAL ECONOMICS AND ECONOMETRICS.” Journal of Economic Surveys 34 (5): 1134–69. https://doi.org/https://doi.org/10.1111/joes.12389.\n\n\nWilson, Jennifer AND Cranston, Greg AND Bryan. 2017. “Good Enough Practices in Scientific Computing.” PLOS Computational Biology 13 (6): 1–20. https://doi.org/10.1371/journal.pcbi.1005510."
   }
 ]
