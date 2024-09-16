@@ -19,22 +19,25 @@ See [problemsets.md](problemsets.md).
 **Paul**
 
 1. **September 4**: Environment and Introduction to Julia
+    - [Intro slides](https://ubcecon.github.io/ECON622/paul/intro.html)
     - Environment: read one or both of these on your own and install Julia, IJulia, and VSCode, preferrably before the first class
         - [MoJuWo: Writing your code](https://modernjuliaworkflows.org/writing/)
         - [Julia Environment](https://quantecon.github.io/lecture-julia.myst/getting_started_julia/getting_started.html)
     - In class: Motivating econometric examples
     - Self-study: [Introductory Examples](https://quantecon.github.io/lecture-julia.myst/getting_started_julia/julia_by_example.html) or [Chapter 1 of *Scientific Programming in Julia*](https://juliateachingctu.github.io/Scientific-Programming-in-Julia/stable/lecture_01/motivation/)
-2. **September 9**: From Economic Models to Code
-   - In class continue: [Implementing random coefficient demand \& numeric integration methods](https://github.com/ubcecon/ECON622_BLP.jl/blob/main/docs/blp.jmd)
+2. **September 9**: Integration
+   - [Slides](https://ubcecon.github.io/ECON622/paul/integration.html)
    - Self-study: [Julia Essentials](https://quantecon.github.io/lecture-julia.myst/getting_started_julia/julia_essentials.html) and [Fundamental Types](https://quantecon.github.io/lecture-julia.myst/getting_started_julia/fundamental_types.html)
    - Self-study: [Chapter 2 of *Scientific Programming in Julia*](https://juliateachingctu.github.io/Scientific-Programming-in-Julia/stable/lecture_02/lecture/)
-3. **September 11**: Optimization
-   - In class: discussion of types and using them to [reorganize numeric integration code from last time](https://github.com/ubcecon/ECON622_BLP.jl/blob/main/src/integrate.jl) and [testing them](https://github.com/ubcecon/ECON622_BLP.jl/blob/main/test/runtests.jl)
+3. **September 11**: Nonlinear Equation Solving
+   - [Slides](https://ubcecon.github.io/ECON622/paul/equationsolving.html)
    - [Optimization algorithms](https://schrimpf.github.io/AnimatedOptimization.jl/optimization/)
    - [Optimization packages](https://quantecon.github.io/lecture-julia.myst/more_julia/optimization_solver_packages.html#Optimization)
    - Self-study: [Generic Programming](https://quantecon.github.io/lecture-julia.myst/more_julia/generic_programming.html)
    - Self-study: [Linear Algebra](https://quantecon.github.io/lecture-julia.myst/tools_and_techniques/linear_algebra.html)
-4. **September 16**: Automatic Differentiation
+4. **September 16**: Project Best Practices
+   - [Slides](https://ubcecon.github.io/ECON622/paul/bestpractices.html)
+
    - In class: Overview of [optimization packages](jmd/opt/optimization_packages.jmd) and [automatic differentiation packages](jmd/opt/autodiff.jmd)
    - Self-study: [Intro to AD](https://quantecon.github.io/lecture-julia.myst/more_julia/optimization_solver_packages.html#Introduction-to-Automatic-Differentiation)
    - Self-study: [Differentiation for Hackers](https://github.com/MikeInnes/diff-zoo)
