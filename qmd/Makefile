@@ -16,8 +16,7 @@ $(OUTDIR)/%.html: $(SRCDIR)/%.qmd $(SRCDIR)/_quarto.yml $(SRCDIR)/styles.css
 	quarto render $<
 
 deploy: all
-	cd $(OUTDIR); git add *; git commit -a -m "Automated updates to html slides."; git push origin main
-	git commit -a -m "Automated updates to html slides."; git push origin main
+	cd $(OUTDIR); git add *; git commit -a -m "Automated updates to html slides."; git push origin master
 
 
 test:
