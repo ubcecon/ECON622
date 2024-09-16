@@ -127,7 +127,7 @@ rm("SomeNewPackage", recursive=true)
 ```{julia}
 #| eval: false
 using BestieTemplate
-BestieTemplate.generate("SomeNewPackage")
+BestieTemplate.generate("TestPackage")
 ```
 
 ## Tests
@@ -170,7 +170,7 @@ BestieTemplate.generate("SomeNewPackage")
 ## Further Reading
 
 - @gentzkow2014
-- @prium2023
+- @pruim2023
 - @wilson2017
 - @haider2021
 - @orozco2020
