@@ -31,39 +31,37 @@ See [problemsets.md](problemsets.md).
    - Self-study: [Chapter 2 of *Scientific Programming in Julia*](https://juliateachingctu.github.io/Scientific-Programming-in-Julia/stable/lecture_02/lecture/)
 3. **September 11**: Nonlinear Equation Solving
    - [Slides](https://ubcecon.github.io/ECON622/paul/equationsolving.html)
-   - [Optimization algorithms](https://schrimpf.github.io/AnimatedOptimization.jl/optimization/)
-   - [Optimization packages](https://quantecon.github.io/lecture-julia.myst/more_julia/optimization_solver_packages.html#Optimization)
-   - Self-study: [Generic Programming](https://quantecon.github.io/lecture-julia.myst/more_julia/generic_programming.html)
-   - Self-study: [Linear Algebra](https://quantecon.github.io/lecture-julia.myst/tools_and_techniques/linear_algebra.html)
+    - Self-study: [Design patterns: good practices and structured thinking](https://juliateachingctu.github.io/Scientific-Programming-in-Julia/dev/lecture_03/lecture/)
 4. **September 16**: Project Best Practices
    - [Slides](https://ubcecon.github.io/ECON622/paul/bestpractices.html)
-
-   - In class: Overview of [optimization packages](jmd/opt/optimization_packages.jmd) and [automatic differentiation packages](jmd/opt/autodiff.jmd)
-   - Self-study: [Intro to AD](https://quantecon.github.io/lecture-julia.myst/more_julia/optimization_solver_packages.html#Introduction-to-Automatic-Differentiation)
+   - Self-study: [Package development, unit tests, & CI](https://juliateachingctu.github.io/Scientific-Programming-in-Julia/dev/lecture_04/lecture/)
+   - Self-study: [Testing and Packages](https://julia.quantecon.org/software_engineering/testing.html)
+   - Self-study: [Git and Github](https://julia.quantecon.org/software_engineering/version_control.html)
+5. **September 18**: clean up example project, introduction to automatic differentiation
+   - In class: [automatic differentiation packages](qmd/autodiff/autodiff.qmd)
+   - Self-study: [Automatic Differentation in *Scientific Programming in Julia*](https://juliateachingctu.github.io/Scientific-Programming-in-Julia/dev/lecture_08/lecture/)
    - Self-study: [Differentiation for Hackers](https://github.com/MikeInnes/diff-zoo)
    - Self-study: [Engineering Trade-Offs in Automatic Differentiation: from TensorFlow and PyTorch to Jax and Julia](http://www.stochasticlifestyle.com/engineering-trade-offs-in-automatic-differentiation-from-tensorflow-and-pytorch-to-jax-and-julia/)
    - Optional:
       - [Understanding automatic differentiation (in Julia)](https://www.youtube.com/watch?v=UqymrMG-Qi4)
       - [Forward and Reverse Automatic Differentiation In A Nutshell](https://rawcdn.githack.com/mitmath/matrixcalc/e90417f46a20bec6d9c743c6b7bf5b178e77913a/automatic_differentiation_done_quick.html)
-5. **Sepember 18**: Extremum Estimation
+      - [Intro to AD](https://quantecon.github.io/lecture-julia.myst/more_julia/optimization_solver_packages.html#Introduction-to-Automatic-Differentiation)
+6. **September **: Optimization
+   - [optimization packages](qmd/opt/optimization_packages.qmd)
+   - [Optimization algorithms](https://schrimpf.github.io/AnimatedOptimization.jl/optimization/)
+   - [Optimization packages](https://quantecon.github.io/lecture-julia.myst/more_julia/optimization_solver_packages.html#Optimization)
+7. **September 25**: Extremum Estimation
    - [Extremum estimation](https://schrimpf.github.io/GMMInference.jl/extremumEstimation/) and [inference](https://schrimpf.github.io/GMMInference.jl/identificationRobustInference/)
    - [Empirical likelihood](https://schrimpf.github.io/GMMInference.jl/empiricalLikelihood/)
    - [Bootstrap](https://schrimpf.github.io/GMMInference.jl/bootstrap/)
-   -  Self-study: [General Packages](https://quantecon.github.io/lecture-julia.myst/more_julia/general_packages.html)
-   -  Self-study: [Data and Statistical Packages](https://quantecon.github.io/lecture-julia.myst/more_julia/data_statistical_packages.html)
-6. **September 23**: Testing and Package Development
-   - In class: development of [our random coefficients demand package as an example](https://github.com/ubcecon/ECON622_BLP.jl)
-   - Self-study: [Testing and Packages](https://julia.quantecon.org/software_engineering/testing.html)
-   - Self-study: [Git and Github](https://julia.quantecon.org/software_engineering/version_control.html)
-7. **September 25**: Code Performance
+
+8. **October 2**
+9. **October 7** Code Performance
    - [Coding for performance](https://github.com/schrimpf/ARGridBootstrap) be sure to look at the 2023 branch for the recent additions
    - [GPU usage](https://github.com/schrimpf/ARGridBootstrap)
    - Self-study: [SIMDscan](https://github.com/schrimpf/SIMDscan.jl/): since it briefly came up in class, and I was curious about it, I made a little package for calculating things like cumulative sums and autoregressive simulations using SIMD
    - Self-study: [Need for speed](https://julia.quantecon.org/software_engineering/need_for_speed.html)
    - Self-study: [Performance Tips](https://docs.julialang.org/en/v1/manual/performance-tips/)
-
-8. **October 2**
-9. **October 7**
 10. **October 9**
 11. **October 16**
 

@@ -2,7 +2,7 @@
 title       : "Problem Set 2"
 subtitle    : "ECON622"
 author      :
-date        : 2023-09-21
+date        : 2024-09-24
 weave_options:
       out_width : 100%
       wrap : true
@@ -11,24 +11,20 @@ weave_options:
       dpi : 192
 ---
 
-The recommended way to hand in and complete this assignment is to fork [`https://github.com/ubcecon/ECON622_BLP.jl/`](https://github.com/ubcecon/ECON622_BLP.jl/) and link to your forked repository. If you prefer you can also simply upload (to canvas) the files you edited or put all your code in a jupyter notebook.
+This problem set is meant to familiarize you with package development and the various tools associated with it. You should turn the problem set by linking to the github project your create. If you want to keep your project private, give me read access. The [lab from chapter 4 of Scientific Programming in Julia](https://juliateachingctu.github.io/Scientific-Programming-in-Julia/dev/lecture_04/lab/) might help with problems 1-3.
 
 # Problem 1
 
-Add quadrature and sparse grid quadrature methods to [`https://github.com/ubcecon/ECON622_BLP.jl/blob/main/src/integrate.jl`](https://github.com/ubcecon/ECON622_BLP.jl/blob/main/src/integrate.jl).
+Create a Julia package using `PkgTemplates.jl` or `BestieTemplate.jl`, and commit the initial template project to github.com or gitlab.org.
 
 # Problem 2
 
-Add tests for your new integration methods in [`https://github.com/ubcecon/ECON622_BLP.jl/blob/main/test/runtests.jl`](https://github.com/ubcecon/ECON622_BLP.jl/blob/main/test/runtests.jl).
+Add some code to your package. It need not complicated, but it should include at least one function that can be tested. You could use some of the code used for in-class examples, code from the first assignment, or some code related to something in your research (preferred). Commit your code to git and push it.
 
 # Problem 3
 
-This problem is more open ended and difficult. Work on either option A or option B. You need not have a complete solution to receive full credit, but you should show some effort and explain what you attempted.
+Add at least two tests for your package. Set up your tests to run on GithubActions or some other CI provider.
 
-## Option A
+# Problem 4
 
-The function `delta` in [`https://github.com/ubcecon/ECON622_BLP.jl/blob/main/src/blp.jl`](https://github.com/ubcecon/ECON622_BLP.jl/blob/main/src/blp.jl) will fail in some situations, such as when some shares are near 0. Create a test that `delta` fails. Try altering `delta` to make it succeed where it previously failed.
-
-## Option B
-
-Calculate the derivative of `delta` with respect to `Σ`. Can any automatic differentiation packages do this? If not, can you make the code compatible with an automatic differentation package (you could define a special method for `Σ::Array{ForwardDiff.Dual{T}}` or use ChainRules.jl).
+Add a docstring to at least one function. Create or edit the `docs/src/index.md` file in your package. Setup Documenter.jl to build your documentation and deploy it to github (or another host).
