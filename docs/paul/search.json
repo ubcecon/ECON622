@@ -284,7 +284,7 @@
     "href": "bestpractices.html#pkgtemplates.jl",
     "title": "Best Practices",
     "section": "PkgTemplates.jl",
-    "text": "PkgTemplates.jl\nor\n\n\n[ Info: Running prehooks\n[ Info: Running hooks\n  Activating new project at `~/ECON622/qmd/SomeNewPackage/test`\n    Updating registry at `~/.julia/registries/General.toml`\n   Resolving package versions...\n    Updating `~/ECON622/qmd/SomeNewPackage/test/Project.toml`\n  [8dfed614] + Test\n    Updating `~/ECON622/qmd/SomeNewPackage/test/Manifest.toml`\n  [2a0f44e3] + Base64\n  [b77e0a4c] + InteractiveUtils\n  [56ddb016] + Logging\n  [d6f4376e] + Markdown\n  [9a3f8284] + Random\n  [ea8e919c] + SHA v0.7.0\n  [9e88b42a] + Serialization\n  [8dfed614] + Test\n  Activating project at `~/ECON622/qmd`\n  Activating project at `~/ECON622/qmd/SomeNewPackage/test`\n   Resolving package versions...\n    Updating `~/ECON622/qmd/SomeNewPackage/test/Project.toml`\n  [4c88cf16] + Aqua v0.8.7\n    Updating `~/ECON622/qmd/SomeNewPackage/test/Manifest.toml`\n  [4c88cf16] + Aqua v0.8.7\n  [34da2185] + Compat v4.16.0\n  [0dad84c5] + ArgTools v1.1.1\n  [56f22d72] + Artifacts\n  [ade2ca70] + Dates\n  [f43a241f] + Downloads v1.6.0\n  [7b1f6079] + FileWatching\n  [b27032c2] + LibCURL v0.6.4\n  [76f85450] + LibGit2\n  [8f399da3] + Libdl\n  [ca575930] + NetworkOptions v1.2.0\n  [44cfe95a] + Pkg v1.10.0\n  [de0858da] + Printf\n  [3fa0cd96] + REPL\n  [6462fe0b] + Sockets\n  [fa267f1f] + TOML v1.0.3\n  [a4e569a6] + Tar v1.10.0\n  [cf7118a7] + UUIDs\n  [4ec0a83e] + Unicode\n  [deac9b47] + LibCURL_jll v8.4.0+0\n  [e37daf67] + LibGit2_jll v1.6.4+0\n  [29816b5a] + LibSSH2_jll v1.11.0+1\n  [c8ffd9c3] + MbedTLS_jll v2.28.2+1\n  [14a3606d] + MozillaCACerts_jll v2023.1.10\n  [83775a58] + Zlib_jll v1.2.13+1\n  [8e850ede] + nghttp2_jll v1.52.0+1\n  [3f19e933] + p7zip_jll v17.4.0+2\n  Activating project at `~/ECON622/qmd`\n  Activating project at `~/ECON622/qmd/SomeNewPackage/test`\n   Resolving package versions...\n    Updating `~/ECON622/qmd/SomeNewPackage/test/Project.toml`\n  [c3a54625] + JET v0.9.9\n    Updating `~/ECON622/qmd/SomeNewPackage/test/Manifest.toml`\n  [da1fd8a2] + CodeTracking v1.3.6\n  [c3a54625] + JET v0.9.9\n  [aa1ae85d] + JuliaInterpreter v0.9.36\n  [6f1432cf] + LoweredCodeUtils v3.0.2\n  [1914dd2f] + MacroTools v0.5.13\n  [aea7be01] + PrecompileTools v1.2.1\n  [21216c6a] + Preferences v1.4.3\n  Activating project at `~/ECON622/qmd`\n  Activating new project at `~/ECON622/qmd/SomeNewPackage/docs`\n   Resolving package versions...\n    Updating `~/ECON622/qmd/SomeNewPackage/docs/Project.toml`\n  [e30172f5] + Documenter v1.7.0\n    Updating `~/ECON622/qmd/SomeNewPackage/docs/Manifest.toml`\n  [a4c015fc] + ANSIColoredPrinters v0.0.1\n  [1520ce14] + AbstractTrees v0.4.5\n  [944b1d66] + CodecZlib v0.7.6\n  [ffbed154] + DocStringExtensions v0.9.3\n  [e30172f5] + Documenter v1.7.0\n  [d7ba0133] + Git v1.3.1\n  [b5f81e59] + IOCapture v0.2.5\n  [692b3bcd] + JLLWrappers v1.6.0\n  [682c06a0] + JSON v0.21.4\n  [0e77f7df] + LazilyInitializedFields v1.2.2\n  [d0879d2d] + MarkdownAST v0.1.2\n  [69de0a69] + Parsers v2.8.1\n  [aea7be01] + PrecompileTools v1.2.1\n  [21216c6a] + Preferences v1.4.3\n  [2792f1a3] + RegistryInstances v0.1.0\n  [3bb67fe8] + TranscodingStreams v0.11.2\n  [2e619515] + Expat_jll v2.6.2+0\n  [f8c6e375] + Git_jll v2.44.0+2\n  [94ce4f54] + Libiconv_jll v1.17.0+0\n  [458c3c95] + OpenSSL_jll v3.0.15+0\n  [0dad84c5] + ArgTools v1.1.1\n  [56f22d72] + Artifacts\n  [2a0f44e3] + Base64\n  [ade2ca70] + Dates\n  [f43a241f] + Downloads v1.6.0\n  [7b1f6079] + FileWatching\n  [b77e0a4c] + InteractiveUtils\n  [b27032c2] + LibCURL v0.6.4\n  [76f85450] + LibGit2\n  [8f399da3] + Libdl\n  [56ddb016] + Logging\n  [d6f4376e] + Markdown\n  [a63ad114] + Mmap\n  [ca575930] + NetworkOptions v1.2.0\n  [44cfe95a] + Pkg v1.10.0\n  [de0858da] + Printf\n  [3fa0cd96] + REPL\n  [9a3f8284] + Random\n  [ea8e919c] + SHA v0.7.0\n  [9e88b42a] + Serialization\n  [6462fe0b] + Sockets\n  [fa267f1f] + TOML v1.0.3\n  [a4e569a6] + Tar v1.10.0\n  [8dfed614] + Test\n  [cf7118a7] + UUIDs\n  [4ec0a83e] + Unicode\n  [deac9b47] + LibCURL_jll v8.4.0+0\n  [e37daf67] + LibGit2_jll v1.6.4+0\n  [29816b5a] + LibSSH2_jll v1.11.0+1\n  [c8ffd9c3] + MbedTLS_jll v2.28.2+1\n  [14a3606d] + MozillaCACerts_jll v2023.1.10\n  [efcefdf7] + PCRE2_jll v10.42.0+1\n  [83775a58] + Zlib_jll v1.2.13+1\n  [8e850ede] + nghttp2_jll v1.52.0+1\n  [3f19e933] + p7zip_jll v17.4.0+2\n   Resolving package versions...\n    Updating `~/ECON622/qmd/SomeNewPackage/docs/Project.toml`\n  [c350c594] + SomeNewPackage v1.0.0-DEV `..`\n    Updating `~/ECON622/qmd/SomeNewPackage/docs/Manifest.toml`\n  [c350c594] + SomeNewPackage v1.0.0-DEV `..`\n  Activating project at `~/ECON622/qmd`\n[ Info: Running posthooks\n[ Info: New package is at /home/paul/ECON622/qmd/SomeNewPackage\n\n\n\"/home/paul/ECON622/qmd/SomeNewPackage\""
+    "text": "PkgTemplates.jl\nor\n\n\n[ Info: Running prehooks\n[ Info: Running hooks\n  Activating new project at `~/compecon/ECON622/qmd/SomeNewPackage/test`\n   Resolving package versions...\n    Updating `~/compecon/ECON622/qmd/SomeNewPackage/test/Project.toml`\n  [8dfed614] + Test\n    Updating `~/compecon/ECON622/qmd/SomeNewPackage/test/Manifest.toml`\n  [2a0f44e3] + Base64\n  [b77e0a4c] + InteractiveUtils\n  [56ddb016] + Logging\n  [d6f4376e] + Markdown\n  [9a3f8284] + Random\n  [ea8e919c] + SHA v0.7.0\n  [9e88b42a] + Serialization\n  [8dfed614] + Test\n  Activating project at `~/compecon/ECON622/qmd`\n  Activating project at `~/compecon/ECON622/qmd/SomeNewPackage/test`\n   Resolving package versions...\n    Updating `~/compecon/ECON622/qmd/SomeNewPackage/test/Project.toml`\n  [4c88cf16] + Aqua v0.8.7\n    Updating `~/compecon/ECON622/qmd/SomeNewPackage/test/Manifest.toml`\n  [4c88cf16] + Aqua v0.8.7\n  [34da2185] + Compat v4.16.0\n  [0dad84c5] + ArgTools v1.1.1\n  [56f22d72] + Artifacts\n  [ade2ca70] + Dates\n  [f43a241f] + Downloads v1.6.0\n  [7b1f6079] + FileWatching\n  [b27032c2] + LibCURL v0.6.4\n  [76f85450] + LibGit2\n  [8f399da3] + Libdl\n  [ca575930] + NetworkOptions v1.2.0\n  [44cfe95a] + Pkg v1.10.0\n  [de0858da] + Printf\n  [3fa0cd96] + REPL\n  [6462fe0b] + Sockets\n  [fa267f1f] + TOML v1.0.3\n  [a4e569a6] + Tar v1.10.0\n  [cf7118a7] + UUIDs\n  [4ec0a83e] + Unicode\n  [deac9b47] + LibCURL_jll v8.4.0+0\n  [e37daf67] + LibGit2_jll v1.6.4+0\n  [29816b5a] + LibSSH2_jll v1.11.0+1\n  [c8ffd9c3] + MbedTLS_jll v2.28.2+1\n  [14a3606d] + MozillaCACerts_jll v2023.1.10\n  [83775a58] + Zlib_jll v1.2.13+1\n  [8e850ede] + nghttp2_jll v1.52.0+1\n  [3f19e933] + p7zip_jll v17.4.0+2\nPrecompiling project...\n  ✓ Aqua\n  1 dependency successfully precompiled in 1 seconds. 4 already precompiled.\n  Activating project at `~/compecon/ECON622/qmd`\n  Activating project at `~/compecon/ECON622/qmd/SomeNewPackage/test`\n   Resolving package versions...\n   Installed JET ─ v0.9.9\n    Updating `~/compecon/ECON622/qmd/SomeNewPackage/test/Project.toml`\n  [c3a54625] + JET v0.9.9\n    Updating `~/compecon/ECON622/qmd/SomeNewPackage/test/Manifest.toml`\n  [da1fd8a2] + CodeTracking v1.3.6\n  [c3a54625] + JET v0.9.9\n  [aa1ae85d] + JuliaInterpreter v0.9.36\n  [6f1432cf] + LoweredCodeUtils v3.0.2\n  [1914dd2f] + MacroTools v0.5.13\n  [aea7be01] + PrecompileTools v1.2.1\n  [21216c6a] + Preferences v1.4.3\nPrecompiling project...\n  ✓ JET\n  1 dependency successfully precompiled in 25 seconds. 11 already precompiled.\n  Activating project at `~/compecon/ECON622/qmd`\n  Activating new project at `~/compecon/ECON622/qmd/SomeNewPackage/docs`\n   Resolving package versions...\n    Updating `~/compecon/ECON622/qmd/SomeNewPackage/docs/Project.toml`\n  [e30172f5] + Documenter v1.7.0\n    Updating `~/compecon/ECON622/qmd/SomeNewPackage/docs/Manifest.toml`\n  [a4c015fc] + ANSIColoredPrinters v0.0.1\n  [1520ce14] + AbstractTrees v0.4.5\n  [944b1d66] + CodecZlib v0.7.6\n  [ffbed154] + DocStringExtensions v0.9.3\n  [e30172f5] + Documenter v1.7.0\n  [d7ba0133] + Git v1.3.1\n  [b5f81e59] + IOCapture v0.2.5\n  [692b3bcd] + JLLWrappers v1.6.0\n  [682c06a0] + JSON v0.21.4\n  [0e77f7df] + LazilyInitializedFields v1.2.2\n  [d0879d2d] + MarkdownAST v0.1.2\n  [69de0a69] + Parsers v2.8.1\n  [aea7be01] + PrecompileTools v1.2.1\n  [21216c6a] + Preferences v1.4.3\n  [2792f1a3] + RegistryInstances v0.1.0\n  [3bb67fe8] + TranscodingStreams v0.11.2\n  [2e619515] + Expat_jll v2.6.2+0\n  [f8c6e375] + Git_jll v2.44.0+2\n  [94ce4f54] + Libiconv_jll v1.17.0+0\n  [458c3c95] + OpenSSL_jll v3.0.15+0\n  [0dad84c5] + ArgTools v1.1.1\n  [56f22d72] + Artifacts\n  [2a0f44e3] + Base64\n  [ade2ca70] + Dates\n  [f43a241f] + Downloads v1.6.0\n  [7b1f6079] + FileWatching\n  [b77e0a4c] + InteractiveUtils\n  [b27032c2] + LibCURL v0.6.4\n  [76f85450] + LibGit2\n  [8f399da3] + Libdl\n  [56ddb016] + Logging\n  [d6f4376e] + Markdown\n  [a63ad114] + Mmap\n  [ca575930] + NetworkOptions v1.2.0\n  [44cfe95a] + Pkg v1.10.0\n  [de0858da] + Printf\n  [3fa0cd96] + REPL\n  [9a3f8284] + Random\n  [ea8e919c] + SHA v0.7.0\n  [9e88b42a] + Serialization\n  [6462fe0b] + Sockets\n  [fa267f1f] + TOML v1.0.3\n  [a4e569a6] + Tar v1.10.0\n  [8dfed614] + Test\n  [cf7118a7] + UUIDs\n  [4ec0a83e] + Unicode\n  [deac9b47] + LibCURL_jll v8.4.0+0\n  [e37daf67] + LibGit2_jll v1.6.4+0\n  [29816b5a] + LibSSH2_jll v1.11.0+1\n  [c8ffd9c3] + MbedTLS_jll v2.28.2+1\n  [14a3606d] + MozillaCACerts_jll v2023.1.10\n  [efcefdf7] + PCRE2_jll v10.42.0+1\n  [83775a58] + Zlib_jll v1.2.13+1\n  [8e850ede] + nghttp2_jll v1.52.0+1\n  [3f19e933] + p7zip_jll v17.4.0+2\nPrecompiling project...\n  ✓ Git_jll\n  ✓ Git\n  ✓ Documenter\n  3 dependencies successfully precompiled in 13 seconds. 20 already precompiled.\n   Resolving package versions...\n    Updating `~/compecon/ECON622/qmd/SomeNewPackage/docs/Project.toml`\n  [673f75a5] + SomeNewPackage v1.0.0-DEV `..`\n    Updating `~/compecon/ECON622/qmd/SomeNewPackage/docs/Manifest.toml`\n  [673f75a5] + SomeNewPackage v1.0.0-DEV `..`\n  Activating project at `~/compecon/ECON622/qmd`\n[ Info: Running posthooks\n[ Info: New package is at /home/paul/compecon/ECON622/qmd/SomeNewPackage\n\n\n\"/home/paul/compecon/ECON622/qmd/SomeNewPackage\""
   },
   {
     "objectID": "bestpractices.html#bestietemplate.jl",
@@ -333,13 +333,146 @@
     "href": "bestpractices.html#further-reading",
     "title": "Best Practices",
     "section": "Further Reading",
-    "text": "Further Reading\n\nGentzkow and Shapiro (2014)\n(prium2023?)\nWilson (2017)\nHaider, Riesch, and Jirauschek (2021)\nOrozco et al. (2020)"
+    "text": "Further Reading\n\nGentzkow and Shapiro (2014)\nPruim, Gîrjău, and Horton (2023)\nWilson (2017)\nHaider, Riesch, and Jirauschek (2021)\nOrozco et al. (2020)"
   },
   {
     "objectID": "bestpractices.html#references",
     "href": "bestpractices.html#references",
     "title": "Best Practices",
     "section": "References",
-    "text": "References\n\n\n\n\n\n\n\n\nGentzkow, Matthew, and Jesse M. Shapiro. 2014. “Code and Data for the Social Sciences: A Practitioner’s Guide.” In. https://api.semanticscholar.org/CorpusID:62408223.\n\n\nHaider, Michael, Michael Riesch, and Christian Jirauschek. 2021. “Realization of Best Practices in Software Engineering and Scientific Writing Through Ready-to-Use Project Skeletons.” Optical and Quantum Electronics 53 (10): 568. https://doi.org/10.1007/s11082-021-03192-4.\n\n\nOrozco, Valérie, Christophe Bontemps, Elise Maigné, Virginie Piguet, Annie Hofstetter, Anne Lacroix, Fabrice Levert, and Jean-Marc Rousselle. 2020. “HOW TO MAKE a PIE: REPRODUCIBLE RESEARCH FOR EMPIRICAL ECONOMICS AND ECONOMETRICS.” Journal of Economic Surveys 34 (5): 1134–69. https://doi.org/https://doi.org/10.1111/joes.12389.\n\n\nWilson, Jennifer AND Cranston, Greg AND Bryan. 2017. “Good Enough Practices in Scientific Computing.” PLOS Computational Biology 13 (6): 1–20. https://doi.org/10.1371/journal.pcbi.1005510."
+    "text": "References\n\n\n\n\n\n\n\n\nGentzkow, Matthew, and Jesse M. Shapiro. 2014. “Code and Data for the Social Sciences: A Practitioner’s Guide.” In. https://api.semanticscholar.org/CorpusID:62408223.\n\n\nHaider, Michael, Michael Riesch, and Christian Jirauschek. 2021. “Realization of Best Practices in Software Engineering and Scientific Writing Through Ready-to-Use Project Skeletons.” Optical and Quantum Electronics 53 (10): 568. https://doi.org/10.1007/s11082-021-03192-4.\n\n\nOrozco, Valérie, Christophe Bontemps, Elise Maigné, Virginie Piguet, Annie Hofstetter, Anne Lacroix, Fabrice Levert, and Jean-Marc Rousselle. 2020. “HOW TO MAKE a PIE: REPRODUCIBLE RESEARCH FOR EMPIRICAL ECONOMICS AND ECONOMETRICS.” Journal of Economic Surveys 34 (5): 1134–69. https://doi.org/https://doi.org/10.1111/joes.12389.\n\n\nPruim, Randall J., Maria-Cristiana Gîrjău, and Nicholas Jon Horton. 2023. “Fostering Better Coding Practices for Data Scientists.” https://arxiv.org/abs/2210.03991.\n\n\nWilson, Jennifer AND Cranston, Greg AND Bryan. 2017. “Good Enough Practices in Scientific Computing.” PLOS Computational Biology 13 (6): 1–20. https://doi.org/10.1371/journal.pcbi.1005510."
+  },
+  {
+    "objectID": "autodiff.html#derivatives",
+    "href": "autodiff.html#derivatives",
+    "title": "Automatic Differentiation",
+    "section": "Derivatives",
+    "text": "Derivatives\n\nNeeded for efficient equation solving and optimization\nCan calculate automatically"
+  },
+  {
+    "objectID": "autodiff.html#finite-differences",
+    "href": "autodiff.html#finite-differences",
+    "title": "Automatic Differentiation",
+    "section": "Finite Differences",
+    "text": "Finite Differences\n\n\n-0.1450763155960872"
+  },
+  {
+    "objectID": "autodiff.html#forward-automatic-differentiation",
+    "href": "autodiff.html#forward-automatic-differentiation",
+    "title": "Automatic Differentiation",
+    "section": "Forward Automatic Differentiation",
+    "text": "Forward Automatic Differentiation\n\n\n(0.10839091026481387, -0.14507631594729084)"
+  },
+  {
+    "objectID": "autodiff.html#reverse-automatic-differentiation",
+    "href": "autodiff.html#reverse-automatic-differentiation",
+    "title": "Automatic Differentiation",
+    "section": "Reverse Automatic Differentiation",
+    "text": "Reverse Automatic Differentiation\n\ncompute \\(f(x)\\) in usual forward direction, keep track of each operation and intermediate value\ncompute derivative “backwards”\n\n\\(f(x) = g(h(x))\\)\n\\(f'(x) = g'(h(x)) h'(x)\\)\n\nscales better for high dimensional \\(x\\)\nimplementation more complicated\n\nSimple-ish example https://simeonschaub.github.io/ReverseModePluto/notebook.html"
+  },
+  {
+    "objectID": "autodiff.html#forwarddiff",
+    "href": "autodiff.html#forwarddiff",
+    "title": "Automatic Differentiation",
+    "section": "ForwardDiff",
+    "text": "ForwardDiff\n\nForwardDiff.jl\nmature and reliable"
+  },
+  {
+    "objectID": "autodiff.html#forwarddiff-example",
+    "href": "autodiff.html#forwarddiff-example",
+    "title": "Automatic Differentiation",
+    "section": "ForwardDiff Example",
+    "text": "ForwardDiff Example\n\n\n3-element Vector{Float64}:\n   0.8066049744615985\n   7.152475995234996\n -15.595102337523281"
+  },
+  {
+    "objectID": "autodiff.html#forwarddiff-notes",
+    "href": "autodiff.html#forwarddiff-notes",
+    "title": "Automatic Differentiation",
+    "section": "ForwardDiff Notes",
+    "text": "ForwardDiff Notes\n\nFor \\(f: \\mathbb{R}^n \\to \\mathbb{R}^m\\), the computation scales with \\(n\\)\n\nbest for moderate \\(n\\)\n\nCode must be generic\n\nbe careful when allocating arrays\n\n\n\nfunction wontwork(x)\n  y = zeros(size(x))\n  for i ∈ eachindex(x)\n    y[i] += x[i]*i\n  end\n  return(sum(y))\nend\n\nfunction willwork(x)\n  y = zero(x)\n  for i ∈ eachindex(x)\n    y[i] += x[i]*i\n  end\n  return(sum(y))\nend\n\nbetterstyle(x) = sum(v*i for (i,v) in enumerate(x))"
+  },
+  {
+    "objectID": "autodiff.html#zygote",
+    "href": "autodiff.html#zygote",
+    "title": "Automatic Differentiation",
+    "section": "Zygote",
+    "text": "Zygote\n\nZygote.jl\nDoes not allow mutating arrays\nQuite mature, but possibly some bugs remain\nApparently hard to develop, unclear future"
+  },
+  {
+    "objectID": "autodiff.html#zygote-example",
+    "href": "autodiff.html#zygote-example",
+    "title": "Automatic Differentiation",
+    "section": "Zygote Example",
+    "text": "Zygote Example\n\n\n8.452290561089217e-15"
+  },
+  {
+    "objectID": "autodiff.html#enzyme",
+    "href": "autodiff.html#enzyme",
+    "title": "Automatic Differentiation",
+    "section": "Enzyme",
+    "text": "Enzyme\n“Enzyme performs automatic differentiation (AD) of statically analyzable LLVM. It is highly-efficient and its ability to perform AD on optimized code allows Enzyme to meet or exceed the performance of state-of-the-art AD tools.”\n\n\n┌ Warning: Using fallback BLAS replacements for ([\"dsymv_64_\"]), performance may be degraded\n└ @ Enzyme.Compiler ~/.julia/packages/GPUCompiler/y4cj1/src/utils.jl:59\n\n\n3-element Vector{Float64}:\n   0.8066049744616017\n   7.15247599523499\n -15.595102337523274"
+  },
+  {
+    "objectID": "autodiff.html#enzyme-notes",
+    "href": "autodiff.html#enzyme-notes",
+    "title": "Automatic Differentiation",
+    "section": "Enzyme Notes",
+    "text": "Enzyme Notes\n\nDocumentation is not suited to beginners\nDoes not work on all Julia code, but cases where it fails are not well documented. Calling Enzyme.API.runtimeActivity!(true) works around some errors.\nCryptic error messages. Enzyme operates on LLVM IR, and error messages often reference the point in the LLVM IR where the error occurred. Figuring out what Julia code the LLVM IR corresponds to is not easy.\n\nThese may be better now than last year when I first wrote this slide\n\n\n\n\n  1.108786 seconds (1.72 M allocations: 116.841 MiB, 2.44% gc time, 99.10% compilation time)\n  0.331799 seconds (1.59 M allocations: 115.956 MiB, 5.96% gc time, 99.91% compilation time)\n\n\n30000-element Vector{Float64}:\n 0.1521368249654288\n 0.12387585879897856\n 0.8857234227606771\n 0.14821778363062343\n 0.5413014298006785\n 0.3665697380941372\n 0.13984956995562747\n 0.7730640198753364\n 0.9157592331085139\n 0.2593215619546694\n ⋮\n 0.17638027741677498\n 0.2554650297347364\n 0.11166916354718681\n 0.8388902766422559\n 0.5553861769520001\n 0.719686451326661\n 0.4027668349766428\n 0.39804843303511317\n 0.48472133241840876"
+  },
+  {
+    "objectID": "autodiff.html#finitediff",
+    "href": "autodiff.html#finitediff",
+    "title": "Automatic Differentiation",
+    "section": "FiniteDiff",
+    "text": "FiniteDiff\n\nFiniteDiff computes finite difference gradients– always test that whatever automatic or manual derivatives you compute are close to the finite difference versions\nuse a package for finite differences to handle rounding error well"
+  },
+  {
+    "objectID": "autodiff.html#chainrules",
+    "href": "autodiff.html#chainrules",
+    "title": "Automatic Differentiation",
+    "section": "ChainRules",
+    "text": "ChainRules\n\nChainRules\nused by many AD packages to define the derivatives of various functions.\nUseful if you want to define a custom derivative rule for a function."
+  },
+  {
+    "objectID": "autodiff.html#differentiationinterface",
+    "href": "autodiff.html#differentiationinterface",
+    "title": "Automatic Differentiation",
+    "section": "DifferentiationInterface",
+    "text": "DifferentiationInterface\n\nDifferentiationInterface gives a single interface for many differentiation packages\n\n\n\n┌ Warning: Using fallback BLAS replacements for ([\"dsymv_64_\"]), performance may be degraded\n└ @ Enzyme.Compiler ~/.julia/packages/GPUCompiler/y4cj1/src/utils.jl:59\n\n\n3-element Vector{Float64}:\n   0.8066049744616017\n   7.15247599523499\n -15.595102337523274\n\n\n\nimprove performance by reusing intermediate variables\n\n\n\n3-element Vector{Float64}:\n   0.8066049744616017\n   7.15247599523499\n -15.595102337523274"
+  },
+  {
+    "objectID": "autodiff.html#other-packages-1",
+    "href": "autodiff.html#other-packages-1",
+    "title": "Automatic Differentiation",
+    "section": "Other Packages",
+    "text": "Other Packages\n\nhttps://juliadiff.org/"
+  },
+  {
+    "objectID": "autodiff.html#reversediff.jl",
+    "href": "autodiff.html#reversediff.jl",
+    "title": "Automatic Differentiation",
+    "section": "ReverseDiff.jl",
+    "text": "ReverseDiff.jl\n\nReverseDiff.jl a tape based reverse mode package\nLong lived and well tested\nlimitations. Importantly, code must be generic and mutation of arrays is not allowed."
+  },
+  {
+    "objectID": "autodiff.html#yota.jl",
+    "href": "autodiff.html#yota.jl",
+    "title": "Automatic Differentiation",
+    "section": "Yota.jl",
+    "text": "Yota.jl\n\nYota.jl another tape based package\nCompatible with Chainrules.jl\nSomewhat newer and less popular\nIts documentation has a very nice explanation of how it works."
+  },
+  {
+    "objectID": "autodiff.html#tracker",
+    "href": "autodiff.html#tracker",
+    "title": "Automatic Differentiation",
+    "section": "Tracker",
+    "text": "Tracker\nTracker is a tape based reverse mode package. It was the default autodiff package in Flux before being replaced by Zygote. No longer under active development."
+  },
+  {
+    "objectID": "autodiff.html#diffractor",
+    "href": "autodiff.html#diffractor",
+    "title": "Automatic Differentiation",
+    "section": "Diffractor",
+    "text": "Diffractor\nDiffractor is automatic differentiation package in development. It was once hoped to be the future of AD in Julia, but has been delayed. It plans to have both forward and reverse mode, but only forward mode is available so far."
   }
 ]

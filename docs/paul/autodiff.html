@@ -11,8 +11,8 @@
   <meta name="generator" content="quarto-1.5.57">
 
   <meta name="author" content="Paul Schrimpf">
-  <meta name="dcterms.date" content="2024-09-16">
-  <title>ECON 622 – Best Practices</title>
+  <meta name="dcterms.date" content="2024-09-18">
+  <title>ECON 622 – Automatic Differentiation</title>
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, minimal-ui">
@@ -30,27 +30,72 @@
       margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
       vertical-align: middle;
     }
-    /* CSS for citations */
-    div.csl-bib-body { }
-    div.csl-entry {
-      clear: both;
-      margin-bottom: 0em;
+    /* CSS for syntax highlighting */
+    pre > code.sourceCode { white-space: pre; position: relative; }
+    pre > code.sourceCode > span { line-height: 1.25; }
+    pre > code.sourceCode > span:empty { height: 1.2em; }
+    .sourceCode { overflow: visible; }
+    code.sourceCode > span { color: inherit; text-decoration: inherit; }
+    div.sourceCode { margin: 1em 0; }
+    pre.sourceCode { margin: 0; }
+    @media screen {
+    div.sourceCode { overflow: auto; }
     }
-    .hanging-indent div.csl-entry {
-      margin-left:2em;
-      text-indent:-2em;
+    @media print {
+    pre > code.sourceCode { white-space: pre-wrap; }
+    pre > code.sourceCode > span { display: inline-block; text-indent: -5em; padding-left: 5em; }
     }
-    div.csl-left-margin {
-      min-width:2em;
-      float:left;
+    pre.numberSource code
+      { counter-reset: source-line 0; }
+    pre.numberSource code > span
+      { position: relative; left: -4em; counter-increment: source-line; }
+    pre.numberSource code > span > a:first-child::before
+      { content: counter(source-line);
+        position: relative; left: -1em; text-align: right; vertical-align: baseline;
+        border: none; display: inline-block;
+        -webkit-touch-callout: none; -webkit-user-select: none;
+        -khtml-user-select: none; -moz-user-select: none;
+        -ms-user-select: none; user-select: none;
+        padding: 0 4px; width: 4em;
+      }
+    pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+    div.sourceCode
+      { color: #f8f8f2;  }
+    @media screen {
+    pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
     }
-    div.csl-right-inline {
-      margin-left:2em;
-      padding-left:1em;
-    }
-    div.csl-indent {
-      margin-left: 2em;
-    }  </style>
+    code span { color: #f8f8f2; } /* Normal */
+    code span.al { color: #f07178; background-color: #2a0f15; font-weight: bold; } /* Alert */
+    code span.an { color: #d4d0ab; } /* Annotation */
+    code span.at { color: #00e0e0; } /* Attribute */
+    code span.bn { color: #d4d0ab; } /* BaseN */
+    code span.bu { color: #abe338; } /* BuiltIn */
+    code span.cf { color: #ffa07a; font-weight: bold; } /* ControlFlow */
+    code span.ch { color: #abe338; } /* Char */
+    code span.cn { color: #ffd700; } /* Constant */
+    code span.co { color: #f8f8f2; font-style: italic; } /* Comment */
+    code span.cv { color: #ffd700; } /* CommentVar */
+    code span.do { color: #f8f8f2; } /* Documentation */
+    code span.dt { color: #ffa07a; } /* DataType */
+    code span.dv { color: #d4d0ab; } /* DecVal */
+    code span.er { color: #f07178; text-decoration: underline; } /* Error */
+    code span.ex { color: #00e0e0; font-weight: bold; } /* Extension */
+    code span.fl { color: #d4d0ab; } /* Float */
+    code span.fu { color: #ffa07a; } /* Function */
+    code span.im { color: #abe338; } /* Import */
+    code span.in { color: #d4d0ab; } /* Information */
+    code span.kw { color: #ffa07a; font-weight: bold; } /* Keyword */
+    code span.op { color: #ffa07a; } /* Operator */
+    code span.ot { color: #00e0e0; } /* Other */
+    code span.pp { color: #dcc6e0; } /* Preprocessor */
+    code span.re { color: #00e0e0; background-color: #f8f8f2; } /* RegionMarker */
+    code span.sc { color: #abe338; } /* SpecialChar */
+    code span.ss { color: #abe338; } /* SpecialString */
+    code span.st { color: #abe338; } /* String */
+    code span.va { color: #00e0e0; } /* Variable */
+    code span.vs { color: #abe338; } /* VerbatimString */
+    code span.wa { color: #dcc6e0; } /* Warning */
+  </style>
   <link rel="stylesheet" href="site_libs/revealjs/dist/theme/quarto.css">
   <link href="site_libs/revealjs/plugin/quarto-line-highlight/line-highlight.css" rel="stylesheet">
   <link href="site_libs/revealjs/plugin/reveal-menu/menu.css" rel="stylesheet">
@@ -349,7 +394,7 @@
     <div class="slides">
 
 <section id="title-slide" class="quarto-title-block center">
-  <h1 class="title">Best Practices</h1>
+  <h1 class="title">Automatic Differentiation</h1>
 
 <div class="quarto-title-authors">
 <div class="quarto-title-author">
@@ -359,368 +404,269 @@ Paul Schrimpf
 </div>
 </div>
 
-  <p class="date">2024-09-16</p>
-</section>
-<section class="slide level2">
-
-<p><span class="math display">\[
-\def\Er{{\mathrm{E}}}
-\def\En{{\mathbb{E}_n}}
-\def\cov{{\mathrm{Cov}}}
-\def\var{{\mathrm{Var}}}
-\def\R{{\mathbb{R}}}
-\def\arg{{\mathrm{arg}}}
-\newcommand\norm[1]{\left\lVert#1\right\rVert}
-\def\rank{{\mathrm{rank}}}
-\newcommand{\inpr}{ \overset{p^*_{\scriptscriptstyle n}}{\longrightarrow}}
-\def\inprob{{\,{\buildrel p \over \rightarrow}\,}}
-\def\indist{\,{\buildrel d \over \rightarrow}\,}
-\DeclareMathOperator*{\plim}{plim}
-\DeclareMathOperator*{\argmax}{argmax}
-\DeclareMathOperator*{\argmin}{argmin}
-\]</span></p>
+  <p class="date">2024-09-18</p>
 </section>
 <section>
-<section id="overview" class="title-slide slide level1 center">
-<h1>Overview</h1>
+<section id="introduction" class="title-slide slide level1 center">
+<h1>Introduction</h1>
 
 </section>
-<section id="goals" class="slide level2">
-<h2>Goals</h2>
+<section id="derivatives" class="slide level2">
+<h2>Derivatives</h2>
 <ul>
-<li>Correct</li>
-<li>Maintainable &amp; Extensible
-<ul>
-<li>Clear</li>
-<li>Contained</li>
-<li>Consistent</li>
-</ul></li>
-<li>Efficient</li>
+<li>Needed for efficient equation solving and optimization</li>
+<li>Can calculate automatically</li>
 </ul>
 </section>
-<section id="tools" class="slide level2">
-<h2>Tools</h2>
-<table class="caption-top">
-<colgroup>
-<col style="width: 40%">
-<col style="width: 60%">
-</colgroup>
-<thead>
-<tr class="header">
-<th>Goal</th>
-<th>Tool(s)</th>
-</tr>
-</thead>
-<tbody>
-<tr class="odd">
-<td>Correct</td>
-<td>tests, static analysis</td>
-</tr>
-<tr class="even">
-<td>Maintainable</td>
-<td>version control, CI, documentation, dependency management</td>
-</tr>
-<tr class="odd">
-<td>Efficient</td>
-<td>benchmarks, profiler</td>
-</tr>
-</tbody>
-</table>
-</section></section>
-<section>
-<section id="version-control" class="title-slide slide level1 center">
-<h1>Version Control</h1>
-
+<section id="finite-differences" class="slide level2">
+<h2>Finite Differences</h2>
+<div id="2" class="cell" data-execution_count="1">
+<div class="cell-output cell-output-display" data-execution_count="1">
+<pre><code>-0.1450763155960872</code></pre>
+</div>
+</div>
 </section>
-<section id="version-control-1" class="slide level2">
-<h2>Version Control</h2>
-<ul>
-<li>essential</li>
-<li>git is by far the most popular and what I recommend</li>
-<li>git hosting services
-<ul>
-<li>github.com</li>
-<li>gitlab.com</li>
-<li>bitbucket.org</li>
-</ul></li>
-<li>Benefits:
-<ul>
-<li>backup</li>
-<li>edit history</li>
-<li>coordination</li>
-</ul></li>
-</ul>
-</section>
-<section id="git" class="slide level2">
-<h2>git</h2>
-<ul>
-<li>Use it</li>
-<li><a href="https://mint.westdri.ca/git/intro_intro">git intro and tutorial</a> and <a href="https://www.youtube.com/watch?v=nulmjJq5Fz0">webinar</a></li>
-</ul>
-</section></section>
-<section>
-<section id="julia-tools" class="title-slide slide level1 center">
-<h1>Julia Tools</h1>
-
-</section>
-<section id="tool-setup-for-julia" class="slide level2">
-<h2>Tool Setup for Julia</h2>
-<ul>
-<li>Organize code into a package</li>
-<li>Good advice aimed at scientific computing projects: <a href="https://j-fu.github.io/marginalia/julia/project-workflow/">Julia: Project Workflow</a></li>
-<li>Setup your package with a project skeleton
-<ul>
-<li><a href="https://github.com/JuliaCI/PkgTemplates.jl"><code>PkgTemplates.jl</code></a></li>
-<li><a href="https://github.com/abelsiqueira/BestieTemplate.jl"><code>BestieTemplate.jl</code></a></li>
-<li><a href="https://juliadynamics.github.io/DrWatson.jl/stable/"><code>DoctorWatson.jl</code></a></li>
-<li><span class="citation" data-cites="haider2021">Haider, Riesch, and Jirauschek (<a href="#/references" role="doc-biblioref" onclick="">2021</a>)</span> for similar idea for other languages</li>
-</ul></li>
-</ul>
-</section>
-<section id="pkgtemplates.jl" class="slide level2">
-<h2>PkgTemplates.jl</h2>
-<p>or</p>
+<section id="forward-automatic-differentiation" class="slide level2">
+<h2>Forward Automatic Differentiation</h2>
 <div id="4" class="cell" data-execution_count="1">
+<div class="cell-output cell-output-display" data-execution_count="1">
+<pre><code>(0.10839091026481387, -0.14507631594729084)</code></pre>
+</div>
+</div>
+</section>
+<section id="reverse-automatic-differentiation" class="slide level2">
+<h2>Reverse Automatic Differentiation</h2>
+<ul>
+<li>compute <span class="math inline">\(f(x)\)</span> in usual forward direction, keep track of each operation and intermediate value</li>
+<li>compute derivative “backwards”
+<ul>
+<li><span class="math inline">\(f(x) = g(h(x))\)</span></li>
+<li><span class="math inline">\(f'(x) = g'(h(x)) h'(x)\)</span></li>
+</ul></li>
+<li>scales better for high dimensional <span class="math inline">\(x\)</span></li>
+<li>implementation more complicated
+<ul>
+<li>Simple-ish example https://simeonschaub.github.io/ReverseModePluto/notebook.html</li>
+</ul></li>
+</ul>
+</section></section>
+<section>
+<section id="julia-ad-packages" class="title-slide slide level1 center">
+<h1>Julia AD Packages</h1>
+
+</section>
+<section id="forwarddiff" class="slide level2">
+<h2>ForwardDiff</h2>
+<ul>
+<li><a href="https://github.com/JuliaDiff/ForwardDiff.jl"><code>ForwardDiff.jl</code></a></li>
+<li>mature and reliable</li>
+</ul>
+</section>
+<section id="forwarddiff-example" class="slide level2">
+<h2>ForwardDiff Example</h2>
+<div id="6" class="cell" data-execution_count="1">
+<div class="cell-output cell-output-display" data-execution_count="1">
+<pre><code>3-element Vector{Float64}:
+   0.8066049744615985
+   7.152475995234996
+ -15.595102337523281</code></pre>
+</div>
+</div>
+</section>
+<section id="forwarddiff-notes" class="slide level2">
+<h2>ForwardDiff Notes</h2>
+<ul>
+<li>For <span class="math inline">\(f: \mathbb{R}^n \to \mathbb{R}^m\)</span>, the computation scales with <span class="math inline">\(n\)</span>
+<ul>
+<li>best for moderate <span class="math inline">\(n\)</span></li>
+</ul></li>
+<li>Code must be generic
+<ul>
+<li>be careful when allocating arrays</li>
+</ul></li>
+</ul>
+<div id="8" class="cell" data-execution_count="0">
+<div class="sourceCode cell-code" id="cb4"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb4-1"><a></a><span class="kw">function</span> <span class="fu">wontwork</span>(x)</span>
+<span id="cb4-2"><a></a>  y <span class="op">=</span> <span class="fu">zeros</span>(<span class="fu">size</span>(x))</span>
+<span id="cb4-3"><a></a>  <span class="cf">for</span> i <span class="op">∈</span> <span class="fu">eachindex</span>(x)</span>
+<span id="cb4-4"><a></a>    y[i] <span class="op">+=</span> x[i]<span class="op">*</span>i</span>
+<span id="cb4-5"><a></a>  <span class="cf">end</span></span>
+<span id="cb4-6"><a></a>  <span class="cf">return</span>(<span class="fu">sum</span>(y))</span>
+<span id="cb4-7"><a></a><span class="kw">end</span></span>
+<span id="cb4-8"><a></a></span>
+<span id="cb4-9"><a></a><span class="kw">function</span> <span class="fu">willwork</span>(x)</span>
+<span id="cb4-10"><a></a>  y <span class="op">=</span> <span class="fu">zero</span>(x)</span>
+<span id="cb4-11"><a></a>  <span class="cf">for</span> i <span class="op">∈</span> <span class="fu">eachindex</span>(x)</span>
+<span id="cb4-12"><a></a>    y[i] <span class="op">+=</span> x[i]<span class="op">*</span>i</span>
+<span id="cb4-13"><a></a>  <span class="cf">end</span></span>
+<span id="cb4-14"><a></a>  <span class="cf">return</span>(<span class="fu">sum</span>(y))</span>
+<span id="cb4-15"><a></a><span class="kw">end</span></span>
+<span id="cb4-16"><a></a></span>
+<span id="cb4-17"><a></a><span class="fu">betterstyle</span>(x) <span class="op">=</span> <span class="fu">sum</span>(v<span class="op">*</span>i <span class="cf">for</span> (i,v) <span class="kw">in</span> <span class="fu">enumerate</span>(x))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</section>
+<section id="zygote" class="slide level2">
+<h2>Zygote</h2>
+<ul>
+<li><a href="https://fluxml.ai/Zygote.jl/latest/">Zygote.jl</a></li>
+<li>Does not allow mutating arrays</li>
+<li>Quite mature, but possibly some bugs remain</li>
+<li>Apparently hard to develop, unclear future</li>
+</ul>
+</section>
+<section id="zygote-example" class="slide level2">
+<h2>Zygote Example</h2>
+<div id="10" class="cell" data-execution_count="1">
+<div class="cell-output cell-output-display" data-execution_count="1">
+<pre><code>8.452290561089217e-15</code></pre>
+</div>
+</div>
+</section>
+<section id="enzyme" class="slide level2">
+<h2>Enzyme</h2>
+<p><a href="https://enzymead.github.io/Enzyme.jl/stable/">“Enzyme performs automatic differentiation (AD) of statically analyzable LLVM. It is highly-efficient and its ability to perform AD on optimized code allows Enzyme to meet or exceed the performance of state-of-the-art AD tools.”</a></p>
+<div id="12" class="cell" data-execution_count="1">
 <div class="cell-output cell-output-stdout">
-<pre><code>[ Info: Running prehooks
-[ Info: Running hooks
-  Activating new project at `~/compecon/ECON622/qmd/SomeNewPackage/test`
-   Resolving package versions...
-    Updating `~/compecon/ECON622/qmd/SomeNewPackage/test/Project.toml`
-  [8dfed614] + Test
-    Updating `~/compecon/ECON622/qmd/SomeNewPackage/test/Manifest.toml`
-  [2a0f44e3] + Base64
-  [b77e0a4c] + InteractiveUtils
-  [56ddb016] + Logging
-  [d6f4376e] + Markdown
-  [9a3f8284] + Random
-  [ea8e919c] + SHA v0.7.0
-  [9e88b42a] + Serialization
-  [8dfed614] + Test
-  Activating project at `~/compecon/ECON622/qmd`
-  Activating project at `~/compecon/ECON622/qmd/SomeNewPackage/test`
-   Resolving package versions...
-    Updating `~/compecon/ECON622/qmd/SomeNewPackage/test/Project.toml`
-  [4c88cf16] + Aqua v0.8.7
-    Updating `~/compecon/ECON622/qmd/SomeNewPackage/test/Manifest.toml`
-  [4c88cf16] + Aqua v0.8.7
-  [34da2185] + Compat v4.16.0
-  [0dad84c5] + ArgTools v1.1.1
-  [56f22d72] + Artifacts
-  [ade2ca70] + Dates
-  [f43a241f] + Downloads v1.6.0
-  [7b1f6079] + FileWatching
-  [b27032c2] + LibCURL v0.6.4
-  [76f85450] + LibGit2
-  [8f399da3] + Libdl
-  [ca575930] + NetworkOptions v1.2.0
-  [44cfe95a] + Pkg v1.10.0
-  [de0858da] + Printf
-  [3fa0cd96] + REPL
-  [6462fe0b] + Sockets
-  [fa267f1f] + TOML v1.0.3
-  [a4e569a6] + Tar v1.10.0
-  [cf7118a7] + UUIDs
-  [4ec0a83e] + Unicode
-  [deac9b47] + LibCURL_jll v8.4.0+0
-  [e37daf67] + LibGit2_jll v1.6.4+0
-  [29816b5a] + LibSSH2_jll v1.11.0+1
-  [c8ffd9c3] + MbedTLS_jll v2.28.2+1
-  [14a3606d] + MozillaCACerts_jll v2023.1.10
-  [83775a58] + Zlib_jll v1.2.13+1
-  [8e850ede] + nghttp2_jll v1.52.0+1
-  [3f19e933] + p7zip_jll v17.4.0+2
-Precompiling project...
-  ✓ Aqua
-  1 dependency successfully precompiled in 1 seconds. 4 already precompiled.
-  Activating project at `~/compecon/ECON622/qmd`
-  Activating project at `~/compecon/ECON622/qmd/SomeNewPackage/test`
-   Resolving package versions...
-   Installed JET ─ v0.9.9
-    Updating `~/compecon/ECON622/qmd/SomeNewPackage/test/Project.toml`
-  [c3a54625] + JET v0.9.9
-    Updating `~/compecon/ECON622/qmd/SomeNewPackage/test/Manifest.toml`
-  [da1fd8a2] + CodeTracking v1.3.6
-  [c3a54625] + JET v0.9.9
-  [aa1ae85d] + JuliaInterpreter v0.9.36
-  [6f1432cf] + LoweredCodeUtils v3.0.2
-  [1914dd2f] + MacroTools v0.5.13
-  [aea7be01] + PrecompileTools v1.2.1
-  [21216c6a] + Preferences v1.4.3
-Precompiling project...
-  ✓ JET
-  1 dependency successfully precompiled in 25 seconds. 11 already precompiled.
-  Activating project at `~/compecon/ECON622/qmd`
-  Activating new project at `~/compecon/ECON622/qmd/SomeNewPackage/docs`
-   Resolving package versions...
-    Updating `~/compecon/ECON622/qmd/SomeNewPackage/docs/Project.toml`
-  [e30172f5] + Documenter v1.7.0
-    Updating `~/compecon/ECON622/qmd/SomeNewPackage/docs/Manifest.toml`
-  [a4c015fc] + ANSIColoredPrinters v0.0.1
-  [1520ce14] + AbstractTrees v0.4.5
-  [944b1d66] + CodecZlib v0.7.6
-  [ffbed154] + DocStringExtensions v0.9.3
-  [e30172f5] + Documenter v1.7.0
-  [d7ba0133] + Git v1.3.1
-  [b5f81e59] + IOCapture v0.2.5
-  [692b3bcd] + JLLWrappers v1.6.0
-  [682c06a0] + JSON v0.21.4
-  [0e77f7df] + LazilyInitializedFields v1.2.2
-  [d0879d2d] + MarkdownAST v0.1.2
-  [69de0a69] + Parsers v2.8.1
-  [aea7be01] + PrecompileTools v1.2.1
-  [21216c6a] + Preferences v1.4.3
-  [2792f1a3] + RegistryInstances v0.1.0
-  [3bb67fe8] + TranscodingStreams v0.11.2
-  [2e619515] + Expat_jll v2.6.2+0
-  [f8c6e375] + Git_jll v2.44.0+2
-  [94ce4f54] + Libiconv_jll v1.17.0+0
-  [458c3c95] + OpenSSL_jll v3.0.15+0
-  [0dad84c5] + ArgTools v1.1.1
-  [56f22d72] + Artifacts
-  [2a0f44e3] + Base64
-  [ade2ca70] + Dates
-  [f43a241f] + Downloads v1.6.0
-  [7b1f6079] + FileWatching
-  [b77e0a4c] + InteractiveUtils
-  [b27032c2] + LibCURL v0.6.4
-  [76f85450] + LibGit2
-  [8f399da3] + Libdl
-  [56ddb016] + Logging
-  [d6f4376e] + Markdown
-  [a63ad114] + Mmap
-  [ca575930] + NetworkOptions v1.2.0
-  [44cfe95a] + Pkg v1.10.0
-  [de0858da] + Printf
-  [3fa0cd96] + REPL
-  [9a3f8284] + Random
-  [ea8e919c] + SHA v0.7.0
-  [9e88b42a] + Serialization
-  [6462fe0b] + Sockets
-  [fa267f1f] + TOML v1.0.3
-  [a4e569a6] + Tar v1.10.0
-  [8dfed614] + Test
-  [cf7118a7] + UUIDs
-  [4ec0a83e] + Unicode
-  [deac9b47] + LibCURL_jll v8.4.0+0
-  [e37daf67] + LibGit2_jll v1.6.4+0
-  [29816b5a] + LibSSH2_jll v1.11.0+1
-  [c8ffd9c3] + MbedTLS_jll v2.28.2+1
-  [14a3606d] + MozillaCACerts_jll v2023.1.10
-  [efcefdf7] + PCRE2_jll v10.42.0+1
-  [83775a58] + Zlib_jll v1.2.13+1
-  [8e850ede] + nghttp2_jll v1.52.0+1
-  [3f19e933] + p7zip_jll v17.4.0+2
-Precompiling project...
-  ✓ Git_jll
-  ✓ Git
-  ✓ Documenter
-  3 dependencies successfully precompiled in 13 seconds. 20 already precompiled.
-   Resolving package versions...
-    Updating `~/compecon/ECON622/qmd/SomeNewPackage/docs/Project.toml`
-  [673f75a5] + SomeNewPackage v1.0.0-DEV `..`
-    Updating `~/compecon/ECON622/qmd/SomeNewPackage/docs/Manifest.toml`
-  [673f75a5] + SomeNewPackage v1.0.0-DEV `..`
-  Activating project at `~/compecon/ECON622/qmd`
-[ Info: Running posthooks
-[ Info: New package is at /home/paul/compecon/ECON622/qmd/SomeNewPackage</code></pre>
+<pre><code>┌ Warning: Using fallback BLAS replacements for (["dsymv_64_"]), performance may be degraded
+└ @ Enzyme.Compiler ~/.julia/packages/GPUCompiler/y4cj1/src/utils.jl:59</code></pre>
 </div>
 <div class="cell-output cell-output-display" data-execution_count="1">
-<pre><code>"/home/paul/compecon/ECON622/qmd/SomeNewPackage"</code></pre>
+<pre><code>3-element Vector{Float64}:
+   0.8066049744616017
+   7.15247599523499
+ -15.595102337523274</code></pre>
 </div>
 </div>
 </section>
-<section id="bestietemplate.jl" class="slide level2">
-<h2>BestieTemplate.jl</h2>
-</section>
-<section id="tests" class="slide level2">
-<h2>Tests</h2>
+<section id="enzyme-notes" class="slide level2">
+<h2>Enzyme Notes</h2>
 <ul>
-<li>essential</li>
-<li>organize code into small functions, test them all</li>
-<li>test both your code and code from others that you rely on</li>
-</ul>
-</section>
-<section id="documentation" class="slide level2">
-<h2>Documentation</h2>
+<li>Documentation is not suited to beginners</li>
+<li>Does not work on all Julia code, but cases where it fails are not well documented. Calling <code>Enzyme.API.runtimeActivity!(true)</code> works around some errors.</li>
+<li>Cryptic error messages. Enzyme operates on LLVM IR, and error messages often reference the point in the LLVM IR where the error occurred. Figuring out what Julia code the LLVM IR corresponds to is not easy.
 <ul>
-<li>create it for others and your future self</li>
-</ul>
-</section>
-<section id="continuous-integration" class="slide level2">
-<h2>Continuous Integration</h2>
-<ul>
-<li>Automatically execute some actions in the cloud after git commits or pull requests or merges
-<ul>
-<li>Run tests</li>
-<li>Build documentation</li>
-<li>Run static code analysis / Linter</li>
-<li>Check test coverage</li>
-<li>etc</li>
-</ul></li>
-<li>Many providers
-<ul>
-<li>GitHub Actions</li>
-<li>TravisCI</li>
-<li>etc</li>
+<li>These may be better now than last year when I first wrote this slide</li>
 </ul></li>
 </ul>
+<div id="14" class="cell" data-execution_count="1">
+<div class="cell-output cell-output-stdout">
+<pre><code>  1.108786 seconds (1.72 M allocations: 116.841 MiB, 2.44% gc time, 99.10% compilation time)
+  0.331799 seconds (1.59 M allocations: 115.956 MiB, 5.96% gc time, 99.91% compilation time)</code></pre>
+</div>
+<div class="cell-output cell-output-display" data-execution_count="1">
+<pre><code>30000-element Vector{Float64}:
+ 0.1521368249654288
+ 0.12387585879897856
+ 0.8857234227606771
+ 0.14821778363062343
+ 0.5413014298006785
+ 0.3665697380941372
+ 0.13984956995562747
+ 0.7730640198753364
+ 0.9157592331085139
+ 0.2593215619546694
+ ⋮
+ 0.17638027741677498
+ 0.2554650297347364
+ 0.11166916354718681
+ 0.8388902766422559
+ 0.5553861769520001
+ 0.719686451326661
+ 0.4027668349766428
+ 0.39804843303511317
+ 0.48472133241840876</code></pre>
+</div>
+</div>
 </section>
-<section id="test-coverage" class="slide level2">
-<h2>Test Coverage</h2>
+<section id="finitediff" class="slide level2">
+<h2>FiniteDiff</h2>
 <ul>
-<li>Automatically try to determine which lines of code were executed during testing and produce a summary and report</li>
-<li>app.codecov.io</li>
-<li>coveralls.io</li>
+<li><a href="https://github.com/JuliaDiff/FiniteDiff.jl">FiniteDiff</a> computes finite difference gradients– always test that whatever automatic or manual derivatives you compute are close to the finite difference versions</li>
+<li>use a package for finite differences to handle rounding error well</li>
 </ul>
 </section>
-<section id="static-code-analysis" class="slide level2">
-<h2>Static Code Analysis</h2>
+<section id="chainrules" class="slide level2">
+<h2>ChainRules</h2>
 <ul>
-<li>“linters” analyze code to detect errors and possible bugs
-<ul>
-<li>built into VSCode and other editors</li>
-<li>JET.jl for detecting type stability problems (advanced)</li>
-</ul></li>
-<li>formatters check for following text formatting standards around indentation and such</li>
+<li><a href="https://github.com/JuliaDiff/ChainRules.jl">ChainRules</a></li>
+<li>used by many AD packages to define the derivatives of various functions.</li>
+<li>Useful if you want to define a custom derivative rule for a function.</li>
 </ul>
 </section>
-<section id="further-reading" class="slide level2">
-<h2>Further Reading</h2>
+<section id="differentiationinterface" class="slide level2">
+<h2>DifferentiationInterface</h2>
 <ul>
-<li><span class="citation" data-cites="gentzkow2014">Gentzkow and Shapiro (<a href="#/references" role="doc-biblioref" onclick="">2014</a>)</span></li>
-<li><span class="citation" data-cites="pruim2023">Pruim, Gîrjău, and Horton (<a href="#/references" role="doc-biblioref" onclick="">2023</a>)</span></li>
-<li><span class="citation" data-cites="wilson2017">Wilson (<a href="#/references" role="doc-biblioref" onclick="">2017</a>)</span></li>
-<li><span class="citation" data-cites="haider2021">Haider, Riesch, and Jirauschek (<a href="#/references" role="doc-biblioref" onclick="">2021</a>)</span></li>
-<li><span class="citation" data-cites="orozco2020">Orozco et al. (<a href="#/references" role="doc-biblioref" onclick="">2020</a>)</span></li>
+<li><a href="https://github.com/gdalle/DifferentiationInterface.jl">DifferentiationInterface</a> gives a single interface for many differentiation packages</li>
+</ul>
+<div id="16" class="cell" data-execution_count="1">
+<div class="cell-output cell-output-stdout">
+<pre><code>┌ Warning: Using fallback BLAS replacements for (["dsymv_64_"]), performance may be degraded
+└ @ Enzyme.Compiler ~/.julia/packages/GPUCompiler/y4cj1/src/utils.jl:59</code></pre>
+</div>
+<div class="cell-output cell-output-display" data-execution_count="1">
+<pre><code>3-element Vector{Float64}:
+   0.8066049744616017
+   7.15247599523499
+ -15.595102337523274</code></pre>
+</div>
+</div>
+<ul>
+<li>improve performance by reusing intermediate variables</li>
+</ul>
+<div id="18" class="cell" data-execution_count="1">
+<div class="cell-output cell-output-display" data-execution_count="1">
+<pre><code>3-element Vector{Float64}:
+   0.8066049744616017
+   7.15247599523499
+ -15.595102337523274</code></pre>
+</div>
+</div>
+</section></section>
+<section>
+<section id="other-packages" class="title-slide slide level1 center">
+<h1>Other Packages</h1>
+
+</section>
+<section id="other-packages-1" class="slide level2">
+<h2>Other Packages</h2>
+<ul>
+<li><a href="https://juliadiff.org/">https://juliadiff.org/</a></li>
 </ul>
 </section>
-<section id="references" class="slide level2 smaller scrollable">
-<h2>References</h2>
+<section id="reversediff.jl" class="slide level2">
+<h2>ReverseDiff.jl</h2>
+<ul>
+<li><p><a href="https://github.com/JuliaDiff/ReverseDiff.jl">ReverseDiff.jl</a> a tape based reverse mode package</p></li>
+<li><p>Long lived and well tested</p></li>
+<li><p><a href="https://juliadiff.org/ReverseDiff.jl/limits/">limitations</a>. Importantly, code must be generic and mutation of arrays is not allowed.</p></li>
+</ul>
+</section>
+<section id="yota.jl" class="slide level2">
+<h2>Yota.jl</h2>
+<ul>
+<li><a href="https://github.com/dfdx/Yota.jl">Yota.jl</a> another tape based package</li>
+<li>Compatible with Chainrules.jl</li>
+<li>Somewhat newer and less popular</li>
+<li><a href="https://dfdx.github.io/Yota.jl/dev/design/">Its documentation has a very nice explanation of how it works.</a></li>
+</ul>
+</section>
+<section id="tracker" class="slide level2">
+<h2>Tracker</h2>
+<p><a href="https://github.com/FluxML/Tracker.jl">Tracker</a> is a tape based reverse mode package. It was the default autodiff package in Flux before being replaced by Zygote. No longer under active development.</p>
+</section>
+<section id="diffractor" class="slide level2">
+<h2>Diffractor</h2>
+<p><a href="https://github.com/JuliaDiff/Diffractor.jl">Diffractor</a> is automatic differentiation package in development. It was once hoped to be the future of AD in Julia, but has been delayed. It plans to have both forward and reverse mode, but only forward mode is available so far.</p>
+</section></section>
+<section id="references" class="title-slide slide level1 center">
+<h1>References</h1>
 
 <div class="quarto-auto-generated-content">
 <div class="footer footer-default">
 
 </div>
 </div>
-<div id="refs" class="references csl-bib-body hanging-indent" data-entry-spacing="0" role="list">
-<div id="ref-gentzkow2014" class="csl-entry" role="listitem">
-Gentzkow, Matthew, and Jesse M. Shapiro. 2014. <span>“Code and Data for the Social Sciences: A Practitioner’s Guide.”</span> In. <a href="https://api.semanticscholar.org/CorpusID:62408223">https://api.semanticscholar.org/CorpusID:62408223</a>.
-</div>
-<div id="ref-haider2021" class="csl-entry" role="listitem">
-Haider, Michael, Michael Riesch, and Christian Jirauschek. 2021. <span>“Realization of Best Practices in Software Engineering and Scientific Writing Through Ready-to-Use Project Skeletons.”</span> <em>Optical and Quantum Electronics</em> 53 (10): 568. <a href="https://doi.org/10.1007/s11082-021-03192-4">https://doi.org/10.1007/s11082-021-03192-4</a>.
-</div>
-<div id="ref-orozco2020" class="csl-entry" role="listitem">
-Orozco, Valérie, Christophe Bontemps, Elise Maigné, Virginie Piguet, Annie Hofstetter, Anne Lacroix, Fabrice Levert, and Jean-Marc Rousselle. 2020. <span>“HOW TO MAKE a PIE: REPRODUCIBLE RESEARCH FOR EMPIRICAL ECONOMICS AND ECONOMETRICS.”</span> <em>Journal of Economic Surveys</em> 34 (5): 1134–69. https://doi.org/<a href="https://doi.org/10.1111/joes.12389">https://doi.org/10.1111/joes.12389</a>.
-</div>
-<div id="ref-pruim2023" class="csl-entry" role="listitem">
-Pruim, Randall J., Maria-Cristiana Gîrjău, and Nicholas Jon Horton. 2023. <span>“Fostering Better Coding Practices for Data Scientists.”</span> <a href="https://arxiv.org/abs/2210.03991">https://arxiv.org/abs/2210.03991</a>.
-</div>
-<div id="ref-wilson2017" class="csl-entry" role="listitem">
-Wilson, Jennifer AND Cranston, Greg AND Bryan. 2017. <span>“Good Enough Practices in Scientific Computing.”</span> <em>PLOS Computational Biology</em> 13 (6): 1–20. <a href="https://doi.org/10.1371/journal.pcbi.1005510">https://doi.org/10.1371/journal.pcbi.1005510</a>.
-</div>
-</div>
-</section></section>
+</section>
     </div>
   </div>
 

@@ -21,6 +21,77 @@ engine: julia
 
 # Introduction
 
+## Derivatives
+
+- Needed for efficient equation solving and optimization
+- Can calculate automatically
+
+## Finite Differences
+
+```{julia}
+f(x) = sin(x)/(1+exp(x))
+
+function dxfin(f,x)
+  h = sqrt(eps(x))
+  if abs(x) > 1
+    h = h*abs(x)
+  end
+  (f(x+h) - f(x) )/ h
+end
+
+dxfin(f, 2.0)
+```
+
+## Forward Automatic Differentiation
+
+```{julia}
+module Forward
+
+struct Dual{T}
+  v::T
+  dv::T
+end
+
+Dual(x::T) where {T} = Dual(x, one(x))
+
+import Base: +, sin, exp, *, /
+
+function (+)(a, x::Dual)
+  Dual(a+x.v, x.dv)
+end
+
+function (*)(y::Dual, x::Dual)
+  Dual(y.v*x.v, x.v*y.dv + x.dv*y.v)
+end
+
+function (/)(x::Dual, y::Dual)
+  Dual(x.v/y.v, x.dv/y.v - x.v*y.dv/y.v^2)
+end
+
+exp(x::Dual) = Dual(exp(x.v), exp(x.v)*x.dv)
+sin(x::Dual) = Dual(sin(x.v), cos(x.v)*x.dv)
+
+
+function fdx(f,x)
+  out=f(Dual(x))
+  (out.v, out.dv)
+end
+
+end
+
+Forward.fdx(f,2.0)
+```
+
+## Reverse Automatic Differentiation
+
+- compute $f(x)$ in usual forward direction, keep track of each operation and intermediate value
+- compute derivative "backwards"
+   - $f(x) = g(h(x))$
+   - $f'(x) = g'(h(x)) h'(x)$
+- scales better for high dimensional $x$
+- implementation more complicated
+  - Simple-ish example https://simeonschaub.github.io/ReverseModePluto/notebook.html
+
 # Julia AD Packages
 
 
@@ -134,10 +205,12 @@ da = zeros(dima)
 Enzyme.autodiff(Enzyme.ReverseWithPrimal, f3, Duplicated(a,da),Const(b))
 da
 
-f2(a,b) = sum(a*b for (a,b) ∈ zip(a,b))
-da = zeros(dima)
-@time Enzyme.autodiff(Enzyme.ReverseWithPrimal, f2, Duplicated(a,da), Const(b))
-da
+if (false) # will trigger enzyme error without runtimeactivity
+  f2(a,b) = sum(a*b for (a,b) ∈ zip(a,b))
+  da = zeros(dima)
+  @time Enzyme.autodiff(Enzyme.ReverseWithPrimal, f2, Duplicated(a,da), Const(b))
+  da
+end
 
 Enzyme.API.runtimeActivity!(true)
 f2(a,b) = sum(a*b for (a,b) ∈ zip(a,b))
@@ -171,7 +244,7 @@ DI.gradient(b->logit_likelihood(b,y,x), DI.AutoEnzyme(),β0)
 ```{julia}
 backend = DI.AutoEnzyme()
 dcache = DI.prepare_gradient(b->logit_likelihood(b,y,x), backend, β0)
-grad = zeros(β0)
+grad = zero(β0)
 DI.gradient!(b->logit_likelihood(b,y,x),grad, backend,β0 , dcache)
 ```
 
