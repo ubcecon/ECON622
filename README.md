@@ -38,7 +38,7 @@ See [problemsets.md](problemsets.md).
    - Self-study: [Testing and Packages](https://julia.quantecon.org/software_engineering/testing.html)
    - Self-study: [Git and Github](https://julia.quantecon.org/software_engineering/version_control.html)
 5. **September 18**: clean up example project, introduction to automatic differentiation
-   - In class: [automatic differentiation packages](qmd/autodiff/autodiff.qmd)
+   - In class: [automatic differentiation packages](qmd/autodiff.qmd), [slides](https://ubcecon.github.io/ECON622/paul/autodiff.html)
    - Self-study: [Automatic Differentation in *Scientific Programming in Julia*](https://juliateachingctu.github.io/Scientific-Programming-in-Julia/dev/lecture_08/lecture/)
    - Self-study: [Differentiation for Hackers](https://github.com/MikeInnes/diff-zoo)
    - Self-study: [Engineering Trade-Offs in Automatic Differentiation: from TensorFlow and PyTorch to Jax and Julia](http://www.stochasticlifestyle.com/engineering-trade-offs-in-automatic-differentiation-from-tensorflow-and-pytorch-to-jax-and-julia/)
@@ -46,7 +46,7 @@ See [problemsets.md](problemsets.md).
       - [Understanding automatic differentiation (in Julia)](https://www.youtube.com/watch?v=UqymrMG-Qi4)
       - [Forward and Reverse Automatic Differentiation In A Nutshell](https://rawcdn.githack.com/mitmath/matrixcalc/e90417f46a20bec6d9c743c6b7bf5b178e77913a/automatic_differentiation_done_quick.html)
       - [Intro to AD](https://quantecon.github.io/lecture-julia.myst/more_julia/optimization_solver_packages.html#Introduction-to-Automatic-Differentiation)
-6. **September **: Optimization
+6. **September 23**: Optimization
    - [optimization packages](qmd/opt/optimization_packages.qmd)
    - [Optimization algorithms](https://schrimpf.github.io/AnimatedOptimization.jl/optimization/)
    - [Optimization packages](https://quantecon.github.io/lecture-julia.myst/more_julia/optimization_solver_packages.html#Optimization)
