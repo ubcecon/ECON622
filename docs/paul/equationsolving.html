@@ -11,7 +11,7 @@
   <meta name="generator" content="quarto-1.5.57">
 
   <meta name="author" content="Paul Schrimpf">
-  <meta name="dcterms.date" content="2024-09-14">
+  <meta name="dcterms.date" content="2024-09-23">
   <title>ECON 622 – Solving Nonlinear Equations</title>
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
@@ -30,6 +30,71 @@
       margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
       vertical-align: middle;
     }
+    /* CSS for syntax highlighting */
+    pre > code.sourceCode { white-space: pre; position: relative; }
+    pre > code.sourceCode > span { line-height: 1.25; }
+    pre > code.sourceCode > span:empty { height: 1.2em; }
+    .sourceCode { overflow: visible; }
+    code.sourceCode > span { color: inherit; text-decoration: inherit; }
+    div.sourceCode { margin: 1em 0; }
+    pre.sourceCode { margin: 0; }
+    @media screen {
+    div.sourceCode { overflow: auto; }
+    }
+    @media print {
+    pre > code.sourceCode { white-space: pre-wrap; }
+    pre > code.sourceCode > span { display: inline-block; text-indent: -5em; padding-left: 5em; }
+    }
+    pre.numberSource code
+      { counter-reset: source-line 0; }
+    pre.numberSource code > span
+      { position: relative; left: -4em; counter-increment: source-line; }
+    pre.numberSource code > span > a:first-child::before
+      { content: counter(source-line);
+        position: relative; left: -1em; text-align: right; vertical-align: baseline;
+        border: none; display: inline-block;
+        -webkit-touch-callout: none; -webkit-user-select: none;
+        -khtml-user-select: none; -moz-user-select: none;
+        -ms-user-select: none; user-select: none;
+        padding: 0 4px; width: 4em;
+      }
+    pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+    div.sourceCode
+      { color: #f8f8f2;  }
+    @media screen {
+    pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+    }
+    code span { color: #f8f8f2; } /* Normal */
+    code span.al { color: #f07178; background-color: #2a0f15; font-weight: bold; } /* Alert */
+    code span.an { color: #d4d0ab; } /* Annotation */
+    code span.at { color: #00e0e0; } /* Attribute */
+    code span.bn { color: #d4d0ab; } /* BaseN */
+    code span.bu { color: #abe338; } /* BuiltIn */
+    code span.cf { color: #ffa07a; font-weight: bold; } /* ControlFlow */
+    code span.ch { color: #abe338; } /* Char */
+    code span.cn { color: #ffd700; } /* Constant */
+    code span.co { color: #f8f8f2; font-style: italic; } /* Comment */
+    code span.cv { color: #ffd700; } /* CommentVar */
+    code span.do { color: #f8f8f2; } /* Documentation */
+    code span.dt { color: #ffa07a; } /* DataType */
+    code span.dv { color: #d4d0ab; } /* DecVal */
+    code span.er { color: #f07178; text-decoration: underline; } /* Error */
+    code span.ex { color: #00e0e0; font-weight: bold; } /* Extension */
+    code span.fl { color: #d4d0ab; } /* Float */
+    code span.fu { color: #ffa07a; } /* Function */
+    code span.im { color: #abe338; } /* Import */
+    code span.in { color: #d4d0ab; } /* Information */
+    code span.kw { color: #ffa07a; font-weight: bold; } /* Keyword */
+    code span.op { color: #ffa07a; } /* Operator */
+    code span.ot { color: #00e0e0; } /* Other */
+    code span.pp { color: #dcc6e0; } /* Preprocessor */
+    code span.re { color: #00e0e0; background-color: #f8f8f2; } /* RegionMarker */
+    code span.sc { color: #abe338; } /* SpecialChar */
+    code span.ss { color: #abe338; } /* SpecialString */
+    code span.st { color: #abe338; } /* String */
+    code span.va { color: #00e0e0; } /* Variable */
+    code span.vs { color: #abe338; } /* VerbatimString */
+    code span.wa { color: #dcc6e0; } /* Warning */
     /* CSS for citations */
     div.csl-bib-body { }
     div.csl-entry {
@@ -359,7 +424,7 @@ Paul Schrimpf
 </div>
 </div>
 
-  <p class="date">2024-09-14</p>
+  <p class="date">2024-09-23</p>
 </section>
 <section class="slide level2">
 
@@ -511,6 +576,50 @@ x_{s+1} = x_s + F'(x_s)^{-1} F(x_s)
 <section id="blp-share-equation" class="slide level2">
 <h2>BLP share equation</h2>
 <div id="2" class="cell" data-execution_count="1">
+<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb1-1"><a></a><span class="pp">@doc</span> <span class="st">raw"""</span></span>
+<span id="cb1-2"><a></a><span class="st">    share(δ, Σ, dFν, x)</span></span>
+<span id="cb1-3"><a></a></span>
+<span id="cb1-4"><a></a><span class="st">Computes shares in random coefficient logit with mean tastes `δ`, observed characteristics `x`, unobserved taste distribution `dFν`, and taste covariances `Σ`.</span></span>
+<span id="cb1-5"><a></a></span>
+<span id="cb1-6"><a></a><span class="st"># Arguments</span></span>
+<span id="cb1-7"><a></a></span>
+<span id="cb1-8"><a></a><span class="st">- `δ` vector of length `J`</span></span>
+<span id="cb1-9"><a></a><span class="st">- `Σ` `K` by `K` matrix</span></span>
+<span id="cb1-10"><a></a><span class="st">- `dFν` distribution of length `K` vector</span></span>
+<span id="cb1-11"><a></a><span class="st">- `x` `J` by `K` array</span></span>
+<span id="cb1-12"><a></a></span>
+<span id="cb1-13"><a></a><span class="st"># Returns</span></span>
+<span id="cb1-14"><a></a></span>
+<span id="cb1-15"><a></a><span class="st">- vector of length `J` consisting of $s_1$, ..., $s_J$</span></span>
+<span id="cb1-16"><a></a><span class="st">"""</span></span>
+<span id="cb1-17"><a></a><span class="kw">function</span> <span class="fu">share</span>(δ, Σ, dFν, x, ∫ <span class="op">=</span> ∫cuba)</span>
+<span id="cb1-18"><a></a>  J,K <span class="op">=</span> <span class="fu">size</span>(x)</span>
+<span id="cb1-19"><a></a>  (<span class="fu">length</span>(δ) <span class="op">==</span> J) <span class="op">||</span> <span class="fu">error</span>(<span class="st">"length(δ)=</span><span class="sc">$</span>(<span class="fu">length</span>(δ))<span class="st"> != size(x,1)=</span><span class="sc">$</span>J<span class="st">"</span>)</span>
+<span id="cb1-20"><a></a>  (K,K) <span class="op">===</span> <span class="fu">size</span>(Σ) <span class="op">||</span> <span class="fu">error</span>(<span class="st">"size(x,2)=</span><span class="sc">$</span>K<span class="st"> != size(Σ)=</span><span class="sc">$</span>(<span class="fu">size</span>(Σ))<span class="st">"</span>)</span>
+<span id="cb1-21"><a></a>  <span class="kw">function</span> <span class="fu">shareν</span>(ν)</span>
+<span id="cb1-22"><a></a>    s <span class="op">=</span> δ <span class="op">+</span> x<span class="op">*</span>Σ<span class="op">*</span>ν</span>
+<span id="cb1-23"><a></a>    s <span class="op">.-=</span> <span class="fu">maximum</span>(s)</span>
+<span id="cb1-24"><a></a>    s <span class="op">.=</span> <span class="fu">exp</span>.(s)</span>
+<span id="cb1-25"><a></a>    s <span class="op">./=</span> <span class="fu">sum</span>(s)</span>
+<span id="cb1-26"><a></a>    <span class="cf">return</span>(s)</span>
+<span id="cb1-27"><a></a>  <span class="kw">end</span></span>
+<span id="cb1-28"><a></a>  <span class="cf">return</span>(<span class="fu">∫</span>(shareν, dFν))</span>
+<span id="cb1-29"><a></a><span class="kw">end</span></span>
+<span id="cb1-30"><a></a></span>
+<span id="cb1-31"><a></a><span class="im">using</span> <span class="bu">HCubature</span></span>
+<span id="cb1-32"><a></a><span class="kw">function</span> <span class="fu">∫cuba</span>(f, dx; rtol<span class="op">=</span><span class="fl">1e-4</span>)</span>
+<span id="cb1-33"><a></a>  D <span class="op">=</span> <span class="fu">length</span>(dx)</span>
+<span id="cb1-34"><a></a>  <span class="fu">x</span>(t) <span class="op">=</span> t<span class="op">./</span>(<span class="fl">1</span> <span class="op">.-</span> t<span class="op">.^</span><span class="fl">2</span>)</span>
+<span id="cb1-35"><a></a>  <span class="fu">Dx</span>(t) <span class="op">=</span> <span class="fu">prod</span>((<span class="fl">1</span> <span class="op">.+</span> t<span class="op">.^</span><span class="fl">2</span>)<span class="op">./</span>(<span class="fl">1</span> <span class="op">.-</span> t<span class="op">.^</span><span class="fl">2</span>)<span class="op">.^</span><span class="fl">2</span>)</span>
+<span id="cb1-36"><a></a>  <span class="fu">hcubature</span>(<span class="fu">t-&gt;f</span>(<span class="fu">x</span>(t))<span class="fu">*pdf</span>(dx,<span class="fu">x</span>(t))<span class="fu">*Dx</span>(t), <span class="fu">-ones</span>(D),<span class="fu">ones</span>(D), rtol<span class="op">=</span>rtol)[<span class="fl">1</span>]</span>
+<span id="cb1-37"><a></a><span class="kw">end</span></span>
+<span id="cb1-38"><a></a></span>
+<span id="cb1-39"><a></a><span class="im">using</span> <span class="bu">SparseGrids</span>, <span class="bu">FastGaussQuadrature</span>, <span class="bu">Distributions</span></span>
+<span id="cb1-40"><a></a><span class="kw">function</span> <span class="fu">∫sgq</span>(f, dx<span class="op">::</span><span class="dt">MvNormal</span>; order<span class="op">=</span><span class="fl">5</span>)</span>
+<span id="cb1-41"><a></a>  X, W <span class="op">=</span> <span class="fu">sparsegrid</span>(<span class="fu">length</span>(dx), order, gausshermite, sym<span class="op">=</span><span class="cn">true</span>)</span>
+<span id="cb1-42"><a></a>  L <span class="op">=</span> <span class="fu">cholesky</span>(dx.Σ).L</span>
+<span id="cb1-43"><a></a>  <span class="fu">sum</span>(<span class="fu">f</span>(√<span class="fl">2</span><span class="op">*</span>L<span class="op">*</span>x <span class="op">+</span> dx.μ)<span class="op">*</span>w <span class="cf">for</span> (x,w) <span class="op">∈</span> <span class="fu">zip</span>(X,W))<span class="op">/</span>(<span class="cn">π</span><span class="op">^</span>(<span class="fu">length</span>(dx)<span class="op">/</span><span class="fl">2</span>))</span>
+<span id="cb1-44"><a></a><span class="cf">end</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-display" data-execution_count="1">
 <pre><code>∫sgq (generic function with 1 method)</code></pre>
 </div>
@@ -519,6 +628,30 @@ x_{s+1} = x_s + F'(x_s)^{-1} F(x_s)
 <section id="solving-for-delta" class="slide level2">
 <h2>Solving for <span class="math inline">\(\delta\)</span></h2>
 <div id="4" class="cell" data-execution_count="1">
+<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb3-1"><a></a><span class="co"># create a problem to solve</span></span>
+<span id="cb3-2"><a></a><span class="im">using</span> <span class="bu">LinearAlgebra</span></span>
+<span id="cb3-3"><a></a>J <span class="op">=</span> <span class="fl">3</span></span>
+<span id="cb3-4"><a></a>K <span class="op">=</span> <span class="fl">2</span></span>
+<span id="cb3-5"><a></a>x <span class="op">=</span> <span class="fu">randn</span>(J,K)</span>
+<span id="cb3-6"><a></a>C <span class="op">=</span> <span class="fu">randn</span>(K,K)</span>
+<span id="cb3-7"><a></a>Σ <span class="op">=</span> C<span class="op">'*</span>C <span class="op">+</span> I</span>
+<span id="cb3-8"><a></a>δ <span class="op">=</span> <span class="fu">randn</span>(J)</span>
+<span id="cb3-9"><a></a>dFν <span class="op">=</span> <span class="fu">MvNormal</span>(<span class="fu">zeros</span>(K), I)</span>
+<span id="cb3-10"><a></a>s <span class="op">=</span> <span class="fu">share</span>(δ, Σ, dFν, x, ∫sgq)</span>
+<span id="cb3-11"><a></a></span>
+<span id="cb3-12"><a></a><span class="co"># try to recover δ</span></span>
+<span id="cb3-13"><a></a><span class="im">using</span> <span class="bu">NonlinearSolve</span>, <span class="bu">LinearAlgebra</span></span>
+<span id="cb3-14"><a></a>p <span class="op">=</span> (Σ<span class="op">=</span>Σ, x<span class="op">=</span>x)</span>
+<span id="cb3-15"><a></a><span class="fu">F</span>(d, p) <span class="op">=</span> <span class="fu">share</span>([<span class="fl">0</span>, d<span class="op">...</span>],p.Σ,dFν, p.x,∫sgq) <span class="op">-</span> s</span>
+<span id="cb3-16"><a></a>d0 <span class="op">=</span> <span class="fu">zeros</span>(<span class="fu">length</span>(δ)<span class="op">-</span><span class="fl">1</span>)</span>
+<span id="cb3-17"><a></a>prob <span class="op">=</span> <span class="fu">NonlinearProblem</span>(F, d0, p)</span>
+<span id="cb3-18"><a></a>sol <span class="op">=</span> <span class="fu">solve</span>(prob, show_trace<span class="op">=</span><span class="fu">Val</span>(<span class="cn">true</span>), trace_level<span class="op">=</span><span class="fu">TraceAll</span>())</span>
+<span id="cb3-19"><a></a></span>
+<span id="cb3-20"><a></a>δ <span class="op">=</span> δ[<span class="fl">2</span><span class="op">:</span><span class="kw">end</span>]<span class="op">.-</span>δ[<span class="fl">1</span>]</span>
+<span id="cb3-21"><a></a><span class="fu">println</span>(<span class="st">"True δ: </span><span class="sc">$</span>(δ)<span class="st">"</span>)</span>
+<span id="cb3-22"><a></a><span class="fu">println</span>(<span class="st">"Solved δ: </span><span class="sc">$</span>(sol.u)<span class="st">"</span>)</span>
+<span id="cb3-23"><a></a><span class="fu">println</span>(<span class="st">"||F(sol.u)||: </span><span class="sc">$</span>(<span class="fu">norm</span>(sol.resid))<span class="st">"</span>)</span>
+<span id="cb3-24"><a></a><span class="fu">println</span>(<span class="st">"Error: </span><span class="sc">$</span>(<span class="fu">norm</span>(sol.u <span class="op">-</span> δ))<span class="st">"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>
 Algorithm: NewtonRaphson(
@@ -528,28 +661,25 @@ Algorithm: NewtonRaphson(
 ----     -------------        -----------          -------             
 Iter     f(u) inf-norm        Step 2-norm          cond(J)             
 ----     -------------        -----------          -------             
-0        1.82428101e-01       9.65211049e-310      Inf                 
-1        3.01273299e-02       1.70789122e+00       2.63744218e+00      
-2        5.94098292e-03       5.27569311e-01       1.91424031e+00      
-3        1.53494624e-03       2.04661414e-01       2.16526016e+00      
-4        3.70822861e-04       7.85896918e-02       3.05654249e+00      
-5        7.95079980e-05       3.47582862e-02       5.16317447e+00      
-6        1.10785423e-05       1.29706541e-02       8.59340657e+00      
-7        4.11936788e-07       2.50335989e-03       1.17139946e+01      
-8        6.64506047e-10       1.00551122e-04       1.26157467e+01      
-9        1.76247905e-15       1.62724342e-07       1.26550054e+01      
-Final    1.76247905e-15      
+0        1.88072926e-01       9.48686179e-310      Inf                 
+1        5.23718617e-02       8.68398087e-01       2.26259547e+00      
+2        5.20045465e-03       5.85059986e-01       3.35339594e+00      
+3        4.16409393e-06       2.52501889e-02       3.19232849e+00      
+4        3.93973743e-12       1.81460418e-05       3.23869537e+00      
+5        2.77555756e-16       5.53073611e-11       3.23865707e+00      
+Final    2.77555756e-16      
 ----------------------      
-True δ: [-2.031557154931929, -1.57397420333144]
-Solved δ: [-1.9689272217047142, -1.5772302971336]
-||F(sol.u)||: 2.2888254720986747e-15
-Error: 0.06271451732170019</code></pre>
+True δ: [-1.1881998657873825, 0.29036787948682025]
+Solved δ: [-1.1881998657873816, 0.290367879486821]
+||F(sol.u)||: 2.9893669801409083e-16
+Error: 1.1801832636420706e-15</code></pre>
 </div>
 </div>
 </section>
 <section id="alternative-algorithms" class="slide level2">
 <h2>Alternative algorithms</h2>
 <div id="6" class="cell" data-execution_count="1">
+<div class="sourceCode cell-code" id="cb5"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb5-1"><a></a>solr <span class="op">=</span> <span class="fu">solve</span>(prob, <span class="fu">RobustMultiNewton</span>(), show_trace<span class="op">=</span><span class="fu">Val</span>(<span class="cn">true</span>), trace_level<span class="op">=</span><span class="fu">TraceAll</span>())</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>
 Algorithm: TrustRegion(
@@ -560,41 +690,33 @@ Algorithm: TrustRegion(
 ----     -------------        -----------          -------             
 Iter     f(u) inf-norm        Step 2-norm          cond(J)             
 ----     -------------        -----------          -------             
-0        1.82428101e-01       8.99199475e-322      Inf                 
-1        1.80268916e-01       2.03270424e-02       2.63744218e+00      
-2        1.75950002e-01       4.06540847e-02       2.61484193e+00      
-3        1.67320264e-01       8.13081694e-02       2.57133226e+00      
-4        1.50175269e-01       1.62616339e-01       2.49059505e+00      
-5        1.27131120e-01       2.23597466e-01       2.35089605e+00      
-6        1.05114341e-01       2.23597466e-01       2.19830531e+00      
-7        8.45131473e-02       2.23597466e-01       2.07739511e+00      
-8        6.56501612e-02       2.23597466e-01       1.98541863e+00      
-9        4.87654269e-02       2.23597466e-01       1.92260572e+00      
-10       3.40038617e-02       2.23597466e-01       1.88993542e+00      
-11       2.14335419e-02       2.23597466e-01       1.89041487e+00      
-12       1.11200296e-02       2.23597466e-01       1.93076944e+00      
-13       3.91957617e-03       2.23597466e-01       2.03331527e+00      
-14       9.85989520e-04       1.52709011e-01       2.34858093e+00      
-15       2.32730958e-04       6.07253397e-02       3.57108395e+00      
-16       4.58856484e-05       2.63832618e-02       6.13013075e+00      
-17       4.82159425e-06       8.56024120e-03       9.75569775e+00      
-18       8.51618883e-08       1.13831686e-03       1.22173784e+01      
-19       2.85474283e-11       2.08407016e-05       1.26469083e+01      
-20       3.74700271e-16       6.99080226e-09       1.26550664e+01      
-Final    3.74700271e-16      
+0        1.88072926e-01       NaN                  Inf                 
+1        1.83087798e-01       2.33405601e-02       2.26259547e+00      
+2        1.73157475e-01       4.66811203e-02       2.26659716e+00      
+3        1.53527714e-01       9.33622405e-02       2.28277043e+00      
+4        1.15742198e-01       1.86724481e-01       2.34378214e+00      
+5        6.87695707e-02       2.56746161e-01       2.55458026e+00      
+6        4.34530978e-02       2.56746161e-01       2.97069041e+00      
+7        2.50707384e-02       2.56746161e-01       3.23266003e+00      
+8        3.89688367e-03       2.56746161e-01       3.07242279e+00      
+9        6.49472362e-05       5.17394429e-02       3.21288822e+00      
+10       8.90621799e-09       4.49694789e-04       3.23793665e+00      
+11       2.22044605e-16       1.03616390e-07       3.23865697e+00      
+Final    2.22044605e-16      
 ----------------------      </code></pre>
 </div>
 <div class="cell-output cell-output-display" data-execution_count="1">
 <pre><code>retcode: Success
 u: 2-element Vector{Float64}:
- -1.9689272217051998
- -1.5772302971335839</code></pre>
+ -1.1881998657873802
+  0.29036787948682</code></pre>
 </div>
 </div>
 <div id="8" class="cell" data-execution_count="1">
-<div class="cell-output cell-output-stdout">
-<pre><code>WARNING: method definition for #fixed_point#13 at /home/paul/.julia/packages/FixedPointAcceleration/ahazt/src/1_MainFunctions.jl:163 declares type variable R but does not use it.</code></pre>
-</div>
+<div class="sourceCode cell-code" id="cb8"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb8-1"><a></a><span class="im">using</span> <span class="bu">FixedPointAcceleration</span></span>
+<span id="cb8-2"><a></a><span class="fu">G</span>(δ,p) <span class="op">=</span> <span class="fu">log</span>.(s) <span class="op">-</span> <span class="fu">log</span>.(<span class="fu">share</span>([<span class="fl">0</span>,δ<span class="op">...</span>], Σ, dFν, x, ∫sgq))</span>
+<span id="cb8-3"><a></a>probfp <span class="op">=</span> <span class="fu">NonlinearProblem</span>(G, d0, <span class="cn">nothing</span>)</span>
+<span id="cb8-4"><a></a>solfp <span class="op">=</span> <span class="fu">solve</span>(probfp, <span class="fu">FixedPointAccelerationJL</span>(algorithm<span class="op">=:</span>Anderson, m<span class="op">=</span><span class="fl">1</span>) )</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-display" data-execution_count="1">
 <pre><code>retcode: Failure
 u: 2-element Vector{Float64}:
