@@ -58,7 +58,7 @@ end
 ```{julia}
 using Plots
 β = ones(2)
-f, x, y ,z = cueiv(β;σ=0.1,ρ=0.5)
+f, x, y ,z = cueiv(β;σ=0.1,ρ=0.9)
 b1 = range(0,2,length=100)
 b2 = range(0,2,length=100)
 fval = ((x,y)->f([x,y])).(b1,b2')

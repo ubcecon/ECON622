@@ -47,7 +47,7 @@ See [problemsets.md](problemsets.md).
       - [Forward and Reverse Automatic Differentiation In A Nutshell](https://rawcdn.githack.com/mitmath/matrixcalc/e90417f46a20bec6d9c743c6b7bf5b178e77913a/automatic_differentiation_done_quick.html)
       - [Intro to AD](https://quantecon.github.io/lecture-julia.myst/more_julia/optimization_solver_packages.html#Introduction-to-Automatic-Differentiation)
 6. **September 23**: Optimization
-   - [optimization packages](qmd/opt/optimization_packages.qmd)
+   - [optimization](qmd/optimization.qmd), [slides](https://ubcecon.github.io/ECON622/paul/optimization.html)
    - [Optimization algorithms](https://schrimpf.github.io/AnimatedOptimization.jl/optimization/)
    - [Optimization packages](https://quantecon.github.io/lecture-julia.myst/more_julia/optimization_solver_packages.html#Optimization)
 7. **September 25**: Extremum Estimation

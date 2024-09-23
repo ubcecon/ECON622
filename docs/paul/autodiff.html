@@ -421,7 +421,7 @@ Paul Schrimpf
 <section id="finite-differences" class="slide level2">
 <h2>Finite Differences</h2>
 <div id="2" class="cell" data-execution_count="1">
-<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb1-1"><a></a><span class="fu">f</span>(x) <span class="op">=</span> <span class="fu">sin</span>(x)<span class="op">/</span>(<span class="fl">1</span><span class="fu">+exp</span>(x))</span>
+<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb1-1"><a></a><span class="fu">f</span>(x) <span class="op">=</span> <span class="fu">sin</span>(x)<span class="op">/</span>(<span class="fl">1.0</span><span class="fu">+exp</span>(x))</span>
 <span id="cb1-2"><a></a></span>
 <span id="cb1-3"><a></a><span class="kw">function</span> <span class="fu">dxfin</span>(f,x)</span>
 <span id="cb1-4"><a></a>  h <span class="op">=</span> <span class="fu">sqrt</span>(<span class="fu">eps</span>(x))</span>
@@ -451,7 +451,7 @@ Paul Schrimpf
 <span id="cb3-9"><a></a></span>
 <span id="cb3-10"><a></a><span class="im">import</span> <span class="bu">Base</span>: +, sin, exp, *, /</span>
 <span id="cb3-11"><a></a></span>
-<span id="cb3-12"><a></a><span class="kw">function</span> (<span class="op">+</span>)(a, x<span class="op">::</span><span class="dt">Dual</span>)</span>
+<span id="cb3-12"><a></a><span class="kw">function</span> (<span class="op">+</span>)(a<span class="op">::</span><span class="dt">T</span>, x<span class="op">::</span><span class="dt">Dual{T}</span>) <span class="kw">where</span> {T}</span>
 <span id="cb3-13"><a></a>  <span class="fu">Dual</span>(a<span class="op">+</span>x.v, x.dv)</span>
 <span id="cb3-14"><a></a><span class="kw">end</span></span>
 <span id="cb3-15"><a></a></span>
@@ -532,9 +532,9 @@ Paul Schrimpf
 <span id="cb5-19"><a></a>∇L <span class="op">=</span> ForwardDiff.<span class="fu">gradient</span>(<span class="fu">b-&gt;logit_likelihood</span>(b,y,x),β<span class="fl">0</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-display" data-execution_count="1">
 <pre><code>3-element Vector{Float64}:
- 13.088428185153258
- -1.414399766811149
-  0.7737684792779564</code></pre>
+ -8.401021936193848
+ -2.5793470602763358
+  8.750532340154054</code></pre>
 </div>
 </div>
 </section>
@@ -552,7 +552,7 @@ Paul Schrimpf
 </ul>
 <div id="8" class="cell" data-execution_count="0">
 <div class="sourceCode cell-code" id="cb7"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb7-1"><a></a><span class="kw">function</span> <span class="fu">wontwork</span>(x)</span>
-<span id="cb7-2"><a></a>  y <span class="op">=</span> <span class="fu">zeros</span>(<span class="fu">size</span>(x))</span>
+<span id="cb7-2"><a></a>  y <span class="op">=</span> <span class="fu">zeros</span>(<span class="fu">eltype</span>(x),<span class="fu">size</span>(x))</span>
 <span id="cb7-3"><a></a>  <span class="cf">for</span> i <span class="op">∈</span> <span class="fu">eachindex</span>(x)</span>
 <span id="cb7-4"><a></a>    y[i] <span class="op">+=</span> x[i]<span class="op">*</span>i</span>
 <span id="cb7-5"><a></a>  <span class="cf">end</span></span>
@@ -584,10 +584,13 @@ Paul Schrimpf
 <div id="10" class="cell" data-execution_count="1">
 <div class="sourceCode cell-code" id="cb8"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb8-1"><a></a><span class="im">import</span> <span class="bu">Zygote</span></span>
 <span id="cb8-2"><a></a><span class="im">using</span> <span class="bu">LinearAlgebra</span></span>
-<span id="cb8-3"><a></a>∇Lz <span class="op">=</span>  Zygote.<span class="fu">gradient</span>(<span class="fu">b-&gt;logit_likelihood</span>(b,y,x),β<span class="fl">0</span>)[<span class="fl">1</span>]</span>
+<span id="cb8-3"><a></a><span class="pp">@time</span> ∇Lz <span class="op">=</span>  Zygote.<span class="fu">gradient</span>(<span class="fu">b-&gt;logit_likelihood</span>(b,y,x),β<span class="fl">0</span>)[<span class="fl">1</span>]</span>
 <span id="cb8-4"><a></a><span class="fu">norm</span>(∇L <span class="op">-</span> ∇Lz)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>  0.298501 seconds (652.62 k allocations: 40.078 MiB, 4.77% gc time, 99.82% compilation time)</code></pre>
+</div>
 <div class="cell-output cell-output-display" data-execution_count="1">
-<pre><code>8.530675149520015e-15</code></pre>
+<pre><code>3.2023728339893768e-15</code></pre>
 </div>
 </div>
 </section>
@@ -595,21 +598,22 @@ Paul Schrimpf
 <h2>Enzyme</h2>
 <p><a href="https://enzymead.github.io/Enzyme.jl/stable/">“Enzyme performs automatic differentiation (AD) of statically analyzable LLVM. It is highly-efficient and its ability to perform AD on optimized code allows Enzyme to meet or exceed the performance of state-of-the-art AD tools.”</a></p>
 <div id="12" class="cell" data-execution_count="1">
-<div class="sourceCode cell-code" id="cb10"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb10-1"><a></a><span class="im">import</span> <span class="bu">Enzyme</span></span>
-<span id="cb10-2"><a></a><span class="im">import</span> <span class="bu">Enzyme</span>: Active, Duplicated, Const</span>
-<span id="cb10-3"><a></a></span>
-<span id="cb10-4"><a></a>db <span class="op">=</span> <span class="fu">zero</span>(β<span class="fl">0</span>)</span>
-<span id="cb10-5"><a></a>Enzyme.<span class="fu">autodiff</span>(Enzyme.ReverseWithPrimal,logit_likelihood, Active, <span class="fu">Duplicated</span>(β<span class="fl">0</span>,db), <span class="fu">Const</span>(y), <span class="fu">Const</span>(x))</span>
-<span id="cb10-6"><a></a>db</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb11"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb11-1"><a></a><span class="im">import</span> <span class="bu">Enzyme</span></span>
+<span id="cb11-2"><a></a><span class="im">import</span> <span class="bu">Enzyme</span>: Active, Duplicated, Const</span>
+<span id="cb11-3"><a></a></span>
+<span id="cb11-4"><a></a>db <span class="op">=</span> <span class="fu">zero</span>(β<span class="fl">0</span>)</span>
+<span id="cb11-5"><a></a><span class="pp">@time</span> Enzyme.<span class="fu">autodiff</span>(Enzyme.ReverseWithPrimal,logit_likelihood, Active, <span class="fu">Duplicated</span>(β<span class="fl">0</span>,db), <span class="fu">Const</span>(y), <span class="fu">Const</span>(x))</span>
+<span id="cb11-6"><a></a>db</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>┌ Warning: Using fallback BLAS replacements for (["dsymv_64_"]), performance may be degraded
-└ @ Enzyme.Compiler ~/.julia/packages/GPUCompiler/y4cj1/src/utils.jl:59</code></pre>
+└ @ Enzyme.Compiler ~/.julia/packages/GPUCompiler/y4cj1/src/utils.jl:59
+  1.522911 seconds (2.35 M allocations: 143.470 MiB, 2.44% gc time, 99.99% compilation time)</code></pre>
 </div>
 <div class="cell-output cell-output-display" data-execution_count="1">
 <pre><code>3-element Vector{Float64}:
- 13.088428185153266
- -1.4143997668111454
-  0.7737684792779611</code></pre>
+ -8.401021936193835
+ -2.5793470602763398
+  8.750532340154058</code></pre>
 </div>
 </div>
 </section>
@@ -624,58 +628,58 @@ Paul Schrimpf
 </ul></li>
 </ul>
 <div id="14" class="cell" data-execution_count="1">
-<div class="sourceCode cell-code" id="cb13"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb13-1"><a></a>Enzyme.API.<span class="fu">runtimeActivity!</span>(<span class="cn">false</span>)</span>
-<span id="cb13-2"><a></a><span class="fu">f1</span>(a,b) <span class="op">=</span> <span class="fu">sum</span>(a<span class="op">.*</span>b)</span>
-<span id="cb13-3"><a></a>dima <span class="op">=</span> <span class="fl">30000</span></span>
-<span id="cb13-4"><a></a>a <span class="op">=</span> <span class="fu">ones</span>(dima)</span>
-<span id="cb13-5"><a></a>b <span class="op">=</span> <span class="fu">rand</span>(dima)</span>
-<span id="cb13-6"><a></a>da <span class="op">=</span> <span class="fu">zeros</span>(dima)</span>
-<span id="cb13-7"><a></a><span class="pp">@time</span> Enzyme.<span class="fu">autodiff</span>(Enzyme.ReverseWithPrimal, f1, <span class="fu">Duplicated</span>(a,da),<span class="fu">Const</span>(b))</span>
-<span id="cb13-8"><a></a>da</span>
-<span id="cb13-9"><a></a></span>
-<span id="cb13-10"><a></a><span class="fu">f3</span>(a,b) <span class="op">=</span> <span class="fu">sum</span>(a[i]<span class="op">*</span>b[i] <span class="cf">for</span> i <span class="op">∈</span> <span class="fu">eachindex</span>(a))</span>
-<span id="cb13-11"><a></a>da <span class="op">=</span> <span class="fu">zeros</span>(dima)</span>
-<span id="cb13-12"><a></a>Enzyme.<span class="fu">autodiff</span>(Enzyme.ReverseWithPrimal, f3, <span class="fu">Duplicated</span>(a,da),<span class="fu">Const</span>(b))</span>
-<span id="cb13-13"><a></a>da</span>
-<span id="cb13-14"><a></a></span>
-<span id="cb13-15"><a></a><span class="cf">if</span> (<span class="cn">false</span>) <span class="co"># will trigger enzyme error without runtimeactivity</span></span>
-<span id="cb13-16"><a></a>  <span class="fu">f2</span>(a,b) <span class="op">=</span> <span class="fu">sum</span>(a<span class="op">*</span>b <span class="cf">for</span> (a,b) <span class="op">∈</span> <span class="fu">zip</span>(a,b))</span>
-<span id="cb13-17"><a></a>  da <span class="op">=</span> <span class="fu">zeros</span>(dima)</span>
-<span id="cb13-18"><a></a>  <span class="pp">@time</span> Enzyme.<span class="fu">autodiff</span>(Enzyme.ReverseWithPrimal, f2, <span class="fu">Duplicated</span>(a,da), <span class="fu">Const</span>(b))</span>
-<span id="cb13-19"><a></a>  da</span>
-<span id="cb13-20"><a></a><span class="cf">end</span></span>
-<span id="cb13-21"><a></a></span>
-<span id="cb13-22"><a></a>Enzyme.API.<span class="fu">runtimeActivity!</span>(<span class="cn">true</span>)</span>
-<span id="cb13-23"><a></a><span class="fu">f2</span>(a,b) <span class="op">=</span> <span class="fu">sum</span>(a<span class="op">*</span>b <span class="cf">for</span> (a,b) <span class="op">∈</span> <span class="fu">zip</span>(a,b))</span>
-<span id="cb13-24"><a></a>da <span class="op">=</span> <span class="fu">zeros</span>(dima)</span>
-<span id="cb13-25"><a></a><span class="pp">@time</span> Enzyme.<span class="fu">autodiff</span>(Enzyme.ReverseWithPrimal, f2, <span class="fu">Duplicated</span>(a,da), <span class="fu">Const</span>(b))</span>
-<span id="cb13-26"><a></a>da</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb14"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb14-1"><a></a>Enzyme.API.<span class="fu">runtimeActivity!</span>(<span class="cn">false</span>)</span>
+<span id="cb14-2"><a></a><span class="fu">f1</span>(a,b) <span class="op">=</span> <span class="fu">sum</span>(a<span class="op">.*</span>b)</span>
+<span id="cb14-3"><a></a>dima <span class="op">=</span> <span class="fl">30000</span></span>
+<span id="cb14-4"><a></a>a <span class="op">=</span> <span class="fu">ones</span>(dima)</span>
+<span id="cb14-5"><a></a>b <span class="op">=</span> <span class="fu">rand</span>(dima)</span>
+<span id="cb14-6"><a></a>da <span class="op">=</span> <span class="fu">zeros</span>(dima)</span>
+<span id="cb14-7"><a></a><span class="pp">@time</span> Enzyme.<span class="fu">autodiff</span>(Enzyme.ReverseWithPrimal, f1, <span class="fu">Duplicated</span>(a,da),<span class="fu">Const</span>(b))</span>
+<span id="cb14-8"><a></a>da</span>
+<span id="cb14-9"><a></a></span>
+<span id="cb14-10"><a></a><span class="fu">f3</span>(a,b) <span class="op">=</span> <span class="fu">sum</span>(a[i]<span class="op">*</span>b[i] <span class="cf">for</span> i <span class="op">∈</span> <span class="fu">eachindex</span>(a))</span>
+<span id="cb14-11"><a></a>da <span class="op">=</span> <span class="fu">zeros</span>(dima)</span>
+<span id="cb14-12"><a></a>Enzyme.<span class="fu">autodiff</span>(Enzyme.ReverseWithPrimal, f3, <span class="fu">Duplicated</span>(a,da),<span class="fu">Const</span>(b))</span>
+<span id="cb14-13"><a></a>da</span>
+<span id="cb14-14"><a></a></span>
+<span id="cb14-15"><a></a><span class="cf">if</span> (<span class="cn">false</span>) <span class="co"># will trigger enzyme error without runtimeactivity</span></span>
+<span id="cb14-16"><a></a>  <span class="fu">f2</span>(a,b) <span class="op">=</span> <span class="fu">sum</span>(a<span class="op">*</span>b <span class="cf">for</span> (a,b) <span class="op">∈</span> <span class="fu">zip</span>(a,b))</span>
+<span id="cb14-17"><a></a>  da <span class="op">=</span> <span class="fu">zeros</span>(dima)</span>
+<span id="cb14-18"><a></a>  <span class="pp">@time</span> Enzyme.<span class="fu">autodiff</span>(Enzyme.ReverseWithPrimal, f2, <span class="fu">Duplicated</span>(a,da), <span class="fu">Const</span>(b))</span>
+<span id="cb14-19"><a></a>  da</span>
+<span id="cb14-20"><a></a><span class="cf">end</span></span>
+<span id="cb14-21"><a></a></span>
+<span id="cb14-22"><a></a>Enzyme.API.<span class="fu">runtimeActivity!</span>(<span class="cn">true</span>)</span>
+<span id="cb14-23"><a></a><span class="fu">f2</span>(a,b) <span class="op">=</span> <span class="fu">sum</span>(a<span class="op">*</span>b <span class="cf">for</span> (a,b) <span class="op">∈</span> <span class="fu">zip</span>(a,b))</span>
+<span id="cb14-24"><a></a>da <span class="op">=</span> <span class="fu">zeros</span>(dima)</span>
+<span id="cb14-25"><a></a><span class="pp">@time</span> Enzyme.<span class="fu">autodiff</span>(Enzyme.ReverseWithPrimal, f2, <span class="fu">Duplicated</span>(a,da), <span class="fu">Const</span>(b))</span>
+<span id="cb14-26"><a></a>da</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>  1.331929 seconds (2.36 M allocations: 167.312 MiB, 4.03% gc time, 99.95% compilation time)
-  0.903684 seconds (2.06 M allocations: 148.183 MiB, 7.23% gc time, 99.94% compilation time)</code></pre>
+<pre><code>  1.076050 seconds (1.72 M allocations: 116.872 MiB, 2.47% gc time, 99.13% compilation time)
+  0.284568 seconds (1.58 M allocations: 115.268 MiB, 5.50% gc time, 99.89% compilation time)</code></pre>
 </div>
 <div class="cell-output cell-output-display" data-execution_count="1">
 <pre><code>30000-element Vector{Float64}:
- 0.17553525585807217
- 0.958339571694372
- 0.2626133990136421
- 0.8238388115001157
- 0.7263017404418273
- 0.2757103198576374
- 0.12749575566402183
- 0.8477416326896332
- 0.7328397976788997
- 0.1649070928105678
+ 0.9285498547482849
+ 0.4818033538222657
+ 0.4285829345208757
+ 0.11249405663627943
+ 0.6815029880057336
+ 0.7759668486381841
+ 0.27710153082937505
+ 0.9955811391617984
+ 0.9179127296555908
+ 0.08558892746967195
  ⋮
- 0.7032417617018967
- 0.699531485208297
- 0.8594888623025381
- 0.11537190324061453
- 0.0721705895939121
- 0.0003522486477203213
- 0.7294150873546612
- 0.46197618650130645
- 0.17753415346494128</code></pre>
+ 0.7459199045525703
+ 0.2513807047428307
+ 0.9481477587080472
+ 0.02671943248956099
+ 0.00743381088813222
+ 0.20424581522508045
+ 0.797822379770914
+ 0.4752628647520214
+ 0.8273610538041952</code></pre>
 </div>
 </div>
 </section>
@@ -700,32 +704,32 @@ Paul Schrimpf
 <li><a href="https://github.com/gdalle/DifferentiationInterface.jl">DifferentiationInterface</a> gives a single interface for many differentiation packages</li>
 </ul>
 <div id="16" class="cell" data-execution_count="1">
-<div class="sourceCode cell-code" id="cb16"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb16-1"><a></a><span class="im">import</span> <span class="bu">DifferentiationInterface</span> as DI</span>
-<span id="cb16-2"><a></a>DI.<span class="fu">gradient</span>(<span class="fu">b-&gt;logit_likelihood</span>(b,y,x), DI.<span class="fu">AutoEnzyme</span>(),β<span class="fl">0</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb17"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb17-1"><a></a><span class="im">import</span> <span class="bu">DifferentiationInterface</span> as DI</span>
+<span id="cb17-2"><a></a>DI.<span class="fu">gradient</span>(<span class="fu">b-&gt;logit_likelihood</span>(b,y,x), DI.<span class="fu">AutoEnzyme</span>(),β<span class="fl">0</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>┌ Warning: Using fallback BLAS replacements for (["dsymv_64_"]), performance may be degraded
 └ @ Enzyme.Compiler ~/.julia/packages/GPUCompiler/y4cj1/src/utils.jl:59</code></pre>
 </div>
 <div class="cell-output cell-output-display" data-execution_count="1">
 <pre><code>3-element Vector{Float64}:
- 13.088428185153266
- -1.4143997668111454
-  0.7737684792779611</code></pre>
+ -8.401021936193835
+ -2.5793470602763398
+  8.750532340154058</code></pre>
 </div>
 </div>
 <ul>
 <li>improve performance by reusing intermediate variables</li>
 </ul>
 <div id="18" class="cell" data-execution_count="1">
-<div class="sourceCode cell-code" id="cb19"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb19-1"><a></a>backend <span class="op">=</span> DI.<span class="fu">AutoEnzyme</span>()</span>
-<span id="cb19-2"><a></a>dcache <span class="op">=</span> DI.<span class="fu">prepare_gradient</span>(<span class="fu">b-&gt;logit_likelihood</span>(b,y,x), backend, β<span class="fl">0</span>)</span>
-<span id="cb19-3"><a></a>grad <span class="op">=</span> <span class="fu">zero</span>(β<span class="fl">0</span>)</span>
-<span id="cb19-4"><a></a>DI.<span class="fu">gradient!</span>(<span class="fu">b-&gt;logit_likelihood</span>(b,y,x),grad, backend,β<span class="fl">0</span> , dcache)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb20"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb20-1"><a></a>backend <span class="op">=</span> DI.<span class="fu">AutoEnzyme</span>()</span>
+<span id="cb20-2"><a></a>dcache <span class="op">=</span> DI.<span class="fu">prepare_gradient</span>(<span class="fu">b-&gt;logit_likelihood</span>(b,y,x), backend, β<span class="fl">0</span>)</span>
+<span id="cb20-3"><a></a>grad <span class="op">=</span> <span class="fu">zero</span>(β<span class="fl">0</span>)</span>
+<span id="cb20-4"><a></a>DI.<span class="fu">gradient!</span>(<span class="fu">b-&gt;logit_likelihood</span>(b,y,x),grad, backend,β<span class="fl">0</span> , dcache)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-display" data-execution_count="1">
 <pre><code>3-element Vector{Float64}:
- 13.088428185153266
- -1.4143997668111454
-  0.7737684792779611</code></pre>
+ -8.401021936193835
+ -2.5793470602763398
+  8.750532340154058</code></pre>
 </div>
 </div>
 </section></section>

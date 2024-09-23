@@ -601,7 +601,7 @@ s_{jt} = \int \frac{e^{\delta_{jt} + x_{jt}'\Sigma \nu}} {\sum_{k = 0}^J e^{\del
 <span id="cb7-35"><a></a><span class="pp">@show</span> f</span>
 <span id="cb7-36"><a></a>EC.<span class="fu">reset!</span>(f)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>(intmc, trueint, intmc - trueint) = (1.0654271600116514, 1.0, 0.06542716001165139)
+<pre><code>(intmc, trueint, intmc - trueint) = (0.9369385559524867, 1.0, -0.06306144404751335)
 f = evaluated #6 100 times</code></pre>
 </div>
 <div class="cell-output cell-output-display" data-execution_count="1">
@@ -642,10 +642,10 @@ f = evaluated #6 100 times</code></pre>
 <span id="cb12-4"><a></a><span class="pp">@show</span> <span class="fu">mean</span>(<span class="fu">abs</span>(<span class="fu">∫mc</span>(f,dx,ndraw<span class="op">=</span><span class="fl">100</span>) <span class="op">-</span> trueint) <span class="cf">for</span> s <span class="kw">in</span> <span class="fl">1</span><span class="op">:</span>S)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>mean((abs(∫s(f, dx, ndraw = 100) - trueint) for s = 1:S)) = 0.02875751885407857
-mean((abs(∫mc(f, dx, ndraw = 100) - trueint) for s = 1:S)) = 0.11570433538396915</code></pre>
+mean((abs(∫mc(f, dx, ndraw = 100) - trueint) for s = 1:S)) = 0.11025243264624399</code></pre>
 </div>
 <div class="cell-output cell-output-display" data-execution_count="1">
-<pre><code>0.11570433538396915</code></pre>
+<pre><code>0.11025243264624399</code></pre>
 </div>
 </div>
 </section>

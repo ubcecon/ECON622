@@ -33,7 +33,7 @@ engine: julia
 ## Finite Differences
 
 ```{julia}
-f(x) = sin(x)/(1+exp(x))
+f(x) = sin(x)/(1.0+exp(x))
 
 function dxfin(f,x)
   h = sqrt(eps(x))
@@ -171,17 +171,6 @@ import Zygote
 using LinearAlgebra
 @time ∇Lz =  Zygote.gradient(b->logit_likelihood(b,y,x),β0)[1]
 norm(∇L - ∇Lz)
-```
-
-```{julia}
-function foo(x)
-  y = zero(x)
-  for i ∈ eachindex(x)
-    y[i] += x[i]*i
-  end
-  return(sum(y))
-end
-Zygote.gradient(foo, rand(10))
 ```
 
 ## Enzyme
