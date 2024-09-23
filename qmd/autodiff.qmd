@@ -60,7 +60,7 @@ Dual(x::T) where {T} = Dual(x, one(x))
 
 import Base: +, sin, exp, *, /
 
-function (+)(a, x::Dual)
+function (+)(a::T, x::Dual{T}) where {T}
   Dual(a+x.v, x.dv)
 end
 
@@ -139,7 +139,7 @@ import ForwardDiff
 #| eval: false
 #| echo: true
 function wontwork(x)
-  y = zeros(size(x))
+  y = zeros(eltype(x),size(x))
   for i ∈ eachindex(x)
     y[i] += x[i]*i
   end
@@ -169,8 +169,19 @@ betterstyle(x) = sum(v*i for (i,v) in enumerate(x))
 ```{julia}
 import Zygote
 using LinearAlgebra
-∇Lz =  Zygote.gradient(b->logit_likelihood(b,y,x),β0)[1]
+@time ∇Lz =  Zygote.gradient(b->logit_likelihood(b,y,x),β0)[1]
 norm(∇L - ∇Lz)
+```
+
+```{julia}
+function foo(x)
+  y = zero(x)
+  for i ∈ eachindex(x)
+    y[i] += x[i]*i
+  end
+  return(sum(y))
+end
+Zygote.gradient(foo, rand(10))
 ```
 
 ## Enzyme
@@ -182,7 +193,7 @@ import Enzyme
 import Enzyme: Active, Duplicated, Const
 
 db = zero(β0)
-Enzyme.autodiff(Enzyme.ReverseWithPrimal,logit_likelihood, Active, Duplicated(β0,db), Const(y), Const(x))
+@time Enzyme.autodiff(Enzyme.ReverseWithPrimal,logit_likelihood, Active, Duplicated(β0,db), Const(y), Const(x))
 db
 
 ```
