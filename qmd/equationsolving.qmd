@@ -3,6 +3,10 @@ title: Solving Nonlinear Equations
 author: Paul Schrimpf
 date: last-modified
 bibliography: 622.bib
+execute:
+  echo: true
+  cache: true
+  freeze: auto
 format:
   revealjs:
     theme: blood

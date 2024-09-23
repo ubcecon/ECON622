@@ -1,0 +1,269 @@
+---
+title       : "Optimization"
+date: last-modified
+bibliography: 622.bib
+execute:
+  echo: true
+  cache: true
+  freeze: auto
+format:
+  revealjs:
+    code-fold: true
+    theme: blood
+    smaller: true
+    min-scale: 0.1
+    max-scale: 3.0
+    chalkboard:
+      theme: whiteboard
+      boardmarker-width: 2
+      chalk-width: 2
+      chalk-effect: 0.0
+engine: julia
+---
+
+# Optimization
+
+## Optimization
+
+$$
+\max_{x} f(x)
+$$
+
+## Overview of Algorithms
+
+- [https://schrimpf.github.io/AnimatedOptimization.jl/optimization/](https://schrimpf.github.io/AnimatedOptimization.jl/optimization/)
+
+## Example Problem
+
+```{julia}
+using Statistics, LinearAlgebra
+
+function cueiv(β; n=1000, σ=0.1, γ=[I; ones(2,length(β))], ρ=0.5)
+  z = randn(n, size(γ)[1])
+  endo = randn(n, length(β))
+  x = z*γ .+ endo
+  ϵ = σ*(randn(n)*sqrt(1.0-ρ^2).+endo[:,1]*ρ)
+  y =  x*β .+ ϵ
+  g(β) = (y - x*β).*z
+  function cueobj(β)
+    G = g(β)
+    Eg=mean(G,dims=1)
+    W = inv(cov(G))
+    (n*Eg*W*Eg')[1]
+  end
+  return(cueobj, x, y, z)
+end
+```
+
+```{julia}
+using Plots
+β = ones(2)
+f, x, y ,z = cueiv(β;σ=0.1,ρ=0.5)
+b1 = range(0,2,length=100)
+b2 = range(0,2,length=100)
+fval = ((x,y)->f([x,y])).(b1,b2')
+Plots.plotly()
+contourf(b1,b2,fval)
+```
+
+# Packages
+
+::: {.notes}
+
+We focus on algorithms useful for small to medium scale smooth
+nonlinear problems. Variants of Newton's method will generally be the
+best choice for such problems.
+
+:::
+
+## Optim.jl
+
+::: {.notes}
+
+Pure Julia implementation of standard set of optimization algorithms. This is generally a good starting point, especially
+for unconstrained nonlinear problems without too many variables (maybe up to a few hundred).
+
+:::
+
+- [Optim docs](https://julianlsolvers.github.io/Optim.jl/stable/)
+
+```{julia}
+import Optim
+β = ones(2)
+f = cueiv(β;σ=0.1,ρ=0.5)[1]
+β0 = zero(β)
+
+sol=Optim.optimize(f, β0, Optim.NelderMead())
+sol=Optim.optimize(f,β0, Optim.LBFGS(), autodiff=:forward)
+sol=Optim.optimize(f,β0, Optim.LBFGS(m=20, linesearch=Optim.LineSearches.BackTracking()), autodiff=:forward)
+sol=Optim.optimize(f,β0,Optim.NewtonTrustRegion(), autodiff=:forward)
+
+β = ones(20)
+f =  cueiv(β)[1]
+β0 = zero(β)
+sol=Optim.optimize(f, β0, Optim.NelderMead())
+sol=Optim.optimize(f,β0, Optim.LBFGS(), autodiff=:forward)
+sol=Optim.optimize(f,β0, Optim.LBFGS(m=20, linesearch=Optim.LineSearches.BackTracking()), autodiff=:forward)
+sol=Optim.optimize(f,β0,Optim.NewtonTrustRegion(), autodiff=:forward)
+```
+
+## Optimization.jl
+
+::: {.notes}
+
+A package that provides a uniform interface to many other optimization packages. A good choice for easy experimentation and trying different packages.
+
+:::
+
+- [Optimization docs](https://docs.sciml.ai/Optimization/stable/)
+- Unified interface to many packages (like NonlinearSolve.jl, but less polished)
+
+## JuliaSmoothOptimizers
+
+::: {.notes}
+
+A smaller set of developers and users than Optim, but has some good
+ideas and algorithms. Multiple options for nonlinear constrained
+optimization, [some with promising
+benchmarks.](https://jso.dev/DCISolver.jl/stable/benchmark/#CUTEst-benchmark-with-Knitro). Design
+makes using specialized linear solvers inside nonlinear algorithms
+convenient.
+
+:::
+
+- [Organization README](https://github.com/JuliaSmoothOptimizers)
+
+```julia
+using ADNLPModels
+import DCISolver, JSOSolvers, Percival
+β = ones(2)
+f =  cueiv(β; γ = I + zeros(2,2))[1]
+β0 = zero(β)
+
+nlp = ADNLPModel(f, β0)
+stats=JSOSolvers.lbfgs(nlp)
+print(stats)
+
+stats=JSOSolvers.tron(nlp)
+print(stats)
+
+ecnlp = ADNLPModel(f,β0, b->(length(β0) - sum(b)), zeros(1), zeros(1))
+stats=DCISolver.dci(ecnlp)
+print(stats)
+
+icnlp = ADNLPModel(f,β0, b->(length(β0) - sum(b)), -ones(1), ones(1))
+stats=Percival.percival(icnlp)
+print(stats)
+```
+
+## JuMP
+
+- [JuMP](https://jump.dev/) is a modelling language for optimization in Julia
+- many solvers
+- best when write problem in special JuMP syntax
+  - efficiently calculate derivatives and recognize special problem structure such as linearity, sparsity, etc.
+
+
+```{julia}
+using JuMP
+import MadNLP, Ipopt
+k = 10
+β = ones(k)
+f,x,y,z =  cueiv(β; γ = I + zeros(k,k))
+β0 = zero(β)
+n,k = size(x)
+
+# sub-optimal usage of JuMP
+m = Model(()->MadNLP.Optimizer(print_level=MadNLP.INFO, max_iter=100))
+@variable(m, β[1:k])
+@operator(m, op_f, k, (x...)->f(vcat(x...))) # hides internals of f from JuMP
+@objective(m, Min, op_f(β...))
+optimize!(m)
+JuMP.value.(β)
+```
+
+```{julia}
+# better usage of JuMP
+m2 = Model(()->MadNLP.Optimizer(print_level=MadNLP.INFO, max_iter=100))
+#m2 = Model(Ipopt.Optimizer)
+#set_attribute(m2, "print_level", 5)
+n, k = size(x)
+@variable(m2, β2[1:k])
+g = (y - x*β2).*z
+Eg=mean(g,dims=1)
+invW = cov(g)
+@variable(m2, Wg[1:k])
+@constraint(m2, invW*Wg .== Eg')
+@objective(m2, Min, n*dot(Eg,Wg))
+optimize!(m2)
+JuMP.value.(β2)
+```
+
+```{julia}
+# or Empirical Likelihood
+m3 = Model(()->MadNLP.Optimizer(print_level=MadNLP.INFO, max_iter=100))
+@variable(m3, β3[1:k])
+@variable(m3, 1e-8 <= p[1:n] <= 1-1e-8)
+@constraint(m3, sum(p) == 1)
+@objective(m3, Max, 1/n*sum(log.(p)))
+JuMP.set_start_value.(p, 1/n)
+g3 = (y - x*β3).*z
+@constraint(m3, p'*g3 .== 0)
+optimize!(m3)
+JuMP.value.(β3)
+```
+
+
+## Ipopt
+
+An open source solver written that works well on large constrained nonlinear problems. Can be used directly or through JuMP, Optimization.jl or JuliaSmoothOptimizers interfaces.
+
+## MadNLP
+
+Interior point solver written in Julia.
+
+## Knitro
+
+A commercial solver with state of the art performance on many problems. Maybe worth the cost for large constrained nonlinear problems. Can be used directly or through JuMP, Optimization.jl or JuliaSmoothOptimizers interfaces.
+
+
+## Optimisers
+
+[Optimisers.jl](https://fluxml.ai/Optimisers.jl/dev/) has a collection of gradient descent variations designed  for use in machine learning. A reasonable choice for problems with a very large number of variables.
+
+## Covariance Matrix Adaption Evolution Strategy
+
+::: {.notes}
+
+CMAES can be effective for problems with many local minimum while retaining some of the benefits of Newton's method. It can even deal with noisy and discontinuous objective functions. [CMAEvolutionStrategy](https://github.com/jbrea/CMAEvolutionStrategy.jl) is a Julia implementation. [GCMAES](https://github.com/AStupidBear/GCMAES.jl) implements both the original CMAES algorithm and a variation that also uses gradient information.
+
+:::
+
+```julia
+import CMAEvolutionStrategy, GCMAES
+β = ones(10)
+f =  cueiv(β; γ = I + zeros(length(β),length(β)))[1]
+β0 = zero(β)
+
+out = CMAEvolutionStrategy.minimize(f, β0, 1.0;
+                                    lower = nothing,
+                                    upper = nothing,
+                                    popsize = 4 + floor(Int, 3*log(length(β0))),
+                                    verbosity = 1,
+                                    seed = rand(UInt),
+                                    maxtime = nothing,
+                                    maxiter = 500,
+                                    maxfevals = nothing,
+                                    ftarget = nothing,
+                                    xtol = nothing,
+                                    ftol = 1e-11)
+@show CMAEvolutionStrategy.xbest(out)
+
+xmin, fmin, status = GCMAES.minimize(f, β0, 1.0, fill(-10.,length(β0)), fill(10., length(β0)), maxiter=500)
+@show xmin
+
+import ForwardDiff
+∇f(β) = ForwardDiff.gradient(f, β)
+xmin, fmin, status=GCMAES.minimize((f, ∇f), β0, 1.0, fill(-10.,length(β0)), fill(10., length(β0)), maxiter=500)
+@show xmin
+```
