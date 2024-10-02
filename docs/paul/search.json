@@ -558,5 +558,173 @@
     "title": "Optimization",
     "section": "Covariance Matrix Adaption Evolution Strategy",
     "text": "Covariance Matrix Adaption Evolution Strategy\n\nCMAES can be effective for problems with many local minimum while retaining some of the benefits of Newton’s method. It can even deal with noisy and discontinuous objective functions. CMAEvolutionStrategy is a Julia implementation. GCMAES implements both the original CMAES algorithm and a variation that also uses gradient information.\n\nimport CMAEvolutionStrategy, GCMAES\nβ = ones(10)\nf =  cueiv(β; γ = I + zeros(length(β),length(β)))[1]\nβ0 = zero(β)\n\nout = CMAEvolutionStrategy.minimize(f, β0, 1.0;\n                                    lower = nothing,\n                                    upper = nothing,\n                                    popsize = 4 + floor(Int, 3*log(length(β0))),\n                                    verbosity = 1,\n                                    seed = rand(UInt),\n                                    maxtime = nothing,\n                                    maxiter = 500,\n                                    maxfevals = nothing,\n                                    ftarget = nothing,\n                                    xtol = nothing,\n                                    ftol = 1e-11)\n@show CMAEvolutionStrategy.xbest(out)\n\nxmin, fmin, status = GCMAES.minimize(f, β0, 1.0, fill(-10.,length(β0)), fill(10., length(β0)), maxiter=500)\n@show xmin\n\nimport ForwardDiff\n∇f(β) = ForwardDiff.gradient(f, β)\nxmin, fmin, status=GCMAES.minimize((f, ∇f), β0, 1.0, fill(-10.,length(β0)), fill(10., length(β0)), maxiter=500)\n@show xmin"
+  },
+  {
+    "objectID": "approximation.html#function-approximation",
+    "href": "approximation.html#function-approximation",
+    "title": "Function Approximation",
+    "section": "Function Approximation",
+    "text": "Function Approximation\n\\[\n\\def\\R{{\\mathbb{R}}}\n\\def\\Er{{\\mathrm{E}}}\n\\def\\argmin{\\mathrm{arg}\\min}\n\\]\n\nTarget: \\(f_0:\\R^d \\to \\R\\)\n\nExpensive to compute\n\nGiven \\(\\{x_i, f_0(x_i) \\}_{i=1}^n\\), approximate \\(f_0(x)\\) by \\(\\tilde{f}(x)\\) for \\(\\tilde{f} \\in \\mathcal{F}_k\\)\n\nClass of approximating function \\(\\mathcal{F}_k\\)\nWant \\(\\Vert f_0 - \\tilde{f} \\Vert\\) to be small"
+  },
+  {
+    "objectID": "approximation.html#approximating-classes",
+    "href": "approximation.html#approximating-classes",
+    "title": "Function Approximation",
+    "section": "Approximating Classes",
+    "text": "Approximating Classes\n\n\nClassical:\n\nPolynomials\nTrigonometric series\nSplines\nLocal averages / kernel regression\n\nModern:\n\nRadial basis functions\nTrees\nRKHS / Kriging / Gaussian process regression\nNeural networks"
+  },
+  {
+    "objectID": "approximation.html#example-dynamic-programming",
+    "href": "approximation.html#example-dynamic-programming",
+    "title": "Function Approximation",
+    "section": "Example: dynamic programming",
+    "text": "Example: dynamic programming\n\nDynamic programming: \\[\nV(x) = \\max_a u(a,x) + \\beta \\Er[V(x') | x, a]\n\\]\n\n\\(x\\) continuous\n\nValue function iteration:\n\nPick grid \\(x_1,..., x_n\\)\nInitial guess \\(\\tilde{V}_0\\)\nMaximize \\(V_1(x_i) = \\max_a u(a,x) + \\beta \\Er[\\tilde{V}_0(x') | x , a]\\)\nSet \\(\\tilde{V}_1 \\approx V_1\\), repeat"
+  },
+  {
+    "objectID": "approximation.html#example-non-parametric-regression",
+    "href": "approximation.html#example-non-parametric-regression",
+    "title": "Function Approximation",
+    "section": "Example: non parametric regression",
+    "text": "Example: non parametric regression\n\nObserve \\[\ny_i = f_0(x_i) + \\epsilon_i\n\\]\nEstimate \\[\n\\hat{f}_n \\in \\argmin_{f\\in \\mathcal{F}_k} \\frac{1}{n} \\sum_i (y_i - f(x_i))^2\n\\]\nTypically, \\[\n\\Vert f_0 - \\hat{f}_n \\Vert^2 = \\underbrace{\\Vert f_0 - \\tilde{f} \\Vert^2}_{\\text{approximation error}} + \\underbrace{\\Vert \\tilde{f} - \\hat{f}_n \\Vert^2}_{\\text{variance}}\n\\]\n\n\nI say “typically” because one has to be careful about what these norms are to get a results along these lines."
+  },
+  {
+    "objectID": "approximation.html#vert-f_0---f-vert",
+    "href": "approximation.html#vert-f_0---f-vert",
+    "title": "Function Approximation",
+    "section": "\\(\\Vert f_0 - f \\Vert\\)",
+    "text": "\\(\\Vert f_0 - f \\Vert\\)\n\n\nGuarantees of the form \\[\n\\sup_{f_0 \\in \\mathcal{F}_0\n} \\min_{\\hat{f} \\in \\mathcal{F}_k} \\Vert f_0 - \\hat{f} \\Vert_{\\mathcal{V}} \\leq g(n,k)\n\\]\n\n\\(\\mathcal{V}\\) some vector space of functions, \\(\\mathcal{F}_0 \\subseteq \\mathcal{V}\\), \\(\\mathcal{F}_k \\subseteq \\mathcal{V}\\)\nUsually \\(\\lim_{n,k \\to \\infty} g(n,k) = 0\\)\n\nQuality of approximation depends on\n\nrestrictions on \\(\\mathcal{F}_0\\)\n\\(\\mathcal{F}_k\\) that is a good match for \\(\\mathcal{F}_0\\)\n\n\\(\\Vert \\cdot \\Vert_{\\mathcal{V}}\\) might not be norm of interest in applications, so might also want e.g. \\(\\Vert \\cdot \\Vert_{L^q(P(x))} \\leq C \\Vert \\cdot \\Vert_{\\mathcal{V}}\\)"
+  },
+  {
+    "objectID": "approximation.html#polynomials-as-universal-approximators",
+    "href": "approximation.html#polynomials-as-universal-approximators",
+    "title": "Function Approximation",
+    "section": "Polynomials as Universal Approximators",
+    "text": "Polynomials as Universal Approximators\n\nStone–Weierstrass theorem if \\(f_0 \\in C(X)\\) for a compact set \\(X \\subset \\R\\), then \\(\\forall \\epsilon&gt;0\\), \\(\\exists\\) polynomial \\(p\\) s.t. \\[\n\\Vert f_0 - p \\Vert_\\infty &lt; \\epsilon\n\\]"
+  },
+  {
+    "objectID": "approximation.html#polynomials",
+    "href": "approximation.html#polynomials",
+    "title": "Function Approximation",
+    "section": "Polynomials",
+    "text": "Polynomials\n\nLet \\(P_n\\) be polynomials of order \\(n\\)\nJackson’s theorem (Jackson (1912) and later refinements) if \\(f \\in C^s[-1,1]\\) \\[\n\\inf_{p \\in P_n} \\Vert f - p \\Vert_{\\infty} \\leq \\underbrace{\\left( \\frac{\\pi}{2} \\right)^s \\prod_{j=n - s + 1}^{n+1} \\frac{1}{j}}_{C(s) n^{-s}} \\Vert f^{(s)} \\Vert_\\infty\n\\]\n\nAn existence result, but does not tell how to find optimal \\(p\\)\nIn interpolation, achieving minimum requires careful choice of \\(\\{x_i\\}_{i=1}^n\\)"
+  },
+  {
+    "objectID": "approximation.html#polynomials-1",
+    "href": "approximation.html#polynomials-1",
+    "title": "Function Approximation",
+    "section": "Polynomials",
+    "text": "Polynomials\n\nLagrange interpolation problem\nGiven \\(\\{x_i, f(x_i)\\}_{i=1}^n\\), find \\(p_{n-1} \\in P_{n-1}\\) such that \\(p_{n-1}(x_i) = f(x_i)\\)\nIf \\(f \\in C^n[-1,1]\\) \\[\n|f(x) - p_{n-1}(x) | \\leq \\frac{\\Vert f^{(n)} \\Vert_\\infty}{n!}\\prod_{i=1}^n(x - x_i)\n\\]\n\n\n\nChoose \\(x_i\\) to minimize \\(\\Vert \\prod_{i=1}^n(x - x_i) \\Vert\\)\n\nChebyshev polynomials interpolation"
+  },
+  {
+    "objectID": "approximation.html#other-series-estimators",
+    "href": "approximation.html#other-series-estimators",
+    "title": "Function Approximation",
+    "section": "Other Series Estimators",
+    "text": "Other Series Estimators\n\nBelloni et al. (2015) and reference therein\nFor smooth series, \\(f_0:\\R^d \\to \\R\\), \\(s\\)-times differentiable, \\[\n\\min_{\\tilde{f} \\in \\mathcal{F}_k} \\Vert f_0 - \\tilde{f} \\Vert \\leq C k^{-s/d}\n\\]\nSplines of order \\(s_0\\), \\[\n\\min_{\\tilde{f} \\in \\mathcal{F}_k} \\Vert f_0 - \\tilde{f} \\Vert \\leq C k^{-\\min\\{s,s_0\\}/d}\n\\]\n\n\nThe constant \\(C\\) is not really constant, but \\(k^{-s/d}\\) is the dominant term"
+  },
+  {
+    "objectID": "approximation.html#reproducing-kernel-hilbert-space",
+    "href": "approximation.html#reproducing-kernel-hilbert-space",
+    "title": "Function Approximation",
+    "section": "Reproducing Kernel Hilbert Space",
+    "text": "Reproducing Kernel Hilbert Space\n\nIske et al. (2018) chapter 8\nEspecially useful in multi-dimensional settings\nMairhuber-Curtis theorem implies \\(\\mathcal{F}_k\\) should depend on \\(\\{x_i\\}_{i=1}^n\\) when \\(d \\geq 2\\)"
+  },
+  {
+    "objectID": "approximation.html#from-kernel-to-hilbert-space-moore-aronszajn-theorem",
+    "href": "approximation.html#from-kernel-to-hilbert-space-moore-aronszajn-theorem",
+    "title": "Function Approximation",
+    "section": "From Kernel to Hilbert Space (Moore-Aronszajn theorem)",
+    "text": "From Kernel to Hilbert Space (Moore-Aronszajn theorem)\n\nKernel \\(k(\\cdot,\\cdot): \\R^d \\times \\R^d \\to \\R\\) continuous, symmetric, and positive definite \\[\n\\sum_{i=1}^n \\sum_{j=1}^n c_i k(x_i,x_j) c_j \\geq 0 \\forall c, x \\in \\R^n\n\\]\nConstruct an associated Hilbert space \\[\n\\mathcal{K}^{pre} = \\mathrm{span}\\{ \\sum_{j=1}^m c_j k(x_j, \\cdot): c_j \\in \\R, x_j \\in \\R^d, m \\in \\mathbb{N}\\}\n\\] with inner product defined by \\[\n\\langle k(x,\\cdot), k(y,\\cdot) \\rangle_{\\mathcal{K}} = k(x,y)\n\\] completion of \\(\\mathcal{K}^{pre}\\) is a Hilbert space"
+  },
+  {
+    "objectID": "approximation.html#rkhs-facts",
+    "href": "approximation.html#rkhs-facts",
+    "title": "Function Approximation",
+    "section": "RKHS Facts",
+    "text": "RKHS Facts\n\n\\(\\langle k(x,\\cdot), f \\rangle_{\\mathcal{K}} = f\\)\n\\(\\mathcal{K} \\subset C(\\R^d)\\)"
+  },
+  {
+    "objectID": "approximation.html#from-hilbert-space-to-kernel",
+    "href": "approximation.html#from-hilbert-space-to-kernel",
+    "title": "Function Approximation",
+    "section": "From Hilbert Space to Kernel",
+    "text": "From Hilbert Space to Kernel\n\nIf \\(\\mathcal{H}\\) is a Hilbert space and \\(f \\to f(x)\\) is bounded for all \\(x\\), then \\(\\mathcal{H}\\) is an RKHS"
+  },
+  {
+    "objectID": "approximation.html#interpolation-in-rkhs",
+    "href": "approximation.html#interpolation-in-rkhs",
+    "title": "Function Approximation",
+    "section": "Interpolation in RKHS",
+    "text": "Interpolation in RKHS\n\nGiven \\(\\{x_i, f(x_i)\\}_{i=1}^n\\), there is unique \\(\\tilde{f} \\in S_X \\equiv \\{ \\sum_{i=1}^n c_i k(x_i, \\cdot) \\}\\) such that \\(\\tilde{f}(x_i) = f(x_i)\\) -\\(\\tilde{f}\\) solves \\[\n\\min_{g \\in \\mathcal{K}} \\Vert g \\Vert_{\\mathcal{K}} \\, s.t. \\, g(x_i) = f(x_i) \\text{ for } i=1,...,n\n\\]"
+  },
+  {
+    "objectID": "approximation.html#mercers-theorem-and-feature-maps",
+    "href": "approximation.html#mercers-theorem-and-feature-maps",
+    "title": "Function Approximation",
+    "section": "Mercer’s theorem and feature maps",
+    "text": "Mercer’s theorem and feature maps\n\n\nGiven another Hilbert space \\(\\mathcal{W}\\), \\(\\Phi: \\R^d \\to \\mathcal{W}\\) is a feature map for \\(k\\) if \\[\nk(x,y) = \\langle \\Phi(x), \\Phi(y) \\rangle_\\mathcal{W}\n\\]\n\nE.g. \\(\\mathcal{W} = \\mathcal{K}\\) and \\(\\Phi(x) = k(x,\\cdot)\\)\n\nGiven measure \\(\\mu\\), define \\(T: L^2(\\mu) \\to L^2(\\mu)\\) by \\[\nT(f)(x) = \\int k(x,y) f(y) d\\mu(y)\n\\]"
+  },
+  {
+    "objectID": "approximation.html#rkhs-as-universal-approximator",
+    "href": "approximation.html#rkhs-as-universal-approximator",
+    "title": "Function Approximation",
+    "section": "RKHS as Universal Approximator",
+    "text": "RKHS as Universal Approximator\n\n\nMicchelli, Xu, and Zhang (2006) or summary by Zhang (2018)\nGiven \\(f \\in C(Z)\\), \\(Z \\subset \\R^d\\) and compact, can elements of \\(\\mathcal{K}\\) approximate \\(f\\) in \\(\\Vert\\cdot\\Vert_\\infty\\)?\nLet \\(K(Z) = \\overline{\\mathrm{span}}\\{k(\\cdot,y): y \\in Z\\} \\subseteq C(Z)\\)\nLet \\(\\Phi\\) be feature map for \\(k\\) associated with \\(\\mu\\) with \\(supp(\\mu) = Z\\)\nDual space of \\(C(Z)\\) is set of Borel measures on \\(Z\\), \\(B(Z)\\) with \\[\n\\mu(f) = \\int_Z f d\\mu\n\\]"
+  },
+  {
+    "objectID": "approximation.html#rkhs-as-universal-approximator-1",
+    "href": "approximation.html#rkhs-as-universal-approximator-1",
+    "title": "Function Approximation",
+    "section": "RKHS as Universal Approximator",
+    "text": "RKHS as Universal Approximator\n\n\nMap \\(B(Z)\\) into \\(\\mathcal{K}^* = \\mathcal{K}\\) by \\[\n\\langle U(\\mu), h \\rangle_{\\mathcal{K}} = \\langle \\int_Z \\Phi(x)(\\cdot) d\\mu(x), h \\rangle_{\\mathcal{K}} = \\int_Z \\langle \\Phi(x), h \\rangle_{\\mathcal{K}} d\\mu(x)\n\\]\n\\(U\\) is bounded\n\\(K(Z)^\\perp = \\mathcal{N}(U)\\), i.e. universal approximation iff \\(\\mathcal{N}(U) = \\{0\\}\\).\n\niff \\(\\overline{\\mathrm{span}}\\{ \\langle \\Phi(x), \\gamma_i \\rangle_\\mathcal{K} : \\gamma_i \\text{ basis for } \\mathcal{K} \\} = C(Z)\\)\n\nRadial kernels are universal approximators \\[\nk(x,y) = \\int e^{-t\\Vert x-y\\Vert^2} d\\nu(t)\n\\]"
+  },
+  {
+    "objectID": "approximation.html#rkhs-approximation-rate",
+    "href": "approximation.html#rkhs-approximation-rate",
+    "title": "Function Approximation",
+    "section": "RKHS approximation rate",
+    "text": "RKHS approximation rate\n\nBach (2024) chapter 7\nIf \\(k\\) is translation invariant and \\(f\\) is \\(s\\) times differentiable, \\[\n\\inf_{f \\in \\mathcal{K}} \\Vert f - f_0 \\Vert_{L^2(\\mu)} + \\lambda \\Vert f \\Vert_{\\mathcal{K}} \\approx O(\\lambda^(s/r_k))\n\\] where \\(r_k\\) depends on \\(k\\) and need \\(r_k &gt; d/2 &gt; s\\) (if \\(s \\geq r_k\\), then \\(f_0 \\in \\mathcal{K}\\) and can do better)\nIf sample \\(x_i \\sim \\mu\\) and interpolate \\[\n\\hat{f} = \\argmin_{f \\in \\mathcal{K}} \\frac{1}{n}\\sum_{i=1}^n (f_0(x_i) - f(x_i) )^2 + \\lambda \\Vert f \\Vert_{\\mathcal{K}}\n\\] then \\(\\Vert \\hat{f} - f_0 \\Vert_{L^2(\\mu)} \\approx O(n^{-s/r_k})\\)\n\nif \\(f_0 \\in \\mathcal{K}\\), \\(O(n^{-1/2})\\)"
+  },
+  {
+    "objectID": "approximation.html#neural-networks",
+    "href": "approximation.html#neural-networks",
+    "title": "Function Approximation",
+    "section": "Neural Networks",
+    "text": "Neural Networks\n\nBach (2024)"
+  },
+  {
+    "objectID": "approximation.html#investment-with-adjustment-costs-and-productivity",
+    "href": "approximation.html#investment-with-adjustment-costs-and-productivity",
+    "title": "Function Approximation",
+    "section": "Investment with adjustment costs and productivity",
+    "text": "Investment with adjustment costs and productivity\n\nPrice taking firm, output \\(y = e^\\omega F(k,\\ell,m)\\), prices \\(p_y, p_m, p_\\ell, p_k\\)\nEach period, \\(m\\), flexibly chosen given predetermined \\(k, \\ell\\) \\[\n\\max_{m} p_y e^\\omega F(k,\\ell,m) - p_m m\n\\]\n\n\nusing ModelingToolkit, NonlinearSolve, Symbolics\n@variables m\n@parameters k, l, ω, pm, py\nDm = Differential(m)\nproduction(k,l,m) = k^(2//10)*l^(4//10)*m^(3//10)\n#ρ = 5\n#rts = 9//10\n#ces(k,l,m) = (k^ρ + l^ρ + m^ρ)^(rts/ρ)\nprofits(k,l,m,ω,pm,py) = py*exp(ω)*production(k,l,m) - pm*m\nmstar = symbolic_solve(Symbolics.derivative(profits(k,l,m,ω,pm,py),m) ~ 0 ,m)[1]\nprofits(k,l,mstar,ω,pm,py)\n\nflowprofits = eval(build_function(profits(k,l,mstar,ω,pm,py), k,l,ω,pm,py))\n\n#1 (generic function with 1 method)"
+  },
+  {
+    "objectID": "approximation.html#dynamic-labor-and-capital-choices",
+    "href": "approximation.html#dynamic-labor-and-capital-choices",
+    "title": "Function Approximation",
+    "section": "Dynamic Labor and Capital Choices",
+    "text": "Dynamic Labor and Capital Choices\n\n\\(\\omega_t\\) Markov, \\(F(\\omega_t | \\omega_{t-1})\\), prices constant\nLabor and capital chosen before \\(\\omega_t\\) known\nAdjustment cost of capital \\(c(k',k)\\)\n\n\\[\n\\begin{align*}\n  V(\\omega, k,\\ell) = & \\max_{k',\\ell',m} p_y e^\\omega F(k,\\ell,m) - p_\\ell \\ell - p_k k - c(k,k') + \\beta E_\\omega' [V(\\omega', k',\\ell') | \\omega ] \\\\\n  = & \\max_{k',\\ell'} \\pi^*(p,\\omega, k, \\ell) - c(k,k') + \\beta E[V(\\omega',k',\\ell')|\\omega]\n\\end{align*}\n\\]"
+  },
+  {
+    "objectID": "approximation.html#section",
+    "href": "approximation.html#section",
+    "title": "Function Approximation",
+    "section": "",
+    "text": "using Surrogates"
+  },
+  {
+    "objectID": "approximation.html#mercers-theorem-and-feature-maps-1",
+    "href": "approximation.html#mercers-theorem-and-feature-maps-1",
+    "title": "Function Approximation",
+    "section": "Mercer’s theorem and feature maps",
+    "text": "Mercer’s theorem and feature maps\n\n\nMercer’s theorem gives existence of Eigen decomposition, \\[\nT(f)(x) = \\sum_{i=1}^\\infty \\lambda_i \\phi_i(x) \\langle \\bar{\\phi_i}, f \\rangle_{L^2(\\mu)}\n\\] and \\[\nk(x,y) = \\sum \\lambda_i \\phi_i(x) \\bar{\\phi_i}(y)\n\\]\nFeature map \\(k(x,y) = \\langle (\\sqrt{\\lambda_i} \\phi_i(x))_{i=1}^\\infty, (\\sqrt{\\lambda_i} \\phi_i(x))_{i=1}^\\infty \\rangle_{\\ell^2}\\)\nLink between inner product and norm in \\(\\mathcal{K}\\) and in \\(L^2(\\mu)\\)"
+  },
+  {
+    "objectID": "approximation.html#references",
+    "href": "approximation.html#references",
+    "title": "Function Approximation",
+    "section": "References",
+    "text": "References\n\n\n\n\n\n\n\n\nBach, Francis. 2024. Learning Theory from First Principles. MIT Press. https://www.di.ens.fr/~fbach/ltfp_book.pdf.\n\n\nBelloni, Alexandre, Victor Chernozhukov, Denis Chetverikov, and Kengo Kato. 2015. “Some New Asymptotic Theory for Least Squares Series: Pointwise and Uniform Results.” Journal of Econometrics 186 (2): 345–66. https://doi.org/https://doi.org/10.1016/j.jeconom.2015.02.014.\n\n\nIske, Armin et al. 2018. Approximation Theory and Algorithms for Data Analysis. Springer. https://link.springer.com/book/10.1007/978-3-030-05228-7.\n\n\nJackson, Dunham. 1912. “On Approximation by Trigonometric Sums and Polynomials.” Transactions of the American Mathematical Society 13 (4): 491–515. http://www.jstor.org/stable/1988583.\n\n\nMicchelli, Charles A., Yuesheng Xu, and Haizhang Zhang. 2006. “Universal Kernels.” Journal of Machine Learning Research 7 (95): 2651–67. http://jmlr.org/papers/v7/micchelli06a.html.\n\n\nZhang, Thomas. 2018. “Reproducing Kernel Hilbert Spaces.” https://thomaszh3.github.io/writeups/RKHS.pdf."
   }
 ]
