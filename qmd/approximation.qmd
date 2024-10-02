@@ -1,0 +1,338 @@
+---
+title       : "Function Approximation"
+author: Paul Schrimpf
+date: last-modified
+bibliography: 622.bib
+execute:
+  echo: true
+  cache: true
+  freeze: auto
+format:
+  revealjs:
+    theme: blood
+    smaller: true
+    width: 1280
+    height: 960
+    min-scale: 0.1
+    max-scale: 3.0
+    chalkboard:
+      theme: whiteboard
+      boardmarker-width: 2
+      chalk-width: 2
+      chalk-effect: 0.0
+engine: julia
+---
+
+
+# Introduction
+
+## Function Approximation
+
+$$
+\def\R{{\mathbb{R}}}
+\def\Er{{\mathrm{E}}}
+\def\argmin{\mathrm{arg}\min}
+$$
+
+- Target: $f_0:\R^d \to \R$
+  - Expensive to compute
+- Given $\{x_i, f_0(x_i) \}_{i=1}^n$, approximate $f_0(x)$ by $\tilde{f}(x)$ for $\tilde{f} \in \mathcal{F}_k$
+  - Class of approximating function $\mathcal{F}_k$
+  - Want $\Vert f_0 - \tilde{f} \Vert$ to be small
+
+
+## Approximating Classes
+
+::: {.incremental}
+
+- Classical:
+  - Polynomials
+  - Trigonometric series
+  - Splines
+  - Local averages / kernel regression
+- Modern:
+  - Radial basis functions
+  - Trees
+  - RKHS / Kriging / Gaussian process regression
+  - Neural networks
+
+:::
+
+## Example: dynamic programming
+
+- Dynamic programming:
+$$
+V(x) = \max_a u(a,x) + \beta \Er[V(x') | x, a]
+$$
+  - $x$ continuous
+- Value function iteration:
+  - Pick grid $x_1,..., x_n$
+  - Initial guess $\tilde{V}_0$
+  - Maximize $V_1(x_i) = \max_a u(a,x) + \beta \Er[\tilde{V}_0(x') | x , a]$
+  - Set $\tilde{V}_1 \approx V_1$, repeat
+
+## Example: non parametric regression
+
+- Observe
+$$
+y_i = f_0(x_i) + \epsilon_i
+$$
+- Estimate
+$$
+\hat{f}_n \in \argmin_{f\in \mathcal{F}_k} \frac{1}{n} \sum_i (y_i - f(x_i))^2
+$$
+- Typically,
+$$
+\Vert f_0 - \hat{f}_n \Vert^2 = \underbrace{\Vert f_0 - \tilde{f} \Vert^2}_{\text{approximation error}} + \underbrace{\Vert \tilde{f} - \hat{f}_n \Vert^2}_{\text{variance}}
+$$
+
+::: {.notes}
+
+I say "typically" because one has to be careful about what these norms are to get a results along these lines.
+
+:::
+
+
+## $\Vert f_0 - f \Vert$
+
+::: {.incremental}
+
+- Guarantees of the form
+$$
+\sup_{f_0 \in \mathcal{F}_0
+} \min_{\hat{f} \in \mathcal{F}_k} \Vert f_0 - \hat{f} \Vert_{\mathcal{V}} \leq g(n,k)
+$$
+  - $\mathcal{V}$ some vector space of functions, $\mathcal{F}_0 \subseteq \mathcal{V}$, $\mathcal{F}_k \subseteq \mathcal{V}$
+  - Usually $\lim_{n,k \to \infty} g(n,k) = 0$
+- Quality of approximation depends on
+  - restrictions on $\mathcal{F}_0$
+  - $\mathcal{F}_k$ that is a good match for $\mathcal{F}_0$
+- $\Vert \cdot \Vert_{\mathcal{V}}$ might not be norm of interest in applications, so might also want e.g. $\Vert \cdot \Vert_{L^q(P(x))} \leq C \Vert \cdot \Vert_{\mathcal{V}}$
+
+:::
+
+
+# Theory
+
+## Polynomials as Universal Approximators
+
+- Stone–Weierstrass theorem if $f_0 \in C(X)$ for a compact set $X \subset \R$, then $\forall \epsilon>0$, $\exists$ polynomial $p$ s.t.
+$$
+\Vert f_0 - p \Vert_\infty < \epsilon
+$$
+
+
+## Polynomials
+
+- Let $P_n$ be polynomials of order $n$
+- Jackson's theorem (@jackson1912 and later refinements) if $f \in C^s[-1,1]$
+$$
+\inf_{p \in P_n} \Vert f - p \Vert_{\infty} \leq \underbrace{\left( \frac{\pi}{2} \right)^s \prod_{j=n - s + 1}^{n+1} \frac{1}{j}}_{C(s) n^{-s}} \Vert f^{(s)} \Vert_\infty
+$$
+  - An existence result, but does not tell how to find optimal $p$
+  - In interpolation, achieving minimum requires careful choice of $\{x_i\}_{i=1}^n$
+
+## Polynomials
+
+- Lagrange interpolation problem
+- Given $\{x_i, f(x_i)\}_{i=1}^n$, find $p_{n-1} \in P_{n-1}$ such that $p_{n-1}(x_i) = f(x_i)$
+- If $f \in C^n[-1,1]$
+$$
+|f(x) - p_{n-1}(x) | \leq \frac{\Vert f^{(n)} \Vert_\infty}{n!}\prod_{i=1}^n(x - x_i)
+$$
+
+::: {.incremental}
+
+- Choose $x_i$ to minimize $\Vert \prod_{i=1}^n(x - x_i) \Vert$
+  - Chebyshev polynomials interpolation
+
+:::
+
+## Other Series Estimators
+
+- @belloni2015 and reference therein
+- For smooth series, $f_0:\R^d \to \R$, $s$-times differentiable,
+$$
+\min_{\tilde{f} \in \mathcal{F}_k} \Vert f_0 - \tilde{f} \Vert \leq C k^{-s/d}
+$$
+- Splines of order $s_0$,
+$$
+\min_{\tilde{f} \in \mathcal{F}_k} \Vert f_0 - \tilde{f} \Vert \leq C k^{-\min\{s,s_0\}/d}
+$$
+
+
+::: {.notes}
+
+The constant $C$ is not really constant, but $k^{-s/d}$ is the dominant term
+
+:::
+
+## Reproducing Kernel Hilbert Space
+
+- @iske2018 chapter 8
+- Especially useful in multi-dimensional settings
+- Mairhuber-Curtis theorem implies $\mathcal{F}_k$ should depend on $\{x_i\}_{i=1}^n$ when $d \geq 2$
+
+## From Kernel to Hilbert Space (Moore-Aronszajn theorem)
+
+- Kernel $k(\cdot,\cdot): \R^d \times \R^d \to \R$ continuous, symmetric, and positive definite
+$$
+\sum_{i=1}^n \sum_{j=1}^n c_i k(x_i,x_j) c_j \geq 0 \forall c, x \in \R^n
+$$
+- Construct an associated Hilbert space
+$$
+\mathcal{K}^{pre} = \mathrm{span}\{ \sum_{j=1}^m c_j k(x_j, \cdot): c_j \in \R, x_j \in \R^d, m \in \mathbb{N}\}
+$$
+with inner product defined by
+$$
+\langle k(x,\cdot), k(y,\cdot) \rangle_{\mathcal{K}} = k(x,y)
+$$
+completion of $\mathcal{K}^{pre}$ is a Hilbert space
+
+## RKHS Facts
+
+- $\langle k(x,\cdot), f \rangle_{\mathcal{K}} = f$
+- $\mathcal{K} \subset C(\R^d)$
+
+## From Hilbert Space to Kernel
+
+- If $\mathcal{H}$ is a Hilbert space and $f \to f(x)$ is bounded for all $x$, then $\mathcal{H}$ is an RKHS
+
+## Interpolation in RKHS
+
+- Given $\{x_i, f(x_i)\}_{i=1}^n$, there is unique $\tilde{f} \in S_X \equiv \{ \sum_{i=1}^n c_i k(x_i, \cdot) \}$ such that $\tilde{f}(x_i) = f(x_i)$
+-$\tilde{f}$ solves
+$$
+\min_{g \in \mathcal{K}} \Vert g \Vert_{\mathcal{K}} \, s.t. \, g(x_i) = f(x_i) \text{ for } i=1,...,n
+$$
+
+## Mercer's theorem and feature maps
+
+::: {.incremental}
+- Given another Hilbert space $\mathcal{W}$, $\Phi: \R^d \to \mathcal{W}$ is a feature map for $k$ if
+$$
+k(x,y) = \langle \Phi(x), \Phi(y) \rangle_\mathcal{W}
+$$
+  - E.g. $\mathcal{W} = \mathcal{K}$ and $\Phi(x) = k(x,\cdot)$
+- Given measure $\mu$, define $T: L^2(\mu) \to L^2(\mu)$ by
+$$
+T(f)(x) = \int k(x,y) f(y) d\mu(y)
+$$
+
+:::
+
+## Mercer's theorem and feature maps
+
+::: {.incremental}
+
+- Mercer's theorem gives existence of Eigen decomposition,
+$$
+T(f)(x) = \sum_{i=1}^\infty \lambda_i \phi_i(x) \langle \bar{\phi_i}, f \rangle_{L^2(\mu)}
+$$
+and
+$$
+k(x,y) = \sum \lambda_i \phi_i(x) \bar{\phi_i}(y)
+$$
+- Feature map $k(x,y) = \langle (\sqrt{\lambda_i} \phi_i(x))_{i=1}^\infty, (\sqrt{\lambda_i} \phi_i(x))_{i=1}^\infty \rangle_{\ell^2}$
+- Link between inner product and norm in $\mathcal{K}$ and in $L^2(\mu)$
+
+:::
+
+## RKHS as Universal Approximator
+
+::: {.incremental}
+
+- @micchelli2006 or summary by @zhang2020
+- Given $f \in C(Z)$, $Z \subset \R^d$ and compact, can elements of $\mathcal{K}$ approximate $f$ in $\Vert\cdot\Vert_\infty$?
+- Let $K(Z) = \overline{\mathrm{span}}\{k(\cdot,y): y \in Z\} \subseteq C(Z)$
+- Let $\Phi$ be feature map for $k$ associated with $\mu$ with $supp(\mu) = Z$
+- Dual space of $C(Z)$ is set of Borel measures on $Z$, $B(Z)$ with
+$$
+\mu(f) = \int_Z f d\mu
+$$
+:::
+
+## RKHS as Universal Approximator
+
+::: {.incremental}
+- Map $B(Z)$ into $\mathcal{K}^* = \mathcal{K}$ by
+$$
+\langle U(\mu), h \rangle_{\mathcal{K}} = \langle \int_Z \Phi(x)(\cdot) d\mu(x), h \rangle_{\mathcal{K}} = \int_Z \langle \Phi(x), h \rangle_{\mathcal{K}} d\mu(x)
+$$
+- $U$ is bounded
+- $K(Z)^\perp = \mathcal{N}(U)$, i.e. universal approximation iff $\mathcal{N}(U) = \{0\}$.
+  - iff $\overline{\mathrm{span}}\{ \langle \Phi(x), \gamma_i \rangle_\mathcal{K} : \gamma_i \text{ basis for } \mathcal{K} \} = C(Z)$
+- Radial kernels are universal approximators
+$$
+k(x,y) = \int e^{-t\Vert x-y\Vert^2} d\nu(t)
+$$
+
+:::
+
+## RKHS approximation rate
+
+- @bach2024 chapter 7
+- If $k$ is translation invariant and $f$ is $s$ times differentiable,
+$$
+\inf_{f \in \mathcal{K}} \Vert f - f_0 \Vert_{L^2(\mu)} + \lambda \Vert f \Vert_{\mathcal{K}} \approx O(\lambda^(s/r_k))
+$$
+where $r_k$ depends on $k$ and need $r_k > d/2 > s$ (if $s \geq r_k$, then $f_0 \in \mathcal{K}$ and can do better)
+- If sample $x_i \sim \mu$ and interpolate
+$$
+\hat{f} = \argmin_{f \in \mathcal{K}} \frac{1}{n}\sum_{i=1}^n (f_0(x_i) - f(x_i) )^2 + \lambda \Vert f \Vert_{\mathcal{K}}
+$$
+then $\Vert \hat{f} - f_0 \Vert_{L^2(\mu)} \approx O(n^{-s/r_k})$
+  - if $f_0 \in \mathcal{K}$, $O(n^{-1/2})$
+
+
+## Neural Networks
+
+- @bach2024
+
+# Application
+
+## Investment with adjustment costs and productivity
+
+- Price taking firm, output $y = e^\omega F(k,\ell,m)$, prices $p_y, p_m, p_\ell, p_k$
+- Each period, $m$, flexibly chosen given predetermined $k, \ell$
+$$
+\max_{m} p_y e^\omega F(k,\ell,m) - p_m m
+$$
+
+
+```{julia}
+using ModelingToolkit, NonlinearSolve, Symbolics
+@variables m
+@parameters k, l, ω, pm, py
+Dm = Differential(m)
+production(k,l,m) = k^(2//10)*l^(4//10)*m^(3//10)
+#ρ = 5
+#rts = 9//10
+#ces(k,l,m) = (k^ρ + l^ρ + m^ρ)^(rts/ρ)
+profits(k,l,m,ω,pm,py) = py*exp(ω)*production(k,l,m) - pm*m
+mstar = symbolic_solve(Symbolics.derivative(profits(k,l,m,ω,pm,py),m) ~ 0 ,m)[1]
+profits(k,l,mstar,ω,pm,py)
+
+flowprofits = eval(build_function(profits(k,l,mstar,ω,pm,py), k,l,ω,pm,py))
+```
+
+## Dynamic Labor and Capital Choices
+
+- $\omega_t$ Markov, $F(\omega_t | \omega_{t-1})$, prices constant
+- Labor and capital chosen before $\omega_t$ known
+- Adjustment cost of capital $c(k',k)$
+
+$$
+\begin{align*}
+  V(\omega, k,\ell) = & \max_{k',\ell',m} p_y e^\omega F(k,\ell,m) - p_\ell \ell - p_k k - c(k,k') + \beta E_\omega' [V(\omega', k',\ell') | \omega ] \\
+  = & \max_{k',\ell'} \pi^*(p,\omega, k, \ell) - c(k,k') + \beta E[V(\omega',k',\ell')|\omega]
+\end{align*}
+$$
+
+##
+
+```{julia}
+using Surrogates
+```
+
+## References
