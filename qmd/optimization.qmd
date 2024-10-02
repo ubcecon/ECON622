@@ -1,5 +1,6 @@
 ---
 title       : "Optimization"
+author : Paul Schrimpf
 date: last-modified
 bibliography: 622.bib
 execute:
