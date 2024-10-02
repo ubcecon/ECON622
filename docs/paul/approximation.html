@@ -12,7 +12,7 @@
 
   <meta name="author" content="Paul Schrimpf">
   <meta name="dcterms.date" content="2024-10-02">
-  <title>ECON 622 – Automatic Differentiation</title>
+  <title>ECON 622 – Function Approximation</title>
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, minimal-ui">
@@ -95,7 +95,27 @@
     code span.va { color: #00e0e0; } /* Variable */
     code span.vs { color: #abe338; } /* VerbatimString */
     code span.wa { color: #dcc6e0; } /* Warning */
-  </style>
+    /* CSS for citations */
+    div.csl-bib-body { }
+    div.csl-entry {
+      clear: both;
+      margin-bottom: 0em;
+    }
+    .hanging-indent div.csl-entry {
+      margin-left:2em;
+      text-indent:-2em;
+    }
+    div.csl-left-margin {
+      min-width:2em;
+      float:left;
+    }
+    div.csl-right-inline {
+      margin-left:2em;
+      padding-left:1em;
+    }
+    div.csl-indent {
+      margin-left: 2em;
+    }  </style>
   <link rel="stylesheet" href="site_libs/revealjs/dist/theme/quarto.css">
   <link href="site_libs/revealjs/plugin/quarto-line-highlight/line-highlight.css" rel="stylesheet">
   <link href="site_libs/revealjs/plugin/reveal-menu/menu.css" rel="stylesheet">
@@ -394,7 +414,7 @@
     <div class="slides">
 
 <section id="title-slide" class="quarto-title-block center">
-  <h1 class="title">Automatic Differentiation</h1>
+  <h1 class="title">Function Approximation</h1>
 
 <div class="quarto-title-authors">
 <div class="quarto-title-author">
@@ -411,373 +431,387 @@ Paul Schrimpf
 <h1>Introduction</h1>
 
 </section>
-<section id="derivatives" class="slide level2">
-<h2>Derivatives</h2>
+<section id="function-approximation" class="slide level2">
+<h2>Function Approximation</h2>
+<p><span class="math display">\[
+\def\R{{\mathbb{R}}}
+\def\Er{{\mathrm{E}}}
+\def\argmin{\mathrm{arg}\min}
+\]</span></p>
 <ul>
-<li>Needed for efficient equation solving and optimization</li>
-<li>Can calculate automatically</li>
+<li>Target: <span class="math inline">\(f_0:\R^d \to \R\)</span>
+<ul>
+<li>Expensive to compute</li>
+</ul></li>
+<li>Given <span class="math inline">\(\{x_i, f_0(x_i) \}_{i=1}^n\)</span>, approximate <span class="math inline">\(f_0(x)\)</span> by <span class="math inline">\(\tilde{f}(x)\)</span> for <span class="math inline">\(\tilde{f} \in \mathcal{F}_k\)</span>
+<ul>
+<li>Class of approximating function <span class="math inline">\(\mathcal{F}_k\)</span></li>
+<li>Want <span class="math inline">\(\Vert f_0 - \tilde{f} \Vert\)</span> to be small</li>
+</ul></li>
 </ul>
 </section>
-<section id="finite-differences" class="slide level2">
-<h2>Finite Differences</h2>
+<section id="approximating-classes" class="slide level2">
+<h2>Approximating Classes</h2>
+<div>
+<ul>
+<li class="fragment">Classical:
+<ul>
+<li class="fragment">Polynomials</li>
+<li class="fragment">Trigonometric series</li>
+<li class="fragment">Splines</li>
+<li class="fragment">Local averages / kernel regression</li>
+</ul></li>
+<li class="fragment">Modern:
+<ul>
+<li class="fragment">Radial basis functions</li>
+<li class="fragment">Trees</li>
+<li class="fragment">RKHS / Kriging / Gaussian process regression</li>
+<li class="fragment">Neural networks</li>
+</ul></li>
+</ul>
+</div>
+</section>
+<section id="example-dynamic-programming" class="slide level2">
+<h2>Example: dynamic programming</h2>
+<ul>
+<li>Dynamic programming: <span class="math display">\[
+V(x) = \max_a u(a,x) + \beta \Er[V(x') | x, a]
+\]</span>
+<ul>
+<li><span class="math inline">\(x\)</span> continuous</li>
+</ul></li>
+<li>Value function iteration:
+<ul>
+<li>Pick grid <span class="math inline">\(x_1,..., x_n\)</span></li>
+<li>Initial guess <span class="math inline">\(\tilde{V}_0\)</span></li>
+<li>Maximize <span class="math inline">\(V_1(x_i) = \max_a u(a,x) + \beta \Er[\tilde{V}_0(x') | x , a]\)</span></li>
+<li>Set <span class="math inline">\(\tilde{V}_1 \approx V_1\)</span>, repeat</li>
+</ul></li>
+</ul>
+</section>
+<section id="example-non-parametric-regression" class="slide level2">
+<h2>Example: non parametric regression</h2>
+<ul>
+<li>Observe <span class="math display">\[
+y_i = f_0(x_i) + \epsilon_i
+\]</span></li>
+<li>Estimate <span class="math display">\[
+\hat{f}_n \in \argmin_{f\in \mathcal{F}_k} \frac{1}{n} \sum_i (y_i - f(x_i))^2
+\]</span></li>
+<li>Typically, <span class="math display">\[
+\Vert f_0 - \hat{f}_n \Vert^2 = \underbrace{\Vert f_0 - \tilde{f} \Vert^2}_{\text{approximation error}} + \underbrace{\Vert \tilde{f} - \hat{f}_n \Vert^2}_{\text{variance}}
+\]</span></li>
+</ul>
+<aside class="notes">
+<p>I say “typically” because one has to be careful about what these norms are to get a results along these lines.</p>
+<style type="text/css">
+        span.MJX_Assistive_MathML {
+          position:absolute!important;
+          clip: rect(1px, 1px, 1px, 1px);
+          padding: 1px 0 0 0!important;
+          border: 0!important;
+          height: 1px!important;
+          width: 1px!important;
+          overflow: hidden!important;
+          display:block!important;
+      }</style></aside>
+</section>
+<section id="vert-f_0---f-vert" class="slide level2">
+<h2><span class="math inline">\(\Vert f_0 - f \Vert\)</span></h2>
+<div>
+<ul>
+<li class="fragment">Guarantees of the form <span class="math display">\[
+\sup_{f_0 \in \mathcal{F}_0
+} \min_{\hat{f} \in \mathcal{F}_k} \Vert f_0 - \hat{f} \Vert_{\mathcal{V}} \leq g(n,k)
+\]</span>
+<ul>
+<li class="fragment"><span class="math inline">\(\mathcal{V}\)</span> some vector space of functions, <span class="math inline">\(\mathcal{F}_0 \subseteq \mathcal{V}\)</span>, <span class="math inline">\(\mathcal{F}_k \subseteq \mathcal{V}\)</span></li>
+<li class="fragment">Usually <span class="math inline">\(\lim_{n,k \to \infty} g(n,k) = 0\)</span></li>
+</ul></li>
+<li class="fragment">Quality of approximation depends on
+<ul>
+<li class="fragment">restrictions on <span class="math inline">\(\mathcal{F}_0\)</span></li>
+<li class="fragment"><span class="math inline">\(\mathcal{F}_k\)</span> that is a good match for <span class="math inline">\(\mathcal{F}_0\)</span></li>
+</ul></li>
+<li class="fragment"><span class="math inline">\(\Vert \cdot \Vert_{\mathcal{V}}\)</span> might not be norm of interest in applications, so might also want e.g.&nbsp;<span class="math inline">\(\Vert \cdot \Vert_{L^q(P(x))} \leq C \Vert \cdot \Vert_{\mathcal{V}}\)</span></li>
+</ul>
+</div>
+</section></section>
+<section>
+<section id="theory" class="title-slide slide level1 center">
+<h1>Theory</h1>
+
+</section>
+<section id="polynomials-as-universal-approximators" class="slide level2">
+<h2>Polynomials as Universal Approximators</h2>
+<ul>
+<li>Stone–Weierstrass theorem if <span class="math inline">\(f_0 \in C(X)\)</span> for a compact set <span class="math inline">\(X \subset \R\)</span>, then <span class="math inline">\(\forall \epsilon&gt;0\)</span>, <span class="math inline">\(\exists\)</span> polynomial <span class="math inline">\(p\)</span> s.t. <span class="math display">\[
+\Vert f_0 - p \Vert_\infty &lt; \epsilon
+\]</span></li>
+</ul>
+</section>
+<section id="polynomials" class="slide level2">
+<h2>Polynomials</h2>
+<ul>
+<li>Let <span class="math inline">\(P_n\)</span> be polynomials of order <span class="math inline">\(n\)</span></li>
+<li>Jackson’s theorem (<span class="citation" data-cites="jackson1912">Jackson (<a href="#/references" role="doc-biblioref" onclick="">1912</a>)</span> and later refinements) if <span class="math inline">\(f \in C^s[-1,1]\)</span> <span class="math display">\[
+\inf_{p \in P_n} \Vert f - p \Vert_{\infty} \leq \underbrace{\left( \frac{\pi}{2} \right)^s \prod_{j=n - s + 1}^{n+1} \frac{1}{j}}_{C(s) n^{-s}} \Vert f^{(s)} \Vert_\infty
+\]</span>
+<ul>
+<li>An existence result, but does not tell how to find optimal <span class="math inline">\(p\)</span></li>
+<li>In interpolation, achieving minimum requires careful choice of <span class="math inline">\(\{x_i\}_{i=1}^n\)</span></li>
+</ul></li>
+</ul>
+</section>
+<section id="polynomials-1" class="slide level2">
+<h2>Polynomials</h2>
+<ul>
+<li>Lagrange interpolation problem</li>
+<li>Given <span class="math inline">\(\{x_i, f(x_i)\}_{i=1}^n\)</span>, find <span class="math inline">\(p_{n-1} \in P_{n-1}\)</span> such that <span class="math inline">\(p_{n-1}(x_i) = f(x_i)\)</span></li>
+<li>If <span class="math inline">\(f \in C^n[-1,1]\)</span> <span class="math display">\[
+|f(x) - p_{n-1}(x) | \leq \frac{\Vert f^{(n)} \Vert_\infty}{n!}\prod_{i=1}^n(x - x_i)
+\]</span></li>
+</ul>
+<div>
+<ul>
+<li class="fragment">Choose <span class="math inline">\(x_i\)</span> to minimize <span class="math inline">\(\Vert \prod_{i=1}^n(x - x_i) \Vert\)</span>
+<ul>
+<li class="fragment">Chebyshev polynomials interpolation</li>
+</ul></li>
+</ul>
+</div>
+</section>
+<section id="other-series-estimators" class="slide level2">
+<h2>Other Series Estimators</h2>
+<ul>
+<li><span class="citation" data-cites="belloni2015">Belloni et al. (<a href="#/references" role="doc-biblioref" onclick="">2015</a>)</span> and reference therein</li>
+<li>For smooth series, <span class="math inline">\(f_0:\R^d \to \R\)</span>, <span class="math inline">\(s\)</span>-times differentiable, <span class="math display">\[
+\min_{\tilde{f} \in \mathcal{F}_k} \Vert f_0 - \tilde{f} \Vert \leq C k^{-s/d}
+\]</span></li>
+<li>Splines of order <span class="math inline">\(s_0\)</span>, <span class="math display">\[
+\min_{\tilde{f} \in \mathcal{F}_k} \Vert f_0 - \tilde{f} \Vert \leq C k^{-\min\{s,s_0\}/d}
+\]</span></li>
+</ul>
+<aside class="notes">
+<p>The constant <span class="math inline">\(C\)</span> is not really constant, but <span class="math inline">\(k^{-s/d}\)</span> is the dominant term</p>
+<style type="text/css">
+        span.MJX_Assistive_MathML {
+          position:absolute!important;
+          clip: rect(1px, 1px, 1px, 1px);
+          padding: 1px 0 0 0!important;
+          border: 0!important;
+          height: 1px!important;
+          width: 1px!important;
+          overflow: hidden!important;
+          display:block!important;
+      }</style></aside>
+</section>
+<section id="reproducing-kernel-hilbert-space" class="slide level2">
+<h2>Reproducing Kernel Hilbert Space</h2>
+<ul>
+<li><span class="citation" data-cites="iske2018">Iske et al. (<a href="#/references" role="doc-biblioref" onclick="">2018</a>)</span> chapter 8</li>
+<li>Especially useful in multi-dimensional settings</li>
+<li>Mairhuber-Curtis theorem implies <span class="math inline">\(\mathcal{F}_k\)</span> should depend on <span class="math inline">\(\{x_i\}_{i=1}^n\)</span> when <span class="math inline">\(d \geq 2\)</span></li>
+</ul>
+</section>
+<section id="from-kernel-to-hilbert-space-moore-aronszajn-theorem" class="slide level2">
+<h2>From Kernel to Hilbert Space (Moore-Aronszajn theorem)</h2>
+<ul>
+<li>Kernel <span class="math inline">\(k(\cdot,\cdot): \R^d \times \R^d \to \R\)</span> continuous, symmetric, and positive definite <span class="math display">\[
+\sum_{i=1}^n \sum_{j=1}^n c_i k(x_i,x_j) c_j \geq 0 \forall c, x \in \R^n
+\]</span></li>
+<li>Construct an associated Hilbert space <span class="math display">\[
+\mathcal{K}^{pre} = \mathrm{span}\{ \sum_{j=1}^m c_j k(x_j, \cdot): c_j \in \R, x_j \in \R^d, m \in \mathbb{N}\}
+\]</span> with inner product defined by <span class="math display">\[
+\langle k(x,\cdot), k(y,\cdot) \rangle_{\mathcal{K}} = k(x,y)
+\]</span> completion of <span class="math inline">\(\mathcal{K}^{pre}\)</span> is a Hilbert space</li>
+</ul>
+</section>
+<section id="rkhs-facts" class="slide level2">
+<h2>RKHS Facts</h2>
+<ul>
+<li><span class="math inline">\(\langle k(x,\cdot), f \rangle_{\mathcal{K}} = f\)</span></li>
+<li><span class="math inline">\(\mathcal{K} \subset C(\R^d)\)</span></li>
+</ul>
+</section>
+<section id="from-hilbert-space-to-kernel" class="slide level2">
+<h2>From Hilbert Space to Kernel</h2>
+<ul>
+<li>If <span class="math inline">\(\mathcal{H}\)</span> is a Hilbert space and <span class="math inline">\(f \to f(x)\)</span> is bounded for all <span class="math inline">\(x\)</span>, then <span class="math inline">\(\mathcal{H}\)</span> is an RKHS</li>
+</ul>
+</section>
+<section id="interpolation-in-rkhs" class="slide level2">
+<h2>Interpolation in RKHS</h2>
+<ul>
+<li>Given <span class="math inline">\(\{x_i, f(x_i)\}_{i=1}^n\)</span>, there is unique <span class="math inline">\(\tilde{f} \in S_X \equiv \{ \sum_{i=1}^n c_i k(x_i, \cdot) \}\)</span> such that <span class="math inline">\(\tilde{f}(x_i) = f(x_i)\)</span> -<span class="math inline">\(\tilde{f}\)</span> solves <span class="math display">\[
+\min_{g \in \mathcal{K}} \Vert g \Vert_{\mathcal{K}} \, s.t. \, g(x_i) = f(x_i) \text{ for } i=1,...,n
+\]</span></li>
+</ul>
+</section>
+<section id="mercers-theorem-and-feature-maps" class="slide level2">
+<h2>Mercer’s theorem and feature maps</h2>
+<div>
+<ul>
+<li class="fragment">Given another Hilbert space <span class="math inline">\(\mathcal{W}\)</span>, <span class="math inline">\(\Phi: \R^d \to \mathcal{W}\)</span> is a feature map for <span class="math inline">\(k\)</span> if <span class="math display">\[
+k(x,y) = \langle \Phi(x), \Phi(y) \rangle_\mathcal{W}
+\]</span>
+<ul>
+<li class="fragment">E.g. <span class="math inline">\(\mathcal{W} = \mathcal{K}\)</span> and <span class="math inline">\(\Phi(x) = k(x,\cdot)\)</span></li>
+</ul></li>
+<li class="fragment">Given measure <span class="math inline">\(\mu\)</span>, define <span class="math inline">\(T: L^2(\mu) \to L^2(\mu)\)</span> by <span class="math display">\[
+T(f)(x) = \int k(x,y) f(y) d\mu(y)
+\]</span></li>
+</ul>
+</div>
+</section>
+<section id="mercers-theorem-and-feature-maps-1" class="slide level2">
+<h2>Mercer’s theorem and feature maps</h2>
+<div>
+<ul>
+<li class="fragment">Mercer’s theorem gives existence of Eigen decomposition, <span class="math display">\[
+T(f)(x) = \sum_{i=1}^\infty \lambda_i \phi_i(x) \langle \bar{\phi_i}, f \rangle_{L^2(\mu)}
+\]</span> and <span class="math display">\[
+k(x,y) = \sum \lambda_i \phi_i(x) \bar{\phi_i}(y)
+\]</span></li>
+<li class="fragment">Feature map <span class="math inline">\(k(x,y) = \langle (\sqrt{\lambda_i} \phi_i(x))_{i=1}^\infty, (\sqrt{\lambda_i} \phi_i(x))_{i=1}^\infty \rangle_{\ell^2}\)</span></li>
+<li class="fragment">Link between inner product and norm in <span class="math inline">\(\mathcal{K}\)</span> and in <span class="math inline">\(L^2(\mu)\)</span></li>
+</ul>
+</div>
+</section>
+<section id="rkhs-as-universal-approximator" class="slide level2">
+<h2>RKHS as Universal Approximator</h2>
+<div>
+<ul>
+<li class="fragment"><span class="citation" data-cites="micchelli2006">Micchelli, Xu, and Zhang (<a href="#/references" role="doc-biblioref" onclick="">2006</a>)</span> or summary by <span class="citation" data-cites="zhang2020">Zhang (<a href="#/references" role="doc-biblioref" onclick="">2018</a>)</span></li>
+<li class="fragment">Given <span class="math inline">\(f \in C(Z)\)</span>, <span class="math inline">\(Z \subset \R^d\)</span> and compact, can elements of <span class="math inline">\(\mathcal{K}\)</span> approximate <span class="math inline">\(f\)</span> in <span class="math inline">\(\Vert\cdot\Vert_\infty\)</span>?</li>
+<li class="fragment">Let <span class="math inline">\(K(Z) = \overline{\mathrm{span}}\{k(\cdot,y): y \in Z\} \subseteq C(Z)\)</span></li>
+<li class="fragment">Let <span class="math inline">\(\Phi\)</span> be feature map for <span class="math inline">\(k\)</span> associated with <span class="math inline">\(\mu\)</span> with <span class="math inline">\(supp(\mu) = Z\)</span></li>
+<li class="fragment">Dual space of <span class="math inline">\(C(Z)\)</span> is set of Borel measures on <span class="math inline">\(Z\)</span>, <span class="math inline">\(B(Z)\)</span> with <span class="math display">\[
+\mu(f) = \int_Z f d\mu
+\]</span></li>
+</ul>
+</div>
+</section>
+<section id="rkhs-as-universal-approximator-1" class="slide level2">
+<h2>RKHS as Universal Approximator</h2>
+<div>
+<ul>
+<li class="fragment">Map <span class="math inline">\(B(Z)\)</span> into <span class="math inline">\(\mathcal{K}^* = \mathcal{K}\)</span> by <span class="math display">\[
+\langle U(\mu), h \rangle_{\mathcal{K}} = \langle \int_Z \Phi(x)(\cdot) d\mu(x), h \rangle_{\mathcal{K}} = \int_Z \langle \Phi(x), h \rangle_{\mathcal{K}} d\mu(x)
+\]</span></li>
+<li class="fragment"><span class="math inline">\(U\)</span> is bounded</li>
+<li class="fragment"><span class="math inline">\(K(Z)^\perp = \mathcal{N}(U)\)</span>, i.e.&nbsp;universal approximation iff <span class="math inline">\(\mathcal{N}(U) = \{0\}\)</span>.
+<ul>
+<li class="fragment">iff <span class="math inline">\(\overline{\mathrm{span}}\{ \langle \Phi(x), \gamma_i \rangle_\mathcal{K} : \gamma_i \text{ basis for } \mathcal{K} \} = C(Z)\)</span></li>
+</ul></li>
+<li class="fragment">Radial kernels are universal approximators <span class="math display">\[
+k(x,y) = \int e^{-t\Vert x-y\Vert^2} d\nu(t)
+\]</span></li>
+</ul>
+</div>
+</section>
+<section id="rkhs-approximation-rate" class="slide level2">
+<h2>RKHS approximation rate</h2>
+<ul>
+<li><span class="citation" data-cites="bach2024">Bach (<a href="#/references" role="doc-biblioref" onclick="">2024</a>)</span> chapter 7</li>
+<li>If <span class="math inline">\(k\)</span> is translation invariant and <span class="math inline">\(f\)</span> is <span class="math inline">\(s\)</span> times differentiable, <span class="math display">\[
+\inf_{f \in \mathcal{K}} \Vert f - f_0 \Vert_{L^2(\mu)} + \lambda \Vert f \Vert_{\mathcal{K}} \approx O(\lambda^(s/r_k))
+\]</span> where <span class="math inline">\(r_k\)</span> depends on <span class="math inline">\(k\)</span> and need <span class="math inline">\(r_k &gt; d/2 &gt; s\)</span> (if <span class="math inline">\(s \geq r_k\)</span>, then <span class="math inline">\(f_0 \in \mathcal{K}\)</span> and can do better)</li>
+<li>If sample <span class="math inline">\(x_i \sim \mu\)</span> and interpolate <span class="math display">\[
+\hat{f} = \argmin_{f \in \mathcal{K}} \frac{1}{n}\sum_{i=1}^n (f_0(x_i) - f(x_i) )^2 + \lambda \Vert f \Vert_{\mathcal{K}}
+\]</span> then <span class="math inline">\(\Vert \hat{f} - f_0 \Vert_{L^2(\mu)} \approx O(n^{-s/r_k})\)</span>
+<ul>
+<li>if <span class="math inline">\(f_0 \in \mathcal{K}\)</span>, <span class="math inline">\(O(n^{-1/2})\)</span></li>
+</ul></li>
+</ul>
+</section>
+<section id="neural-networks" class="slide level2">
+<h2>Neural Networks</h2>
+<ul>
+<li><span class="citation" data-cites="bach2024">Bach (<a href="#/references" role="doc-biblioref" onclick="">2024</a>)</span></li>
+</ul>
+</section></section>
+<section>
+<section id="application" class="title-slide slide level1 center">
+<h1>Application</h1>
+
+</section>
+<section id="investment-with-adjustment-costs-and-productivity" class="slide level2">
+<h2>Investment with adjustment costs and productivity</h2>
+<ul>
+<li>Price taking firm, output <span class="math inline">\(y = e^\omega F(k,\ell,m)\)</span>, prices <span class="math inline">\(p_y, p_m, p_\ell, p_k\)</span></li>
+<li>Each period, <span class="math inline">\(m\)</span>, flexibly chosen given predetermined <span class="math inline">\(k, \ell\)</span> <span class="math display">\[
+\max_{m} p_y e^\omega F(k,\ell,m) - p_m m
+\]</span></li>
+</ul>
 <div id="2" class="cell" data-execution_count="1">
-<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb1-1"><a></a><span class="fu">f</span>(x) <span class="op">=</span> <span class="fu">sin</span>(x)<span class="op">/</span>(<span class="fl">1.0</span><span class="fu">+exp</span>(x))</span>
-<span id="cb1-2"><a></a></span>
-<span id="cb1-3"><a></a><span class="kw">function</span> <span class="fu">dxfin</span>(f,x)</span>
-<span id="cb1-4"><a></a>  h <span class="op">=</span> <span class="fu">sqrt</span>(<span class="fu">eps</span>(x))</span>
-<span id="cb1-5"><a></a>  <span class="cf">if</span> <span class="fu">abs</span>(x) <span class="op">&gt;</span> <span class="fl">1</span></span>
-<span id="cb1-6"><a></a>    h <span class="op">=</span> <span class="fu">h*abs</span>(x)</span>
-<span id="cb1-7"><a></a>  <span class="cf">end</span></span>
-<span id="cb1-8"><a></a>  (<span class="fu">f</span>(x<span class="op">+</span>h) <span class="op">-</span> <span class="fu">f</span>(x) )<span class="op">/</span> h</span>
-<span id="cb1-9"><a></a><span class="kw">end</span></span>
-<span id="cb1-10"><a></a></span>
-<span id="cb1-11"><a></a><span class="fu">dxfin</span>(f, <span class="fl">2.0</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb1-1"><a></a><span class="im">using</span> <span class="bu">ModelingToolkit</span>, <span class="bu">NonlinearSolve</span>, <span class="bu">Symbolics</span></span>
+<span id="cb1-2"><a></a><span class="pp">@variables</span> m</span>
+<span id="cb1-3"><a></a><span class="pp">@parameters</span> k, l, ω, pm, py</span>
+<span id="cb1-4"><a></a>Dm <span class="op">=</span> <span class="fu">Differential</span>(m)</span>
+<span id="cb1-5"><a></a><span class="fu">production</span>(k,l,m) <span class="op">=</span> k<span class="op">^</span>(<span class="fl">2</span><span class="op">//</span><span class="fl">10</span>)<span class="op">*</span>l<span class="op">^</span>(<span class="fl">4</span><span class="op">//</span><span class="fl">10</span>)<span class="op">*</span>m<span class="op">^</span>(<span class="fl">3</span><span class="op">//</span><span class="fl">10</span>)</span>
+<span id="cb1-6"><a></a><span class="co">#ρ = 5</span></span>
+<span id="cb1-7"><a></a><span class="co">#rts = 9//10</span></span>
+<span id="cb1-8"><a></a><span class="co">#ces(k,l,m) = (k^ρ + l^ρ + m^ρ)^(rts/ρ)</span></span>
+<span id="cb1-9"><a></a><span class="fu">profits</span>(k,l,m,ω,pm,py) <span class="op">=</span> <span class="fu">py*exp</span>(ω)<span class="fu">*production</span>(k,l,m) <span class="op">-</span> pm<span class="op">*</span>m</span>
+<span id="cb1-10"><a></a>mstar <span class="op">=</span> <span class="fu">symbolic_solve</span>(Symbolics.<span class="fu">derivative</span>(<span class="fu">profits</span>(k,l,m,ω,pm,py),m) <span class="op">~</span> <span class="fl">0</span> ,m)[<span class="fl">1</span>]</span>
+<span id="cb1-11"><a></a><span class="fu">profits</span>(k,l,mstar,ω,pm,py)</span>
+<span id="cb1-12"><a></a></span>
+<span id="cb1-13"><a></a>flowprofits <span class="op">=</span> <span class="fu">eval</span>(<span class="fu">build_function</span>(<span class="fu">profits</span>(k,l,mstar,ω,pm,py), k,l,ω,pm,py))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-display" data-execution_count="1">
-<pre><code>-0.1450763155960872</code></pre>
+<pre><code>#1 (generic function with 1 method)</code></pre>
 </div>
 </div>
 </section>
-<section id="forward-automatic-differentiation" class="slide level2">
-<h2>Forward Automatic Differentiation</h2>
+<section id="dynamic-labor-and-capital-choices" class="slide level2">
+<h2>Dynamic Labor and Capital Choices</h2>
+<ul>
+<li><span class="math inline">\(\omega_t\)</span> Markov, <span class="math inline">\(F(\omega_t | \omega_{t-1})\)</span>, prices constant</li>
+<li>Labor and capital chosen before <span class="math inline">\(\omega_t\)</span> known</li>
+<li>Adjustment cost of capital <span class="math inline">\(c(k',k)\)</span></li>
+</ul>
+<p><span class="math display">\[
+\begin{align*}
+  V(\omega, k,\ell) = &amp; \max_{k',\ell',m} p_y e^\omega F(k,\ell,m) - p_\ell \ell - p_k k - c(k,k') + \beta E_\omega' [V(\omega', k',\ell') | \omega ] \\
+  = &amp; \max_{k',\ell'} \pi^*(p,\omega, k, \ell) - c(k,k') + \beta E[V(\omega',k',\ell')|\omega]
+\end{align*}
+\]</span></p>
+</section>
+<section id="section" class="slide level2">
+<h2></h2>
 <div id="4" class="cell" data-execution_count="1">
-<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb3-1"><a></a><span class="kw">module</span> Forward</span>
-<span id="cb3-2"><a></a></span>
-<span id="cb3-3"><a></a><span class="kw">struct</span> Dual{T}</span>
-<span id="cb3-4"><a></a>  v<span class="op">::</span><span class="dt">T</span></span>
-<span id="cb3-5"><a></a>  dv<span class="op">::</span><span class="dt">T</span></span>
-<span id="cb3-6"><a></a><span class="kw">end</span></span>
-<span id="cb3-7"><a></a></span>
-<span id="cb3-8"><a></a><span class="fu">Dual</span>(x<span class="op">::</span><span class="dt">T</span>) <span class="kw">where</span> {T} <span class="op">=</span> <span class="fu">Dual</span>(x, <span class="fu">one</span>(x))</span>
-<span id="cb3-9"><a></a></span>
-<span id="cb3-10"><a></a><span class="im">import</span> <span class="bu">Base</span>: +, sin, exp, *, /</span>
-<span id="cb3-11"><a></a></span>
-<span id="cb3-12"><a></a><span class="kw">function</span> (<span class="op">+</span>)(a<span class="op">::</span><span class="dt">T</span>, x<span class="op">::</span><span class="dt">Dual{T}</span>) <span class="kw">where</span> {T}</span>
-<span id="cb3-13"><a></a>  <span class="fu">Dual</span>(a<span class="op">+</span>x.v, x.dv)</span>
-<span id="cb3-14"><a></a><span class="kw">end</span></span>
-<span id="cb3-15"><a></a></span>
-<span id="cb3-16"><a></a><span class="kw">function</span> (<span class="op">*</span>)(y<span class="op">::</span><span class="dt">Dual</span>, x<span class="op">::</span><span class="dt">Dual</span>)</span>
-<span id="cb3-17"><a></a>  <span class="fu">Dual</span>(y.v<span class="op">*</span>x.v, x.v<span class="op">*</span>y.dv <span class="op">+</span> x.dv<span class="op">*</span>y.v)</span>
-<span id="cb3-18"><a></a><span class="kw">end</span></span>
-<span id="cb3-19"><a></a></span>
-<span id="cb3-20"><a></a><span class="kw">function</span> (<span class="op">/</span>)(x<span class="op">::</span><span class="dt">Dual</span>, y<span class="op">::</span><span class="dt">Dual</span>)</span>
-<span id="cb3-21"><a></a>  <span class="fu">Dual</span>(x.v<span class="op">/</span>y.v, x.dv<span class="op">/</span>y.v <span class="op">-</span> x.v<span class="op">*</span>y.dv<span class="op">/</span>y.v<span class="op">^</span><span class="fl">2</span>)</span>
-<span id="cb3-22"><a></a><span class="kw">end</span></span>
-<span id="cb3-23"><a></a></span>
-<span id="cb3-24"><a></a><span class="fu">exp</span>(x<span class="op">::</span><span class="dt">Dual</span>) <span class="op">=</span> <span class="fu">Dual</span>(<span class="fu">exp</span>(x.v), <span class="fu">exp</span>(x.v)<span class="op">*</span>x.dv)</span>
-<span id="cb3-25"><a></a><span class="fu">sin</span>(x<span class="op">::</span><span class="dt">Dual</span>) <span class="op">=</span> <span class="fu">Dual</span>(<span class="fu">sin</span>(x.v), <span class="fu">cos</span>(x.v)<span class="op">*</span>x.dv)</span>
-<span id="cb3-26"><a></a></span>
-<span id="cb3-27"><a></a></span>
-<span id="cb3-28"><a></a><span class="kw">function</span> <span class="fu">fdx</span>(f,x)</span>
-<span id="cb3-29"><a></a>  out<span class="op">=</span><span class="fu">f</span>(<span class="fu">Dual</span>(x))</span>
-<span id="cb3-30"><a></a>  (out.v, out.dv)</span>
-<span id="cb3-31"><a></a><span class="kw">end</span></span>
-<span id="cb3-32"><a></a></span>
-<span id="cb3-33"><a></a><span class="kw">end</span></span>
-<span id="cb3-34"><a></a></span>
-<span id="cb3-35"><a></a>Forward.<span class="fu">fdx</span>(f,<span class="fl">2.0</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-display" data-execution_count="1">
-<pre><code>(0.10839091026481387, -0.14507631594729084)</code></pre>
-</div>
+<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb3-1"><a></a><span class="im">using</span> <span class="bu">Surrogates</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 </section>
-<section id="reverse-automatic-differentiation" class="slide level2">
-<h2>Reverse Automatic Differentiation</h2>
-<ul>
-<li>compute <span class="math inline">\(f(x)\)</span> in usual forward direction, keep track of each operation and intermediate value</li>
-<li>compute derivative “backwards”
-<ul>
-<li><span class="math inline">\(f(x) = g(h(x))\)</span></li>
-<li><span class="math inline">\(f'(x) = g'(h(x)) h'(x)\)</span></li>
-</ul></li>
-<li>scales better for high dimensional <span class="math inline">\(x\)</span></li>
-<li>implementation more complicated
-<ul>
-<li>Simple-ish example https://simeonschaub.github.io/ReverseModePluto/notebook.html</li>
-</ul></li>
-</ul>
-</section></section>
-<section>
-<section id="julia-ad-packages" class="title-slide slide level1 center">
-<h1>Julia AD Packages</h1>
-
-</section>
-<section id="forwarddiff" class="slide level2">
-<h2>ForwardDiff</h2>
-<ul>
-<li><a href="https://github.com/JuliaDiff/ForwardDiff.jl"><code>ForwardDiff.jl</code></a></li>
-<li>mature and reliable</li>
-</ul>
-</section>
-<section id="forwarddiff-example" class="slide level2">
-<h2>ForwardDiff Example</h2>
-<div id="6" class="cell" data-execution_count="1">
-<div class="sourceCode cell-code" id="cb5"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb5-1"><a></a><span class="im">using</span> <span class="bu">Distributions</span></span>
-<span id="cb5-2"><a></a><span class="kw">function</span> <span class="fu">simulate_logit</span>(observations, β)</span>
-<span id="cb5-3"><a></a>  x <span class="op">=</span> <span class="fu">randn</span>(observations, <span class="fu">length</span>(β))</span>
-<span id="cb5-4"><a></a>  y <span class="op">=</span> (x<span class="op">*</span>β <span class="op">+</span> <span class="fu">rand</span>(<span class="fu">Logistic</span>(), observations)) <span class="op">.&gt;=</span> <span class="fl">0.0</span></span>
-<span id="cb5-5"><a></a>  <span class="cf">return</span>((y<span class="op">=</span>y,x<span class="op">=</span>x))</span>
-<span id="cb5-6"><a></a><span class="kw">end</span></span>
-<span id="cb5-7"><a></a></span>
-<span id="cb5-8"><a></a><span class="kw">function</span> <span class="fu">logit_likelihood</span>(β,y,x)</span>
-<span id="cb5-9"><a></a>  p <span class="op">=</span> <span class="fu">map</span>(xb <span class="op">-&gt;</span> <span class="fu">cdf</span>(<span class="fu">Logistic</span>(),xb), x<span class="op">*</span>β)</span>
-<span id="cb5-10"><a></a>  <span class="fu">sum</span>(<span class="fu">log</span>.(<span class="fu">ifelse</span>.(y, p, <span class="fl">1.0</span> <span class="op">.-</span> p)))</span>
-<span id="cb5-11"><a></a><span class="kw">end</span></span>
-<span id="cb5-12"><a></a></span>
-<span id="cb5-13"><a></a>n <span class="op">=</span> <span class="fl">500</span></span>
-<span id="cb5-14"><a></a>k <span class="op">=</span> <span class="fl">3</span></span>
-<span id="cb5-15"><a></a>β<span class="fl">0</span> <span class="op">=</span> <span class="fu">ones</span>(k)</span>
-<span id="cb5-16"><a></a>(y,x) <span class="op">=</span> <span class="fu">simulate_logit</span>(n,β<span class="fl">0</span>)</span>
-<span id="cb5-17"><a></a></span>
-<span id="cb5-18"><a></a><span class="im">import</span> <span class="bu">ForwardDiff</span></span>
-<span id="cb5-19"><a></a>∇L <span class="op">=</span> ForwardDiff.<span class="fu">gradient</span>(<span class="fu">b-&gt;logit_likelihood</span>(b,y,x),β<span class="fl">0</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-display" data-execution_count="1">
-<pre><code>3-element Vector{Float64}:
-   3.76314337097665
- -11.968131147395866
-   6.923502003034791</code></pre>
-</div>
-</div>
-</section>
-<section id="forwarddiff-notes" class="slide level2">
-<h2>ForwardDiff Notes</h2>
-<ul>
-<li>For <span class="math inline">\(f: \mathbb{R}^n \to \mathbb{R}^m\)</span>, the computation scales with <span class="math inline">\(n\)</span>
-<ul>
-<li>best for moderate <span class="math inline">\(n\)</span></li>
-</ul></li>
-<li>Code must be generic
-<ul>
-<li>be careful when allocating arrays</li>
-</ul></li>
-</ul>
-<div id="8" class="cell" data-execution_count="0">
-<div class="sourceCode cell-code" id="cb7"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb7-1"><a></a><span class="kw">function</span> <span class="fu">wontwork</span>(x)</span>
-<span id="cb7-2"><a></a>  y <span class="op">=</span> <span class="fu">zeros</span>(<span class="fu">eltype</span>(x),<span class="fu">size</span>(x))</span>
-<span id="cb7-3"><a></a>  <span class="cf">for</span> i <span class="op">∈</span> <span class="fu">eachindex</span>(x)</span>
-<span id="cb7-4"><a></a>    y[i] <span class="op">+=</span> x[i]<span class="op">*</span>i</span>
-<span id="cb7-5"><a></a>  <span class="cf">end</span></span>
-<span id="cb7-6"><a></a>  <span class="cf">return</span>(<span class="fu">sum</span>(y))</span>
-<span id="cb7-7"><a></a><span class="kw">end</span></span>
-<span id="cb7-8"><a></a></span>
-<span id="cb7-9"><a></a><span class="kw">function</span> <span class="fu">willwork</span>(x)</span>
-<span id="cb7-10"><a></a>  y <span class="op">=</span> <span class="fu">zero</span>(x)</span>
-<span id="cb7-11"><a></a>  <span class="cf">for</span> i <span class="op">∈</span> <span class="fu">eachindex</span>(x)</span>
-<span id="cb7-12"><a></a>    y[i] <span class="op">+=</span> x[i]<span class="op">*</span>i</span>
-<span id="cb7-13"><a></a>  <span class="cf">end</span></span>
-<span id="cb7-14"><a></a>  <span class="cf">return</span>(<span class="fu">sum</span>(y))</span>
-<span id="cb7-15"><a></a><span class="kw">end</span></span>
-<span id="cb7-16"><a></a></span>
-<span id="cb7-17"><a></a><span class="fu">betterstyle</span>(x) <span class="op">=</span> <span class="fu">sum</span>(v<span class="op">*</span>i <span class="cf">for</span> (i,v) <span class="kw">in</span> <span class="fu">enumerate</span>(x))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-</div>
-</section>
-<section id="zygote" class="slide level2">
-<h2>Zygote</h2>
-<ul>
-<li><a href="https://fluxml.ai/Zygote.jl/latest/">Zygote.jl</a></li>
-<li>Does not allow mutating arrays</li>
-<li>Quite mature, but possibly some bugs remain</li>
-<li>Apparently hard to develop, unclear future</li>
-</ul>
-</section>
-<section id="zygote-example" class="slide level2">
-<h2>Zygote Example</h2>
-<div id="10" class="cell" data-execution_count="1">
-<div class="sourceCode cell-code" id="cb8"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb8-1"><a></a><span class="im">import</span> <span class="bu">Zygote</span></span>
-<span id="cb8-2"><a></a><span class="im">using</span> <span class="bu">LinearAlgebra</span></span>
-<span id="cb8-3"><a></a><span class="pp">@time</span> ∇Lz <span class="op">=</span>  Zygote.<span class="fu">gradient</span>(<span class="fu">b-&gt;logit_likelihood</span>(b,y,x),β<span class="fl">0</span>)[<span class="fl">1</span>]</span>
-<span id="cb8-4"><a></a><span class="fu">norm</span>(∇L <span class="op">-</span> ∇Lz)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-stdout">
-<pre><code>  3.883209 seconds (6.06 M allocations: 403.763 MiB, 5.50% gc time, 99.99% compilation time)</code></pre>
-</div>
-<div class="cell-output cell-output-display" data-execution_count="1">
-<pre><code>1.1648350771590544e-14</code></pre>
-</div>
-</div>
-</section>
-<section id="enzyme" class="slide level2">
-<h2>Enzyme</h2>
-<p><a href="https://enzymead.github.io/Enzyme.jl/stable/">“Enzyme performs automatic differentiation (AD) of statically analyzable LLVM. It is highly-efficient and its ability to perform AD on optimized code allows Enzyme to meet or exceed the performance of state-of-the-art AD tools.”</a></p>
-<div id="12" class="cell" data-execution_count="1">
-<div class="sourceCode cell-code" id="cb11"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb11-1"><a></a><span class="im">import</span> <span class="bu">Enzyme</span></span>
-<span id="cb11-2"><a></a><span class="im">import</span> <span class="bu">Enzyme</span>: Active, Duplicated, Const</span>
-<span id="cb11-3"><a></a></span>
-<span id="cb11-4"><a></a>db <span class="op">=</span> <span class="fu">zero</span>(β<span class="fl">0</span>)</span>
-<span id="cb11-5"><a></a><span class="pp">@time</span> Enzyme.<span class="fu">autodiff</span>(Enzyme.ReverseWithPrimal,logit_likelihood, Active, <span class="fu">Duplicated</span>(β<span class="fl">0</span>,db), <span class="fu">Const</span>(y), <span class="fu">Const</span>(x))</span>
-<span id="cb11-6"><a></a>db</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-stdout">
-<pre><code>┌ Warning: Using fallback BLAS replacements for (["dsymv_64_"]), performance may be degraded
-└ @ Enzyme.Compiler ~/.julia/packages/GPUCompiler/y4cj1/src/utils.jl:59
- 25.912938 seconds (25.55 M allocations: 1.714 GiB, 3.54% gc time, 100.00% compilation time)</code></pre>
-</div>
-<div class="cell-output cell-output-display" data-execution_count="1">
-<pre><code>3-element Vector{Float64}:
-   3.76314337097664
- -11.96813114739587
-   6.923502003034802</code></pre>
-</div>
-</div>
-</section>
-<section id="enzyme-notes" class="slide level2">
-<h2>Enzyme Notes</h2>
-<ul>
-<li>Documentation is not suited to beginners</li>
-<li>Does not work on all Julia code, but cases where it fails are not well documented. Calling <code>Enzyme.API.runtimeActivity!(true)</code> works around some errors.</li>
-<li>Cryptic error messages. Enzyme operates on LLVM IR, and error messages often reference the point in the LLVM IR where the error occurred. Figuring out what Julia code the LLVM IR corresponds to is not easy.
-<ul>
-<li>These may be better now than last year when I first wrote this slide</li>
-</ul></li>
-</ul>
-<div id="14" class="cell" data-execution_count="1">
-<div class="sourceCode cell-code" id="cb14"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb14-1"><a></a>Enzyme.API.<span class="fu">runtimeActivity!</span>(<span class="cn">false</span>)</span>
-<span id="cb14-2"><a></a><span class="fu">f1</span>(a,b) <span class="op">=</span> <span class="fu">sum</span>(a<span class="op">.*</span>b)</span>
-<span id="cb14-3"><a></a>dima <span class="op">=</span> <span class="fl">30000</span></span>
-<span id="cb14-4"><a></a>a <span class="op">=</span> <span class="fu">ones</span>(dima)</span>
-<span id="cb14-5"><a></a>b <span class="op">=</span> <span class="fu">rand</span>(dima)</span>
-<span id="cb14-6"><a></a>da <span class="op">=</span> <span class="fu">zeros</span>(dima)</span>
-<span id="cb14-7"><a></a><span class="pp">@time</span> Enzyme.<span class="fu">autodiff</span>(Enzyme.ReverseWithPrimal, f1, <span class="fu">Duplicated</span>(a,da),<span class="fu">Const</span>(b))</span>
-<span id="cb14-8"><a></a>da</span>
-<span id="cb14-9"><a></a></span>
-<span id="cb14-10"><a></a><span class="fu">f3</span>(a,b) <span class="op">=</span> <span class="fu">sum</span>(a[i]<span class="op">*</span>b[i] <span class="cf">for</span> i <span class="op">∈</span> <span class="fu">eachindex</span>(a))</span>
-<span id="cb14-11"><a></a>da <span class="op">=</span> <span class="fu">zeros</span>(dima)</span>
-<span id="cb14-12"><a></a>Enzyme.<span class="fu">autodiff</span>(Enzyme.ReverseWithPrimal, f3, <span class="fu">Duplicated</span>(a,da),<span class="fu">Const</span>(b))</span>
-<span id="cb14-13"><a></a>da</span>
-<span id="cb14-14"><a></a></span>
-<span id="cb14-15"><a></a><span class="cf">if</span> (<span class="cn">false</span>) <span class="co"># will trigger enzyme error without runtimeactivity</span></span>
-<span id="cb14-16"><a></a>  <span class="fu">f2</span>(a,b) <span class="op">=</span> <span class="fu">sum</span>(a<span class="op">*</span>b <span class="cf">for</span> (a,b) <span class="op">∈</span> <span class="fu">zip</span>(a,b))</span>
-<span id="cb14-17"><a></a>  da <span class="op">=</span> <span class="fu">zeros</span>(dima)</span>
-<span id="cb14-18"><a></a>  <span class="pp">@time</span> Enzyme.<span class="fu">autodiff</span>(Enzyme.ReverseWithPrimal, f2, <span class="fu">Duplicated</span>(a,da), <span class="fu">Const</span>(b))</span>
-<span id="cb14-19"><a></a>  da</span>
-<span id="cb14-20"><a></a><span class="cf">end</span></span>
-<span id="cb14-21"><a></a></span>
-<span id="cb14-22"><a></a>Enzyme.API.<span class="fu">runtimeActivity!</span>(<span class="cn">true</span>)</span>
-<span id="cb14-23"><a></a><span class="fu">f2</span>(a,b) <span class="op">=</span> <span class="fu">sum</span>(a<span class="op">*</span>b <span class="cf">for</span> (a,b) <span class="op">∈</span> <span class="fu">zip</span>(a,b))</span>
-<span id="cb14-24"><a></a>da <span class="op">=</span> <span class="fu">zeros</span>(dima)</span>
-<span id="cb14-25"><a></a><span class="pp">@time</span> Enzyme.<span class="fu">autodiff</span>(Enzyme.ReverseWithPrimal, f2, <span class="fu">Duplicated</span>(a,da), <span class="fu">Const</span>(b))</span>
-<span id="cb14-26"><a></a>da</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-stdout">
-<pre><code>  1.309099 seconds (2.36 M allocations: 167.310 MiB, 4.65% gc time, 99.95% compilation time)
-  0.885099 seconds (2.06 M allocations: 148.183 MiB, 7.22% gc time, 99.94% compilation time)</code></pre>
-</div>
-<div class="cell-output cell-output-display" data-execution_count="1">
-<pre><code>30000-element Vector{Float64}:
- 0.6604300486634319
- 0.6270180550987297
- 0.6299565612785084
- 0.04494418448097137
- 0.8856048079314317
- 0.49066159256372843
- 0.8628059721863847
- 0.6945672822637726
- 0.8878644919655609
- 0.5158311069160438
- ⋮
- 0.9388866128698892
- 0.49862855571403253
- 0.6131248043328932
- 0.9804335362774208
- 0.07423427954088635
- 0.8459359730567572
- 0.3172947744777822
- 0.572499813003595
- 0.01770995753210758</code></pre>
-</div>
-</div>
-</section>
-<section id="finitediff" class="slide level2">
-<h2>FiniteDiff</h2>
-<ul>
-<li><a href="https://github.com/JuliaDiff/FiniteDiff.jl">FiniteDiff</a> computes finite difference gradients– always test that whatever automatic or manual derivatives you compute are close to the finite difference versions</li>
-<li>use a package for finite differences to handle rounding error well</li>
-</ul>
-</section>
-<section id="chainrules" class="slide level2">
-<h2>ChainRules</h2>
-<ul>
-<li><a href="https://github.com/JuliaDiff/ChainRules.jl">ChainRules</a></li>
-<li>used by many AD packages to define the derivatives of various functions.</li>
-<li>Useful if you want to define a custom derivative rule for a function.</li>
-</ul>
-</section>
-<section id="differentiationinterface" class="slide level2">
-<h2>DifferentiationInterface</h2>
-<ul>
-<li><a href="https://github.com/gdalle/DifferentiationInterface.jl">DifferentiationInterface</a> gives a single interface for many differentiation packages</li>
-</ul>
-<div id="16" class="cell" data-execution_count="1">
-<div class="sourceCode cell-code" id="cb17"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb17-1"><a></a><span class="im">import</span> <span class="bu">DifferentiationInterface</span> as DI</span>
-<span id="cb17-2"><a></a>DI.<span class="fu">gradient</span>(<span class="fu">b-&gt;logit_likelihood</span>(b,y,x), DI.<span class="fu">AutoEnzyme</span>(),β<span class="fl">0</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-stdout">
-<pre><code>┌ Warning: Using fallback BLAS replacements for (["dsymv_64_"]), performance may be degraded
-└ @ Enzyme.Compiler ~/.julia/packages/GPUCompiler/y4cj1/src/utils.jl:59</code></pre>
-</div>
-<div class="cell-output cell-output-display" data-execution_count="1">
-<pre><code>3-element Vector{Float64}:
-   3.76314337097664
- -11.96813114739587
-   6.923502003034802</code></pre>
-</div>
-</div>
-<ul>
-<li>improve performance by reusing intermediate variables</li>
-</ul>
-<div id="18" class="cell" data-execution_count="1">
-<div class="sourceCode cell-code" id="cb20"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb20-1"><a></a>backend <span class="op">=</span> DI.<span class="fu">AutoEnzyme</span>()</span>
-<span id="cb20-2"><a></a>dcache <span class="op">=</span> DI.<span class="fu">prepare_gradient</span>(<span class="fu">b-&gt;logit_likelihood</span>(b,y,x), backend, β<span class="fl">0</span>)</span>
-<span id="cb20-3"><a></a>grad <span class="op">=</span> <span class="fu">zero</span>(β<span class="fl">0</span>)</span>
-<span id="cb20-4"><a></a>DI.<span class="fu">gradient!</span>(<span class="fu">b-&gt;logit_likelihood</span>(b,y,x),grad, backend,β<span class="fl">0</span> , dcache)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-display" data-execution_count="1">
-<pre><code>3-element Vector{Float64}:
-   3.76314337097664
- -11.96813114739587
-   6.923502003034802</code></pre>
-</div>
-</div>
-</section></section>
-<section>
-<section id="other-packages" class="title-slide slide level1 center">
-<h1>Other Packages</h1>
-
-</section>
-<section id="other-packages-1" class="slide level2">
-<h2>Other Packages</h2>
-<ul>
-<li><a href="https://juliadiff.org/">https://juliadiff.org/</a></li>
-</ul>
-</section>
-<section id="reversediff.jl" class="slide level2">
-<h2>ReverseDiff.jl</h2>
-<ul>
-<li><p><a href="https://github.com/JuliaDiff/ReverseDiff.jl">ReverseDiff.jl</a> a tape based reverse mode package</p></li>
-<li><p>Long lived and well tested</p></li>
-<li><p><a href="https://juliadiff.org/ReverseDiff.jl/limits/">limitations</a>. Importantly, code must be generic and mutation of arrays is not allowed.</p></li>
-</ul>
-</section>
-<section id="yota.jl" class="slide level2">
-<h2>Yota.jl</h2>
-<ul>
-<li><a href="https://github.com/dfdx/Yota.jl">Yota.jl</a> another tape based package</li>
-<li>Compatible with Chainrules.jl</li>
-<li>Somewhat newer and less popular</li>
-<li><a href="https://dfdx.github.io/Yota.jl/dev/design/">Its documentation has a very nice explanation of how it works.</a></li>
-</ul>
-</section>
-<section id="tracker" class="slide level2">
-<h2>Tracker</h2>
-<p><a href="https://github.com/FluxML/Tracker.jl">Tracker</a> is a tape based reverse mode package. It was the default autodiff package in Flux before being replaced by Zygote. No longer under active development.</p>
-</section>
-<section id="diffractor" class="slide level2">
-<h2>Diffractor</h2>
-<p><a href="https://github.com/JuliaDiff/Diffractor.jl">Diffractor</a> is automatic differentiation package in development. It was once hoped to be the future of AD in Julia, but has been delayed. It plans to have both forward and reverse mode, but only forward mode is available so far.</p>
-</section></section>
-<section id="references" class="title-slide slide level1 center">
-<h1>References</h1>
+<section id="references" class="slide level2 smaller scrollable">
+<h2>References</h2>
 
 <div class="quarto-auto-generated-content">
 <div class="footer footer-default">
 
 </div>
 </div>
-</section>
+<div id="refs" class="references csl-bib-body hanging-indent" data-entry-spacing="0" role="list">
+<div id="ref-bach2024" class="csl-entry" role="listitem">
+Bach, Francis. 2024. <em>Learning Theory from First Principles</em>. MIT Press. <a href="https://www.di.ens.fr/~fbach/ltfp_book.pdf">https://www.di.ens.fr/~fbach/ltfp_book.pdf</a>.
+</div>
+<div id="ref-belloni2015" class="csl-entry" role="listitem">
+Belloni, Alexandre, Victor Chernozhukov, Denis Chetverikov, and Kengo Kato. 2015. <span>“Some New Asymptotic Theory for Least Squares Series: Pointwise and Uniform Results.”</span> <em>Journal of Econometrics</em> 186 (2): 345–66. https://doi.org/<a href="https://doi.org/10.1016/j.jeconom.2015.02.014">https://doi.org/10.1016/j.jeconom.2015.02.014</a>.
+</div>
+<div id="ref-iske2018" class="csl-entry" role="listitem">
+Iske, Armin et al. 2018. <em>Approximation Theory and Algorithms for Data Analysis</em>. Springer. <a href="https://link.springer.com/book/10.1007/978-3-030-05228-7">https://link.springer.com/book/10.1007/978-3-030-05228-7</a>.
+</div>
+<div id="ref-jackson1912" class="csl-entry" role="listitem">
+Jackson, Dunham. 1912. <span>“On Approximation by Trigonometric Sums and Polynomials.”</span> <em>Transactions of the American Mathematical Society</em> 13 (4): 491–515. <a href="http://www.jstor.org/stable/1988583">http://www.jstor.org/stable/1988583</a>.
+</div>
+<div id="ref-micchelli2006" class="csl-entry" role="listitem">
+Micchelli, Charles A., Yuesheng Xu, and Haizhang Zhang. 2006. <span>“Universal Kernels.”</span> <em>Journal of Machine Learning Research</em> 7 (95): 2651–67. <a href="http://jmlr.org/papers/v7/micchelli06a.html">http://jmlr.org/papers/v7/micchelli06a.html</a>.
+</div>
+<div id="ref-zhang2020" class="csl-entry" role="listitem">
+Zhang, Thomas. 2018. <span>“Reproducing Kernel Hilbert Spaces.”</span> <a href="https://thomaszh3.github.io/writeups/RKHS.pdf">https://thomaszh3.github.io/writeups/RKHS.pdf</a>.
+</div>
+</div>
+</section></section>
     </div>
   </div>
 
@@ -956,9 +990,9 @@ Paul Schrimpf
         // The "normal" size of the presentation, aspect ratio will be preserved
         // when the presentation is scaled to fit different resolutions. Can be
         // specified using percentage units.
-        width: 1050,
+        width: 1280,
 
-        height: 700,
+        height: 960,
 
         // Factor of the display size that should remain empty around the content
         margin: 0.1,
