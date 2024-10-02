@@ -55,7 +55,8 @@ See [problemsets.md](problemsets.md).
    - [Empirical likelihood](https://schrimpf.github.io/GMMInference.jl/empiricalLikelihood/)
    - [Bootstrap](https://schrimpf.github.io/GMMInference.jl/bootstrap/)
 
-8. **October 2**
+8. **October 2** Function Approximation
+   - [Slides](https://ubcecon.github.io/ECON622/paul/approximation.html#/title-slide)
 9. **October 7** Code Performance
    - [Coding for performance](https://github.com/schrimpf/ARGridBootstrap) be sure to look at the 2023 branch for the recent additions
    - [GPU usage](https://github.com/schrimpf/ARGridBootstrap)
