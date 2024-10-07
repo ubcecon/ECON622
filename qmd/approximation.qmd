@@ -289,6 +289,7 @@ then $\Vert \hat{f} - f_0 \Vert_{L^2(\mu)} \approx O(n^{-s/r_k})$
 
 - @bach2024
 
+
 # Application
 
 ## Investment with adjustment costs and productivity
@@ -329,10 +330,98 @@ $$
 \end{align*}
 $$
 
+## Places for Approximation
+
+- Value function
+- Variable profits
+  - This example has a closed form, but if it didn't may want to replace max over $m$ with an approximation
+
 ##
 
 ```{julia}
-using Surrogates
+using Surrogates, ForwardDiff
+nfit = 100
+ntest = 3*30
+# x = [k, l, ω]
+lb = [0.01, 0.01] #, -3.0]
+ub = [10.0, 10.0] #, 3.0]
+pm = 1.0
+py = 1.0
+ω = 0.0
+f0 = x->flowprofits(x..., ω, pm, py)
+x = sample(nfit, lb, ub, SobolSample())
+xtest = sample(ntest, lb, ub, HaltonSample())
+y = f0.(x)
+ytest = f0.(xtest)
 ```
+
+## Radial Basis
+
+```{julia}
+using LinearAlgebra
+radial = RadialBasis(x,y,lb,ub, scale_factor=1.0)
+function errorreport(model, xtest, f0)
+  ntest = length(xtest)
+  println("L2 error ≈ $(norm(model.(xtest) - f0.(xtest))/sqrt(ntest))")
+  println("Grad L2 error ≈ $(Float64(norm([ForwardDiff.gradient(x->(model(Tuple(x)) - f0(x)), [xi...]) for xi in xtest])/sqrt(ntest)))")
+end
+errorreport(radial, xtest, f0)
+```
+
+## Radial Basis
+
+```{julia}
+using Plots
+function plotapprox(f0, fapp, lb, ub, xfit; np=25)
+  xp = range(lb[1],ub[1], np)
+  yp = range(lb[2],ub[2], np)
+  p1 = surface(xp, yp, (x, y) -> f0([x y]), title="f0")
+  #scatter!([x[1] for x in xfit], [x[2] for x in xfit], f0.(xfit), marker_z = f0.(xfit), title="f0")
+  p2 = surface(xp, yp, (x, y) -> fapp([x y]), title="Approximation")
+  #scatter!([x[1] for x in xfit], [x[2] for x in xfit], fapp.(xfit), marker_z = fapp.(xfit))
+  err = surface(xp,yp,(x,y)->(fapp([x y]) - f0([x y])), title="Error")
+  return(p1,p2, err)
+end
+plot(plotapprox(f0,radial,lb,ub,x)...)
+```
+
+## Radial Basis (Wendland)
+
+- Polynomial radial basis with compact support
+$$
+\psi(x) = (1- \mathrm{eps} \Vert x - x_j \Vert)_+^\lfloor d/2 \rfloor + 2
+$$
+- Compact support $\Rightarrow$ sparse
+- Very sensitive to $eps$
+
+```{julia}
+wendland = Wendland(x,y, lb, ub, eps=1.0, maxiters=10_000, tol=1e-6)
+errorreport(wendland, xtest, f0)
+plot(plotapprox(f0,wendland,lb,ub,x)...)
+```
+
+
+
+## RKHS (Kriging)
+
+```{julia}
+kriging = Kriging(x,y, lb, ub)
+errorreport(kriging, xtest, f0)
+plot(plotapprox(f0,kriging,lb,ub,x)...)
+```
+
+## RKHS (AbstractGP)
+
+```{julia}
+using SurrogatesAbstractGPs
+
+GP = SurrogatesAbstractGPs.GP(0.0, SurrogatesAbstractGPs.KernelFunctions.ScaledKernel(
+  SurrogatesAbstractGPs.KernelFunctions.SqExponentialKernel(), 0.1
+))
+gp = AbstractGPSurrogate(x,y, gp=GP, Σy=0.0)
+errorreport(gp, xtest, f0)
+plot(plotapprox(f0,gp,lb,ub,x)...)
+```
+
 
 ## References
