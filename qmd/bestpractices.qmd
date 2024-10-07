@@ -88,7 +88,7 @@ $$
 - Good advice aimed at scientific computing projects: [Julia: Project Workflow](https://j-fu.github.io/marginalia/julia/project-workflow/)
 - Setup your package with a project skeleton
   - [`PkgTemplates.jl`](https://github.com/JuliaCI/PkgTemplates.jl)
-  - [`BestieTemplate.jl`](https://github.com/abelsiqueira/BestieTemplate.jl)
+  - [`BestieTemplate.jl`](https://github.com/JuliaBesties/BestieTemplate.jl)
   - [`DoctorWatson.jl`](https://juliadynamics.github.io/DrWatson.jl/stable/)
   - @haider2021 for similar idea for other languages
 
