@@ -1,0 +1,301 @@
+---
+title       : "Dynamic Programming"
+author: Paul Schrimpf
+date: last-modified
+bibliography: 622.bib
+execute:
+  echo: true
+  cache: true
+  freeze: auto
+format:
+  revealjs:
+    theme: blood
+    smaller: true
+    width: 1280
+    height: 960
+    min-scale: 0.1
+    max-scale: 3.0
+    chalkboard:
+      theme: whiteboard
+      boardmarker-width: 2
+      chalk-width: 2
+      chalk-effect: 0.0
+engine: julia
+---
+
+
+# Introduction
+
+## Dynamic programming
+
+- Dynamic programming:
+$$
+V(x) = \max_a u(a,x) + \beta \Er[V(x') | x, a]
+$$
+  - $x$ continuous
+- Value function iteration:
+  - Pick grid $x_1,..., x_n$
+  - Initial guess $\tilde{V}_0$
+  - Maximize $V_1(x_i) = \max_a u(a,x) + \beta \Er[\tilde{V}_0(x') | x , a]$
+  - Set $\tilde{V}_1 \approx V_1$, repeat
+
+## Dynamic Programming
+
+```{julia}
+module DP
+
+using LinearAlgebra
+
+function bellmanoperator!(Vnew, V, u, β, Expect, maximizer, grid, approxupdate!)
+  values = Vector{typeof(V(grid[1]))}(undef, length(grid))
+  for (i,x) in enumerate(grid)
+    values[i] = maximizer(a->u(a,x) + β * Expect(V, a,x))
+  end
+  approxupdate!(Vnew, values)
+  return Vnew
+end
+
+function valuefunctioniteration(u, β, Expect, maximizer, grid, V0, approxupdate!; tol=1e-6,
+                                maxiters=1000, verbose=false)
+  V = deepcopy(V0)
+  Vnew = deepcopy(V)
+  for i in 1:maxiters
+    bellmanoperator!(Vnew,V, u, β, Expect, maximizer, grid, approxupdate!)
+    dV = norm(Vnew.(grid) - V.(grid))
+    if verbose
+      println("Iteration $i: ||V1-V0|| = $dV")
+    end
+    if dV < tol
+      return Vnew
+    end
+    V,Vnew = Vnew,V
+  end
+  return V
+end
+
+end
+```
+
+
+# Application
+
+## Investment with adjustment costs and productivity
+
+- Price taking firm, output $y = e^\omega F(k,\ell,m)$, prices $p_y, p_m, p_\ell, p_k$
+- Each period, $m$, flexibly chosen given predetermined $k, \ell$
+$$
+\max_{m} p_y e^\omega F(k,\ell,m) - p_m m
+$$
+
+
+```{julia}
+using ModelingToolkit, NonlinearSolve, Symbolics
+@variables m
+@parameters k, l, ω, pm, py
+Dm = Differential(m)
+production(k,l,m) = k^(2//10)*l^(4//10)*m^(3//10)
+profits(k,l,m,ω,pm,py) = py*exp(ω)*production(k,l,m) - pm*m
+mstar = symbolic_solve(Symbolics.derivative(profits(k,l,m,ω,pm,py),m) ~ 0 ,m)[1]
+profits(k,l,mstar,ω,pm,py)
+
+flowprofits = eval(build_function(profits(k,l,mstar,ω,pm,py), k,l,ω,pm,py))
+```
+
+## Dynamic Labor and Capital Choices
+
+- $\omega_t$ Markov, $F(\omega_t | \omega_{t-1})$, prices constant
+- Labor and capital chosen before $\omega_t$ known
+- Adjustment cost $c(k'-k,l'-l)$
+
+$$
+\begin{align*}
+  V(\omega, k,\ell) = & \max_{k',\ell',m} p_y e^\omega F(k,\ell,m) - p_\ell \ell - p_k k - c(k,k') + \beta E_\omega' [V(\omega', k',\ell') | \omega ] \\
+  = & \max_{k',\ell'} \pi^*(p,\omega, k, \ell) - c(k'-k,l'-l) + \beta E[V(\omega',k',\ell')|\omega]
+\end{align*}
+$$
+
+## Expectation
+
+```{julia}
+using PolyChaos
+ρ = 0.8
+Expect = let op = GaussOrthoPoly(12, addQuadrature=true), ρ=ρ, σ=1.0
+  function Expect(V,a,x)
+    ω = x[1]
+    k,l = a
+    integrate(z->V(SVector((z*σ + ρ*ω, k, l))),op)
+  end
+end
+```
+
+## Maximizer
+
+```{julia}
+using Optim, StaticArrays
+
+bfgsmax = let optimizer = BFGS()
+  function maximizer(f)
+    res = optimize(x->-f(x), MVector((0.1,0.1)), MVector((10.0,10.0)), MVector((1.0, 1.0)), Fminbox(optimizer),
+                   Optim.Options(g_tol=1e-4))
+    return (-res.minimum)
+  end
+end
+```
+
+## Approximation
+
+```{julia}
+module RKHS
+
+using LinearAlgebra
+
+mutable struct RKHSapproximator{F,Tx, Ty, M}
+  kernel::F
+  X::Tx
+  Kxx::M
+  Kxxinv::M
+  Y::Ty
+  KinvY::Ty
+end
+
+function RKHSapproximator(kernel, X)
+  Kxx = [kernel(xi,xj) for xi in X, xj in X]
+  Kxxinv = inv(Kxx)
+  Y =zeros(length(X))
+  KinvY = Kxxinv * Y
+  RKHSapproximator(kernel, X, Kxx, Kxxinv, Y, KinvY)
+end
+
+function approxupdate!(approx, Y)
+  approx.Y .= Y
+  approx.KinvY .= approx.Kxxinv * Y
+  nothing
+end
+
+function (approx::RKHSapproximator)(x)
+  sum(approx.kernel(x, xi)*ky for (xi, ky) in zip(approx.X, approx.KinvY))
+end
+
+function GaussianKernel(σ=1.0)
+  function kernel(x,y)
+    return exp(-norm(x-y)^2/(2σ^2))
+  end
+end
+
+end
+```
+
+
+## Setup and solve
+
+- with $\omega$ constant (for speed)
+- discretized max (for stability)
+
+```{julia}
+mo = 0.0
+vo = 1.0/ρ
+npoints = 10
+op = GaussOrthoPoly(npoints, addQuadrature=true)
+
+xgrid = [ SVector((ω, k, l)) for (ω, k, l) in Iterators.product(
+           [0.0],
+           #op.quad.nodes*sqrt(vo) .+ mo,
+           range(0.1, 10.0, npoints),
+           range(0.1, 10.0, npoints)  )] |> collect
+V0 = RKHS.RKHSapproximator(RKHS.GaussianKernel(1.0), vec(xgrid) )
+
+discretemax = let agrid = [SVector((k,l)) for (k,l) in Iterators.product(
+  range(0.1, 10.0, npoints),
+  range(0.1, 10.0, npoints)  )] |> collect
+  function discretemaximizer(f)
+    maximum(f, agrid)
+  end
+end
+
+function Econstant(V,a,x)
+    V(SVector((x[1], a[1], a[2])))
+end
+
+u = let py = 1.0, pm = 1.0
+ u(a, x) = flowprofits(x[2],x[3],x[1], py, pm) - 0.2*(a[1] - x[2])^2 - 0.1*(a[2] - x[3])^2
+end
+V = DP.valuefunctioniteration(u, 0.9, Econstant, discretemax, xgrid, V0, RKHS.approxupdate!, verbose=true, tol=1e-4)
+```
+
+## Visualize Progress
+
+```{julia}
+using Plots
+
+function vfiterplot(u, β, Expect, maximizer, grid, V0, approxupdate!; tol=1e-3,
+                    maxiters=10, plotevery=max(maxiters ÷ 10,1), ngrid=50)
+  kg = range(minimum([x[2] for x in grid]), maximum([x[2] for x in grid]), length=ngrid)
+  lg = range(minimum([x[3] for x in grid]), maximum([x[3] for x in grid]), length=ngrid)
+  V = V0
+
+  fig = plot()
+  function plotV(V)
+    surface!(fig,kg, lg, (k,l)->V(SVector((0,k,l))), xlabel="k", ylabel="l", zlabel="V")
+    return(fig)
+  end
+
+  for i in 1:maxiters
+    V = DP.valuefunctioniteration(u, β, Expect, maximizer, grid, V, approxupdate!, tol=tol, verbose=true, maxiters=1)
+    if i % plotevery == 0
+      fig=plotV(V)
+    end
+  end
+  fig
+end
+
+vfiterplot(u, 0.9, Econstant, discretemax, xgrid, V0, RKHS.approxupdate!, tol=1e-4, maxiters=10)
+```
+
+## Continuous
+
+- maximizing action too freely amplifies approximation error
+
+```{julia}
+vfiterplot(u, 0.9, Econstant, bfgsmax, xgrid, V0, RKHS.approxupdate!, tol=1e-4, maxiters=10)
+```
+
+##
+
+```{julia}
+kl = [ SVector((k, l)) for (k, l) in Iterators.product(
+           range(0.1, 10.0, npoints),
+           range(0.1, 10.0, npoints)  )] |> collect
+
+module LinInt
+using FlexibleSpline: LinearInterpolater, createtriangulation, designmatrix, coefficienttransform, fit!
+
+
+struct VLin{T,M, M2}
+  LI::T
+  kl::M
+  XM::M2
+end
+
+function VLin(kl)
+  X = hcat(kl...)
+  tri = createtriangulation(X, length(kl), type=Val(:regular))
+  LI = LinearInterpolater(tri)
+  VLin(LI,X, designmatrix(LI.qis, X)*coefficienttransform(LI))
+end
+
+function (V::VLin)(x)
+  @views V.LI(x[2:end])
+end
+
+function approxupdate!(V::VLin, values)
+  fit!(V.LI, V.kl, values, V.XM, trues(2))
+  nothing
+end
+
+end
+
+VL0 = LinInt.VLin(kl)
+LinInt.approxupdate!(V0, zeros(size(V.kl,2)))
+
+vfiterplot(u, 0.9, Econstant, bfgsmax, xgrid, VL0, LinInt.approxupdate!, tol=1e-4, maxiters=10)
+```
