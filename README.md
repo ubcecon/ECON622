@@ -63,8 +63,11 @@ See [problemsets.md](problemsets.md).
    - Self-study: [SIMDscan](https://github.com/schrimpf/SIMDscan.jl/): since it briefly came up in class, and I was curious about it, I made a little package for calculating things like cumulative sums and autoregressive simulations using SIMD
    - Self-study: [Need for speed](https://julia.quantecon.org/software_engineering/need_for_speed.html)
    - Self-study: [Performance Tips](https://docs.julialang.org/en/v1/manual/performance-tips/)
-10. **October 9**
-11. **October 16**
+10. **October 9** Dynamic Programming
+   - [Slides](qmd/dynamicprogramming.qmd)
+11. **October 16** Debiased Machine Learning
+   - [My notes](https://schrimpf.github.io/NeuralNetworkEconomics.jl/ml-doubledebiased/)
+   - Self-study: [CausalML](https://causalml-book.org/), [Chernozhukov, Newey, Quintas-Martinez, & Syrgkanis (2024)](https://arxiv.org/abs/2104.14737)
 
 **JESSE**
 
