@@ -90,8 +90,8 @@ $$
 
 ```{julia}
 using ModelingToolkit, NonlinearSolve, Symbolics
-@variables m
-@parameters k, l, ω, pm, py
+@variables m::Float64
+@parameters k::Float64, l::Float64, ω::Float64, pm::Float64, py::Float64
 Dm = Differential(m)
 production(k,l,m) = k^(2//10)*l^(4//10)*m^(3//10)
 profits(k,l,m,ω,pm,py) = py*exp(ω)*production(k,l,m) - pm*m
@@ -158,10 +158,11 @@ mutable struct RKHSapproximator{F,Tx, Ty, M}
   KinvY::Ty
 end
 
-function RKHSapproximator(kernel, X)
+function RKHSapproximator(kernel, X, dim=1)
   Kxx = [kernel(xi,xj) for xi in X, xj in X]
   Kxxinv = inv(Kxx)
-  Y =zeros(length(X))
+  Y =zeros(length(X),dim)
+  Y=dropdims(Y,dims=tuple(findall(size(Y).==1)...))
   KinvY = Kxxinv * Y
   RKHSapproximator(kernel, X, Kxx, Kxxinv, Y, KinvY)
 end
@@ -173,12 +174,21 @@ function approxupdate!(approx, Y)
 end
 
 function (approx::RKHSapproximator)(x)
-  sum(approx.kernel(x, xi)*ky for (xi, ky) in zip(approx.X, approx.KinvY))
+  approx(x, approx.KinvY)
+end
+
+function (approx::RKHSapproximator)(x, c::AbstractMatrix)
+  sum(approx.kernel(x, xi)*ky for (xi, ky) in zip(approx.X, eachrow(c)))
+end
+
+function (approx::RKHSapproximator)(x, c::AbstractVector)
+  sum(approx.kernel(x, xi)*ky for (xi, ky) in zip(approx.X, c))
 end
 
 function GaussianKernel(σ=1.0)
   function kernel(x,y)
-    return exp(-norm(x-y)^2/(2σ^2))
+    return exp(-sum(z->z^2,x-y)/(2σ^2))
+    #return exp(-norm(x-y)^2/(2σ^2))
   end
 end
 
@@ -239,6 +249,7 @@ function vfiterplot(u, β, Expect, maximizer, grid, V0, approxupdate!; tol=1e-3,
     return(fig)
   end
 
+  fig=plotV(V)
   for i in 1:maxiters
     V = DP.valuefunctioniteration(u, β, Expect, maximizer, grid, V, approxupdate!, tol=tol, verbose=true, maxiters=1)
     if i % plotevery == 0
@@ -251,15 +262,68 @@ end
 vfiterplot(u, 0.9, Econstant, discretemax, xgrid, V0, RKHS.approxupdate!, tol=1e-4, maxiters=10)
 ```
 
+
 ## Continuous
 
-- maximizing action too freely amplifies approximation error
+- maximizing action amplifies approximation error
 
 ```{julia}
-vfiterplot(u, 0.9, Econstant, bfgsmax, xgrid, V0, RKHS.approxupdate!, tol=1e-4, maxiters=10)
+vfiterplot(u, 0.9, Econstant, bfgsmax, xgrid, V0, RKHS.approxupdate!, tol=1e-4, maxiters=20)
 ```
 
-##
+
+## Policy Optimization
+
+- Value of policy $\alpha$
+$$
+V(x;\alpha) = u(\alpha(x),x) + \beta \Er[V(x';\alpha) | x, a=\alpha(x)]
+$$
+- Maximize
+$$
+\max_{\alpha} V(x;\alpha)
+$$
+
+
+```{julia}
+using NonlinearSolve, ModelingToolkit
+npoints = 10
+xgrid = [ SVector((ω, k, l)) for (ω, k, l) in Iterators.product(
+           [0.0],
+           #op.quad.nodes*sqrt(vo) .+ mo,
+           range(0.1, 10.0, npoints),
+           range(0.1, 10.0, npoints)  )] |> collect
+V0 = RKHS.RKHSapproximator(RKHS.GaussianKernel(1.0), vec(xgrid) )
+policy = RKHS.RKHSapproximator(RKHS.GaussianKernel(),vec(xgrid), 2)
+function valuepolicy!(policy,u, β, Expect, xgrid, V0::RKHSApproximator)
+  c0 = V0.KinvY
+  verr(c, a, x) = V0(x,c) - (u(a,x)
+                             + β*Econstant(z->V0(z,c),a,x))
+  x = Symbolics.variables(:x, 1:3)
+  a = Symbolics.variables(:a, 1:2)
+  cs = Symbolics.variables(:c, 1:length(c0)) #@variables cs[1:size(c0,1)]
+  @time ves =verr(cs,a,x);
+  valueerror=build_function(ves, cs, a, x, expression=Val{false}, convert_oop=true)
+  F(c,a) = [valueerror(c, ai, x) for (ai,x) in zip(eachcol(a), vec(xgrid))]
+  a0 = zeros(2, length(xgrid))
+  prob = NonlinearProblem(F, c0, a0)
+  function obj(a)
+    sol=NonlinearSolve.solve(prob, p=a, NewtonRaphson())
+    -sum(V0.Kxx*sol.u) #sum(V0(x,sol.u) for x in xgrid)
+  end
+  res=Optim.optimize(obj, a0, LBFGS(linesearch = Optim.LineSearches.BackTracking()), Optim.Options(g_tol=1e-4, show_trace=true), autodiff=:forward)
+  a = res.minimizer
+  RKHS.approxupdate!(policy,a')
+  sol=NonlinearSolve.solve(prob, p=a, NewtonRaphson())
+  c = sol.u
+  vg = vec([V0(x,c) for x in xgrid])
+  RKHS.approxupdate!(V0,vg)
+  return(policy,V0)
+end
+
+
+vfiterplot(u, 0.9, Econstant, bfgsmax, xgrid, V0, RKHS.approxupdate!, tol=1e-4, maxiters=0)
+```
+
 
 ```{julia}
 kl = [ SVector((k, l)) for (k, l) in Iterators.product(
