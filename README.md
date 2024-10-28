@@ -109,7 +109,7 @@ Slides for the lectures can be found [here](https://ubcecon.github.io/ECON622/le
       - [Mark Schmidt's CPSC440 Notes on Double-Descent Curves](https://www.cs.ubc.ca/~schmidtm/Courses/440-W22/L7.pdf) (see [CPSC340](https://www.cs.ubc.ca/~schmidtm/Courses/340-F22/L32.pdf) lectures for a more basic treatment of these topics)
     - **Optional Extra Material**
       - [Probabilistic Machine Learning: Advanced Topics](https://probml.github.io/pml-book/book2.html) Section 32 on representation learning
-20. **Novmebr 25** Finish Double-Descent and Intro to Kernel Methods and Gaussian Processes
+20. **November 25** Finish Double-Descent and Intro to Kernel Methods and Gaussian Processes
     - **SLIDES**: [Kernel Methods and Gaussian Processes](https://ubcecon.github.io/ECON622/lectures/lectures/kernel_methods.html) and finish [Double-Descent and Regularization](https://ubcecon.github.io/ECON622/lectures/lectures/overparameterization.html)
     - **Readings**
       - If you didn't do it already, read [Mark Schmidt's CPSC440 Notes on Double-Descent Curves and Overparameterization](https://www.cs.ubc.ca/~schmidtm/Courses/440-W22/L7.pdf) (see [CPSC340](https://www.cs.ubc.ca/~schmidtm/Courses/340-F22/L32.pdf) lectures for a more basic treatment of these topics)
@@ -119,13 +119,13 @@ Slides for the lectures can be found [here](https://ubcecon.github.io/ECON622/le
       -  [Probabilistic Machine Learning: Advanced Topics](https://probml.github.io/pml-book/book2.html) Section 18.1 to 18.3 on GPs and kernels
       - Researchers working in GPs love the online textbook [Gaussian Processes for Machine Learning](https://gaussianprocess.org/gpml/chapters/), so you may want to read the intro section on [GP Regression](https://gaussianprocess.org/gpml/chapters/RW2.pdf)
 
-21. **November 27** GUEST LECTURE [GEOFF PLEISS](https://geoffpleiss.com/) FROM UBC STATS
-22. **December 2**
+21. **November 27** Applications
+22. **December 2** Applications
 
 
-23. **December 4** Student presentations
+23. **December 4** Applications
 
-28. **Decemeber 18**
+28. **December 18**
     - Final Project due
 
 

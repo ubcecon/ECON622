@@ -658,7 +658,7 @@ Jesse Perla
 <h2>Examples of Core Transformations</h2>
 <p>From <a href="https://jax.readthedocs.io/en/latest/notebooks/quickstart.html">JAX quickstart</a></p>
 <p>Builtin composable transformations: <code>jit</code>, <code>grad</code> and <code>vmap</code></p>
-<div class="cell" data-execution_count="2">
+<div class="cell" data-execution_count="1">
 <div class="sourceCode cell-code" id="cb2"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb2-1"><a href="#cb2-1"></a><span class="im">import</span> jax</span>
 <span id="cb2-2"><a href="#cb2-2"></a><span class="im">import</span> jax.numpy <span class="im">as</span> jnp</span>
 <span id="cb2-3"><a href="#cb2-3"></a><span class="im">import</span> numpy <span class="im">as</span> np</span>
@@ -667,7 +667,7 @@ Jesse Perla
 </section>
 <section id="compiling-with-jit" class="slide level2">
 <h2>Compiling with <code>jit</code></h2>
-<div class="cell" data-execution_count="3">
+<div class="cell" data-execution_count="2">
 <div class="sourceCode cell-code" id="cb3"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1"></a><span class="kw">def</span> selu(x, alpha<span class="op">=</span><span class="fl">1.67</span>, lmbda<span class="op">=</span><span class="fl">1.05</span>):</span>
 <span id="cb3-2"><a href="#cb3-2"></a>  <span class="cf">return</span> lmbda <span class="op">*</span> jnp.where(x <span class="op">&gt;</span> <span class="dv">0</span>, x, alpha <span class="op">*</span> jnp.exp(x) <span class="op">-</span> alpha)</span>
 <span id="cb3-3"><a href="#cb3-3"></a>key <span class="op">=</span> random.PRNGKey(<span class="dv">0</span>)  </span>
@@ -676,8 +676,8 @@ Jesse Perla
 <span id="cb3-6"><a href="#cb3-6"></a>selu_jit <span class="op">=</span> jit(selu)</span>
 <span id="cb3-7"><a href="#cb3-7"></a><span class="op">%</span>timeit selu_jit(x).block_until_ready()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>1.08 ms ± 22.7 µs per loop (mean ± std. dev. of 7 runs, 1,000 loops each)
-359 µs ± 1.55 µs per loop (mean ± std. dev. of 7 runs, 1,000 loops each)</code></pre>
+<pre><code>2.38 ms ± 65.9 μs per loop (mean ± std. dev. of 7 runs, 100 loops each)
+602 μs ± 68.5 μs per loop (mean ± std. dev. of 7 runs, 1,000 loops each)</code></pre>
 </div>
 </div>
 </section>
@@ -686,19 +686,19 @@ Jesse Perla
 <ul>
 <li>Convenience python decorator <code>@jit</code></li>
 </ul>
-<div class="cell" data-execution_count="4">
+<div class="cell" data-execution_count="3">
 <div class="sourceCode cell-code" id="cb5"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb5-1"><a href="#cb5-1"></a><span class="at">@jit</span></span>
 <span id="cb5-2"><a href="#cb5-2"></a><span class="kw">def</span> selu(x, alpha<span class="op">=</span><span class="fl">1.67</span>, lmbda<span class="op">=</span><span class="fl">1.05</span>):</span>
 <span id="cb5-3"><a href="#cb5-3"></a>  <span class="cf">return</span> lmbda <span class="op">*</span> jnp.where(x <span class="op">&gt;</span> <span class="dv">0</span>, x, alpha <span class="op">*</span> jnp.exp(x) <span class="op">-</span> alpha)</span>
 <span id="cb5-4"><a href="#cb5-4"></a><span class="op">%</span>timeit selu(x).block_until_ready()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>358 µs ± 2.54 µs per loop (mean ± std. dev. of 7 runs, 1,000 loops each)</code></pre>
+<pre><code>690 μs ± 23.1 μs per loop (mean ± std. dev. of 7 runs, 1,000 loops each)</code></pre>
 </div>
 </div>
 </section>
 <section id="differentiation-with-grad" class="slide level2">
 <h2>Differentiation with <code>grad</code></h2>
-<div class="cell" data-execution_count="5">
+<div class="cell" data-execution_count="4">
 <div class="sourceCode cell-code" id="cb7"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb7-1"><a href="#cb7-1"></a><span class="kw">def</span> sum_logistic(x):</span>
 <span id="cb7-2"><a href="#cb7-2"></a>  <span class="cf">return</span> jnp.<span class="bu">sum</span>(<span class="fl">1.0</span> <span class="op">/</span> (<span class="fl">1.0</span> <span class="op">+</span> jnp.exp(<span class="op">-</span>x)))</span>
 <span id="cb7-3"><a href="#cb7-3"></a></span>
@@ -713,7 +713,7 @@ Jesse Perla
 <section id="manual-batchingvectorization" class="slide level2">
 <h2>Manual “Batching”/Vectorization</h2>
 <p>Common to run the same function along one dimension of an array</p>
-<div class="cell" data-execution_count="6">
+<div class="cell" data-execution_count="5">
 <div class="sourceCode cell-code" id="cb9"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb9-1"><a href="#cb9-1"></a>mat <span class="op">=</span> random.normal(key, (<span class="dv">150</span>, <span class="dv">100</span>))</span>
 <span id="cb9-2"><a href="#cb9-2"></a>batched_x <span class="op">=</span> random.normal(key, (<span class="dv">10</span>, <span class="dv">100</span>))</span>
 <span id="cb9-3"><a href="#cb9-3"></a></span>
@@ -723,14 +723,14 @@ Jesse Perla
 <span id="cb9-7"><a href="#cb9-7"></a>  <span class="cf">return</span> jnp.stack([f(v) <span class="cf">for</span> v <span class="kw">in</span> v_batched])</span>
 <span id="cb9-8"><a href="#cb9-8"></a><span class="op">%</span>timeit naively_batched_f(batched_x).block_until_ready()  </span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>340 µs ± 1.4 µs per loop (mean ± std. dev. of 7 runs, 1,000 loops each)</code></pre>
+<pre><code>831 μs ± 24.2 μs per loop (mean ± std. dev. of 7 runs, 1,000 loops each)</code></pre>
 </div>
 </div>
 </section>
 <section id="using-vmap" class="slide level2">
 <h2>Using <code>vmap</code></h2>
 <p>The <a href="https://jax.readthedocs.io/en/latest/_autosummary/jax.vmap.html#jax.vmap">vmap</a> applies across a dimension</p>
-<div class="cell" data-execution_count="7">
+<div class="cell" data-execution_count="6">
 <div class="sourceCode cell-code" id="cb11"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb11-1"><a href="#cb11-1"></a><span class="at">@jit</span></span>
 <span id="cb11-2"><a href="#cb11-2"></a><span class="kw">def</span> vmap_batched_f(v_batched):</span>
 <span id="cb11-3"><a href="#cb11-3"></a>  <span class="cf">return</span> vmap(f)(v_batched)</span>
@@ -739,7 +739,39 @@ Jesse Perla
 <span id="cb11-6"><a href="#cb11-6"></a><span class="op">%</span>timeit vmap_batched_f(batched_x).block_until_ready()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>Auto-vectorized with vmap
-13.4 µs ± 77.8 ns per loop (mean ± std. dev. of 7 runs, 100,000 loops each)</code></pre>
+47.2 μs ± 729 ns per loop (mean ± std. dev. of 7 runs, 10,000 loops each)</code></pre>
+</div>
+</div>
+</section>
+<section id="more-vmap" class="slide level2">
+<h2>More <code>vmap</code></h2>
+<p>Can fix dimensions with <code>in_axes</code></p>
+<div class="cell" data-execution_count="7">
+<div class="sourceCode cell-code" id="cb13"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb13-1"><a href="#cb13-1"></a><span class="kw">def</span> f(a, x, y):</span>
+<span id="cb13-2"><a href="#cb13-2"></a>  <span class="cf">return</span> a <span class="op">*</span> x <span class="op">+</span> y</span>
+<span id="cb13-3"><a href="#cb13-3"></a>a <span class="op">=</span> <span class="fl">2.0</span></span>
+<span id="cb13-4"><a href="#cb13-4"></a>x <span class="op">=</span> jnp.arange(<span class="fl">5.</span>)</span>
+<span id="cb13-5"><a href="#cb13-5"></a>y <span class="op">=</span> jnp.arange(<span class="fl">5.</span>)</span>
+<span id="cb13-6"><a href="#cb13-6"></a>vmap(f, in_axes<span class="op">=</span>(<span class="va">None</span>, <span class="dv">0</span>, <span class="dv">0</span>))(a, x, y)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="7">
+<pre><code>Array([ 0.,  3.,  6.,  9., 12.], dtype=float32)</code></pre>
+</div>
+</div>
+</section>
+<section id="save-vmap-functions" class="slide level2">
+<h2>Save <code>vmap</code> functions</h2>
+<p>Can fix dimensions with <code>in_axes</code></p>
+<div class="cell" data-execution_count="8">
+<div class="sourceCode cell-code" id="cb15"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb15-1"><a href="#cb15-1"></a><span class="at">@jax.jit</span></span>
+<span id="cb15-2"><a href="#cb15-2"></a><span class="kw">def</span> f(a, x, y):</span>
+<span id="cb15-3"><a href="#cb15-3"></a>  <span class="cf">return</span> a <span class="op">*</span> x <span class="op">+</span> y</span>
+<span id="cb15-4"><a href="#cb15-4"></a>a <span class="op">=</span> <span class="fl">2.0</span></span>
+<span id="cb15-5"><a href="#cb15-5"></a>x <span class="op">=</span> jnp.arange(<span class="fl">5.</span>)</span>
+<span id="cb15-6"><a href="#cb15-6"></a>y <span class="op">=</span> jnp.arange(<span class="fl">5.</span>)</span>
+<span id="cb15-7"><a href="#cb15-7"></a>f_batched <span class="op">=</span> vmap(f, in_axes<span class="op">=</span>(<span class="va">None</span>, <span class="dv">0</span>, <span class="dv">0</span>))</span>
+<span id="cb15-8"><a href="#cb15-8"></a>f_batched(a, x, y)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="8">
+<pre><code>Array([ 0.,  3.,  6.,  9., 12.], dtype=float32)</code></pre>
 </div>
 </div>
 </section>
@@ -800,19 +832,19 @@ Jesse Perla
 <ul>
 <li>JAX uses a generic <a href="https://jax.readthedocs.io/en/latest/jax-101/05.1-pytrees.html">tree structure</a>. Powerful but takes time to understand: Examples from: <a href="https://jax.readthedocs.io/en/latest/pytrees.html">here</a> and <a href="https://jax.readthedocs.io/en/latest/_autosummary/jax.vmap.html#jax.vmap">here</a></li>
 </ul>
-<div class="cell" data-execution_count="8">
-<div class="sourceCode cell-code" id="cb13"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb13-1"><a href="#cb13-1"></a>f <span class="op">=</span> <span class="kw">lambda</span> x, y: jnp.vdot(x, y)</span>
-<span id="cb13-2"><a href="#cb13-2"></a>X <span class="op">=</span> jnp.array([[<span class="fl">1.0</span>, <span class="fl">2.0</span>],</span>
-<span id="cb13-3"><a href="#cb13-3"></a>               [<span class="fl">3.0</span>, <span class="fl">4.0</span>]])</span>
-<span id="cb13-4"><a href="#cb13-4"></a>y <span class="op">=</span> jnp.array([<span class="fl">3.0</span>, <span class="fl">4.0</span>])</span>
-<span id="cb13-5"><a href="#cb13-5"></a><span class="bu">print</span>(f(X[<span class="dv">0</span>], y))</span>
-<span id="cb13-6"><a href="#cb13-6"></a><span class="bu">print</span>(f(X[<span class="dv">1</span>], y))</span>
-<span id="cb13-7"><a href="#cb13-7"></a></span>
-<span id="cb13-8"><a href="#cb13-8"></a>mv <span class="op">=</span> vmap(f, in_axes <span class="op">=</span> (</span>
-<span id="cb13-9"><a href="#cb13-9"></a>  <span class="dv">0</span>, <span class="co"># broadcast over 1st index of first argument</span></span>
-<span id="cb13-10"><a href="#cb13-10"></a>  <span class="va">None</span> <span class="co"># don't broadcast over anything of second argument</span></span>
-<span id="cb13-11"><a href="#cb13-11"></a>  ), out_axes<span class="op">=</span><span class="dv">0</span>)</span>
-<span id="cb13-12"><a href="#cb13-12"></a><span class="bu">print</span>(mv(X, y))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell" data-execution_count="9">
+<div class="sourceCode cell-code" id="cb17"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb17-1"><a href="#cb17-1"></a>f <span class="op">=</span> <span class="kw">lambda</span> x, y: jnp.vdot(x, y)</span>
+<span id="cb17-2"><a href="#cb17-2"></a>X <span class="op">=</span> jnp.array([[<span class="fl">1.0</span>, <span class="fl">2.0</span>],</span>
+<span id="cb17-3"><a href="#cb17-3"></a>               [<span class="fl">3.0</span>, <span class="fl">4.0</span>]])</span>
+<span id="cb17-4"><a href="#cb17-4"></a>y <span class="op">=</span> jnp.array([<span class="fl">3.0</span>, <span class="fl">4.0</span>])</span>
+<span id="cb17-5"><a href="#cb17-5"></a><span class="bu">print</span>(f(X[<span class="dv">0</span>], y))</span>
+<span id="cb17-6"><a href="#cb17-6"></a><span class="bu">print</span>(f(X[<span class="dv">1</span>], y))</span>
+<span id="cb17-7"><a href="#cb17-7"></a></span>
+<span id="cb17-8"><a href="#cb17-8"></a>mv <span class="op">=</span> vmap(f, in_axes <span class="op">=</span> (</span>
+<span id="cb17-9"><a href="#cb17-9"></a>  <span class="dv">0</span>, <span class="co"># broadcast over 1st index of first argument</span></span>
+<span id="cb17-10"><a href="#cb17-10"></a>  <span class="va">None</span> <span class="co"># don't broadcast over anything of second argument</span></span>
+<span id="cb17-11"><a href="#cb17-11"></a>  ), out_axes<span class="op">=</span><span class="dv">0</span>)</span>
+<span id="cb17-12"><a href="#cb17-12"></a><span class="bu">print</span>(mv(X, y))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>11.0
 25.0
@@ -823,18 +855,18 @@ Jesse Perla
 <section id="pytree-example-1" class="slide level2">
 <h2>PyTree Example 1</h2>
 <p>The <code>in_axes</code> can match more complicated structures</p>
-<div class="cell" data-execution_count="9">
-<div class="sourceCode cell-code" id="cb15"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb15-1"><a href="#cb15-1"></a>dct <span class="op">=</span> {<span class="st">'a'</span>: <span class="fl">0.</span>, <span class="st">'b'</span>: jnp.arange(<span class="fl">5.</span>)}</span>
-<span id="cb15-2"><a href="#cb15-2"></a><span class="kw">def</span> foo(dct, x):</span>
-<span id="cb15-3"><a href="#cb15-3"></a> <span class="cf">return</span> dct[<span class="st">'a'</span>] <span class="op">+</span> dct[<span class="st">'b'</span>] <span class="op">+</span> x</span>
-<span id="cb15-4"><a href="#cb15-4"></a><span class="co"># axes must match shape of the PyTree</span></span>
-<span id="cb15-5"><a href="#cb15-5"></a>x <span class="op">=</span> <span class="fl">1.</span></span>
-<span id="cb15-6"><a href="#cb15-6"></a>out <span class="op">=</span> vmap(foo, in_axes<span class="op">=</span>(</span>
-<span id="cb15-7"><a href="#cb15-7"></a>  {<span class="st">'a'</span>: <span class="va">None</span>, <span class="st">'b'</span>: <span class="dv">0</span>}, <span class="co">#broadcast over the 'b'</span></span>
-<span id="cb15-8"><a href="#cb15-8"></a>  <span class="va">None</span> <span class="co"># no broadcasting over the "x"</span></span>
-<span id="cb15-9"><a href="#cb15-9"></a>  ))(dct, x)</span>
-<span id="cb15-10"><a href="#cb15-10"></a><span class="co"># example now: {'a': 0, 'b': 0} etc.</span></span>
-<span id="cb15-11"><a href="#cb15-11"></a><span class="bu">print</span>(out)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell" data-execution_count="10">
+<div class="sourceCode cell-code" id="cb19"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb19-1"><a href="#cb19-1"></a>dct <span class="op">=</span> {<span class="st">'a'</span>: <span class="fl">0.</span>, <span class="st">'b'</span>: jnp.arange(<span class="fl">5.</span>)}</span>
+<span id="cb19-2"><a href="#cb19-2"></a><span class="kw">def</span> foo(dct, x):</span>
+<span id="cb19-3"><a href="#cb19-3"></a> <span class="cf">return</span> dct[<span class="st">'a'</span>] <span class="op">+</span> dct[<span class="st">'b'</span>] <span class="op">+</span> x</span>
+<span id="cb19-4"><a href="#cb19-4"></a><span class="co"># axes must match shape of the PyTree</span></span>
+<span id="cb19-5"><a href="#cb19-5"></a>x <span class="op">=</span> <span class="fl">1.</span></span>
+<span id="cb19-6"><a href="#cb19-6"></a>out <span class="op">=</span> vmap(foo, in_axes<span class="op">=</span>(</span>
+<span id="cb19-7"><a href="#cb19-7"></a>  {<span class="st">'a'</span>: <span class="va">None</span>, <span class="st">'b'</span>: <span class="dv">0</span>}, <span class="co">#broadcast over the 'b'</span></span>
+<span id="cb19-8"><a href="#cb19-8"></a>  <span class="va">None</span> <span class="co"># no broadcasting over the "x"</span></span>
+<span id="cb19-9"><a href="#cb19-9"></a>  ))(dct, x)</span>
+<span id="cb19-10"><a href="#cb19-10"></a><span class="co"># example now: {'a': 0, 'b': 0} etc.</span></span>
+<span id="cb19-11"><a href="#cb19-11"></a><span class="bu">print</span>(out)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>[1. 2. 3. 4. 5.]</code></pre>
 </div>
@@ -842,18 +874,18 @@ Jesse Perla
 </section>
 <section id="pytree-example-2" class="slide level2">
 <h2>PyTree Example 2</h2>
-<div class="cell" data-execution_count="10">
-<div class="sourceCode cell-code" id="cb17"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb17-1"><a href="#cb17-1"></a>dct <span class="op">=</span> {<span class="st">'a'</span>: jnp.array([<span class="fl">3.0</span>, <span class="fl">5.0</span>]), <span class="st">'b'</span>: jnp.array([<span class="fl">2.0</span>, <span class="fl">4.0</span>])}</span>
-<span id="cb17-2"><a href="#cb17-2"></a><span class="kw">def</span> foo2(dct, x):</span>
-<span id="cb17-3"><a href="#cb17-3"></a> <span class="cf">return</span> dct[<span class="st">'a'</span>] <span class="op">+</span> dct[<span class="st">'b'</span>] <span class="op">+</span> x</span>
-<span id="cb17-4"><a href="#cb17-4"></a><span class="co"># axes must match shape of the PyTree</span></span>
-<span id="cb17-5"><a href="#cb17-5"></a>x <span class="op">=</span> <span class="fl">1.</span></span>
-<span id="cb17-6"><a href="#cb17-6"></a>out <span class="op">=</span> vmap(foo2, in_axes<span class="op">=</span>(</span>
-<span id="cb17-7"><a href="#cb17-7"></a>  {<span class="st">'a'</span>: <span class="dv">0</span>, <span class="st">'b'</span>: <span class="dv">0</span>}, <span class="co">#broadcast over the 'a' and 'b'</span></span>
-<span id="cb17-8"><a href="#cb17-8"></a>  <span class="va">None</span> <span class="co"># no broadcasting over the "x"</span></span>
-<span id="cb17-9"><a href="#cb17-9"></a>  ))(dct, x)</span>
-<span id="cb17-10"><a href="#cb17-10"></a><span class="co"># example now: {'a': 3.0, 'b': 2.0} etc.</span></span>
-<span id="cb17-11"><a href="#cb17-11"></a><span class="bu">print</span>(out)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell" data-execution_count="11">
+<div class="sourceCode cell-code" id="cb21"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb21-1"><a href="#cb21-1"></a>dct <span class="op">=</span> {<span class="st">'a'</span>: jnp.array([<span class="fl">3.0</span>, <span class="fl">5.0</span>]), <span class="st">'b'</span>: jnp.array([<span class="fl">2.0</span>, <span class="fl">4.0</span>])}</span>
+<span id="cb21-2"><a href="#cb21-2"></a><span class="kw">def</span> foo2(dct, x):</span>
+<span id="cb21-3"><a href="#cb21-3"></a> <span class="cf">return</span> dct[<span class="st">'a'</span>] <span class="op">+</span> dct[<span class="st">'b'</span>] <span class="op">+</span> x</span>
+<span id="cb21-4"><a href="#cb21-4"></a><span class="co"># axes must match shape of the PyTree</span></span>
+<span id="cb21-5"><a href="#cb21-5"></a>x <span class="op">=</span> <span class="fl">1.</span></span>
+<span id="cb21-6"><a href="#cb21-6"></a>out <span class="op">=</span> vmap(foo2, in_axes<span class="op">=</span>(</span>
+<span id="cb21-7"><a href="#cb21-7"></a>  {<span class="st">'a'</span>: <span class="dv">0</span>, <span class="st">'b'</span>: <span class="dv">0</span>}, <span class="co">#broadcast over the 'a' and 'b'</span></span>
+<span id="cb21-8"><a href="#cb21-8"></a>  <span class="va">None</span> <span class="co"># no broadcasting over the "x"</span></span>
+<span id="cb21-9"><a href="#cb21-9"></a>  ))(dct, x)</span>
+<span id="cb21-10"><a href="#cb21-10"></a><span class="co"># example now: {'a': 3.0, 'b': 2.0} etc.</span></span>
+<span id="cb21-11"><a href="#cb21-11"></a><span class="bu">print</span>(out)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>[ 6. 10.]</code></pre>
 </div>
@@ -861,17 +893,17 @@ Jesse Perla
 </section>
 <section id="pytree-example-3" class="slide level2">
 <h2>PyTree Example 3</h2>
-<div class="cell" data-execution_count="11">
-<div class="sourceCode cell-code" id="cb19"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb19-1"><a href="#cb19-1"></a>dct <span class="op">=</span> {<span class="st">'a'</span>: jnp.array([<span class="fl">3.0</span>, <span class="fl">5.0</span>]), <span class="st">'b'</span>: jnp.arange(<span class="fl">5.</span>)}</span>
-<span id="cb19-2"><a href="#cb19-2"></a><span class="kw">def</span> foo3(dct, x):</span>
-<span id="cb19-3"><a href="#cb19-3"></a> <span class="cf">return</span> dct[<span class="st">'a'</span>][<span class="dv">0</span>] <span class="op">*</span> dct[<span class="st">'a'</span>][<span class="dv">1</span>] <span class="op">+</span> dct[<span class="st">'b'</span>] <span class="op">+</span> x</span>
-<span id="cb19-4"><a href="#cb19-4"></a><span class="co"># axes must match shape of the PyTree</span></span>
-<span id="cb19-5"><a href="#cb19-5"></a>out <span class="op">=</span> vmap(foo3, in_axes<span class="op">=</span>(</span>
-<span id="cb19-6"><a href="#cb19-6"></a>  {<span class="st">'a'</span>: <span class="va">None</span>, <span class="st">'b'</span>: <span class="dv">0</span>}, <span class="co">#broadcast over the 'b'</span></span>
-<span id="cb19-7"><a href="#cb19-7"></a>  <span class="va">None</span> <span class="co"># no broadcasting over the "x"</span></span>
-<span id="cb19-8"><a href="#cb19-8"></a>  ))(dct, x)</span>
-<span id="cb19-9"><a href="#cb19-9"></a><span class="co"># example now: {'a': [3.0, 5.0], 'b': 0} etc.</span></span>
-<span id="cb19-10"><a href="#cb19-10"></a><span class="bu">print</span>(out)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell" data-execution_count="12">
+<div class="sourceCode cell-code" id="cb23"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb23-1"><a href="#cb23-1"></a>dct <span class="op">=</span> {<span class="st">'a'</span>: jnp.array([<span class="fl">3.0</span>, <span class="fl">5.0</span>]), <span class="st">'b'</span>: jnp.arange(<span class="fl">5.</span>)}</span>
+<span id="cb23-2"><a href="#cb23-2"></a><span class="kw">def</span> foo3(dct, x):</span>
+<span id="cb23-3"><a href="#cb23-3"></a> <span class="cf">return</span> dct[<span class="st">'a'</span>][<span class="dv">0</span>] <span class="op">*</span> dct[<span class="st">'a'</span>][<span class="dv">1</span>] <span class="op">+</span> dct[<span class="st">'b'</span>] <span class="op">+</span> x</span>
+<span id="cb23-4"><a href="#cb23-4"></a><span class="co"># axes must match shape of the PyTree</span></span>
+<span id="cb23-5"><a href="#cb23-5"></a>out <span class="op">=</span> vmap(foo3, in_axes<span class="op">=</span>(</span>
+<span id="cb23-6"><a href="#cb23-6"></a>  {<span class="st">'a'</span>: <span class="va">None</span>, <span class="st">'b'</span>: <span class="dv">0</span>}, <span class="co">#broadcast over the 'b'</span></span>
+<span id="cb23-7"><a href="#cb23-7"></a>  <span class="va">None</span> <span class="co"># no broadcasting over the "x"</span></span>
+<span id="cb23-8"><a href="#cb23-8"></a>  ))(dct, x)</span>
+<span id="cb23-9"><a href="#cb23-9"></a><span class="co"># example now: {'a': [3.0, 5.0], 'b': 0} etc.</span></span>
+<span id="cb23-10"><a href="#cb23-10"></a><span class="bu">print</span>(out)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>[16. 17. 18. 19. 20.]</code></pre>
 </div>

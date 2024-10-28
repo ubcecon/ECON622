@@ -591,7 +591,7 @@ C-&gt;D
 <ol type="1">
 <li>Converts the program into a computational graph (i.e., nested functions)</li>
 <li>Apply the chain rule to the computational graph recursively</li>
-<li>Provide library of “primitives” where the recursion stops, and ability to register new primitives to teach the computer calculus</li>
+<li>Provide library of “primitives” where the recursion stops, and provides registration of new primitives to teach the computer calculus</li>
 </ol></li>
 </ul>
 <p>Finally: many frameworks will compile the resulting sequence of operations to be efficient on a GPU since this is so central to deep learning performance</p>
@@ -661,7 +661,7 @@ C-&gt;D
 \]</span></p>
 <ul>
 <li>This is called the “push-forward”. The Jacobian Vector Product (JVP)</li>
-<li>i.e.&nbsp;<span class="math inline">\(\nabla f(x) \cdot v\)</span></li>
+<li>i.e.&nbsp;<span class="math inline">\(\nabla f(x) \cdot v\)</span>, as the product of the jacobian and a direction</li>
 </ul></li>
 <li><p>JAX (and others) will take an <span class="math inline">\(f\)</span> and an <span class="math inline">\(x\)</span> and compile a new function from <span class="math inline">\(\mathbb{R}^N\)</span> to <span class="math inline">\(\mathbb{R}^M\)</span> that calculates <span class="math inline">\(\partial f(x)[v]\)</span></p></li>
 </ul>
@@ -745,7 +745,7 @@ x_2 &amp; x_1
 \partial f(x)[v] = \partial c(b(a(x))) \left[ \partial b(a(x))[\partial a(x)[v]] \right]
 \]</span></p>
 <ul>
-<li><p>Calculation order inside out:</p>
+<li><p>Calculation order inside out, recursively finding linearization points:</p>
 <ol type="1">
 <li><span class="math inline">\(\partial a(x)[v]\)</span> and <span class="math inline">\(a(x)\)</span></li>
 <li><span class="math inline">\(\partial b(a(x))[\partial a(x)[v]]\)</span> and <span class="math inline">\(b(a(x))\)</span></li>
@@ -767,7 +767,7 @@ x_2 &amp; x_1
 \partial f(x)^{\top} = \partial a(x)^{\top} \circ \partial b(a(x))^{\top} \circ \partial c(b(a(x)))^{\top}
 \]</span></p>
 <ul>
-<li>Multiply by some <span class="math inline">\(v \in \mathbb{R}^M\)</span></li>
+<li>In particular, if we multiply by some <span class="math inline">\(u \in \mathbb{R}^M\)</span> (i.e., <span class="math inline">\(u \cdot \nabla f(x)\)</span>), we get</li>
 </ul>
 <p><span class="math display">\[
 \partial f(x)^{\top}[u] = \partial a(x)^{\top} \left[ \partial b(a(x))^{\top} \left[ \partial c(b(a(x)))^{\top}[u] \right] \right]
@@ -781,7 +781,7 @@ x_2 &amp; x_1
 <ul>
 <li>Calculation order outside in (of original):
 <ol type="1">
-<li><span class="math inline">\(a(x), b(a(x)), c(b(a(x)))\)</span> (i.e., the “primal” calculations)</li>
+<li><span class="math inline">\(a(x), b(a(x)), c(b(a(x)))\)</span> (i.e., the “primal” calculations required for linearization points)</li>
 <li><span class="math inline">\(\partial c(b(a(x)))^{\top}[u]\)</span></li>
 <li><span class="math inline">\(\partial b(a(x))^{\top}[\partial c(b(a(x)))^{\top}[u]]\)</span></li>
 <li><span class="math inline">\(\partial a(x)^{\top}[\partial b(a(x))^{\top}[\partial c(b(a(x)))^{\top}[u]]]\)</span></li>

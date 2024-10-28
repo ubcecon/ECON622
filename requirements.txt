@@ -29,3 +29,8 @@ tqdm
 fire
 jsonargparse[signatures]
 gpytorch
+flax
+jax-dataloader
+interpax
+joblib
+keras
