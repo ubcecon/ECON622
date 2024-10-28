@@ -592,7 +592,7 @@ f^* \equiv \arg\min_{f \in \mathcal{H}} R(f, p^*)
 <li>Then the <strong>approximation error</strong> is defined as</li>
 </ul>
 <p><span class="math display">\[
-\varepsilon_{app}(\mathcal{H}) \equiv R(f^{**}, p^*) - R(f^*, p^*)
+\varepsilon_{app}(\mathcal{H}) \equiv R(f^*, p^*) - R(f^{**}, p^*)
 \]</span></p>
 <ul>
 <li>This says, taking the population distribution as given, how close we can get a <span class="math inline">\(f^*\)</span> to the ideal solution <span class="math inline">\(f^{**}\)</span> using <span class="math inline">\(\mathcal{H}\)</span> instead of <span class="math inline">\(\mathcal{F}\)</span>
@@ -733,7 +733,7 @@ f^*_{\mathcal{D}_{train}} = \arg\min_{f \in \mathcal{H}} R(f, \mathcal{D}_{train
 <li>The short answer is: yes, but it is still an art (with finite data)</li>
 <li><strong>Representation learning</strong> finds representations <span class="math inline">\(g : \mathcal{X} \to \mathcal{Z}\)</span> using <span class="math inline">\(\mathcal{D}\)</span>
 <ul>
-<li>Hopefully: works well for $ x p^*(x,y)$, and for many <span class="math inline">\(\ell(\tilde{f} \circ g, x, y)\)</span></li>
+<li>Hopefully: works well for <span class="math inline">\(x \sim p^*(x,y)\)</span>, and for many <span class="math inline">\(\ell(\tilde{f} \circ g, x, y)\)</span></li>
 </ul></li>
 <li>This happens in subtle ways in many different methods. e.g.&nbsp;
 <ul>
@@ -798,7 +798,7 @@ f^*_{\mathcal{D}_{train}} = \arg\min_{f \in \mathcal{H}} R(f, \mathcal{D}_{train
 <section id="rough-intuition-on-the-success-of-deep-learning" class="slide level2">
 <h2>Rough Intuition on The Success of Deep Learning</h2>
 <ul>
-<li>The broadest intuition on why deep learning with flexible, overparameterized neural networks often works well is a combination of::
+<li>The broadest intuition on why deep learning with flexible, overparameterized neural networks often works well is a combination of:
 <ol type="1">
 <li>The massive number of parameters makes the optimization process find more generalizable solutions (sometimes through regularization)</li>
 <li>The depth of approximations allowing for better representations</li>

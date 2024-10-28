@@ -526,7 +526,7 @@ Jesse Perla
 <h2>When and Where Does This Converge?</h2>
 <ul>
 <li><p>Skipping a million details, see <a href="https://probml.github.io/pml-book/book1.html">ProbML Book 1</a> Section 8.2.2 and <a href="https://www.cs.ubc.ca/~schmidtm/Courses/340-F22/L14.pdf">Mark Schmidt’s basic</a> and <a href="https://www.cs.ubc.ca/~schmidtm/Courses/5XX-S22/S1.pdf">more advanced notes</a></p></li>
-<li><p>For strictly convex problems this converges to the global minima, though sufficient conditions include Robbins-Monro <span class="math inline">\(\lim_{T\to \infty} \eta_T \to 0\)</span> and</p>
+<li><p>For strictly convex problems this converges to the global minima, though sufficient conditions include Robbins-Monro <span class="math inline">\(\lim_{T\to \infty} \eta_T = 0\)</span> and</p>
 <p><span class="math display">\[
 \lim_{T\to\infty}\frac{\sum_{t=1}^T \eta_t}{\sum_{t=1}^T \eta_t^2} = 0
 \]</span></p></li>
@@ -987,7 +987,7 @@ y \sim N(x \cdot \theta, \sigma^2)
 <span id="cb2-7"><a href="#cb2-7"></a>dataset <span class="op">=</span> TensorDataset(X, Y)</span>
 <span id="cb2-8"><a href="#cb2-8"></a><span class="bu">print</span>(dataset[<span class="dv">0</span>]) <span class="co"># returns tuples of (x_n, y_n)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>(tensor([ 0.0446, -0.6026]), tensor(-0.6975))</code></pre>
+<pre><code>(tensor([-0.3331,  0.3385]), tensor(0.9287))</code></pre>
 </div>
 </div>
 </section>
@@ -1008,14 +1008,14 @@ y \sim N(x \cdot \theta, \sigma^2)
 <span id="cb4-6"><a href="#cb4-6"></a><span class="bu">print</span>(<span class="bu">next</span>(<span class="bu">iter</span>(train_loader)))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div><div class="column">
 <div class="cell-output cell-output-stdout">
-<pre><code>[tensor([[-0.5068, -1.8683],
-        [ 0.0268,  0.4194],
-        [ 1.9364, -0.3282],
-        [ 0.6170, -0.0864],
-        [ 0.7405,  0.4941],
-        [-1.2465, -0.5728],
-        [ 0.6809, -0.3438],
-        [ 1.1715, -0.6198]]), tensor([-0.7790,  0.3617, -4.4886, -1.4130, -1.0978,  2.1072, -1.8076, -3.1371])]</code></pre>
+<pre><code>[tensor([[ 1.0887, -2.0147],
+        [-0.9769,  0.9183],
+        [ 0.3217, -0.2553],
+        [ 0.2292, -1.2586],
+        [-0.2504, -0.7905],
+        [-0.4938, -0.8292],
+        [-0.3105,  0.2425],
+        [-0.8839, -0.0147]]), tensor([-3.7268,  2.6681, -0.8417, -1.4195, -0.0978,  0.3626,  0.8096,  1.7694])]</code></pre>
 </div>
 </div>
 </div>
@@ -1096,7 +1096,7 @@ Parameter Group 0
 <span id="cb11-7"><a href="#cb11-7"></a>        optimizer.step()  <span class="co"># Update the optimizers internal parameters</span></span>
 <span id="cb11-8"><a href="#cb11-8"></a><span class="bu">print</span>(<span class="ss">f"||theta - theta_hat|| = </span><span class="sc">{</span>torch<span class="sc">.</span>norm(theta <span class="op">-</span> model.weight.squeeze())<span class="sc">}</span><span class="ss">"</span>)        </span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>||theta - theta_hat|| = 1.023274762701476e-05</code></pre>
+<pre><code>||theta - theta_hat|| = 3.726587237906642e-05</code></pre>
 </div>
 </div>
 </section></section>
@@ -1362,7 +1362,7 @@ Epoch 200,||theta - theta_hat|| = 6.367397145368159e-05
 <span id="cb26-11"><a href="#cb26-11"></a><span class="bu">print</span>(residuals(theta_0, X, Y))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>0.021030858
-3.5461223</code></pre>
+3.546122</code></pre>
 </div>
 </div>
 </section>
