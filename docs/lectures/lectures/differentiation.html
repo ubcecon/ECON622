@@ -847,6 +847,41 @@ x_2 &amp; x_1
 <li>In general, you will find it the most convenient for a standard supervised learning problems (e.g.&nbsp;neural networks with empirical risk minimization)</li>
 <li>We will discuss later when we look at ML pipelines</li>
 </ul>
+<div class="cell" data-execution_count="2">
+<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1"></a><span class="im">import</span> torch</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</section>
+<section id="example-with-pytorch-.backward" class="slide level2">
+<h2>Example with Pytorch <code>.backward()</code></h2>
+<ul>
+<li>Reverse-mode AD passes values with <code>requires_grad=True</code></li>
+<li>Traces the intermediates, and does the AD on <code>.backward()</code></li>
+</ul>
+<div class="cell columns column-output-location" data-execution_count="3">
+<div class="column">
+<div class="sourceCode cell-code" id="cb2"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb2-1"><a href="#cb2-1"></a>x <span class="op">=</span> torch.tensor(<span class="fl">2.0</span>, requires_grad<span class="op">=</span><span class="va">True</span>)</span>
+<span id="cb2-2"><a href="#cb2-2"></a><span class="co"># Trace computations for the "forward" pass</span></span>
+<span id="cb2-3"><a href="#cb2-3"></a>y <span class="op">=</span> torch.tanh(x)</span>
+<span id="cb2-4"><a href="#cb2-4"></a><span class="co"># Do the "backward" pass for Reverse-mode AD</span></span>
+<span id="cb2-5"><a href="#cb2-5"></a>y.backward()</span>
+<span id="cb2-6"><a href="#cb2-6"></a><span class="bu">print</span>(x.grad)</span>
+<span id="cb2-7"><a href="#cb2-7"></a></span>
+<span id="cb2-8"><a href="#cb2-8"></a><span class="kw">def</span> f(x, y):</span>
+<span id="cb2-9"><a href="#cb2-9"></a>    <span class="cf">return</span> x<span class="op">**</span><span class="dv">3</span> <span class="op">+</span> <span class="dv">2</span> <span class="op">*</span> y[<span class="dv">0</span>]<span class="op">**</span><span class="dv">2</span> <span class="op">-</span> <span class="dv">3</span> <span class="op">*</span> y[<span class="dv">1</span>] <span class="op">+</span> <span class="dv">1</span></span>
+<span id="cb2-10"><a href="#cb2-10"></a></span>
+<span id="cb2-11"><a href="#cb2-11"></a>x <span class="op">=</span> torch.tensor(<span class="fl">1.0</span>, requires_grad<span class="op">=</span><span class="va">True</span>)</span>
+<span id="cb2-12"><a href="#cb2-12"></a>y <span class="op">=</span> torch.tensor([<span class="fl">2.0</span>, <span class="fl">3.0</span>],</span>
+<span id="cb2-13"><a href="#cb2-13"></a>                  requires_grad<span class="op">=</span><span class="va">True</span>)</span>
+<span id="cb2-14"><a href="#cb2-14"></a>z <span class="op">=</span> f(x, y)</span>
+<span id="cb2-15"><a href="#cb2-15"></a>z.backward()</span>
+<span id="cb2-16"><a href="#cb2-16"></a><span class="bu">print</span>(x.grad, y.grad)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div><div class="column">
+<div class="cell-output cell-output-stdout">
+<pre><code>tensor(0.0707)
+tensor(3.) tensor([ 8., -3.])</code></pre>
+</div>
+</div>
+</div>
 </section>
 <section id="jax" class="slide level2">
 <h2>JAX</h2>
@@ -866,16 +901,16 @@ x_2 &amp; x_1
 <li>Random numbers always require keys, which can be split for reproducibility</li>
 <li>Use <code>jax.config.update('jax_enable_x64', True)</code> for 64bit precision (default is 32bit)</li>
 </ul>
-<div class="cell" data-execution_count="2">
-<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1"></a><span class="im">import</span> jax</span>
-<span id="cb1-2"><a href="#cb1-2"></a><span class="im">import</span> jax.numpy <span class="im">as</span> jnp</span>
-<span id="cb1-3"><a href="#cb1-3"></a><span class="im">import</span> numpy <span class="im">as</span> np</span>
-<span id="cb1-4"><a href="#cb1-4"></a><span class="im">from</span> jax <span class="im">import</span> grad, jit, vmap</span>
-<span id="cb1-5"><a href="#cb1-5"></a><span class="im">from</span> jax <span class="im">import</span> random, vjp, jvp</span>
-<span id="cb1-6"><a href="#cb1-6"></a>key <span class="op">=</span> random.PRNGKey(<span class="dv">0</span>)</span>
-<span id="cb1-7"><a href="#cb1-7"></a>subkey1, subkey2 <span class="op">=</span> random.split(key)</span>
-<span id="cb1-8"><a href="#cb1-8"></a>random.normal(subkey1, (<span class="dv">2</span>,))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-display" data-execution_count="1">
+<div class="cell" data-execution_count="4">
+<div class="sourceCode cell-code" id="cb4"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb4-1"><a href="#cb4-1"></a><span class="im">import</span> jax</span>
+<span id="cb4-2"><a href="#cb4-2"></a><span class="im">import</span> jax.numpy <span class="im">as</span> jnp</span>
+<span id="cb4-3"><a href="#cb4-3"></a><span class="im">import</span> numpy <span class="im">as</span> np</span>
+<span id="cb4-4"><a href="#cb4-4"></a><span class="im">from</span> jax <span class="im">import</span> grad, jit, vmap</span>
+<span id="cb4-5"><a href="#cb4-5"></a><span class="im">from</span> jax <span class="im">import</span> random, vjp, jvp</span>
+<span id="cb4-6"><a href="#cb4-6"></a>key <span class="op">=</span> random.PRNGKey(<span class="dv">0</span>)</span>
+<span id="cb4-7"><a href="#cb4-7"></a>subkey1, subkey2 <span class="op">=</span> random.split(key)</span>
+<span id="cb4-8"><a href="#cb4-8"></a>random.normal(subkey1, (<span class="dv">2</span>,))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="3">
 <pre><code>Array([-0.04950034, -0.711568  ], dtype=float32)</code></pre>
 </div>
 </div>
@@ -886,40 +921,40 @@ x_2 &amp; x_1
 <li><code>grad</code> is the high-level reverse-mode AD function</li>
 <li>Returns a new function, which could be compiled</li>
 </ul>
-<div class="cell" data-execution_count="3">
-<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1"></a>grad_tanh <span class="op">=</span> grad(jnp.tanh)</span>
-<span id="cb3-2"><a href="#cb3-2"></a><span class="bu">print</span>(grad_tanh(<span class="fl">2.0</span>))</span>
-<span id="cb3-3"><a href="#cb3-3"></a>grad_tanh_jit <span class="op">=</span> jit(grad_tanh)</span>
-<span id="cb3-4"><a href="#cb3-4"></a><span class="bu">print</span>(grad_tanh_jit(<span class="fl">2.0</span>))</span>
-<span id="cb3-5"><a href="#cb3-5"></a></span>
-<span id="cb3-6"><a href="#cb3-6"></a><span class="kw">def</span> f(x):</span>
-<span id="cb3-7"><a href="#cb3-7"></a>    <span class="cf">return</span> x<span class="op">**</span><span class="dv">3</span> <span class="op">+</span> <span class="dv">2</span> <span class="op">*</span> x<span class="op">**</span><span class="dv">2</span> <span class="op">-</span> <span class="dv">3</span> <span class="op">*</span> x <span class="op">+</span> <span class="dv">1</span></span>
-<span id="cb3-8"><a href="#cb3-8"></a><span class="bu">print</span>(grad(f)(<span class="fl">1.0</span>))</span>
-<span id="cb3-9"><a href="#cb3-9"></a><span class="at">@jit</span></span>
-<span id="cb3-10"><a href="#cb3-10"></a><span class="kw">def</span> f2(x):</span>
-<span id="cb3-11"><a href="#cb3-11"></a>    <span class="cf">return</span> x<span class="op">**</span><span class="dv">3</span> <span class="op">+</span> <span class="dv">2</span> <span class="op">*</span> x<span class="op">**</span><span class="dv">2</span> <span class="op">-</span> <span class="dv">3</span> <span class="op">*</span> x <span class="op">+</span> <span class="dv">1</span></span>
-<span id="cb3-12"><a href="#cb3-12"></a>grad(f2)(<span class="fl">1.0</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell" data-execution_count="5">
+<div class="sourceCode cell-code" id="cb6"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb6-1"><a href="#cb6-1"></a>grad_tanh <span class="op">=</span> grad(jnp.tanh)</span>
+<span id="cb6-2"><a href="#cb6-2"></a><span class="bu">print</span>(grad_tanh(<span class="fl">2.0</span>))</span>
+<span id="cb6-3"><a href="#cb6-3"></a>grad_tanh_jit <span class="op">=</span> jit(grad_tanh)</span>
+<span id="cb6-4"><a href="#cb6-4"></a><span class="bu">print</span>(grad_tanh_jit(<span class="fl">2.0</span>))</span>
+<span id="cb6-5"><a href="#cb6-5"></a></span>
+<span id="cb6-6"><a href="#cb6-6"></a><span class="kw">def</span> f(x):</span>
+<span id="cb6-7"><a href="#cb6-7"></a>    <span class="cf">return</span> x<span class="op">**</span><span class="dv">3</span> <span class="op">+</span> <span class="dv">2</span> <span class="op">*</span> x<span class="op">**</span><span class="dv">2</span> <span class="op">-</span> <span class="dv">3</span> <span class="op">*</span> x <span class="op">+</span> <span class="dv">1</span></span>
+<span id="cb6-8"><a href="#cb6-8"></a><span class="bu">print</span>(grad(f)(<span class="fl">1.0</span>))</span>
+<span id="cb6-9"><a href="#cb6-9"></a><span class="at">@jit</span></span>
+<span id="cb6-10"><a href="#cb6-10"></a><span class="kw">def</span> f2(x):</span>
+<span id="cb6-11"><a href="#cb6-11"></a>    <span class="cf">return</span> x<span class="op">**</span><span class="dv">3</span> <span class="op">+</span> <span class="dv">2</span> <span class="op">*</span> x<span class="op">**</span><span class="dv">2</span> <span class="op">-</span> <span class="dv">3</span> <span class="op">*</span> x <span class="op">+</span> <span class="dv">1</span></span>
+<span id="cb6-12"><a href="#cb6-12"></a>grad(f2)(<span class="fl">1.0</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>0.070650816
 0.070650816
 4.0</code></pre>
 </div>
-<div class="cell-output cell-output-display" data-execution_count="2">
+<div class="cell-output cell-output-display" data-execution_count="4">
 <pre><code>Array(4., dtype=float32, weak_type=True)</code></pre>
 </div>
 </div>
 </section>
 <section id="fixing-an-argument" class="slide level2">
 <h2>Fixing an argument</h2>
-<div class="cell" data-execution_count="4">
-<div class="sourceCode cell-code" id="cb6"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb6-1"><a href="#cb6-1"></a><span class="kw">def</span> f3(x, y):</span>
-<span id="cb6-2"><a href="#cb6-2"></a>    <span class="cf">return</span> x<span class="op">**</span><span class="dv">2</span> <span class="op">+</span> y</span>
-<span id="cb6-3"><a href="#cb6-3"></a>v, gx <span class="op">=</span> jax.value_and_grad(f3, argnums<span class="op">=</span><span class="dv">0</span>)(<span class="fl">2.0</span>, <span class="fl">3.0</span>)</span>
-<span id="cb6-4"><a href="#cb6-4"></a><span class="bu">print</span>(v)</span>
-<span id="cb6-5"><a href="#cb6-5"></a><span class="bu">print</span>(gx)</span>
-<span id="cb6-6"><a href="#cb6-6"></a></span>
-<span id="cb6-7"><a href="#cb6-7"></a>gy <span class="op">=</span> grad(f3, argnums<span class="op">=</span><span class="dv">1</span>)(<span class="fl">2.0</span>, <span class="fl">3.0</span>)</span>
-<span id="cb6-8"><a href="#cb6-8"></a><span class="bu">print</span>(gy)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell" data-execution_count="6">
+<div class="sourceCode cell-code" id="cb9"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb9-1"><a href="#cb9-1"></a><span class="kw">def</span> f3(x, y):</span>
+<span id="cb9-2"><a href="#cb9-2"></a>    <span class="cf">return</span> x<span class="op">**</span><span class="dv">2</span> <span class="op">+</span> y</span>
+<span id="cb9-3"><a href="#cb9-3"></a>v, gx <span class="op">=</span> jax.value_and_grad(f3, argnums<span class="op">=</span><span class="dv">0</span>)(<span class="fl">2.0</span>, <span class="fl">3.0</span>)</span>
+<span id="cb9-4"><a href="#cb9-4"></a><span class="bu">print</span>(v)</span>
+<span id="cb9-5"><a href="#cb9-5"></a><span class="bu">print</span>(gx)</span>
+<span id="cb9-6"><a href="#cb9-6"></a></span>
+<span id="cb9-7"><a href="#cb9-7"></a>gy <span class="op">=</span> grad(f3, argnums<span class="op">=</span><span class="dv">1</span>)(<span class="fl">2.0</span>, <span class="fl">3.0</span>)</span>
+<span id="cb9-8"><a href="#cb9-8"></a><span class="bu">print</span>(gy)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>7.0
 4.0
@@ -932,14 +967,14 @@ x_2 &amp; x_1
 <ul>
 <li>Goes through full basis forwards or backwards</li>
 </ul>
-<div class="cell" data-execution_count="5">
-<div class="sourceCode cell-code" id="cb8"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb8-1"><a href="#cb8-1"></a><span class="kw">def</span> fun(x):</span>
-<span id="cb8-2"><a href="#cb8-2"></a>    <span class="cf">return</span> jnp.dot(A, x)</span>
-<span id="cb8-3"><a href="#cb8-3"></a>A <span class="op">=</span> np.random.normal(size<span class="op">=</span>(<span class="dv">4</span>, <span class="dv">3</span>))</span>
-<span id="cb8-4"><a href="#cb8-4"></a>x <span class="op">=</span> np.random.normal(size<span class="op">=</span>(<span class="dv">3</span>,))</span>
-<span id="cb8-5"><a href="#cb8-5"></a>Jf <span class="op">=</span> jax.jacfwd(fun)(x)</span>
-<span id="cb8-6"><a href="#cb8-6"></a>Jr <span class="op">=</span> jax.jacrev(fun)(x)</span>
-<span id="cb8-7"><a href="#cb8-7"></a><span class="bu">print</span>(np.allclose(Jf, Jr))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell" data-execution_count="7">
+<div class="sourceCode cell-code" id="cb11"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb11-1"><a href="#cb11-1"></a><span class="kw">def</span> fun(x):</span>
+<span id="cb11-2"><a href="#cb11-2"></a>    <span class="cf">return</span> jnp.dot(A, x)</span>
+<span id="cb11-3"><a href="#cb11-3"></a>A <span class="op">=</span> np.random.normal(size<span class="op">=</span>(<span class="dv">4</span>, <span class="dv">3</span>))</span>
+<span id="cb11-4"><a href="#cb11-4"></a>x <span class="op">=</span> np.random.normal(size<span class="op">=</span>(<span class="dv">3</span>,))</span>
+<span id="cb11-5"><a href="#cb11-5"></a>Jf <span class="op">=</span> jax.jacfwd(fun)(x)</span>
+<span id="cb11-6"><a href="#cb11-6"></a>Jr <span class="op">=</span> jax.jacrev(fun)(x)</span>
+<span id="cb11-7"><a href="#cb11-7"></a><span class="bu">print</span>(np.allclose(Jf, Jr))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>True</code></pre>
 </div>
@@ -947,32 +982,32 @@ x_2 &amp; x_1
 </section>
 <section id="setup-for-logistic-regression" class="slide level2">
 <h2>Setup for Logistic Regression</h2>
-<div class="cell" data-execution_count="6">
-<div class="sourceCode cell-code" id="cb10"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb10-1"><a href="#cb10-1"></a><span class="kw">def</span> sigmoid(x):</span>
-<span id="cb10-2"><a href="#cb10-2"></a>    <span class="cf">return</span> <span class="fl">0.5</span> <span class="op">*</span> (jnp.tanh(x <span class="op">/</span> <span class="dv">2</span>) <span class="op">+</span> <span class="dv">1</span>)</span>
-<span id="cb10-3"><a href="#cb10-3"></a></span>
-<span id="cb10-4"><a href="#cb10-4"></a><span class="kw">def</span> predict(W, b, inputs):</span>
-<span id="cb10-5"><a href="#cb10-5"></a>    <span class="cf">return</span> sigmoid(jnp.dot(inputs, W) <span class="op">+</span> b)</span>
-<span id="cb10-6"><a href="#cb10-6"></a>inputs <span class="op">=</span> jnp.array([[<span class="fl">0.52</span>, <span class="fl">1.12</span>,  <span class="fl">0.77</span>],</span>
-<span id="cb10-7"><a href="#cb10-7"></a>                   [<span class="fl">0.88</span>, <span class="op">-</span><span class="fl">1.08</span>, <span class="fl">0.15</span>],</span>
-<span id="cb10-8"><a href="#cb10-8"></a>                   [<span class="fl">0.52</span>, <span class="fl">0.06</span>, <span class="op">-</span><span class="fl">1.30</span>],</span>
-<span id="cb10-9"><a href="#cb10-9"></a>                   [<span class="fl">0.74</span>, <span class="op">-</span><span class="fl">2.49</span>, <span class="fl">1.39</span>]])</span>
-<span id="cb10-10"><a href="#cb10-10"></a>targets <span class="op">=</span> jnp.array([<span class="va">True</span>, <span class="va">True</span>, <span class="va">False</span>, <span class="va">True</span>])                   </span>
-<span id="cb10-11"><a href="#cb10-11"></a>key, W_key, b_key <span class="op">=</span> random.split(key, <span class="dv">3</span>)</span>
-<span id="cb10-12"><a href="#cb10-12"></a>W <span class="op">=</span> random.normal(W_key, (<span class="dv">3</span>,))</span>
-<span id="cb10-13"><a href="#cb10-13"></a>b <span class="op">=</span> random.normal(b_key, ())                    </span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell" data-execution_count="8">
+<div class="sourceCode cell-code" id="cb13"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb13-1"><a href="#cb13-1"></a><span class="kw">def</span> sigmoid(x):</span>
+<span id="cb13-2"><a href="#cb13-2"></a>    <span class="cf">return</span> <span class="fl">0.5</span> <span class="op">*</span> (jnp.tanh(x <span class="op">/</span> <span class="dv">2</span>) <span class="op">+</span> <span class="dv">1</span>)</span>
+<span id="cb13-3"><a href="#cb13-3"></a></span>
+<span id="cb13-4"><a href="#cb13-4"></a><span class="kw">def</span> predict(W, b, inputs):</span>
+<span id="cb13-5"><a href="#cb13-5"></a>    <span class="cf">return</span> sigmoid(jnp.dot(inputs, W) <span class="op">+</span> b)</span>
+<span id="cb13-6"><a href="#cb13-6"></a>inputs <span class="op">=</span> jnp.array([[<span class="fl">0.52</span>, <span class="fl">1.12</span>,  <span class="fl">0.77</span>],</span>
+<span id="cb13-7"><a href="#cb13-7"></a>                   [<span class="fl">0.88</span>, <span class="op">-</span><span class="fl">1.08</span>, <span class="fl">0.15</span>],</span>
+<span id="cb13-8"><a href="#cb13-8"></a>                   [<span class="fl">0.52</span>, <span class="fl">0.06</span>, <span class="op">-</span><span class="fl">1.30</span>],</span>
+<span id="cb13-9"><a href="#cb13-9"></a>                   [<span class="fl">0.74</span>, <span class="op">-</span><span class="fl">2.49</span>, <span class="fl">1.39</span>]])</span>
+<span id="cb13-10"><a href="#cb13-10"></a>targets <span class="op">=</span> jnp.array([<span class="va">True</span>, <span class="va">True</span>, <span class="va">False</span>, <span class="va">True</span>])                   </span>
+<span id="cb13-11"><a href="#cb13-11"></a>key, W_key, b_key <span class="op">=</span> random.split(key, <span class="dv">3</span>)</span>
+<span id="cb13-12"><a href="#cb13-12"></a>W <span class="op">=</span> random.normal(W_key, (<span class="dv">3</span>,))</span>
+<span id="cb13-13"><a href="#cb13-13"></a>b <span class="op">=</span> random.normal(b_key, ())                    </span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 </section>
 <section id="jvp-1" class="slide level2">
 <h2>JVP</h2>
-<div class="cell" data-execution_count="7">
-<div class="sourceCode cell-code" id="cb11"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb11-1"><a href="#cb11-1"></a>f <span class="op">=</span> <span class="kw">lambda</span> W: predict(W, b, inputs)</span>
-<span id="cb11-2"><a href="#cb11-2"></a>key, subkey <span class="op">=</span> random.split(key)</span>
-<span id="cb11-3"><a href="#cb11-3"></a>v <span class="op">=</span> random.normal(subkey, W.shape)</span>
-<span id="cb11-4"><a href="#cb11-4"></a></span>
-<span id="cb11-5"><a href="#cb11-5"></a><span class="co"># Push forward</span></span>
-<span id="cb11-6"><a href="#cb11-6"></a>y, u <span class="op">=</span> jvp(f, (W,), (v,))</span>
-<span id="cb11-7"><a href="#cb11-7"></a><span class="bu">print</span>((y, u))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell" data-execution_count="9">
+<div class="sourceCode cell-code" id="cb14"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb14-1"><a href="#cb14-1"></a>f <span class="op">=</span> <span class="kw">lambda</span> W: predict(W, b, inputs)</span>
+<span id="cb14-2"><a href="#cb14-2"></a>key, subkey <span class="op">=</span> random.split(key)</span>
+<span id="cb14-3"><a href="#cb14-3"></a>v <span class="op">=</span> random.normal(subkey, W.shape)</span>
+<span id="cb14-4"><a href="#cb14-4"></a></span>
+<span id="cb14-5"><a href="#cb14-5"></a><span class="co"># Push forward</span></span>
+<span id="cb14-6"><a href="#cb14-6"></a>y, u <span class="op">=</span> jvp(f, (W,), (v,))</span>
+<span id="cb14-7"><a href="#cb14-7"></a><span class="bu">print</span>((y, u))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>(Array([0.13262254, 0.952067  , 0.6249393 , 0.9980987 ], dtype=float32), Array([ 0.01893247,  0.06917656, -0.00554809,  0.00501772], dtype=float32))</code></pre>
 </div>
@@ -980,15 +1015,15 @@ x_2 &amp; x_1
 </section>
 <section id="vjp-1" class="slide level2">
 <h2>VJP</h2>
-<div class="cell" data-execution_count="8">
-<div class="sourceCode cell-code" id="cb13"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb13-1"><a href="#cb13-1"></a>y, vjp_fun <span class="op">=</span> vjp(f, W)</span>
-<span id="cb13-2"><a href="#cb13-2"></a></span>
-<span id="cb13-3"><a href="#cb13-3"></a>key, subkey <span class="op">=</span> random.split(key)</span>
-<span id="cb13-4"><a href="#cb13-4"></a>u <span class="op">=</span> random.normal(subkey, y.shape)</span>
-<span id="cb13-5"><a href="#cb13-5"></a></span>
-<span id="cb13-6"><a href="#cb13-6"></a><span class="co"># Pull back</span></span>
-<span id="cb13-7"><a href="#cb13-7"></a><span class="co"># Note need to call function</span></span>
-<span id="cb13-8"><a href="#cb13-8"></a><span class="bu">print</span>((y, vjp_fun(u)))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell" data-execution_count="10">
+<div class="sourceCode cell-code" id="cb16"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb16-1"><a href="#cb16-1"></a>y, vjp_fun <span class="op">=</span> vjp(f, W)</span>
+<span id="cb16-2"><a href="#cb16-2"></a></span>
+<span id="cb16-3"><a href="#cb16-3"></a>key, subkey <span class="op">=</span> random.split(key)</span>
+<span id="cb16-4"><a href="#cb16-4"></a>u <span class="op">=</span> random.normal(subkey, y.shape)</span>
+<span id="cb16-5"><a href="#cb16-5"></a></span>
+<span id="cb16-6"><a href="#cb16-6"></a><span class="co"># Pull back</span></span>
+<span id="cb16-7"><a href="#cb16-7"></a><span class="co"># Note need to call function</span></span>
+<span id="cb16-8"><a href="#cb16-8"></a><span class="bu">print</span>((y, vjp_fun(u)))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>(Array([0.13262254, 0.952067  , 0.6249393 , 0.9980987 ], dtype=float32), (Array([-0.05722706, -0.07111154, -0.09522615], dtype=float32),))</code></pre>
 </div>
@@ -1000,13 +1035,13 @@ x_2 &amp; x_1
 <li>Key JAX feature is “flattening” of nested data</li>
 <li>Works for arbitrarily nested tree structures</li>
 </ul>
-<div class="cell" data-execution_count="9">
-<div class="sourceCode cell-code" id="cb15"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb15-1"><a href="#cb15-1"></a><span class="kw">def</span> loss2(params_dict):</span>
-<span id="cb15-2"><a href="#cb15-2"></a>    preds <span class="op">=</span> predict(params_dict[<span class="st">'W'</span>], params_dict[<span class="st">'b'</span>], inputs)</span>
-<span id="cb15-3"><a href="#cb15-3"></a>    label_probs <span class="op">=</span> preds <span class="op">*</span> targets <span class="op">+</span> (<span class="dv">1</span> <span class="op">-</span> preds) <span class="op">*</span> (<span class="dv">1</span> <span class="op">-</span> targets)</span>
-<span id="cb15-4"><a href="#cb15-4"></a>    <span class="cf">return</span> <span class="op">-</span>jnp.<span class="bu">sum</span>(jnp.log(label_probs))</span>
-<span id="cb15-5"><a href="#cb15-5"></a>params <span class="op">=</span> {<span class="st">'W'</span>: W, <span class="st">'b'</span>: b}</span>
-<span id="cb15-6"><a href="#cb15-6"></a><span class="bu">print</span>(grad(loss2)(params))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell" data-execution_count="11">
+<div class="sourceCode cell-code" id="cb18"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb18-1"><a href="#cb18-1"></a><span class="kw">def</span> loss2(params_dict):</span>
+<span id="cb18-2"><a href="#cb18-2"></a>    preds <span class="op">=</span> predict(params_dict[<span class="st">'W'</span>], params_dict[<span class="st">'b'</span>], inputs)</span>
+<span id="cb18-3"><a href="#cb18-3"></a>    label_probs <span class="op">=</span> preds <span class="op">*</span> targets <span class="op">+</span> (<span class="dv">1</span> <span class="op">-</span> preds) <span class="op">*</span> (<span class="dv">1</span> <span class="op">-</span> targets)</span>
+<span id="cb18-4"><a href="#cb18-4"></a>    <span class="cf">return</span> <span class="op">-</span>jnp.<span class="bu">sum</span>(jnp.log(label_probs))</span>
+<span id="cb18-5"><a href="#cb18-5"></a>params <span class="op">=</span> {<span class="st">'W'</span>: W, <span class="st">'b'</span>: b}</span>
+<span id="cb18-6"><a href="#cb18-6"></a><span class="bu">print</span>(grad(loss2)(params))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>{'W': Array([-0.16965583, -0.8774644 , -1.4901346 ], dtype=float32), 'b': Array(-0.29227245, dtype=float32)}</code></pre>
 </div>
@@ -1050,21 +1085,21 @@ x_2 &amp; x_1
 </section>
 <section id="registering-jvps-in-jax" class="slide level2">
 <h2>Registering JVPs in JAX</h2>
-<div class="cell" data-execution_count="10">
-<div class="sourceCode cell-code" id="cb17"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb17-1"><a href="#cb17-1"></a><span class="at">@jax.custom_jvp</span></span>
-<span id="cb17-2"><a href="#cb17-2"></a><span class="kw">def</span> f(x, y):</span>
-<span id="cb17-3"><a href="#cb17-3"></a>  <span class="cf">return</span> jnp.sin(x) <span class="op">*</span> y</span>
-<span id="cb17-4"><a href="#cb17-4"></a><span class="at">@f.defjvp</span></span>
-<span id="cb17-5"><a href="#cb17-5"></a><span class="kw">def</span> f_jvp(primals, tangents):</span>
-<span id="cb17-6"><a href="#cb17-6"></a>  x, y <span class="op">=</span> primals</span>
-<span id="cb17-7"><a href="#cb17-7"></a>  x_dot, y_dot <span class="op">=</span> tangents</span>
-<span id="cb17-8"><a href="#cb17-8"></a>  primal_out <span class="op">=</span> f(x, y)</span>
-<span id="cb17-9"><a href="#cb17-9"></a>  tangent_out <span class="op">=</span> jnp.cos(x) <span class="op">*</span> x_dot <span class="op">*</span> y <span class="op">+</span> jnp.sin(x) <span class="op">*</span> y_dot</span>
-<span id="cb17-10"><a href="#cb17-10"></a>  <span class="cf">return</span> primal_out, tangent_out</span>
-<span id="cb17-11"><a href="#cb17-11"></a></span>
-<span id="cb17-12"><a href="#cb17-12"></a><span class="bu">print</span>(f(<span class="fl">2.</span>, <span class="fl">3.</span>))</span>
-<span id="cb17-13"><a href="#cb17-13"></a>y, y_dot <span class="op">=</span> jvp(f, (<span class="fl">2.</span>, <span class="fl">3.</span>), (<span class="fl">1.</span>, <span class="fl">0.</span>)) <span class="co"># perturb x, not y</span></span>
-<span id="cb17-14"><a href="#cb17-14"></a><span class="bu">print</span>(y, y_dot)  </span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell" data-execution_count="12">
+<div class="sourceCode cell-code" id="cb20"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb20-1"><a href="#cb20-1"></a><span class="at">@jax.custom_jvp</span></span>
+<span id="cb20-2"><a href="#cb20-2"></a><span class="kw">def</span> f(x, y):</span>
+<span id="cb20-3"><a href="#cb20-3"></a>  <span class="cf">return</span> jnp.sin(x) <span class="op">*</span> y</span>
+<span id="cb20-4"><a href="#cb20-4"></a><span class="at">@f.defjvp</span></span>
+<span id="cb20-5"><a href="#cb20-5"></a><span class="kw">def</span> f_jvp(primals, tangents):</span>
+<span id="cb20-6"><a href="#cb20-6"></a>  x, y <span class="op">=</span> primals</span>
+<span id="cb20-7"><a href="#cb20-7"></a>  x_dot, y_dot <span class="op">=</span> tangents</span>
+<span id="cb20-8"><a href="#cb20-8"></a>  primal_out <span class="op">=</span> f(x, y)</span>
+<span id="cb20-9"><a href="#cb20-9"></a>  tangent_out <span class="op">=</span> jnp.cos(x) <span class="op">*</span> x_dot <span class="op">*</span> y <span class="op">+</span> jnp.sin(x) <span class="op">*</span> y_dot</span>
+<span id="cb20-10"><a href="#cb20-10"></a>  <span class="cf">return</span> primal_out, tangent_out</span>
+<span id="cb20-11"><a href="#cb20-11"></a></span>
+<span id="cb20-12"><a href="#cb20-12"></a><span class="bu">print</span>(f(<span class="fl">2.</span>, <span class="fl">3.</span>))</span>
+<span id="cb20-13"><a href="#cb20-13"></a>y, y_dot <span class="op">=</span> jvp(f, (<span class="fl">2.</span>, <span class="fl">3.</span>), (<span class="fl">1.</span>, <span class="fl">0.</span>)) <span class="co"># perturb x, not y</span></span>
+<span id="cb20-14"><a href="#cb20-14"></a><span class="bu">print</span>(y, y_dot)  </span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>2.7278922
 2.7278922 -1.2484405</code></pre>
@@ -1124,18 +1159,18 @@ I &amp;= C A\\
 <ul>
 <li>Most JAX and Pytorch packages will be built with AD rules</li>
 </ul>
-<div class="cell" data-execution_count="11">
-<div class="sourceCode cell-code" id="cb19"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb19-1"><a href="#cb19-1"></a><span class="im">from</span> jaxopt <span class="im">import</span> Bisection</span>
-<span id="cb19-2"><a href="#cb19-2"></a><span class="at">@jax.jit</span></span>
-<span id="cb19-3"><a href="#cb19-3"></a><span class="kw">def</span> F(x, factor):</span>
-<span id="cb19-4"><a href="#cb19-4"></a>  <span class="cf">return</span> factor <span class="op">*</span> x <span class="op">**</span> <span class="dv">3</span> <span class="op">-</span> x <span class="op">-</span> <span class="dv">2</span></span>
-<span id="cb19-5"><a href="#cb19-5"></a></span>
-<span id="cb19-6"><a href="#cb19-6"></a><span class="kw">def</span> root(factor):</span>
-<span id="cb19-7"><a href="#cb19-7"></a>  bisec <span class="op">=</span> Bisection(optimality_fun<span class="op">=</span>F, lower<span class="op">=</span><span class="dv">1</span>, upper<span class="op">=</span><span class="dv">2</span>)</span>
-<span id="cb19-8"><a href="#cb19-8"></a>  <span class="cf">return</span> bisec.run(factor<span class="op">=</span>factor).params</span>
-<span id="cb19-9"><a href="#cb19-9"></a></span>
-<span id="cb19-10"><a href="#cb19-10"></a><span class="co"># Derivative of root with respect to factor at 2.0.</span></span>
-<span id="cb19-11"><a href="#cb19-11"></a><span class="bu">print</span>(grad(root)(<span class="fl">2.0</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell" data-execution_count="13">
+<div class="sourceCode cell-code" id="cb22"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb22-1"><a href="#cb22-1"></a><span class="im">from</span> jaxopt <span class="im">import</span> Bisection</span>
+<span id="cb22-2"><a href="#cb22-2"></a><span class="at">@jax.jit</span></span>
+<span id="cb22-3"><a href="#cb22-3"></a><span class="kw">def</span> F(x, factor):</span>
+<span id="cb22-4"><a href="#cb22-4"></a>  <span class="cf">return</span> factor <span class="op">*</span> x <span class="op">**</span> <span class="dv">3</span> <span class="op">-</span> x <span class="op">-</span> <span class="dv">2</span></span>
+<span id="cb22-5"><a href="#cb22-5"></a></span>
+<span id="cb22-6"><a href="#cb22-6"></a><span class="kw">def</span> root(factor):</span>
+<span id="cb22-7"><a href="#cb22-7"></a>  bisec <span class="op">=</span> Bisection(optimality_fun<span class="op">=</span>F, lower<span class="op">=</span><span class="dv">1</span>, upper<span class="op">=</span><span class="dv">2</span>)</span>
+<span id="cb22-8"><a href="#cb22-8"></a>  <span class="cf">return</span> bisec.run(factor<span class="op">=</span>factor).params</span>
+<span id="cb22-9"><a href="#cb22-9"></a></span>
+<span id="cb22-10"><a href="#cb22-10"></a><span class="co"># Derivative of root with respect to factor at 2.0.</span></span>
+<span id="cb22-11"><a href="#cb22-11"></a><span class="bu">print</span>(grad(root)(<span class="fl">2.0</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>-0.22139914</code></pre>
 </div>

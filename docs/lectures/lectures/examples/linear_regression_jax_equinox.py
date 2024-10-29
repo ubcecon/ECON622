@@ -17,13 +17,8 @@ def residuals(model, X, Y):
     batched_residuals = jax.vmap(residual, in_axes=(None, 0, 0))
     return jnp.mean(batched_residuals(model, X, Y))
 
-
-# SWITCH OPTIMIZERS HERE!!!!
 # reinitialize
-#optimizer = optax.sgd(0.001)
-optimizer = optax.lbfgs()
-
-
+optimizer = optax.sgd(0.001)
 N = 500  # samples
 M = 2
 sigma = 0.0001

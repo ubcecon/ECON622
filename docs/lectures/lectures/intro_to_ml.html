@@ -460,6 +460,20 @@ Jesse Perla
 <li>For some linear algebra/etc. examples, see the <a href="https://ubcecon.github.io/ECON526/lectures/lectures/index.html">ECON526 Lectures</a></li>
 </ul>
 </section>
+<section id="depth-and-representations" class="slide level2">
+<h2>“Depth” and Representations</h2>
+<ul>
+<li>Could approximate a function <span class="math inline">\(f(X)\)</span> with a “shallow” approximation, e.g.&nbsp;polynomials of <span class="math inline">\(X\)</span>. Alternatively, nest functions <span class="math inline">\(h(\cdot)\)</span> and <span class="math inline">\(\phi(\cdot)\)</span> <span class="math display">\[
+f(X) \approx h(\phi(X))
+\]</span>
+<ul>
+<li>First, the <span class="math inline">\(\phi(X)\)</span> will transform the state into something more amenable for the downstream task (e.g.&nbsp;prediction, classification, etc.)</li>
+<li>Then the <span class="math inline">\(h(\cdot)\)</span> maps that transformed state into the output.</li>
+</ul></li>
+<li>Good <span class="math inline">\(\phi(\cdot)\)</span> efficiently calculate <span class="math inline">\(h(\cdot)\)</span>. Often reusable for other tasks (e.g.&nbsp;<span class="math inline">\(f_2(X) \approx h_2(\phi(X))\)</span>)</li>
+<li>For simple <span class="math inline">\(X\)</span> we can design them (e.g., take means, logs, first-differences). But for rich data can we learn them from the data itself?</li>
+</ul>
+</section>
 <section id="relevant-categories-of-machine-learning" class="slide level2">
 <h2>Relevant Categories of Machine Learning</h2>
 <ul>
@@ -552,7 +566,7 @@ Jesse Perla
 <li>Not really for general purpose programming
 <ul>
 <li>Intended for making auto-differentiation of neural networks easy, and updating gradients for solvers</li>
-<li>May be very slow for simple things or ones which don’t involve high-dimensional AD</li>
+<li>May be very slow for simple things or ones which don’t involve high-order AD</li>
 </ul></li>
 <li>Won’t always have packages you need for general code, and compatibility is ugly</li>
 </ul>
@@ -658,7 +672,7 @@ Jesse Perla
 <h2>Examples of Core Transformations</h2>
 <p>From <a href="https://jax.readthedocs.io/en/latest/notebooks/quickstart.html">JAX quickstart</a></p>
 <p>Builtin composable transformations: <code>jit</code>, <code>grad</code> and <code>vmap</code></p>
-<div class="cell" data-execution_count="1">
+<div class="cell" data-execution_count="2">
 <div class="sourceCode cell-code" id="cb2"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb2-1"><a href="#cb2-1"></a><span class="im">import</span> jax</span>
 <span id="cb2-2"><a href="#cb2-2"></a><span class="im">import</span> jax.numpy <span class="im">as</span> jnp</span>
 <span id="cb2-3"><a href="#cb2-3"></a><span class="im">import</span> numpy <span class="im">as</span> np</span>
@@ -667,7 +681,7 @@ Jesse Perla
 </section>
 <section id="compiling-with-jit" class="slide level2">
 <h2>Compiling with <code>jit</code></h2>
-<div class="cell" data-execution_count="2">
+<div class="cell" data-execution_count="3">
 <div class="sourceCode cell-code" id="cb3"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1"></a><span class="kw">def</span> selu(x, alpha<span class="op">=</span><span class="fl">1.67</span>, lmbda<span class="op">=</span><span class="fl">1.05</span>):</span>
 <span id="cb3-2"><a href="#cb3-2"></a>  <span class="cf">return</span> lmbda <span class="op">*</span> jnp.where(x <span class="op">&gt;</span> <span class="dv">0</span>, x, alpha <span class="op">*</span> jnp.exp(x) <span class="op">-</span> alpha)</span>
 <span id="cb3-3"><a href="#cb3-3"></a>key <span class="op">=</span> random.PRNGKey(<span class="dv">0</span>)  </span>
@@ -686,7 +700,7 @@ Jesse Perla
 <ul>
 <li>Convenience python decorator <code>@jit</code></li>
 </ul>
-<div class="cell" data-execution_count="3">
+<div class="cell" data-execution_count="4">
 <div class="sourceCode cell-code" id="cb5"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb5-1"><a href="#cb5-1"></a><span class="at">@jit</span></span>
 <span id="cb5-2"><a href="#cb5-2"></a><span class="kw">def</span> selu(x, alpha<span class="op">=</span><span class="fl">1.67</span>, lmbda<span class="op">=</span><span class="fl">1.05</span>):</span>
 <span id="cb5-3"><a href="#cb5-3"></a>  <span class="cf">return</span> lmbda <span class="op">*</span> jnp.where(x <span class="op">&gt;</span> <span class="dv">0</span>, x, alpha <span class="op">*</span> jnp.exp(x) <span class="op">-</span> alpha)</span>
@@ -698,7 +712,7 @@ Jesse Perla
 </section>
 <section id="differentiation-with-grad" class="slide level2">
 <h2>Differentiation with <code>grad</code></h2>
-<div class="cell" data-execution_count="4">
+<div class="cell" data-execution_count="5">
 <div class="sourceCode cell-code" id="cb7"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb7-1"><a href="#cb7-1"></a><span class="kw">def</span> sum_logistic(x):</span>
 <span id="cb7-2"><a href="#cb7-2"></a>  <span class="cf">return</span> jnp.<span class="bu">sum</span>(<span class="fl">1.0</span> <span class="op">/</span> (<span class="fl">1.0</span> <span class="op">+</span> jnp.exp(<span class="op">-</span>x)))</span>
 <span id="cb7-3"><a href="#cb7-3"></a></span>
@@ -713,7 +727,7 @@ Jesse Perla
 <section id="manual-batchingvectorization" class="slide level2">
 <h2>Manual “Batching”/Vectorization</h2>
 <p>Common to run the same function along one dimension of an array</p>
-<div class="cell" data-execution_count="5">
+<div class="cell" data-execution_count="6">
 <div class="sourceCode cell-code" id="cb9"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb9-1"><a href="#cb9-1"></a>mat <span class="op">=</span> random.normal(key, (<span class="dv">150</span>, <span class="dv">100</span>))</span>
 <span id="cb9-2"><a href="#cb9-2"></a>batched_x <span class="op">=</span> random.normal(key, (<span class="dv">10</span>, <span class="dv">100</span>))</span>
 <span id="cb9-3"><a href="#cb9-3"></a></span>
@@ -730,7 +744,7 @@ Jesse Perla
 <section id="using-vmap" class="slide level2">
 <h2>Using <code>vmap</code></h2>
 <p>The <a href="https://jax.readthedocs.io/en/latest/_autosummary/jax.vmap.html#jax.vmap">vmap</a> applies across a dimension</p>
-<div class="cell" data-execution_count="6">
+<div class="cell" data-execution_count="7">
 <div class="sourceCode cell-code" id="cb11"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb11-1"><a href="#cb11-1"></a><span class="at">@jit</span></span>
 <span id="cb11-2"><a href="#cb11-2"></a><span class="kw">def</span> vmap_batched_f(v_batched):</span>
 <span id="cb11-3"><a href="#cb11-3"></a>  <span class="cf">return</span> vmap(f)(v_batched)</span>
@@ -746,7 +760,7 @@ Jesse Perla
 <section id="more-vmap" class="slide level2">
 <h2>More <code>vmap</code></h2>
 <p>Can fix dimensions with <code>in_axes</code></p>
-<div class="cell" data-execution_count="7">
+<div class="cell" data-execution_count="8">
 <div class="sourceCode cell-code" id="cb13"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb13-1"><a href="#cb13-1"></a><span class="kw">def</span> f(a, x, y):</span>
 <span id="cb13-2"><a href="#cb13-2"></a>  <span class="cf">return</span> a <span class="op">*</span> x <span class="op">+</span> y</span>
 <span id="cb13-3"><a href="#cb13-3"></a>a <span class="op">=</span> <span class="fl">2.0</span></span>
@@ -761,7 +775,7 @@ Jesse Perla
 <section id="save-vmap-functions" class="slide level2">
 <h2>Save <code>vmap</code> functions</h2>
 <p>Can fix dimensions with <code>in_axes</code></p>
-<div class="cell" data-execution_count="8">
+<div class="cell" data-execution_count="9">
 <div class="sourceCode cell-code" id="cb15"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb15-1"><a href="#cb15-1"></a><span class="at">@jax.jit</span></span>
 <span id="cb15-2"><a href="#cb15-2"></a><span class="kw">def</span> f(a, x, y):</span>
 <span id="cb15-3"><a href="#cb15-3"></a>  <span class="cf">return</span> a <span class="op">*</span> x <span class="op">+</span> y</span>
@@ -832,7 +846,7 @@ Jesse Perla
 <ul>
 <li>JAX uses a generic <a href="https://jax.readthedocs.io/en/latest/jax-101/05.1-pytrees.html">tree structure</a>. Powerful but takes time to understand: Examples from: <a href="https://jax.readthedocs.io/en/latest/pytrees.html">here</a> and <a href="https://jax.readthedocs.io/en/latest/_autosummary/jax.vmap.html#jax.vmap">here</a></li>
 </ul>
-<div class="cell" data-execution_count="9">
+<div class="cell" data-execution_count="10">
 <div class="sourceCode cell-code" id="cb17"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb17-1"><a href="#cb17-1"></a>f <span class="op">=</span> <span class="kw">lambda</span> x, y: jnp.vdot(x, y)</span>
 <span id="cb17-2"><a href="#cb17-2"></a>X <span class="op">=</span> jnp.array([[<span class="fl">1.0</span>, <span class="fl">2.0</span>],</span>
 <span id="cb17-3"><a href="#cb17-3"></a>               [<span class="fl">3.0</span>, <span class="fl">4.0</span>]])</span>
@@ -855,7 +869,7 @@ Jesse Perla
 <section id="pytree-example-1" class="slide level2">
 <h2>PyTree Example 1</h2>
 <p>The <code>in_axes</code> can match more complicated structures</p>
-<div class="cell" data-execution_count="10">
+<div class="cell" data-execution_count="11">
 <div class="sourceCode cell-code" id="cb19"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb19-1"><a href="#cb19-1"></a>dct <span class="op">=</span> {<span class="st">'a'</span>: <span class="fl">0.</span>, <span class="st">'b'</span>: jnp.arange(<span class="fl">5.</span>)}</span>
 <span id="cb19-2"><a href="#cb19-2"></a><span class="kw">def</span> foo(dct, x):</span>
 <span id="cb19-3"><a href="#cb19-3"></a> <span class="cf">return</span> dct[<span class="st">'a'</span>] <span class="op">+</span> dct[<span class="st">'b'</span>] <span class="op">+</span> x</span>
@@ -874,7 +888,7 @@ Jesse Perla
 </section>
 <section id="pytree-example-2" class="slide level2">
 <h2>PyTree Example 2</h2>
-<div class="cell" data-execution_count="11">
+<div class="cell" data-execution_count="12">
 <div class="sourceCode cell-code" id="cb21"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb21-1"><a href="#cb21-1"></a>dct <span class="op">=</span> {<span class="st">'a'</span>: jnp.array([<span class="fl">3.0</span>, <span class="fl">5.0</span>]), <span class="st">'b'</span>: jnp.array([<span class="fl">2.0</span>, <span class="fl">4.0</span>])}</span>
 <span id="cb21-2"><a href="#cb21-2"></a><span class="kw">def</span> foo2(dct, x):</span>
 <span id="cb21-3"><a href="#cb21-3"></a> <span class="cf">return</span> dct[<span class="st">'a'</span>] <span class="op">+</span> dct[<span class="st">'b'</span>] <span class="op">+</span> x</span>
@@ -893,7 +907,7 @@ Jesse Perla
 </section>
 <section id="pytree-example-3" class="slide level2">
 <h2>PyTree Example 3</h2>
-<div class="cell" data-execution_count="12">
+<div class="cell" data-execution_count="13">
 <div class="sourceCode cell-code" id="cb23"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb23-1"><a href="#cb23-1"></a>dct <span class="op">=</span> {<span class="st">'a'</span>: jnp.array([<span class="fl">3.0</span>, <span class="fl">5.0</span>]), <span class="st">'b'</span>: jnp.arange(<span class="fl">5.</span>)}</span>
 <span id="cb23-2"><a href="#cb23-2"></a><span class="kw">def</span> foo3(dct, x):</span>
 <span id="cb23-3"><a href="#cb23-3"></a> <span class="cf">return</span> dct[<span class="st">'a'</span>][<span class="dv">0</span>] <span class="op">*</span> dct[<span class="st">'a'</span>][<span class="dv">1</span>] <span class="op">+</span> dct[<span class="st">'b'</span>] <span class="op">+</span> x</span>

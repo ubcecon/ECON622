@@ -431,10 +431,11 @@ Jesse Perla
 <li><a href="#/optimization-crash-course" id="/toc-optimization-crash-course">Optimization Crash Course</a></li>
 <li><a href="#/stochastic-optimization" id="/toc-stochastic-optimization">Stochastic Optimization</a></li>
 <li><a href="#/training-loops" id="/toc-training-loops">Training Loops</a></li>
-<li><a href="#/detailed-pytorch-linear-regression-example" id="/toc-detailed-pytorch-linear-regression-example">Detailed Pytorch Linear Regression Example</a></li>
+<li><a href="#/linear-regression-with-pytorch" id="/toc-linear-regression-with-pytorch">Linear Regression with Pytorch</a></li>
 <li><a href="#/more-pytorch-linear-regression-examples" id="/toc-more-pytorch-linear-regression-examples">More Pytorch Linear Regression Examples</a></li>
-<li><a href="#/detailed-jax-linear-regression-example" id="/toc-detailed-jax-linear-regression-example">Detailed JAX Linear Regression Example</a></li>
-<li><a href="#/jax-linear-regression-with-equinox" id="/toc-jax-linear-regression-with-equinox">JAX Linear Regression with Equinox</a></li>
+<li><a href="#/linear-regression-with-raw-jax" id="/toc-linear-regression-with-raw-jax">Linear Regression with Raw JAX</a></li>
+<li><a href="#/linear-regression-with-flax" id="/toc-linear-regression-with-flax">Linear Regression with Flax</a></li>
+<li><a href="#/linear-regression-with-equinox" id="/toc-linear-regression-with-equinox">Linear Regression with Equinox</a></li>
 </ul>
 </nav>
 </section>
@@ -517,9 +518,9 @@ Jesse Perla
 \theta_{t+1} = \theta_t - \eta_t \nabla \mathcal{L}(\theta_t)
 \]</span></p>
 <ul>
-<li>It is the simplest “first-order” method (i.e., ones using just the gradient of <span class="math inline">\(\mathcal{L}\)</span>)</li>
+<li>It is the simplest “first-order” method (i.e., using just the gradient of <span class="math inline">\(\mathcal{L}\)</span>)</li>
 <li>Will call <span class="math inline">\(\eta_t\)</span> a “learning rate schedule”</li>
-<li>Think of line-search methods as choosing the stepsize <span class="math inline">\(\eta_t\)</span> optimally. Useful as well for economists, even if used infrequently in M</li>
+<li>Think of line-search methods as choosing the stepsize <span class="math inline">\(\eta_t\)</span> optimally. Can help with many of our problems</li>
 </ul>
 </section>
 <section id="when-and-where-does-this-converge" class="slide level2">
@@ -641,7 +642,8 @@ Jesse Perla
 <li>Make the <span class="math inline">\(\eta_t\)</span> smaller to deal with noise if this is high-variance</li>
 <li>Choose <span class="math inline">\(g_t\)</span> to be far cheaper to calculate than <span class="math inline">\(\nabla \mathcal{L}(\theta_t)\)</span></li>
 </ul></li>
-<li><p>Will turn out that this also adds additional regularization, which helps with generalization</p></li>
+<li><p>Remember: we don’t need the actual value of the objective function to optimize it!</p></li>
+<li><p>Will also add additional regularization, which can help with generalization</p></li>
 </ul>
 </section>
 <section id="stochastic-optimization-1" class="slide level2">
@@ -761,8 +763,8 @@ Jesse Perla
 <ul>
 <li><p>Algorithm is to draw <span class="math inline">\(B_t\)</span> indices at each step and execute SGD <span class="math display">\[
 \begin{aligned}
-g_t \equiv \frac{1}{|B_t|}\sum_{n \in B_t} \nabla_{\theta} \ell(\theta_t, x_n, y_n)\\
-\theta_{t+1} = \theta_t - \eta_t g_t
+g_t &amp;\equiv \frac{1}{|B_t|}\sum_{n \in B_t} \nabla_{\theta} \ell(\theta_t, x_n, y_n)\\
+\theta_{t+1} &amp;= \theta_t - \eta_t g_t
 \end{aligned}
 \]</span></p></li>
 <li><p>Note that we never need to calculate <span class="math inline">\(\mathcal{L}(\theta_t)\)</span> directly, so can write our code to all operate on batches <span class="math inline">\(B_t\)</span></p></li>
@@ -836,7 +838,7 @@ g_t \equiv \frac{1}{|B_t|}\sum_{n \in B_t} \nabla_{\theta} \ell(\theta_t, x_n, y
 <li>Ensure we don’t accidentally use it in training or validation</li>
 </ul></li>
 </ol>
-<p>Not all problems will have this structure, and not all with have validation data.</p>
+<p>Not all problems will have this structure (in particular, a “validation” set).</p>
 </section>
 <section id="why-separate-validation-and-test" class="slide level2">
 <h2>Why Separate Validation and Test?</h2>
@@ -940,8 +942,8 @@ g_t \equiv \frac{1}{|B_t|}\sum_{n \in B_t} \nabla_{\theta} \ell(\theta_t, x_n, y
 </ul>
 </section></section>
 <section>
-<section id="detailed-pytorch-linear-regression-example" class="title-slide slide level1 center">
-<h1>Detailed Pytorch Linear Regression Example</h1>
+<section id="linear-regression-with-pytorch" class="title-slide slide level1 center">
+<h1>Linear Regression with Pytorch</h1>
 
 </section>
 <section id="linear-regression-examples" class="slide level2">
@@ -968,8 +970,10 @@ g_t \equiv \frac{1}{|B_t|}\sum_{n \in B_t} \nabla_{\theta} \ell(\theta_t, x_n, y
 <div class="sourceCode cell-code" id="cb1"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1"></a><span class="im">import</span> torch</span>
 <span id="cb1-2"><a href="#cb1-2"></a><span class="im">import</span> torch.nn <span class="im">as</span> nn</span>
 <span id="cb1-3"><a href="#cb1-3"></a><span class="im">import</span> torch.optim <span class="im">as</span> optim</span>
-<span id="cb1-4"><a href="#cb1-4"></a><span class="im">import</span> equinox <span class="im">as</span> eqx</span>
-<span id="cb1-5"><a href="#cb1-5"></a><span class="im">from</span> torch.utils.data <span class="im">import</span> TensorDataset, DataLoader, TensorDataset</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb1-4"><a href="#cb1-4"></a><span class="im">from</span> torch.utils.data <span class="im">import</span> TensorDataset, DataLoader, TensorDataset</span>
+<span id="cb1-5"><a href="#cb1-5"></a><span class="im">import</span> equinox <span class="im">as</span> eqx</span>
+<span id="cb1-6"><a href="#cb1-6"></a><span class="im">from</span> flax <span class="im">import</span> nnx</span>
+<span id="cb1-7"><a href="#cb1-7"></a><span class="im">from</span> jax_dataloader.loaders <span class="im">import</span> DataLoaderJAX</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 </section>
 <section id="simulate-data" class="slide level2">
@@ -987,7 +991,7 @@ y \sim N(x \cdot \theta, \sigma^2)
 <span id="cb2-7"><a href="#cb2-7"></a>dataset <span class="op">=</span> TensorDataset(X, Y)</span>
 <span id="cb2-8"><a href="#cb2-8"></a><span class="bu">print</span>(dataset[<span class="dv">0</span>]) <span class="co"># returns tuples of (x_n, y_n)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>(tensor([ 0.0446, -0.6026]), tensor(-0.6975))</code></pre>
+<pre><code>(tensor([2.3989, 0.0316]), tensor(0.5813))</code></pre>
 </div>
 </div>
 </section>
@@ -1008,14 +1012,14 @@ y \sim N(x \cdot \theta, \sigma^2)
 <span id="cb4-6"><a href="#cb4-6"></a><span class="bu">print</span>(<span class="bu">next</span>(<span class="bu">iter</span>(train_loader)))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div><div class="column">
 <div class="cell-output cell-output-stdout">
-<pre><code>[tensor([[-0.5068, -1.8683],
-        [ 0.0268,  0.4194],
-        [ 1.9364, -0.3282],
-        [ 0.6170, -0.0864],
-        [ 0.7405,  0.4941],
-        [-1.2465, -0.5728],
-        [ 0.6809, -0.3438],
-        [ 1.1715, -0.6198]]), tensor([-0.7790,  0.3617, -4.4886, -1.4130, -1.0978,  2.1072, -1.8076, -3.1371])]</code></pre>
+<pre><code>[tensor([[-1.5643, -0.4429],
+        [ 1.0594,  0.2506],
+        [-0.7254,  2.3391],
+        [ 0.0394,  0.0421],
+        [ 1.7714, -0.2220],
+        [ 0.8081, -0.1131],
+        [-0.0818, -0.1814],
+        [ 0.3546,  0.5194]]), tensor([-0.3926,  0.2640, -0.1011,  0.0110,  0.4207,  0.1924, -0.0265,  0.1030])]</code></pre>
 </div>
 </div>
 </div>
@@ -1069,6 +1073,7 @@ Parameter Group 0
     dampening: 0
     differentiable: False
     foreach: None
+    fused: None
     lr: 0.001
     maximize: False
     momentum: 0
@@ -1096,7 +1101,7 @@ Parameter Group 0
 <span id="cb11-7"><a href="#cb11-7"></a>        optimizer.step()  <span class="co"># Update the optimizers internal parameters</span></span>
 <span id="cb11-8"><a href="#cb11-8"></a><span class="bu">print</span>(<span class="ss">f"||theta - theta_hat|| = </span><span class="sc">{</span>torch<span class="sc">.</span>norm(theta <span class="op">-</span> model.weight.squeeze())<span class="sc">}</span><span class="ss">"</span>)        </span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>||theta - theta_hat|| = 1.023274762701476e-05</code></pre>
+<pre><code>||theta - theta_hat|| = 7.689500489505008e-05</code></pre>
 </div>
 </div>
 </section></section>
@@ -1173,8 +1178,8 @@ Parameter Group 0
 </ul>
 </section></section>
 <section>
-<section id="detailed-jax-linear-regression-example" class="title-slide slide level1 center">
-<h1>Detailed JAX Linear Regression Example</h1>
+<section id="linear-regression-with-raw-jax" class="title-slide slide level1 center">
+<h1>Linear Regression with Raw JAX</h1>
 
 </section>
 <section id="packages-1" class="slide level2">
@@ -1187,7 +1192,9 @@ Parameter Group 0
 <span id="cb14-2"><a href="#cb14-2"></a><span class="im">import</span> jax.numpy <span class="im">as</span> jnp</span>
 <span id="cb14-3"><a href="#cb14-3"></a><span class="im">from</span> jax <span class="im">import</span> grad, jit, value_and_grad, vmap</span>
 <span id="cb14-4"><a href="#cb14-4"></a><span class="im">from</span> jax <span class="im">import</span> random</span>
-<span id="cb14-5"><a href="#cb14-5"></a><span class="im">import</span> optax</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb14-5"><a href="#cb14-5"></a><span class="im">import</span> optax</span>
+<span id="cb14-6"><a href="#cb14-6"></a><span class="im">import</span> jax_dataloader <span class="im">as</span> jdl</span>
+<span id="cb14-7"><a href="#cb14-7"></a><span class="im">from</span> jax_dataloader.loaders <span class="im">import</span> DataLoaderJAX</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 </section>
 <section id="simulate-data-1" class="slide level2">
@@ -1418,23 +1425,282 @@ Epoch 200,||theta - theta_hat|| = 6.216356268851086e-05
 <li>This implements the <code>vmap</code> as above</li>
 <li>This also adds in an <a href="https://optax.readthedocs.io/en/latest/api.html#optimizer-schedules">learning rate schedule</a></li>
 </ul></li>
-<li>See <a href="examples/linear_regression_jax_equinox.py">examples/linear_regression_jax_equinox.py</a>
-<ul>
-<li>See the following example for more</li>
-</ul></li>
+<li>See <a href="examples/linear_regression_jax_nnx.py">examples/linear_regression_jax_nnx.py</a> and <a href="examples/linear_regression_jax_nnx_split.py">examples/linear_regression_jax_nnx_split.py</a> for ones using the Flax NNX</li>
 </ul>
 </section></section>
 <section>
-<section id="jax-linear-regression-with-equinox" class="title-slide slide level1 center">
-<h1>JAX Linear Regression with Equinox</h1>
+<section id="linear-regression-with-flax" class="title-slide slide level1 center">
+<h1>Linear Regression with Flax</h1>
+
+</section>
+<section id="flax-nnx" class="slide level2">
+<h2>Flax NNX</h2>
+<ul>
+<li>While it seems convenient to work in a functional style, when we move towards nested, deep approximations it can become cumbersome to manage the parameters</li>
+<li><a href="https://flax.readthedocs.io/en/latest/index.html">Flax</a> is a package which provides flexible ways to define and work with function approximations
+<ul>
+<li>There is a newer (NNX) and older (Linen) interface. Use NNX.</li>
+</ul></li>
+<li>We will also introduce a DataLoader class to remove boilerplate</li>
+</ul>
+</section>
+<section id="hypothesis-class-2" class="slide level2">
+<h2>Hypothesis Class</h2>
+<ul>
+<li>We are moving towards Neural Networks, which are a very broad class of approximations.</li>
+<li>Here lets just use a linear approximation with no constant term</li>
+<li>As always, the initial randomization will become increasingly important</li>
+</ul>
+<div class="cell" data-execution_count="20">
+<div class="sourceCode cell-code" id="cb31"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb31-1"><a href="#cb31-1"></a>N, M, sigma <span class="op">=</span> <span class="dv">500</span>, <span class="dv">2</span>, <span class="fl">0.001</span></span>
+<span id="cb31-2"><a href="#cb31-2"></a>rngs <span class="op">=</span> nnx.Rngs(<span class="dv">42</span>)</span>
+<span id="cb31-3"><a href="#cb31-3"></a>model <span class="op">=</span> nnx.Linear(M, <span class="dv">1</span>, use_bias<span class="op">=</span><span class="va">False</span>, rngs<span class="op">=</span>rngs)</span>
+<span id="cb31-4"><a href="#cb31-4"></a><span class="bu">print</span>(model.kernel) <span class="co"># the initial parameters</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Param(
+  value=Array([[-0.19977082],
+         [-0.613821  ]], dtype=float32)
+)</code></pre>
+</div>
+</div>
+</section>
+<section id="residuals-using-the-model" class="slide level2">
+<h2>Residuals Using the “Model”</h2>
+<ul>
+<li>The model now contains all of the, potentially nested, parameters for the approximation class</li>
+<li>It provides call notation to evaluate the function with those parameters</li>
+</ul>
+<div class="cell" data-execution_count="21">
+<div class="sourceCode cell-code" id="cb33"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb33-1"><a href="#cb33-1"></a><span class="kw">def</span> residual(model, x, y):</span>
+<span id="cb33-2"><a href="#cb33-2"></a>    y_hat <span class="op">=</span> model(x)</span>
+<span id="cb33-3"><a href="#cb33-3"></a>    <span class="cf">return</span> (y_hat <span class="op">-</span> y) <span class="op">**</span> <span class="dv">2</span></span>
+<span id="cb33-4"><a href="#cb33-4"></a></span>
+<span id="cb33-5"><a href="#cb33-5"></a><span class="kw">def</span> residuals_loss(model, X, Y):</span>
+<span id="cb33-6"><a href="#cb33-6"></a>    <span class="cf">return</span> jnp.mean(jax.vmap(residual, in_axes<span class="op">=</span>(<span class="va">None</span>, <span class="dv">0</span>, <span class="dv">0</span>))(model, X, Y))</span>
+<span id="cb33-7"><a href="#cb33-7"></a>theta <span class="op">=</span> random.normal(rngs(), (M,))</span>
+<span id="cb33-8"><a href="#cb33-8"></a>X <span class="op">=</span> random.normal(rngs(), (N, M))</span>
+<span id="cb33-9"><a href="#cb33-9"></a>Y <span class="op">=</span> X <span class="op">@</span> theta <span class="op">+</span> sigma <span class="op">*</span> random.normal(rngs(), (N,))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</section>
+<section id="gradients-of-models" class="slide level2">
+<h2>Gradients of Models</h2>
+<ul>
+<li>As discussed, we can find the gradients of richer objects than just arrays</li>
+<li>Optimizer updates use perturbations of the underlying PyTree</li>
+<li>Updates can be applied because the type of the gradients matches the underlying PyTree</li>
+</ul>
+<div class="cell columns column-output-location" data-execution_count="22">
+<div class="column">
+<div class="sourceCode cell-code" id="cb34"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb34-1"><a href="#cb34-1"></a>grads <span class="op">=</span> nnx.grad(residuals_loss)(model, X, Y)</span>
+<span id="cb34-2"><a href="#cb34-2"></a><span class="bu">print</span>(grads)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div><div class="column">
+<div class="cell-output cell-output-stdout">
+<pre><code>State({
+  'bias': VariableState(
+    type=Param,
+    value=None
+  ),
+  'kernel': VariableState(
+    type=Param,
+    value=Array([[-0.63399523],
+           [-0.02216433]], dtype=float32)
+  )
+})</code></pre>
+</div>
+</div>
+</div>
+</section>
+<section id="setup-optimizer-and-training-step" class="slide level2">
+<h2>Setup Optimizer and Training Step</h2>
+<ul>
+<li>The DataLoaderJAX will give us sampled batches without custom code</li>
+<li>Note the <code>@nnx.jit</code> and <code>@nnx.vmap</code> which replace the <code>@jax.</code> versions</li>
+</ul>
+<div class="cell" data-execution_count="23">
+<div class="sourceCode cell-code" id="cb36"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb36-1"><a href="#cb36-1"></a><span class="at">@nnx.jit</span></span>
+<span id="cb36-2"><a href="#cb36-2"></a><span class="kw">def</span> train_step(model, optimizer, X, Y):</span>
+<span id="cb36-3"><a href="#cb36-3"></a>    <span class="kw">def</span> loss_fn(model):</span>
+<span id="cb36-4"><a href="#cb36-4"></a>        <span class="cf">return</span> residuals_loss(model, X, Y)</span>
+<span id="cb36-5"><a href="#cb36-5"></a>    loss, grads <span class="op">=</span> nnx.value_and_grad(loss_fn)(model)</span>
+<span id="cb36-6"><a href="#cb36-6"></a>    optimizer.update(grads)</span>
+<span id="cb36-7"><a href="#cb36-7"></a>    <span class="cf">return</span> loss</span>
+<span id="cb36-8"><a href="#cb36-8"></a>optimizer <span class="op">=</span> nnx.Optimizer(model, optax.sgd(<span class="fl">0.001</span>))</span>
+<span id="cb36-9"><a href="#cb36-9"></a>dataset <span class="op">=</span> jdl.ArrayDataset(X, Y) <span class="co"># automatic data loader</span></span>
+<span id="cb36-10"><a href="#cb36-10"></a>train_loader <span class="op">=</span> DataLoaderJAX(dataset, batch_size<span class="op">=</span><span class="dv">1024</span>, shuffle<span class="op">=</span><span class="va">True</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</section>
+<section id="run-optimizer-with-dataloaderjax" class="slide level2">
+<h2>Run Optimizer with DataLoaderJAX</h2>
+<ul>
+<li>Run optimizer and extract the parameters in the <code>model</code></li>
+</ul>
+<div class="cell" data-execution_count="24">
+<div class="sourceCode cell-code" id="cb37"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb37-1"><a href="#cb37-1"></a><span class="cf">for</span> epoch <span class="kw">in</span> <span class="bu">range</span>(<span class="dv">500</span>):</span>
+<span id="cb37-2"><a href="#cb37-2"></a>    <span class="cf">for</span> X_batch, Y_batch <span class="kw">in</span> train_loader:</span>
+<span id="cb37-3"><a href="#cb37-3"></a>        loss <span class="op">=</span> train_step(model, optimizer, X_batch, Y_batch)</span>
+<span id="cb37-4"><a href="#cb37-4"></a></span>
+<span id="cb37-5"><a href="#cb37-5"></a>    <span class="cf">if</span> epoch <span class="op">%</span> <span class="dv">100</span> <span class="op">==</span> <span class="dv">0</span>:</span>
+<span id="cb37-6"><a href="#cb37-6"></a>        norm_diff <span class="op">=</span> jnp.linalg.norm(theta <span class="op">-</span> jnp.squeeze(model.kernel.value))</span>
+<span id="cb37-7"><a href="#cb37-7"></a>        <span class="bu">print</span>(<span class="ss">f"Epoch </span><span class="sc">{</span>epoch<span class="sc">}</span><span class="ss">,||theta-theta_hat|| = </span><span class="sc">{</span>norm_diff<span class="sc">}</span><span class="ss">"</span>)</span>
+<span id="cb37-8"><a href="#cb37-8"></a>norm_diff <span class="op">=</span> jnp.linalg.norm(theta <span class="op">-</span> jnp.squeeze(model.kernel.value))</span>
+<span id="cb37-9"><a href="#cb37-9"></a><span class="bu">print</span>(<span class="ss">f"||theta - theta_hat|| = </span><span class="sc">{</span>norm_diff<span class="sc">}</span><span class="ss">"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Epoch 0,||theta-theta_hat|| = 0.31769511103630066
+Epoch 100,||theta-theta_hat|| = 0.2602464258670807
+Epoch 200,||theta-theta_hat|| = 0.21318809688091278
+Epoch 300,||theta-theta_hat|| = 0.17464040219783783
+Epoch 400,||theta-theta_hat|| = 0.1430637687444687
+||theta - theta_hat|| = 0.11743119359016418</code></pre>
+</div>
+</div>
+</section>
+<section id="define-a-custom-type" class="slide level2">
+<h2>Define a Custom Type</h2>
+<ul>
+<li>“Neural Networks” are custom types which nest parameterized function calls</li>
+<li>Nest calls to other <code>nnx.Module</code> or create/use differentiable <code>nnx.Param</code></li>
+</ul>
+<div class="cell" data-execution_count="25">
+<div class="sourceCode cell-code" id="cb39"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb39-1"><a href="#cb39-1"></a><span class="kw">class</span> MyLinear(nnx.Module):</span>
+<span id="cb39-2"><a href="#cb39-2"></a>    <span class="kw">def</span> <span class="fu">__init__</span>(<span class="va">self</span>, in_size, out_size, rngs):</span>
+<span id="cb39-3"><a href="#cb39-3"></a>        <span class="va">self</span>.out_size <span class="op">=</span> out_size</span>
+<span id="cb39-4"><a href="#cb39-4"></a>        <span class="va">self</span>.in_size <span class="op">=</span> in_size</span>
+<span id="cb39-5"><a href="#cb39-5"></a>        <span class="va">self</span>.kernel <span class="op">=</span> nnx.Param(jax.random.normal(rngs(), (<span class="va">self</span>.out_size, <span class="va">self</span>.in_size)))</span>
+<span id="cb39-6"><a href="#cb39-6"></a>    <span class="co"># Similar to Pytorch's forward</span></span>
+<span id="cb39-7"><a href="#cb39-7"></a>    <span class="kw">def</span> <span class="fu">__call__</span>(<span class="va">self</span>, x):</span>
+<span id="cb39-8"><a href="#cb39-8"></a>        <span class="cf">return</span> <span class="va">self</span>.kernel <span class="op">@</span> x</span>
+<span id="cb39-9"><a href="#cb39-9"></a></span>
+<span id="cb39-10"><a href="#cb39-10"></a>model <span class="op">=</span> MyLinear(M, <span class="dv">1</span>, rngs <span class="op">=</span> rngs)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</section>
+<section id="same-optimization-loop" class="slide level2">
+<h2>Same Optimization Loop</h2>
+<div class="cell" data-execution_count="26">
+<div class="sourceCode cell-code" id="cb40"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb40-1"><a href="#cb40-1"></a>optimizer <span class="op">=</span> nnx.Optimizer(model, optax.sgd(<span class="fl">0.001</span>))</span>
+<span id="cb40-2"><a href="#cb40-2"></a><span class="cf">for</span> epoch <span class="kw">in</span> <span class="bu">range</span>(<span class="dv">500</span>):</span>
+<span id="cb40-3"><a href="#cb40-3"></a>    <span class="cf">for</span> X_batch, Y_batch <span class="kw">in</span> train_loader:</span>
+<span id="cb40-4"><a href="#cb40-4"></a>        loss <span class="op">=</span> train_step(model, optimizer, X_batch, Y_batch)</span>
+<span id="cb40-5"><a href="#cb40-5"></a></span>
+<span id="cb40-6"><a href="#cb40-6"></a>    <span class="cf">if</span> epoch <span class="op">%</span> <span class="dv">100</span> <span class="op">==</span> <span class="dv">0</span>:</span>
+<span id="cb40-7"><a href="#cb40-7"></a>        norm_diff <span class="op">=</span> jnp.linalg.norm(theta <span class="op">-</span> jnp.squeeze(model.kernel.value))</span>
+<span id="cb40-8"><a href="#cb40-8"></a>        <span class="bu">print</span>(<span class="ss">f"Epoch </span><span class="sc">{</span>epoch<span class="sc">}</span><span class="ss">,||theta-theta_hat|| = </span><span class="sc">{</span>norm_diff<span class="sc">}</span><span class="ss">"</span>)</span>
+<span id="cb40-9"><a href="#cb40-9"></a>norm_diff <span class="op">=</span> jnp.linalg.norm(theta <span class="op">-</span> jnp.squeeze(model.kernel.value))</span>
+<span id="cb40-10"><a href="#cb40-10"></a><span class="bu">print</span>(<span class="ss">f"||theta - theta_hat|| = </span><span class="sc">{</span>norm_diff<span class="sc">}</span><span class="ss">"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Epoch 0,||theta-theta_hat|| = 2.498084306716919
+Epoch 100,||theta-theta_hat|| = 2.0521292686462402
+Epoch 200,||theta-theta_hat|| = 1.6858018636703491
+Epoch 300,||theta-theta_hat|| = 1.384881615638733
+Epoch 400,||theta-theta_hat|| = 1.1376869678497314
+||theta - theta_hat|| = 0.9364640712738037</code></pre>
+</div>
+</div>
+</section>
+<section id="filtering-transformations" class="slide level2">
+<h2>Filtering Transformations</h2>
+<ul>
+<li>Much of the NNX package is built around <a href="https://flax.readthedocs.io/en/latest/guides/filters_guide.html">filtering</a> members of the underlying python class</li>
+<li>Within an <code>nnx.Module</code> the <code>nnx.Param</code> are values which you might look to differentiate, others are fixed</li>
+<li>Since JAX code is (primarily) “pure” and functional, a key part of the package is to split and recombine parameters intended for gradients from those which are not</li>
+</ul>
+</section>
+<section id="splitting-into-differentiable-parameters" class="slide level2">
+<h2>Splitting into Differentiable Parameters</h2>
+<ul>
+<li>For our custom type, the fields are <code>out_size, in_size, kernel</code>. We only want to differentate the <code>kernel</code> since wrapped in <code>nnx.Param</code></li>
+<li>To separate out parameters use <code>nnx.split</code> and to recombine use <code>nnx.merge</code></li>
+</ul>
+<div class="cell columns column-output-location" data-execution_count="27">
+<div class="column">
+<div class="sourceCode cell-code" id="cb42"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb42-1"><a href="#cb42-1"></a>model <span class="op">=</span> MyLinear(M, <span class="dv">1</span>, rngs <span class="op">=</span> rngs)</span>
+<span id="cb42-2"><a href="#cb42-2"></a>graphdef, state <span class="op">=</span> nnx.split(model)</span>
+<span id="cb42-3"><a href="#cb42-3"></a><span class="bu">print</span>(graphdef)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div><div class="column">
+<div class="cell-output cell-output-stdout">
+<pre><code>GraphDef(
+  nodedef=NodeDef(
+    type=MyLinear,
+    index=0,
+    attributes=('in_size', 'kernel', 'out_size'),
+    subgraphs={},
+    static_fields={
+      'in_size': 2,
+      'out_size': 1
+    },
+    leaves={
+      'kernel': 1
+    },
+    metadata=&lt;class '__main__.MyLinear'&gt;
+  ),
+  index_mapping=None
+)</code></pre>
+</div>
+</div>
+</div>
+</section>
+<section id="merging" class="slide level2">
+<h2>Merging</h2>
+<ul>
+<li><code>graphdef</code> was the fixed structure, <code>state</code> is the differentiable</li>
+<li>Use <code>nnx.merge</code> to combine the fixed and differentiable parts</li>
+</ul>
+<div class="cell columns column-output-location" data-execution_count="28">
+<div class="column">
+<div class="sourceCode cell-code" id="cb44"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb44-1"><a href="#cb44-1"></a><span class="bu">print</span>(state)</span>
+<span id="cb44-2"><a href="#cb44-2"></a><span class="co"># Emulate a "gradient" update</span></span>
+<span id="cb44-3"><a href="#cb44-3"></a><span class="kw">def</span> apply_fake_gradient(param):</span>
+<span id="cb44-4"><a href="#cb44-4"></a>    <span class="cf">return</span> param <span class="op">+</span> <span class="fl">0.01</span></span>
+<span id="cb44-5"><a href="#cb44-5"></a><span class="co"># Apply "gradient" update to tree</span></span>
+<span id="cb44-6"><a href="#cb44-6"></a>state_2 <span class="op">=</span> jax.tree_util.tree_map(</span>
+<span id="cb44-7"><a href="#cb44-7"></a>               apply_fake_gradient, state)</span>
+<span id="cb44-8"><a href="#cb44-8"></a><span class="co"># Combine to form a model</span></span>
+<span id="cb44-9"><a href="#cb44-9"></a>model_2 <span class="op">=</span> nnx.merge(graphdef, state_2)</span>
+<span id="cb44-10"><a href="#cb44-10"></a><span class="bu">print</span>(model_2)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div><div class="column">
+<div class="cell-output cell-output-stdout">
+<pre><code>State({
+  'kernel': VariableState(
+    type=Param,
+    value=Array([[1.1462003, 1.0469387]], dtype=float32)
+  )
+})
+MyLinear(
+  in_size=2,
+  kernel=Param(
+    value=Array(shape=(1, 2), dtype=float32)
+  ),
+  out_size=1
+)</code></pre>
+</div>
+</div>
+</div>
+</section>
+<section id="more-advanced-optimization-loops" class="slide level2">
+<h2>More Advanced Optimization Loops</h2>
+<ul>
+<li>Filtering is often automated by replacing <code>jax</code> with <code>nnx</code> equivalents
+<ul>
+<li><code>nnx.jit, nnx.value_and_grad</code> etc. automatically filter for Params</li>
+</ul></li>
+<li>This process provides some overhead, so for high-speed <a href="https://github.com/google/flax/blob/main/examples/nnx_toy_examples/01_functional_api.py">examples</a> may manually split and merge</li>
+</ul>
+</section></section>
+<section>
+<section id="linear-regression-with-equinox" class="title-slide slide level1 center">
+<h1>Linear Regression with Equinox</h1>
 
 </section>
 <section id="using-an-equinox-model" class="slide level2">
 <h2>Using an Equinox Model</h2>
 <ul>
-<li>While it seems convenient to work in a functional style, when we move towards nested, deep approximations it can become cumbersome</li>
-<li>An excellent package to both define hypothesis classes and to work with their gradients is <a href="https://github.com/patrick-kidger/equinox">equinox</a></li>
+<li>Another option for NNs is <a href="https://github.com/patrick-kidger/equinox">Equinox</a></li>
 <li>Key to the design of equinox is that if we use that the nested parameters of an approximation class are PyTrees, then we can find the derivative with respect to that entire type. See our previous example on differentiating PyTrees</li>
+<li>Despite its strengths, Equinox has fewer maintainers than Flax NNX
+<ul>
+<li>Many similarities in the design</li>
+<li>Has a good ecosystem of more scientific packages, which is a benefit</li>
+</ul></li>
+<li>See <a href="examples/linear_regression_jax_equinox.py">examples/linear_regression_jax_equinox.py</a></li>
 </ul>
 </section>
 <section id="equinox-macros" class="slide level2">
@@ -1448,53 +1714,53 @@ Epoch 200,||theta - theta_hat|| = 6.216356268851086e-05
 <li>When in doubt, always replace them. e.g.&nbsp;<code>@jax.jit</code> can be replied with <code>@equinox.filter_jit</code>, <code>jax.vmap</code> should be replaced with <code>eqx.filter_vmap</code>, etc.</li>
 </ul>
 </section>
-<section id="hypothesis-class-2" class="slide level2">
+<section id="hypothesis-class-3" class="slide level2">
 <h2>Hypothesis Class</h2>
 <ul>
 <li>We are moving towards Neural Networks, which are a very broad class of approximations.</li>
 <li>Here lets just use a linear approximation with no constant term</li>
 <li>As always, the initial randomization will become increasingly important</li>
 </ul>
-<div class="cell" data-execution_count="20">
-<div class="sourceCode cell-code" id="cb31"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb31-1"><a href="#cb31-1"></a>key, subkey <span class="op">=</span> random.split(key)</span>
-<span id="cb31-2"><a href="#cb31-2"></a>model <span class="op">=</span> eqx.nn.Linear(M, <span class="dv">1</span>, use_bias <span class="op">=</span> <span class="va">False</span>, key <span class="op">=</span> subkey)</span>
-<span id="cb31-3"><a href="#cb31-3"></a><span class="bu">print</span>(model.weight)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell" data-execution_count="29">
+<div class="sourceCode cell-code" id="cb46"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb46-1"><a href="#cb46-1"></a>key, subkey <span class="op">=</span> random.split(key)</span>
+<span id="cb46-2"><a href="#cb46-2"></a>model <span class="op">=</span> eqx.nn.Linear(M, <span class="dv">1</span>, use_bias <span class="op">=</span> <span class="va">False</span>, key <span class="op">=</span> subkey)</span>
+<span id="cb46-3"><a href="#cb46-3"></a><span class="bu">print</span>(model.weight)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>[[-0.01143495  0.6449629 ]]</code></pre>
 </div>
 </div>
 </section>
-<section id="residuals-using-the-model" class="slide level2">
+<section id="residuals-using-the-model-1" class="slide level2">
 <h2>Residuals using the Model</h2>
 <ul>
 <li>The model now contains all of the, potentially nested, parameters for the approximation class</li>
 <li>It provides call notation to evaluate the function with those parameters</li>
 </ul>
-<div class="cell" data-execution_count="21">
-<div class="sourceCode cell-code" id="cb33"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb33-1"><a href="#cb33-1"></a><span class="kw">def</span> residual(model, x, y):</span>
-<span id="cb33-2"><a href="#cb33-2"></a>    y_hat <span class="op">=</span> model(x)</span>
-<span id="cb33-3"><a href="#cb33-3"></a>    <span class="cf">return</span> (y_hat <span class="op">-</span> y) <span class="op">**</span> <span class="dv">2</span></span>
-<span id="cb33-4"><a href="#cb33-4"></a></span>
-<span id="cb33-5"><a href="#cb33-5"></a><span class="kw">def</span> residuals(model, X, Y):</span>
-<span id="cb33-6"><a href="#cb33-6"></a>    batched_residuals <span class="op">=</span> vmap(residual, in_axes<span class="op">=</span>(<span class="va">None</span>, <span class="dv">0</span>, <span class="dv">0</span>))</span>
-<span id="cb33-7"><a href="#cb33-7"></a>    <span class="cf">return</span> jnp.mean(batched_residuals(model, X, Y))</span>
-<span id="cb33-8"><a href="#cb33-8"></a><span class="co"># Alternatively, could have combined and still jit/grad</span></span>
-<span id="cb33-9"><a href="#cb33-9"></a><span class="kw">def</span> residuals_2(model, X, Y):</span>
-<span id="cb33-10"><a href="#cb33-10"></a>    Y_hat <span class="op">=</span> vmap(model)(X).squeeze()</span>
-<span id="cb33-11"><a href="#cb33-11"></a>    <span class="cf">return</span> jnp.mean((Y <span class="op">-</span> Y_hat) <span class="op">**</span> <span class="dv">2</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell" data-execution_count="30">
+<div class="sourceCode cell-code" id="cb48"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb48-1"><a href="#cb48-1"></a><span class="kw">def</span> residual(model, x, y):</span>
+<span id="cb48-2"><a href="#cb48-2"></a>    y_hat <span class="op">=</span> model(x)</span>
+<span id="cb48-3"><a href="#cb48-3"></a>    <span class="cf">return</span> (y_hat <span class="op">-</span> y) <span class="op">**</span> <span class="dv">2</span></span>
+<span id="cb48-4"><a href="#cb48-4"></a></span>
+<span id="cb48-5"><a href="#cb48-5"></a><span class="kw">def</span> residuals(model, X, Y):</span>
+<span id="cb48-6"><a href="#cb48-6"></a>    batched_residuals <span class="op">=</span> vmap(residual, in_axes<span class="op">=</span>(<span class="va">None</span>, <span class="dv">0</span>, <span class="dv">0</span>))</span>
+<span id="cb48-7"><a href="#cb48-7"></a>    <span class="cf">return</span> jnp.mean(batched_residuals(model, X, Y))</span>
+<span id="cb48-8"><a href="#cb48-8"></a><span class="co"># Alternatively, could have combined and still jit/grad</span></span>
+<span id="cb48-9"><a href="#cb48-9"></a><span class="kw">def</span> residuals_2(model, X, Y):</span>
+<span id="cb48-10"><a href="#cb48-10"></a>    Y_hat <span class="op">=</span> vmap(model)(X).squeeze()</span>
+<span id="cb48-11"><a href="#cb48-11"></a>    <span class="cf">return</span> jnp.mean((Y <span class="op">-</span> Y_hat) <span class="op">**</span> <span class="dv">2</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 </section>
-<section id="gradients-of-models" class="slide level2">
+<section id="gradients-of-models-1" class="slide level2">
 <h2>Gradients of Models</h2>
 <ul>
 <li>As discussed, we can find the gradients of richer objects than just arrays</li>
 <li>Optimizer updates use perturbations of the underlying PyTree</li>
 <li>Updates can be applied because the type of the gradients matches the underlying PyTree</li>
 </ul>
-<div class="cell" data-execution_count="22">
-<div class="sourceCode cell-code" id="cb34"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb34-1"><a href="#cb34-1"></a>grads <span class="op">=</span> jax.grad(residuals)(model, X, Y)</span>
-<span id="cb34-2"><a href="#cb34-2"></a><span class="bu">print</span>(grads)</span>
-<span id="cb34-3"><a href="#cb34-3"></a><span class="bu">print</span>(grads.weight)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell" data-execution_count="31">
+<div class="sourceCode cell-code" id="cb49"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb49-1"><a href="#cb49-1"></a>grads <span class="op">=</span> jax.grad(residuals)(model, X, Y)</span>
+<span id="cb49-2"><a href="#cb49-2"></a><span class="bu">print</span>(grads)</span>
+<span id="cb49-3"><a href="#cb49-3"></a><span class="bu">print</span>(grads.weight)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>Linear(
   weight=f32[1,2],
@@ -1503,7 +1769,7 @@ Epoch 200,||theta - theta_hat|| = 6.216356268851086e-05
   out_features=1,
   use_bias=False
 )
-[[-0.30091333 -0.31419277]]</code></pre>
+[[-0.22713283  2.4636858 ]]</code></pre>
 </div>
 </div>
 </section>
@@ -1512,40 +1778,40 @@ Epoch 200,||theta - theta_hat|| = 6.216356268851086e-05
 <ul>
 <li>The <code>make_step</code> isn’t very different, except for using a few <code>equinox</code> utility functions</li>
 </ul>
-<div class="cell" data-execution_count="23">
-<div class="sourceCode cell-code" id="cb36"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb36-1"><a href="#cb36-1"></a>lr <span class="op">=</span> <span class="fl">0.001</span></span>
-<span id="cb36-2"><a href="#cb36-2"></a>optimizer <span class="op">=</span> optax.sgd(lr)</span>
-<span id="cb36-3"><a href="#cb36-3"></a><span class="co"># Needs to remove the non-differentiable parts of the "model" object</span></span>
-<span id="cb36-4"><a href="#cb36-4"></a>opt_state <span class="op">=</span> optimizer.init(eqx.<span class="bu">filter</span>(model,eqx.is_inexact_array))</span>
-<span id="cb36-5"><a href="#cb36-5"></a></span>
-<span id="cb36-6"><a href="#cb36-6"></a><span class="at">@eqx.filter_jit</span></span>
-<span id="cb36-7"><a href="#cb36-7"></a><span class="kw">def</span> make_step(model, opt_state, X, Y):     </span>
-<span id="cb36-8"><a href="#cb36-8"></a>  loss_value, grads <span class="op">=</span> eqx.filter_value_and_grad(residuals)(model, X, Y)</span>
-<span id="cb36-9"><a href="#cb36-9"></a>  updates, opt_state <span class="op">=</span> optimizer.update(grads, opt_state, model)</span>
-<span id="cb36-10"><a href="#cb36-10"></a>  model <span class="op">=</span> eqx.apply_updates(model, updates)</span>
-<span id="cb36-11"><a href="#cb36-11"></a>  <span class="cf">return</span> model, opt_state, loss_value</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell" data-execution_count="32">
+<div class="sourceCode cell-code" id="cb51"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb51-1"><a href="#cb51-1"></a>lr <span class="op">=</span> <span class="fl">0.001</span></span>
+<span id="cb51-2"><a href="#cb51-2"></a>optimizer <span class="op">=</span> optax.sgd(lr)</span>
+<span id="cb51-3"><a href="#cb51-3"></a><span class="co"># Needs to remove the non-differentiable parts of the "model" object</span></span>
+<span id="cb51-4"><a href="#cb51-4"></a>opt_state <span class="op">=</span> optimizer.init(eqx.<span class="bu">filter</span>(model,eqx.is_inexact_array))</span>
+<span id="cb51-5"><a href="#cb51-5"></a></span>
+<span id="cb51-6"><a href="#cb51-6"></a><span class="at">@eqx.filter_jit</span></span>
+<span id="cb51-7"><a href="#cb51-7"></a><span class="kw">def</span> make_step(model, opt_state, X, Y):     </span>
+<span id="cb51-8"><a href="#cb51-8"></a>  loss_value, grads <span class="op">=</span> eqx.filter_value_and_grad(residuals)(model, X, Y)</span>
+<span id="cb51-9"><a href="#cb51-9"></a>  updates, opt_state <span class="op">=</span> optimizer.update(grads, opt_state, model)</span>
+<span id="cb51-10"><a href="#cb51-10"></a>  model <span class="op">=</span> eqx.apply_updates(model, updates)</span>
+<span id="cb51-11"><a href="#cb51-11"></a>  <span class="cf">return</span> model, opt_state, loss_value</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 </section>
 <section id="training-loop-1" class="slide level2">
 <h2>Training Loop</h2>
-<div class="cell" data-execution_count="24">
-<div class="sourceCode cell-code" id="cb37"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb37-1"><a href="#cb37-1"></a>num_epochs <span class="op">=</span> <span class="dv">300</span></span>
-<span id="cb37-2"><a href="#cb37-2"></a>batch_size <span class="op">=</span> <span class="dv">64</span></span>
-<span id="cb37-3"><a href="#cb37-3"></a>key, subkey <span class="op">=</span> random.split(key) <span class="co"># will keep same key for shuffling each epoch</span></span>
-<span id="cb37-4"><a href="#cb37-4"></a><span class="cf">for</span> epoch <span class="kw">in</span> <span class="bu">range</span>(num_epochs):</span>
-<span id="cb37-5"><a href="#cb37-5"></a>    key, subkey <span class="op">=</span> random.split(key) <span class="co"># changing key for shuffling each epoch</span></span>
-<span id="cb37-6"><a href="#cb37-6"></a>    train_loader <span class="op">=</span> data_loader(subkey, X, Y, batch_size)</span>
-<span id="cb37-7"><a href="#cb37-7"></a>    <span class="cf">for</span> X_batch, Y_batch <span class="kw">in</span> train_loader:</span>
-<span id="cb37-8"><a href="#cb37-8"></a>        model, opt_state, train_loss <span class="op">=</span> make_step(model, opt_state, X_batch, Y_batch)    </span>
-<span id="cb37-9"><a href="#cb37-9"></a>    <span class="cf">if</span> epoch <span class="op">%</span> <span class="dv">100</span> <span class="op">==</span> <span class="dv">0</span>:</span>
-<span id="cb37-10"><a href="#cb37-10"></a>        <span class="bu">print</span>(<span class="ss">f"Epoch </span><span class="sc">{</span>epoch<span class="sc">}</span><span class="ss">,||theta - theta_hat|| = </span><span class="sc">{</span>jnp<span class="sc">.</span>linalg<span class="sc">.</span>norm(theta <span class="op">-</span> model.weight)<span class="sc">}</span><span class="ss">"</span>)</span>
-<span id="cb37-11"><a href="#cb37-11"></a></span>
-<span id="cb37-12"><a href="#cb37-12"></a><span class="bu">print</span>(<span class="ss">f"||theta - theta_hat|| = </span><span class="sc">{</span>jnp<span class="sc">.</span>linalg<span class="sc">.</span>norm(theta <span class="op">-</span> model.weight)<span class="sc">}</span><span class="ss">"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell" data-execution_count="33">
+<div class="sourceCode cell-code" id="cb52"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb52-1"><a href="#cb52-1"></a>num_epochs <span class="op">=</span> <span class="dv">300</span></span>
+<span id="cb52-2"><a href="#cb52-2"></a>batch_size <span class="op">=</span> <span class="dv">64</span></span>
+<span id="cb52-3"><a href="#cb52-3"></a>key, subkey <span class="op">=</span> random.split(key) <span class="co"># will keep same key for shuffling each epoch</span></span>
+<span id="cb52-4"><a href="#cb52-4"></a><span class="cf">for</span> epoch <span class="kw">in</span> <span class="bu">range</span>(num_epochs):</span>
+<span id="cb52-5"><a href="#cb52-5"></a>    key, subkey <span class="op">=</span> random.split(key) <span class="co"># changing key for shuffling each epoch</span></span>
+<span id="cb52-6"><a href="#cb52-6"></a>    train_loader <span class="op">=</span> data_loader(subkey, X, Y, batch_size)</span>
+<span id="cb52-7"><a href="#cb52-7"></a>    <span class="cf">for</span> X_batch, Y_batch <span class="kw">in</span> train_loader:</span>
+<span id="cb52-8"><a href="#cb52-8"></a>        model, opt_state, train_loss <span class="op">=</span> make_step(model, opt_state, X_batch, Y_batch)    </span>
+<span id="cb52-9"><a href="#cb52-9"></a>    <span class="cf">if</span> epoch <span class="op">%</span> <span class="dv">100</span> <span class="op">==</span> <span class="dv">0</span>:</span>
+<span id="cb52-10"><a href="#cb52-10"></a>        <span class="bu">print</span>(<span class="ss">f"Epoch </span><span class="sc">{</span>epoch<span class="sc">}</span><span class="ss">,||theta - theta_hat|| = </span><span class="sc">{</span>jnp<span class="sc">.</span>linalg<span class="sc">.</span>norm(theta <span class="op">-</span> model.weight)<span class="sc">}</span><span class="ss">"</span>)</span>
+<span id="cb52-11"><a href="#cb52-11"></a></span>
+<span id="cb52-12"><a href="#cb52-12"></a><span class="bu">print</span>(<span class="ss">f"||theta - theta_hat|| = </span><span class="sc">{</span>jnp<span class="sc">.</span>linalg<span class="sc">.</span>norm(theta <span class="op">-</span> model.weight)<span class="sc">}</span><span class="ss">"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>Epoch 0,||theta - theta_hat|| = 0.20521600544452667
-Epoch 100,||theta - theta_hat|| = 0.038740210235118866
-Epoch 200,||theta - theta_hat|| = 0.0073235719464719296
-||theta - theta_hat|| = 0.0013871045084670186</code></pre>
+<pre><code>Epoch 0,||theta - theta_hat|| = 1.2386810779571533
+Epoch 100,||theta - theta_hat|| = 0.25654149055480957
+Epoch 200,||theta - theta_hat|| = 0.05323007330298424
+||theta - theta_hat|| = 0.0112279849126935</code></pre>
 </div>
 </div>
 </section>
@@ -1555,16 +1821,16 @@ Epoch 200,||theta - theta_hat|| = 0.0073235719464719296
 <li>To prepare for layers of NN, we see that this class could have been written manually, layering as we see fit</li>
 <li>See <a href="examples/linear_regression_jax_equinox.py">examples/linear_regression_jax_equinox.py</a> for more, but we could have manually created the following</li>
 </ul>
-<div class="cell" data-execution_count="25">
-<div class="sourceCode cell-code" id="cb39"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb39-1"><a href="#cb39-1"></a><span class="kw">class</span> MyLinear(eqx.Module):</span>
-<span id="cb39-2"><a href="#cb39-2"></a>    weight: jax.Array</span>
-<span id="cb39-3"><a href="#cb39-3"></a>    <span class="kw">def</span> <span class="fu">__init__</span>(<span class="va">self</span>, in_size, out_size, key):</span>
-<span id="cb39-4"><a href="#cb39-4"></a>        <span class="va">self</span>.weight <span class="op">=</span> jax.random.normal(key, (out_size, in_size))</span>
-<span id="cb39-5"><a href="#cb39-5"></a>    <span class="co"># Similar to Pytorch's forward</span></span>
-<span id="cb39-6"><a href="#cb39-6"></a>    <span class="kw">def</span> <span class="fu">__call__</span>(<span class="va">self</span>, x):</span>
-<span id="cb39-7"><a href="#cb39-7"></a>        <span class="cf">return</span> <span class="va">self</span>.weight <span class="op">@</span> x</span>
-<span id="cb39-8"><a href="#cb39-8"></a></span>
-<span id="cb39-9"><a href="#cb39-9"></a>model <span class="op">=</span> MyLinear(M, <span class="dv">1</span>, key <span class="op">=</span> subkey)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell" data-execution_count="34">
+<div class="sourceCode cell-code" id="cb54"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb54-1"><a href="#cb54-1"></a><span class="kw">class</span> MyLinear(eqx.Module):</span>
+<span id="cb54-2"><a href="#cb54-2"></a>    weight: jax.Array</span>
+<span id="cb54-3"><a href="#cb54-3"></a>    <span class="kw">def</span> <span class="fu">__init__</span>(<span class="va">self</span>, in_size, out_size, key):</span>
+<span id="cb54-4"><a href="#cb54-4"></a>        <span class="va">self</span>.weight <span class="op">=</span> jax.random.normal(key, (out_size, in_size))</span>
+<span id="cb54-5"><a href="#cb54-5"></a>    <span class="co"># Similar to Pytorch's forward</span></span>
+<span id="cb54-6"><a href="#cb54-6"></a>    <span class="kw">def</span> <span class="fu">__call__</span>(<span class="va">self</span>, x):</span>
+<span id="cb54-7"><a href="#cb54-7"></a>        <span class="cf">return</span> <span class="va">self</span>.weight <span class="op">@</span> x</span>
+<span id="cb54-8"><a href="#cb54-8"></a></span>
+<span id="cb54-9"><a href="#cb54-9"></a>model <span class="op">=</span> MyLinear(M, <span class="dv">1</span>, key <span class="op">=</span> subkey)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 
 <div class="footer footer-default">
