@@ -29,6 +29,71 @@
       margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
       vertical-align: middle;
     }
+    /* CSS for syntax highlighting */
+    pre > code.sourceCode { white-space: pre; position: relative; }
+    pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+    pre > code.sourceCode > span:empty { height: 1.2em; }
+    .sourceCode { overflow: visible; }
+    code.sourceCode > span { color: inherit; text-decoration: inherit; }
+    div.sourceCode { margin: 1em 0; }
+    pre.sourceCode { margin: 0; }
+    @media screen {
+    div.sourceCode { overflow: auto; }
+    }
+    @media print {
+    pre > code.sourceCode { white-space: pre-wrap; }
+    pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+    }
+    pre.numberSource code
+      { counter-reset: source-line 0; }
+    pre.numberSource code > span
+      { position: relative; left: -4em; counter-increment: source-line; }
+    pre.numberSource code > span > a:first-child::before
+      { content: counter(source-line);
+        position: relative; left: -1em; text-align: right; vertical-align: baseline;
+        border: none; display: inline-block;
+        -webkit-touch-callout: none; -webkit-user-select: none;
+        -khtml-user-select: none; -moz-user-select: none;
+        -ms-user-select: none; user-select: none;
+        padding: 0 4px; width: 4em;
+        color: #aaaaaa;
+      }
+    pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+    div.sourceCode
+      { color: #003b4f; background-color: #f1f3f5; }
+    @media screen {
+    pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+    }
+    code span { color: #003b4f; } /* Normal */
+    code span.al { color: #ad0000; } /* Alert */
+    code span.an { color: #5e5e5e; } /* Annotation */
+    code span.at { color: #657422; } /* Attribute */
+    code span.bn { color: #ad0000; } /* BaseN */
+    code span.bu { } /* BuiltIn */
+    code span.cf { color: #003b4f; } /* ControlFlow */
+    code span.ch { color: #20794d; } /* Char */
+    code span.cn { color: #8f5902; } /* Constant */
+    code span.co { color: #5e5e5e; } /* Comment */
+    code span.cv { color: #5e5e5e; font-style: italic; } /* CommentVar */
+    code span.do { color: #5e5e5e; font-style: italic; } /* Documentation */
+    code span.dt { color: #ad0000; } /* DataType */
+    code span.dv { color: #ad0000; } /* DecVal */
+    code span.er { color: #ad0000; } /* Error */
+    code span.ex { } /* Extension */
+    code span.fl { color: #ad0000; } /* Float */
+    code span.fu { color: #4758ab; } /* Function */
+    code span.im { color: #00769e; } /* Import */
+    code span.in { color: #5e5e5e; } /* Information */
+    code span.kw { color: #003b4f; } /* Keyword */
+    code span.op { color: #5e5e5e; } /* Operator */
+    code span.ot { color: #003b4f; } /* Other */
+    code span.pp { color: #ad0000; } /* Preprocessor */
+    code span.sc { color: #5e5e5e; } /* SpecialChar */
+    code span.ss { color: #20794d; } /* SpecialString */
+    code span.st { color: #20794d; } /* String */
+    code span.va { color: #111111; } /* Variable */
+    code span.vs { color: #20794d; } /* VerbatimString */
+    code span.wa { color: #5e5e5e; font-style: italic; } /* Warning */
   </style>
   <link rel="stylesheet" href="../site_libs/revealjs/dist/theme/quarto.css">
   <link href="../site_libs/revealjs/plugin/quarto-line-highlight/line-highlight.css" rel="stylesheet">
@@ -367,6 +432,7 @@ Jesse Perla
 <li><a href="#/features-and-the-kernel-trick" id="/toc-features-and-the-kernel-trick">Features and The Kernel Trick</a></li>
 <li><a href="#/kernels" id="/toc-kernels">Kernels</a></li>
 <li><a href="#/gaussian-processes" id="/toc-gaussian-processes">Gaussian Processes</a></li>
+<li><a href="#/gpytorch" id="/toc-gpytorch">GPytorch</a></li>
 </ul>
 </nav>
 </section>
@@ -402,7 +468,7 @@ Jesse Perla
 <section id="references" class="slide level2">
 <h2>References</h2>
 <ul>
-<li>These notes are a barebones introduction. Look to other references</li>
+<li>These notes are a bare-bones introduction. Look to other references</li>
 <li><a href="https://probml.github.io/pml-book/book1.html">ProbML Book 1</a> Section 17 and <a href="https://probml.github.io/pml-book/book2.html">ProbML Book 2</a> Section 18</li>
 <li><a href="http://gaussianprocess.org/gpml/chapters/">Gaussian Processes for Machine Learning</a> a beloved textbook available online</li>
 <li><a href="https://www.cs.ubc.ca/~schmidtm/Courses/340-F22/L22.pdf">UBC CPSC 340</a> and <a href="https://www.cs.ubc.ca/~schmidtm/Courses/5XX-S22/S8.5.pdf">Mark Schmidt’s Topics Notes</a></li>
@@ -762,11 +828,194 @@ f^*(x) = \sum_{n=1}^N \alpha_n \mathcal{K}(x, x_n)
 <li>See <a href="https://probml.github.io/pml-book/book2.html">ProbML Book 2</a> Section 18.3.5 and 18.6 for more details</li>
 <li>Crucially, we can “learn the kernel” to mix <strong>representation learning</strong> with kernel methods/GPs</li>
 </ul>
+</section>
+<section id="manually-fitting-a-gp" class="slide level2">
+<h2>Manually Fitting a GP</h2>
+<ul>
+<li>Assume <span class="math inline">\(m(x) = 0\)</span> for simplicity</li>
+<li>Remember <span class="math inline">\(K_{XX} \equiv [K_{ij}]_{i,j=1}^N\)</span> and <span class="math inline">\(\mathbf{\alpha}\equiv [\alpha_i]_{i=1}^N\)</span> then, <span class="math display">\[
+||f^*||_{\mathcal{H}_{\mathcal{K}}} = \sqrt{f^*\cdot f^*} = \sqrt{\mathbf{\alpha}^{\top} K_{XX} \mathbf{\alpha}}
+\]</span></li>
+<li>Substitute into the Representer Theorem <span class="math display">\[
+\begin{aligned}
+&amp;\min_{f \in \mathcal{H}_{\mathcal{K}}} \left\{\sum_{n=1}^N\ell(f, x_n, y_n) + \frac{\lambda}{2}||f||_{\mathcal{H}_{\mathcal{K}}}\right\}\\
+&amp;\min_{\mathbf{\alpha}} \left\{\sum_{n=1}^N\ell\left(\sum_{i=1}^N \alpha_n \mathcal{K}(x_n, x_i), x_n, y_n\right) + \sqrt{\frac{\lambda}{2}\mathbf{\alpha}^{\top} K_{XX}\mathbf{\alpha}}\right\}
+\end{aligned}
+\]</span></li>
+</ul>
+</section>
+<section id="mean-functions-and-hyperparameters" class="slide level2">
+<h2>Mean Functions and Hyperparameters</h2>
+<ul>
+<li>Kernels often have hyperparameters <span class="math inline">\(\theta\)</span> (e.g., bandwidth) and parametric <span class="math inline">\(m(x;\eta, \theta)\)</span></li>
+<li>Let <span class="math inline">\(K_{XX}(\theta) \equiv [K(x_i, x_j;\theta)]_{i,j=1}^N, \mathbf{x} \equiv [x_n]_{n=1}^N, \mathbf{y} \equiv [y_n]_{n=1}^N,\)</span> and <span class="math inline">\(\mathbf{m}(\eta;\theta)\equiv [m(x;\theta, \eta)]_{n=1}^N\)</span></li>
+<li>Often loss is written in terms of residuals, <span class="math inline">\(\mathbf{r}(f, \mathbf{x}, \mathbf{y})\)</span> where <span class="math inline">\(\sum_{n=1}^N \ell(f, x_n, y_n) = ||\mathbf{r}(f, \mathbf{x}, \mathbf{y})||_2^2\)</span>
+<ul>
+<li>Then we can usually write the optimization problem as <span class="math display">\[
+\begin{aligned}
+\min_{\mathbf{\alpha}, \eta} &amp;\left\{ ||\mathbf{r}(K_{XX}(\theta)\cdot \mathbf{\alpha}+ \mathbf{m}(\eta, \theta);\theta, \eta)||_2^2 + \sqrt{\frac{\lambda}{2}\mathbf{\alpha}^{\top}\cdot K_{XX}(\theta)\cdot\mathbf{\alpha}}\right\}\\
+\end{aligned}
+\]</span></li>
+<li>Then an outer optimization process for <span class="math inline">\(\theta\)</span>!</li>
+</ul></li>
+</ul>
+</section>
+<section id="ridgeless-kernel-solution" class="slide level2">
+<h2>Ridgeless Kernel Solution</h2>
+<ul>
+<li><p>Recall the min-norm, ridgeless OLS: <span class="math display">\[
+\lim_{\lambda \to 0} \arg\max_{\alpha} ||\alpha \cdot X - y||^2_2 + \lambda ||\alpha||^2_2 = \arg\max_{\alpha} ||\alpha||_2^2 \text{ s t. } \alpha \cdot X = y
+\]</span></p></li>
+<li><p>With interpolating problem (i.e., <span class="math inline">\(\mathbf{r}(\cdot) = 0\)</span> possible) take <span class="math inline">\(\lambda \to 0\)</span> in Representer</p>
+<p><span class="math display">\[
+  \begin{aligned}
+  \min_{\mathbf{\alpha}, \eta} &amp;\left\{\mathbf{\alpha}^{\top}K_{XX}(\theta)\mathbf{\alpha}\right\}\\
+  \text{s.t. }\, &amp; \mathbf{r}(K_{XX}(\theta)\cdot \mathbf{\alpha}+ \mathbf{m}(\eta, \theta);\theta, \eta) = 0
+  \end{aligned}
+\]</span></p>
+<ul>
+<li>i.e.&nbsp;the min-norm (according to <span class="math inline">\(|f||_{\mathcal{H}_{\mathcal{K}}}\)</span>) interpolating solution</li>
+<li>Can stack inequalities, additional constraints etc.</li>
+<li>With linear (in <span class="math inline">\(\mathcal{H}_{\mathcal{K}}\)</span>) residuals/constraints can use very fast LQ solvers</li>
+<li>More explicit and reliable than the inductive bias in neural networks</li>
+</ul></li>
+</ul>
+</section></section>
+<section>
+<section id="gpytorch" class="title-slide slide level1 center">
+<h1>GPytorch</h1>
+
+</section>
+<section id="gpytorch-1" class="slide level2">
+<h2>GPytorch</h2>
+<ul>
+<li>One can manually create kernels and run the optimizer, or use a package such as <a href="https://docs.gpytorch.ai/en/stable/examples/01_Exact_GPs/Simple_GP_Regression.html">GPyTorch</a></li>
+<li>See <a href="examples/gpytorch_regression.py">examples/gpytorch_regression.py</a></li>
+</ul>
+<div class="cell" data-execution_count="1">
+<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1"></a><span class="im">import</span> math</span>
+<span id="cb1-2"><a href="#cb1-2"></a><span class="im">import</span> torch</span>
+<span id="cb1-3"><a href="#cb1-3"></a><span class="im">import</span> gpytorch</span>
+<span id="cb1-4"><a href="#cb1-4"></a><span class="im">from</span> gpytorch.kernels <span class="im">import</span> ScaleKernel, RBFKernel, LinearKernel</span>
+<span id="cb1-5"><a href="#cb1-5"></a><span class="im">from</span> matplotlib <span class="im">import</span> pyplot <span class="im">as</span> plt</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</section>
+<section id="example-training-data" class="slide level2">
+<h2>Example Training Data</h2>
+<div class="cell" data-execution_count="2">
+<div class="sourceCode cell-code" id="cb2"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb2-1"><a href="#cb2-1"></a><span class="co"># Training data is 100 points in [0,1] inclusive regularly spaced</span></span>
+<span id="cb2-2"><a href="#cb2-2"></a>train_x <span class="op">=</span> torch.linspace(<span class="dv">0</span>, <span class="dv">1</span>, <span class="dv">100</span>)</span>
+<span id="cb2-3"><a href="#cb2-3"></a><span class="co"># True function is sin(2*pi*x) with Gaussian noise</span></span>
+<span id="cb2-4"><a href="#cb2-4"></a>train_y <span class="op">=</span> torch.sin(train_x <span class="op">*</span> (<span class="dv">2</span> <span class="op">*</span> math.pi)) <span class="op">+</span> torch.randn(train_x.size()) <span class="op">*</span> math.sqrt(<span class="fl">0.04</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</section>
+<section id="choosing-kernels" class="slide level2">
+<h2>Choosing Kernels</h2>
+<ul>
+<li>Kernels can be created from other kernels. e.g., given <span class="math inline">\(\mathcal{K}(x,x')\)</span>,
+<ul>
+<li><span class="math inline">\(\exp(\mathcal{K}(x,x'))\)</span> is a valid kernel</li>
+<li><span class="math inline">\(C \mathcal{K}(x,x')\)</span> for a fixed scaling <span class="math inline">\(C &gt; 0\)</span></li>
+<li>See <a href="https://docs.gpytorch.ai/en/stable/kernels.html">the docs</a> for more</li>
+</ul></li>
+<li>Also, we can provide a “learnable” mean, <span class="math inline">\(m(x)\)</span> for the process
+<ul>
+<li>e.g.&nbsp;<code>gpytorch.means.ConstantMean()</code>, but could be function of <span class="math inline">\(x\)</span></li>
+</ul></li>
+</ul>
+</section>
+<section id="simple-gp-model-with-exact-inference" class="slide level2">
+<h2>Simple GP Model with exact inference</h2>
+<div class="cell" data-execution_count="3">
+<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1"></a><span class="kw">class</span> ExactGPModel(gpytorch.models.ExactGP):</span>
+<span id="cb3-2"><a href="#cb3-2"></a>    <span class="kw">def</span> <span class="fu">__init__</span>(<span class="va">self</span>, train_x, train_y, likelihood):</span>
+<span id="cb3-3"><a href="#cb3-3"></a>        <span class="bu">super</span>(ExactGPModel, <span class="va">self</span>).<span class="fu">__init__</span>(train_x, train_y, likelihood)</span>
+<span id="cb3-4"><a href="#cb3-4"></a>        <span class="va">self</span>.mean_module <span class="op">=</span> gpytorch.means.ConstantMean()</span>
+<span id="cb3-5"><a href="#cb3-5"></a>        <span class="va">self</span>.covar_module <span class="op">=</span> gpytorch.kernels.ScaleKernel(gpytorch.kernels.RBFKernel())</span>
+<span id="cb3-6"><a href="#cb3-6"></a></span>
+<span id="cb3-7"><a href="#cb3-7"></a>    <span class="kw">def</span> forward(<span class="va">self</span>, x):</span>
+<span id="cb3-8"><a href="#cb3-8"></a>        mean_x <span class="op">=</span> <span class="va">self</span>.mean_module(x)</span>
+<span id="cb3-9"><a href="#cb3-9"></a>        covar_x <span class="op">=</span> <span class="va">self</span>.covar_module(x)</span>
+<span id="cb3-10"><a href="#cb3-10"></a>        <span class="cf">return</span> gpytorch.distributions.MultivariateNormal(mean_x, covar_x)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</section>
+<section id="setup-likelihood-and-loss" class="slide level2">
+<h2>Setup likelihood and Loss</h2>
+<div class="cell" data-execution_count="4">
+<div class="sourceCode cell-code" id="cb4"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb4-1"><a href="#cb4-1"></a>likelihood <span class="op">=</span> gpytorch.likelihoods.GaussianLikelihood()</span>
+<span id="cb4-2"><a href="#cb4-2"></a>model <span class="op">=</span> ExactGPModel(train_x, train_y, likelihood)</span>
+<span id="cb4-3"><a href="#cb4-3"></a>model.train()</span>
+<span id="cb4-4"><a href="#cb4-4"></a>likelihood.train()</span>
+<span id="cb4-5"><a href="#cb4-5"></a>optimizer <span class="op">=</span> torch.optim.Adam(model.parameters(), lr<span class="op">=</span><span class="fl">0.1</span>)  <span class="co"># Includes GaussianLikelihood parameters</span></span>
+<span id="cb4-6"><a href="#cb4-6"></a><span class="co"># "Loss" for GPs - the marginal log likelihood</span></span>
+<span id="cb4-7"><a href="#cb4-7"></a>mll <span class="op">=</span> gpytorch.mlls.ExactMarginalLogLikelihood(likelihood, model)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</section>
+<section id="run-the-optimizer" class="slide level2">
+<h2>Run the Optimizer</h2>
+<div class="cell columns column-output-location" data-execution_count="5">
+<div class="column">
+<div class="sourceCode cell-code" id="cb5"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb5-1"><a href="#cb5-1"></a><span class="cf">for</span> i <span class="kw">in</span> <span class="bu">range</span>(<span class="dv">100</span>):</span>
+<span id="cb5-2"><a href="#cb5-2"></a>    optimizer.zero_grad()</span>
+<span id="cb5-3"><a href="#cb5-3"></a>    <span class="co"># Output from model</span></span>
+<span id="cb5-4"><a href="#cb5-4"></a>    output <span class="op">=</span> model(train_x)</span>
+<span id="cb5-5"><a href="#cb5-5"></a>    <span class="co"># Calc loss and backprop gradients</span></span>
+<span id="cb5-6"><a href="#cb5-6"></a>    loss <span class="op">=</span> <span class="op">-</span>mll(output, train_y)</span>
+<span id="cb5-7"><a href="#cb5-7"></a>    loss.backward()</span>
+<span id="cb5-8"><a href="#cb5-8"></a>    <span class="cf">if</span> i <span class="op">%</span> <span class="dv">10</span> <span class="op">==</span> <span class="dv">0</span>:</span>
+<span id="cb5-9"><a href="#cb5-9"></a>      <span class="bu">print</span>(<span class="ss">f"Iter=</span><span class="sc">{</span>i<span class="sc">}</span><span class="ss">, Loss=</span><span class="sc">{</span>loss<span class="sc">.</span>item()<span class="sc">}</span><span class="ss">"</span>)</span>
+<span id="cb5-10"><a href="#cb5-10"></a>    optimizer.step()</span>
+<span id="cb5-11"><a href="#cb5-11"></a>model.<span class="bu">eval</span>() <span class="co"># evaluation mode</span></span>
+<span id="cb5-12"><a href="#cb5-12"></a>likelihood.<span class="bu">eval</span>()    </span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div><div class="column">
+<div class="cell-output cell-output-stdout">
+<pre><code>Iter=0, Loss=0.9302332997322083
+Iter=10, Loss=0.5079350471496582
+Iter=20, Loss=0.17511649429798126
+Iter=30, Loss=-0.02991340681910515
+Iter=40, Loss=-0.020419616252183914
+Iter=50, Loss=-0.034119490534067154
+Iter=60, Loss=-0.03867233172059059
+Iter=70, Loss=-0.0389210507273674
+Iter=80, Loss=-0.04004982113838196
+Iter=90, Loss=-0.039925917983055115</code></pre>
+</div>
+<div class="cell-output cell-output-display" data-execution_count="5">
+<pre><code>GaussianLikelihood(
+  (noise_covar): HomoskedasticNoise(
+    (raw_noise_constraint): GreaterThan(1.000E-04)
+  )
+)</code></pre>
+</div>
+</div>
+</div>
+</section>
+<section id="visualize-results" class="slide level2">
+<h2>Visualize Results</h2>
+<div class="cell" data-execution_count="6">
+<div class="sourceCode cell-code" id="cb8"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb8-1"><a href="#cb8-1"></a><span class="cf">with</span> torch.no_grad(), gpytorch.settings.fast_pred_var():</span>
+<span id="cb8-2"><a href="#cb8-2"></a>    test_x <span class="op">=</span> torch.linspace(<span class="dv">0</span>, <span class="dv">1</span>, <span class="dv">51</span>)</span>
+<span id="cb8-3"><a href="#cb8-3"></a>    observed_pred <span class="op">=</span> likelihood(model(test_x))</span>
+<span id="cb8-4"><a href="#cb8-4"></a></span>
+<span id="cb8-5"><a href="#cb8-5"></a>    fig, ax <span class="op">=</span> plt.subplots()</span>
+<span id="cb8-6"><a href="#cb8-6"></a>    lower, upper <span class="op">=</span> observed_pred.confidence_region()</span>
+<span id="cb8-7"><a href="#cb8-7"></a>    ax.plot(train_x.numpy(), train_y.numpy(), <span class="st">'k*'</span>)</span>
+<span id="cb8-8"><a href="#cb8-8"></a>    ax.plot(test_x.numpy(), observed_pred.mean.numpy(), <span class="st">'b'</span>)</span>
+<span id="cb8-9"><a href="#cb8-9"></a>    <span class="co"># Shade between the lower and upper confidence bounds</span></span>
+<span id="cb8-10"><a href="#cb8-10"></a>    ax.fill_between(test_x.numpy(), lower.numpy(), upper.numpy(), alpha<span class="op">=</span><span class="fl">0.5</span>)</span>
+<span id="cb8-11"><a href="#cb8-11"></a>    ax.set_ylim([<span class="op">-</span><span class="dv">3</span>, <span class="dv">3</span>])</span>
+<span id="cb8-12"><a href="#cb8-12"></a>    ax.legend([<span class="st">'Observed Data'</span>, <span class="st">'Mean'</span>, <span class="st">'Confidence'</span>])    </span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+
 
 <div class="footer footer-default">
 
 </div>
-</section></section>
+</section><section id="visualize-results-output" class="slide level2 output-location-slide"><h2>Visualize Results</h2><div class="cell output-location-slide" data-execution_count="6">
+<div class="cell-output cell-output-display">
+<p><img data-src="kernel_methods_files/figure-revealjs/cell-7-output-1.png" width="792" height="416"></p>
+</div>
+</div></section></section>
     </div>
   </div>
 
