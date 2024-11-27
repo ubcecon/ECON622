@@ -789,10 +789,70 @@ g_t &amp;\equiv \frac{1}{|B_t|}\sum_{n \in B_t} \nabla_{\theta} \ell(\theta_t, x
 <li>More art than science in many cases, because it requires many priors</li>
 </ul>
 </section>
+<section id="stochastic-optimization-with-q_thetaz" class="slide level2">
+<h2>Stochastic Optimization with <span class="math inline">\(q_{\theta}(z)\)</span></h2>
+<ul>
+<li>Previously, <span class="math inline">\(q(z)\)</span> was independent of <span class="math inline">\(\theta\)</span> (i.e., <span class="math inline">\(\min_{\theta}\mathbb{E}_{q(z)} \tilde{\mathcal{L}}(\theta, z)\)</span>)</li>
+<li>For many problems, the population distribution is dependent on the parameters <span class="math inline">\(\theta\)</span> (e.g., reinforcement learning, variational inference, etc.). <span class="math display">\[
+\min_{\theta}\overbrace{\mathbb{E}_{q_{\theta}(z)} \tilde{\mathcal{L}}(\theta, z)}^{\equiv \mathcal{L}(\theta)}
+\]</span></li>
+<li>if <span class="math inline">\(q_{\theta}(z)\)</span> we have our previous special case, otherwise <span class="math display">\[
+\nabla_{\theta} \mathcal{L}(\theta) = \underbrace{\int \nabla_{\theta} \tilde{\mathcal{L}}(\theta, z)q_{
+  \theta}(z) dz}_{=\mathbb{E}_{q_{\theta}(z)}\left[\nabla_{\theta} \tilde{\mathcal{L}}(\theta, z)\right]} + \int\tilde{\mathcal{L}}(\theta, z) \nabla_{\theta}q_{\theta}(z) d z
+\]</span></li>
+</ul>
+</section>
+<section id="computational-challenges-with-approximation" class="slide level2">
+<h2>Computational Challenges with Approximation</h2>
+<ul>
+<li>Given <span class="math inline">\(\theta\)</span> we can use <span class="math inline">\(B\)</span> samples from <span class="math inline">\(q_{\theta}(z)\)</span> we can still approximate <span class="math inline">\(\mathbb{E}_{q(z)}\left[\nabla_{\theta} \tilde{\mathcal{L}}(\theta, z)\right] \approx \frac{1}{|B|}\sum_{z \in B} \nabla_{\theta} \tilde{\mathcal{L}}(\theta, z)\)</span></li>
+<li>But note that <span class="math inline">\(\int\tilde{\mathcal{L}}(\theta, z) \nabla_{\theta}q_{\theta}(z) d z\)</span>, requires <span class="math inline">\(\nabla_{\theta}q_{\theta}(z)\)</span>
+<ul>
+<li>“Vanilla” monte-carlo approximations which can only sample from <span class="math inline">\(q_{\theta}(z)\)</span> in order to find gradient estimates of the objective are no longer possible</li>
+</ul></li>
+<li>There are several common approaches, often used in reinforcement learning, variational inference, etc.</li>
+<li>See <a href="https://probml.github.io/pml-book/book2.html">ProbML Book 2: Advanced Topics</a> section 6.3.3 for more</li>
+</ul>
+</section>
+<section id="score-function-estimation-reinforce" class="slide level2">
+<h2>Score Function Estimation (REINFORCE)</h2>
+<ul>
+<li>Apply the chain rule to <span class="math inline">\(\log q_{\theta}(z)\)</span>, we find <span class="math inline">\(\nabla_{\theta} q_{\theta}(z) = q_{\theta}(z) \nabla_{\theta} \log q_{\theta}(z)\)</span>. Rewrite <span class="math inline">\(\int\tilde{\mathcal{L}}(\theta, z) \nabla_{\theta}q_{\theta}(z) d z\)</span> as <span class="math display">\[
+\int\tilde{\mathcal{L}}(\theta, z)(\nabla_{\theta} \log q_{\theta}(z))  q_{\theta}(z)dz = \mathbb{E}_{q(z)}\left[ \tilde{\mathcal{L}}(\theta, z) \nabla_{\theta} \log q_{\theta}(z)\right]
+\]</span></li>
+<li>Then the REINFORCE estimator using <span class="math inline">\(B\)</span> samples from <span class="math inline">\(q_{\theta}(z)\)</span> is <span class="math display">\[
+\mathbb{E}_{q(z)}\left[ \tilde{\mathcal{L}}(\theta, z) \nabla_{\theta} \log q_{\theta}(z)\right]\approx \frac{1}{|B|}\sum_{z\in B} \tilde{\mathcal{L}}(\theta, z) \nabla_{\theta} \log q_{\theta}(z)
+\]</span>
+<ul>
+<li>Requires a differentiable <span class="math inline">\(q_{\theta}(z)\)</span> calculated local to each <span class="math inline">\(z\)</span></li>
+<li>This estimator is usually high variance, so there are many tricks to reduce this. See <a href="https://probml.github.io/pml-book/book2.html">ProbML Book 2</a> Sections 6.3.4-6.3.7 or RL books for more</li>
+</ul></li>
+</ul>
+</section>
+<section id="the-reparameterization-trick" class="slide level2">
+<h2>The “Reparameterization Trick”</h2>
+<ul>
+<li>Alternatively, if you can rewrite the <span class="math inline">\(q_{\theta}(z)\)</span> in terms of <span class="math inline">\(\epsilon \sim q_{\epsilon}\)</span>
+<ul>
+<li>e.g., <span class="math inline">\(z = g(\epsilon;\theta)\)</span> for some <span class="math inline">\(g(\cdot;\theta)\)</span> differentiable wrt <span class="math inline">\(\theta\)</span></li>
+<li>Then the optimization objective is <span class="math display">\[
+\nabla_{\theta} \mathcal{L}(\theta) = \mathbb{E}_{q_{\epsilon}(\epsilon)}\left[\nabla_{\theta} \tilde{\mathcal{L}}(\theta, g(\epsilon;\theta))\right]
+\]</span></li>
+</ul></li>
+<li>This lets us use stochastic gradient approximations sampling <span class="math inline">\(\epsilon\)</span> batches <span class="math display">\[
+\nabla_{\theta} \mathcal{L}(\theta) = \approx \frac{1}{|B|}\sum_{\epsilon\in B}\nabla_{\theta} \tilde{\mathcal{L}}(\theta, g(\epsilon;\theta))
+\]</span></li>
+</ul>
+</section></section>
+<section>
+<section id="training-loops" class="title-slide slide level1 center">
+<h1>Training Loops</h1>
+
+</section>
 <section id="grad-student-descent" class="slide level2">
 <h2>“Grad Student Descent”</h2>
 <ul>
-<li>This is how virtually all deep learning works. Just swap SGD with slightly fancier algorithms using momentum, tinker with parameters, etc.</li>
+<li>Those methods for stochastic optimization make deep learning possible. Just swap SGD with slightly fancier algorithms using momentum, tinker with parameters, etc.</li>
 <li>In practice, all of these optimizer settings (e.g., how large for <span class="math inline">\(|B_t|\)</span>, <span class="math inline">\(\eta_t\)</span>, convergence criteria, etc.) are fragile and require a lot of tuning
 <ul>
 <li>Part of a a process called <strong>hyperparameter optimization (HPO)</strong> where you try to find the best non-model parameters for your goals</li>
@@ -815,11 +875,6 @@ g_t &amp;\equiv \frac{1}{|B_t|}\sum_{n \in B_t} \nabla_{\theta} \ell(\theta_t, x
 <li>But HPO is dangerous because if we are not careful we can “contaminate” our process for finding <span class="math inline">\(\hat{f}_{\theta}\)</span> using some of the data we intend to check it with. Which might lead to overfitting/etc.</li>
 </ul></li>
 </ul>
-</section></section>
-<section>
-<section id="training-loops" class="title-slide slide level1 center">
-<h1>Training Loops</h1>
-
 </section>
 <section id="splitting-the-data" class="slide level2">
 <h2>Splitting the Data</h2>

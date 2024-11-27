@@ -892,7 +892,7 @@ f^*(x) = \sum_{n=1}^N \alpha_n \mathcal{K}(x, x_n)
 <li>One can manually create kernels and run the optimizer, or use a package such as <a href="https://docs.gpytorch.ai/en/stable/examples/01_Exact_GPs/Simple_GP_Regression.html">GPyTorch</a></li>
 <li>See <a href="examples/gpytorch_regression.py">examples/gpytorch_regression.py</a></li>
 </ul>
-<div class="cell" data-execution_count="1">
+<div class="cell" data-execution_count="2">
 <div class="sourceCode cell-code" id="cb1"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1"></a><span class="im">import</span> math</span>
 <span id="cb1-2"><a href="#cb1-2"></a><span class="im">import</span> torch</span>
 <span id="cb1-3"><a href="#cb1-3"></a><span class="im">import</span> gpytorch</span>
@@ -902,7 +902,7 @@ f^*(x) = \sum_{n=1}^N \alpha_n \mathcal{K}(x, x_n)
 </section>
 <section id="example-training-data" class="slide level2">
 <h2>Example Training Data</h2>
-<div class="cell" data-execution_count="2">
+<div class="cell" data-execution_count="3">
 <div class="sourceCode cell-code" id="cb2"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb2-1"><a href="#cb2-1"></a><span class="co"># Training data is 100 points in [0,1] inclusive regularly spaced</span></span>
 <span id="cb2-2"><a href="#cb2-2"></a>train_x <span class="op">=</span> torch.linspace(<span class="dv">0</span>, <span class="dv">1</span>, <span class="dv">100</span>)</span>
 <span id="cb2-3"><a href="#cb2-3"></a><span class="co"># True function is sin(2*pi*x) with Gaussian noise</span></span>
@@ -926,7 +926,7 @@ f^*(x) = \sum_{n=1}^N \alpha_n \mathcal{K}(x, x_n)
 </section>
 <section id="simple-gp-model-with-exact-inference" class="slide level2">
 <h2>Simple GP Model with exact inference</h2>
-<div class="cell" data-execution_count="3">
+<div class="cell" data-execution_count="4">
 <div class="sourceCode cell-code" id="cb3"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1"></a><span class="kw">class</span> ExactGPModel(gpytorch.models.ExactGP):</span>
 <span id="cb3-2"><a href="#cb3-2"></a>    <span class="kw">def</span> <span class="fu">__init__</span>(<span class="va">self</span>, train_x, train_y, likelihood):</span>
 <span id="cb3-3"><a href="#cb3-3"></a>        <span class="bu">super</span>(ExactGPModel, <span class="va">self</span>).<span class="fu">__init__</span>(train_x, train_y, likelihood)</span>
@@ -941,7 +941,7 @@ f^*(x) = \sum_{n=1}^N \alpha_n \mathcal{K}(x, x_n)
 </section>
 <section id="setup-likelihood-and-loss" class="slide level2">
 <h2>Setup likelihood and Loss</h2>
-<div class="cell" data-execution_count="4">
+<div class="cell" data-execution_count="5">
 <div class="sourceCode cell-code" id="cb4"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb4-1"><a href="#cb4-1"></a>likelihood <span class="op">=</span> gpytorch.likelihoods.GaussianLikelihood()</span>
 <span id="cb4-2"><a href="#cb4-2"></a>model <span class="op">=</span> ExactGPModel(train_x, train_y, likelihood)</span>
 <span id="cb4-3"><a href="#cb4-3"></a>model.train()</span>
@@ -953,7 +953,7 @@ f^*(x) = \sum_{n=1}^N \alpha_n \mathcal{K}(x, x_n)
 </section>
 <section id="run-the-optimizer" class="slide level2">
 <h2>Run the Optimizer</h2>
-<div class="cell columns column-output-location" data-execution_count="5">
+<div class="cell columns column-output-location" data-execution_count="6">
 <div class="column">
 <div class="sourceCode cell-code" id="cb5"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb5-1"><a href="#cb5-1"></a><span class="cf">for</span> i <span class="kw">in</span> <span class="bu">range</span>(<span class="dv">100</span>):</span>
 <span id="cb5-2"><a href="#cb5-2"></a>    optimizer.zero_grad()</span>
@@ -992,7 +992,7 @@ Iter=90, Loss=-0.039925917983055115</code></pre>
 </section>
 <section id="visualize-results" class="slide level2">
 <h2>Visualize Results</h2>
-<div class="cell" data-execution_count="6">
+<div class="cell" data-execution_count="7">
 <div class="sourceCode cell-code" id="cb8"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb8-1"><a href="#cb8-1"></a><span class="cf">with</span> torch.no_grad(), gpytorch.settings.fast_pred_var():</span>
 <span id="cb8-2"><a href="#cb8-2"></a>    test_x <span class="op">=</span> torch.linspace(<span class="dv">0</span>, <span class="dv">1</span>, <span class="dv">51</span>)</span>
 <span id="cb8-3"><a href="#cb8-3"></a>    observed_pred <span class="op">=</span> likelihood(model(test_x))</span>
@@ -1011,7 +1011,7 @@ Iter=90, Loss=-0.039925917983055115</code></pre>
 <div class="footer footer-default">
 
 </div>
-</section><section id="visualize-results-output" class="slide level2 output-location-slide"><h2>Visualize Results</h2><div class="cell output-location-slide" data-execution_count="6">
+</section><section id="visualize-results-output" class="slide level2 output-location-slide"><h2>Visualize Results</h2><div class="cell output-location-slide" data-execution_count="7">
 <div class="cell-output cell-output-display">
 <p><img data-src="kernel_methods_files/figure-revealjs/cell-7-output-1.png" width="792" height="416"></p>
 </div>

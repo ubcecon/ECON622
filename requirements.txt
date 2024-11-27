@@ -34,3 +34,9 @@ jax-dataloader
 interpax
 joblib
 keras
+transformers
+sentence-transformers
+openai
+datasets
+evaluate
+accelerate

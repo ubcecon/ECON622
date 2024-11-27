@@ -1083,6 +1083,19 @@ tensor(3.) tensor([ 8., -3.])</code></pre>
 <li>See <a href="https://jax.readthedocs.io/en/latest/notebooks/Custom_derivative_rules_for_Python_code.html">here</a> for JAX implementation</li>
 </ul>
 </section>
+<section id="smooth-matrix-functions" class="slide level2">
+<h2>Smooth Matrix Functions</h2>
+<ul>
+<li>Consider <span class="math inline">\(f : \mathbb{R}^{N \times N} \to \mathbb{R}^{N \times N}\)</span> and following Mathias 1996 and Higham 2008</li>
+<li>Assume a suitably smooth function and a perturbation <span class="math inline">\(\delta A\)</span>, where we want to calculate the forward-mode <span class="math inline">\(\partial f(A)[\delta A]\)</span></li>
+<li>Then, apply <span class="math inline">\(f(\cdot)\)</span> to the following <span class="math inline">\(\mathbb{R}^{2N \times 2 N}\)</span> block matrix and extract the answer form the upper right corner <span class="math display">\[
+f\left(\begin{bmatrix} A &amp; \delta A\\ 0 &amp; A\end{bmatrix}\right) = \begin{bmatrix} f(A) &amp; \partial f(A)[\delta A]\\ 0 &amp; f(A)\end{bmatrix}
+\]</span>
+<ul>
+<li>This is a remarkable result true for any <span class="math inline">\(\delta A\)</span>. Not always the most efficient way, but very general</li>
+</ul></li>
+</ul>
+</section>
 <section id="registering-jvps-in-jax" class="slide level2">
 <h2>Registering JVPs in JAX</h2>
 <div class="cell" data-execution_count="12">

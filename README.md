@@ -110,7 +110,7 @@ Slides for the lectures can be found [here](https://ubcecon.github.io/ECON622/le
     - **Optional Extra Material**
       - [Probabilistic Machine Learning: Advanced Topics](https://probml.github.io/pml-book/book2.html) Section 32 on representation learning
 19. **November 20** Finish Double-Descent and Intro to Kernel Methods and Gaussian Processes
-    - **SLIDES**: [Kernel Methods and Gaussian Processes](https://ubcecon.github.io/ECON622/lectures/lectures/kernel_methods.html) and finish [Double-Descent and Regularization](https://ubcecon.github.io/ECON622/lectures/lectures/overparameterization.html)
+    - **SLIDES**: Start [Kernel Methods and Gaussian Processes](https://ubcecon.github.io/ECON622/lectures/lectures/kernel_methods.html) and finish [Double-Descent and Regularization](https://ubcecon.github.io/ECON622/lectures/lectures/overparameterization.html)
     - **Readings**
       - If you didn't do it already, read [Mark Schmidt's CPSC440 Notes on Double-Descent Curves and Overparameterization](https://www.cs.ubc.ca/~schmidtm/Courses/440-W22/L7.pdf) (see [CPSC340](https://www.cs.ubc.ca/~schmidtm/Courses/340-F22/L32.pdf) lectures for a more basic treatment of these topics)
       - [Probabilistic Machine Learning: An Introduction](https://probml.github.io/pml-book/book1.html) Section 17.1 and 17.2 on Kernel methods and Gaussian Processes
@@ -119,12 +119,15 @@ Slides for the lectures can be found [here](https://ubcecon.github.io/ECON622/le
       -  [Probabilistic Machine Learning: Advanced Topics](https://probml.github.io/pml-book/book2.html) Section 18.1 to 18.3 on GPs and kernels
       - Researchers working in GPs love the online textbook [Gaussian Processes for Machine Learning](https://gaussianprocess.org/gpml/chapters/), so you may want to read the intro section on [GP Regression](https://gaussianprocess.org/gpml/chapters/RW2.pdf)
 
-20. **November 25** Bayesian Methods and HMC
-21. **November 27** Applications
-22. **December 2** Applications
-23. **December 4** Applications
+20. **November 25** Finish Kernel Methods and Review "Distances" in a latent space
+    - **SLIDES**: Finish [Kernel Methods and Gaussian Processes](https://ubcecon.github.io/ECON622/lectures/lectures/kernel_methods.html)
+22. **November 27** "ML Engineering" and start on embeddings, NLP, and LLMs
+    - See example code, W&B, etc.  Linear regression, NN regression, pytorch, pytorch lightning, CLI, etc.
+    - **SLIDES**: Finish [Embeddings, NLP, and LLMs](https://ubcecon.github.io/ECON622/lectures/lectures/embeddings_nlp_llm.html)
+24. **December 2** Finish on LLMs and intro to solving functional equations
+25. **December 4** Class Presentations
 
-24. **December 18**
+26. **December 20**
     - Final Project due
 
 
