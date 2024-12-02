@@ -1,0 +1,17 @@
+program: lectures/examples/mlp_regression_jax_nnx_logging.py
+name: Sweep Example
+description: Example Sweep
+method: bayes
+metric:
+  name: test_loss
+  goal: minimize
+parameters:
+  wandb_mode:
+    value: online # otherwise won't log
+  num_epochs:
+    value: 300
+  lr:
+    min: 0.0001
+    max: 0.01
+  width:
+    values: [64, 128, 256]

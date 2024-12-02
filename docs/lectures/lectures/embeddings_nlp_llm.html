@@ -429,22 +429,30 @@ Jesse Perla
 <h2 id="toc-title">Table of contents</h2>
 <ul>
 <li><a href="#/overview" id="/toc-overview">Overview</a></li>
+<li><a href="#/is-some-ml-just-fancy-logit" id="/toc-is-some-ml-just-fancy-logit">Is (Some) ML Just Fancy Logit?</a></li>
 <li><a href="#/embeddings" id="/toc-embeddings">Embeddings</a></li>
-<li><a href="#/sequential-data" id="/toc-sequential-data">Sequential Data</a></li>
-<li><a href="#/hugging-face" id="/toc-hugging-face">Hugging Face</a></li>
+<li><a href="#/word-embeddings" id="/toc-word-embeddings">Word Embeddings</a></li>
+<li><a href="#/bigger-embeddings" id="/toc-bigger-embeddings">Bigger Embeddings</a></li>
+<li><a href="#/sequential-data-and-token-prediction" id="/toc-sequential-data-and-token-prediction">Sequential Data and Token Prediction</a></li>
+<li><a href="#/classification-and-masking" id="/toc-classification-and-masking">Classification and Masking</a></li>
+<li><a href="#/fine-tuning-and-training" id="/toc-fine-tuning-and-training">Fine-Tuning and Training</a></li>
 </ul>
 </nav>
 </section>
 <section>
 <section id="overview" class="title-slide slide level1 center">
 <h1>Overview</h1>
+
+</section>
+<section id="summary" class="slide level2">
+<h2>Summary</h2>
 <ul>
-<li>Will cover embeddings and relationship to autoencoders and representation learning</li>
+<li>Relate embeddings to autoencoders and representation learning</li>
 <li>Discuss text and other embeddings</li>
 <li>Describe attention and the transformer architecture</li>
 <li>Better discuss ``out of distribution’’, transfer learning, and fine tuning</li>
 <li>Introduce self-supervised learning and semi-supervised learning</li>
-<li>Use the OpenAI and Hugging Face libraries</li>
+<li>Use the OpenAI and Hugging Face Packages</li>
 </ul>
 </section>
 <section id="references" class="slide level2">
@@ -463,7 +471,13 @@ Jesse Perla
 <div class="cell" data-execution_count="1">
 <div class="sourceCode cell-code" id="cb1"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1"></a><span class="im">import</span> openai</span>
 <span id="cb1-2"><a href="#cb1-2"></a><span class="im">import</span> transformers</span>
-<span id="cb1-3"><a href="#cb1-3"></a><span class="im">from</span> openai <span class="im">import</span> OpenAI</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb1-3"><a href="#cb1-3"></a><span class="im">import</span> torch</span>
+<span id="cb1-4"><a href="#cb1-4"></a><span class="im">from</span> torch.nn.functional <span class="im">import</span> cosine_similarity</span>
+<span id="cb1-5"><a href="#cb1-5"></a><span class="im">from</span> openai <span class="im">import</span> OpenAI</span>
+<span id="cb1-6"><a href="#cb1-6"></a><span class="im">from</span> transformers <span class="im">import</span> pipeline, AutoTokenizer, AutoModel <span class="co"># Hugging Face</span></span>
+<span id="cb1-7"><a href="#cb1-7"></a><span class="im">from</span> sklearn.manifold <span class="im">import</span> TSNE</span>
+<span id="cb1-8"><a href="#cb1-8"></a><span class="im">import</span> matplotlib.pyplot <span class="im">as</span> plt</span>
+<span id="cb1-9"><a href="#cb1-9"></a><span class="im">import</span> numpy <span class="im">as</span> np</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 </section>
 <section id="openai" class="slide level2">
@@ -478,184 +492,629 @@ Jesse Perla
 </ul>
 </section></section>
 <section>
+<section id="is-some-ml-just-fancy-logit" class="title-slide slide level1 center">
+<h1>Is (Some) ML Just Fancy Logit?</h1>
+
+</section>
+<section id="discrete-random-variables" class="slide level2">
+<h2>Discrete Random Variables</h2>
+<ul>
+<li>Up until now, we have mostly been interested in continuous outputs from our models</li>
+<li>When working with NLP/etc. we usually have discrete outputs such as a classification or prediction of the next “token”</li>
+<li>Lets review basic econometrics of logit and classification problems and explain how they work with learned representations</li>
+</ul>
+</section>
+<section id="logit-and-classification" class="slide level2">
+<h2>Logit and Classification</h2>
+<ul>
+<li>In econometrics, with observables <span class="math inline">\(X\)</span>, a binary outcome <span class="math inline">\(Y\)</span> and coefficients <span class="math inline">\(\beta\)</span> we have a logit model <span class="math display">\[
+\mathbb{P}(Y = 1 | X) = \frac{\exp(X\cdot \beta)}{1 + \exp(X\cdot \beta)}
+\]</span>
+<ul>
+<li>The parameters <span class="math inline">\(\beta\)</span> are usually estimated with maximum likelihood</li>
+</ul></li>
+</ul>
+</section>
+<section id="multinomial-logit" class="slide level2">
+<h2>Multinomial Logit</h2>
+<ul>
+<li>More generally, with <span class="math inline">\(K\)</span> possible outcomes, we have a multinomial logit model <span class="math display">\[
+\mathbb{P}(Y = k | X) = \frac{\exp(X\cdot \beta_k)}{\sum_{j=1}^K \exp(X\cdot \beta_j)}
+\]</span></li>
+<li>The <span class="math inline">\(\beta\)</span> (matrix) are usually estimated with maximum (log)-likelihood <span class="math display">\[
+\min_{\beta}\left\{- \sum_{(X, y)\in\mathcal{D}} \log \mathbb{P}(Y = y | X;\beta)\right\}
+\]</span></li>
+</ul>
+</section>
+<section id="nesting-representations" class="slide level2">
+<h2>Nesting Representations</h2>
+<ul>
+<li>As always, best to think of deep-learning as finding good representations of the data, <span class="math inline">\(\phi : \mathcal{X} \to \mathcal{Z}\)</span> and then a thin mapping or “projection” of that representation to the output space, <span class="math inline">\(\hat{f} : \mathcal{Z} \to \mathcal{Y}\)</span></li>
+<li>With classification or discrete-valued outcomes, create a distribution <span class="math inline">\(\mathcal{Y}\in\mathbb{R}^K\)</span> be a probability distribution over the <span class="math inline">\(K\)</span> possible outcomes using the Multinomial logit <span class="math display">\[
+\mathbb{P}(Y = k | X;\beta,\theta) = \frac{\exp(\phi(X;\theta)\cdot \beta_k)}{\sum_{j=1}^K \exp(\phi(X;\theta)\cdot \beta_j)}
+\]</span>
+<ul>
+<li>Then <span class="math inline">\(\min_{\beta, \theta} \left\{- \sum_{(X, y)\in\mathcal{D}} \log \mathbb{P}(Y = y | X;\beta, \theta)\right\}\)</span></li>
+</ul></li>
+</ul>
+</section>
+<section id="turning-features-to-probabilities" class="slide level2">
+<h2>Turning “Features” to Probabilities</h2>
+<ul>
+<li>Common to have a complicated internal approximation which they want to convert to a discrete action/state/prediction/classification</li>
+<li>The easiest approach, pervasive in ML methods, is to convert this to a probability distribution over discrete outcomes
+<ul>
+<li>“softmax”, i.e.&nbsp;the multinomial logit PMF, provides an easy way to do this</li>
+</ul></li>
+<li>Among other reasons, this makes the objective’s differentiable and allows for gradient-based optimization</li>
+</ul>
+</section>
+<section id="is-ml-just-fancy-logit" class="slide level2">
+<h2>Is ML Just Fancy Logit?</h2>
+<ul>
+<li>At this point many economists will say that this all just sounds like fancy logit regression fitted with MLE
+<ul>
+<li>That is <strong>mostly true</strong>, for this type of problem</li>
+<li><strong>But tha tis not insult!</strong> Multinomial logit is a powerful, and MLE is well understood. Logit/LLS/etc. are simple ML methods</li>
+</ul></li>
+<li>The key difference with deep learning + logit is important:
+<ul>
+<li>Economists typically work with engineered representations (e.g., taking logs, first-differences, variable selection)</li>
+<li>But deep learning lets us use learned representations, <span class="math inline">\(\phi(X;\theta)\)</span></li>
+</ul></li>
+</ul>
+</section>
+<section id="terminology-differences" class="slide level2">
+<h2>Terminology Differences</h2>
+<ul>
+<li>Standard MLE loss in this setup is the “cross-entropy loss”</li>
+<li>The formula for the multinomial logit is called the ``softmax’’ function</li>
+<li>When thinking about the separate mapping of the representation to the output, we often of it as the last layer</li>
+<li>And remember that we can have representations in the latent space:
+<ul>
+<li>If there are <span class="math inline">\(N\)</span> observables to predict <span class="math inline">\(K\)</span> outcomes, then in multinomial logit we estimate <span class="math inline">\(N \times K\)</span> parameters</li>
+<li>But with representations, <span class="math inline">\(z = \phi(X;\theta)\)</span>, it might be a much higher (or lower) dimensional mapping to <span class="math inline">\(K\)</span> outcomes</li>
+</ul></li>
+<li><strong>Confusion</strong>: “Inference” in some ML-speak is the pointwise evaluation of a model</li>
+</ul>
+</section></section>
+<section>
 <section id="embeddings" class="title-slide slide level1 center">
 <h1>Embeddings</h1>
 
 </section>
-<section id="what-is-an-embedding-cheating" class="slide level2">
-<h2>What is an embedding? Cheating!</h2>
+<section id="what-is-an-embedding" class="slide level2">
+<h2>What is an Embedding?</h2>
 <div class="cell" data-execution_count="2">
 <div class="sourceCode cell-code" id="cb2"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb2-1"><a href="#cb2-1"></a>client <span class="op">=</span> OpenAI()</span>
 <span id="cb2-2"><a href="#cb2-2"></a>completion <span class="op">=</span> client.chat.completions.create(</span>
 <span id="cb2-3"><a href="#cb2-3"></a>    model<span class="op">=</span><span class="st">"gpt-4o-mini"</span>,</span>
-<span id="cb2-4"><a href="#cb2-4"></a>    temperature<span class="op">=</span><span class="fl">0.7</span>, top_p<span class="op">=</span><span class="dv">1</span>, max_tokens<span class="op">=</span><span class="dv">300</span>, <span class="co">#optional</span></span>
-<span id="cb2-5"><a href="#cb2-5"></a>    messages<span class="op">=</span>[</span>
-<span id="cb2-6"><a href="#cb2-6"></a>        {</span>
-<span id="cb2-7"><a href="#cb2-7"></a>          <span class="st">"role"</span>: <span class="st">"system"</span>,</span>
-<span id="cb2-8"><a href="#cb2-8"></a>          <span class="st">"content"</span>: <span class="st">"You provide 3 bullet point, technical answers."</span></span>
-<span id="cb2-9"><a href="#cb2-9"></a>        },</span>
-<span id="cb2-10"><a href="#cb2-10"></a>        {</span>
-<span id="cb2-11"><a href="#cb2-11"></a>          <span class="st">"role"</span>: <span class="st">"user"</span>,</span>
-<span id="cb2-12"><a href="#cb2-12"></a>          <span class="st">"content"</span>: <span class="st">"What is an embedding?"</span></span>
-<span id="cb2-13"><a href="#cb2-13"></a>        }</span>
-<span id="cb2-14"><a href="#cb2-14"></a>    ]</span>
-<span id="cb2-15"><a href="#cb2-15"></a>)</span>
-<span id="cb2-16"><a href="#cb2-16"></a><span class="bu">print</span>(completion.choices[<span class="dv">0</span>].message.content)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb2-4"><a href="#cb2-4"></a>    messages<span class="op">=</span>[</span>
+<span id="cb2-5"><a href="#cb2-5"></a>        {</span>
+<span id="cb2-6"><a href="#cb2-6"></a>          <span class="st">"role"</span>: <span class="st">"system"</span>,</span>
+<span id="cb2-7"><a href="#cb2-7"></a>          <span class="st">"content"</span>: <span class="st">"You provide 2 short bullet points, technical answers."</span></span>
+<span id="cb2-8"><a href="#cb2-8"></a>        },</span>
+<span id="cb2-9"><a href="#cb2-9"></a>        {</span>
+<span id="cb2-10"><a href="#cb2-10"></a>          <span class="st">"role"</span>: <span class="st">"user"</span>,</span>
+<span id="cb2-11"><a href="#cb2-11"></a>          <span class="st">"content"</span>: <span class="st">"What is an embedding?"</span></span>
+<span id="cb2-12"><a href="#cb2-12"></a>        }</span>
+<span id="cb2-13"><a href="#cb2-13"></a>    ]</span>
+<span id="cb2-14"><a href="#cb2-14"></a>)</span>
+<span id="cb2-15"><a href="#cb2-15"></a><span class="bu">print</span>(completion.choices[<span class="dv">0</span>].message.content)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 
 </section>
-<section id="what-is-an-embedding-cheating-output" class="slide level2 output-location-slide"><h2>What is an embedding? Cheating!</h2><div class="cell output-location-slide" data-execution_count="2">
+<section id="what-is-an-embedding-output" class="slide level2 output-location-slide"><h2>What is an Embedding?</h2><div class="cell output-location-slide" data-execution_count="2">
 <div class="cell-output cell-output-stdout">
-<pre><code>- **Mathematical Representation**: An embedding is a mapping of discrete objects (such as words, sentences, or images) into a continuous vector space, where each object is represented as a dense vector of real numbers. This allows for meaningful comparisons and operations in a lower-dimensional space.
-
-- **Semantic Similarity**: In natural language processing (NLP), embeddings capture semantic relationships by placing similar objects closer together in the vector space. For example, word embeddings like Word2Vec or GloVe represent words so that words with similar meanings have similar vector representations.
-
-- **Applications**: Embeddings are widely used in machine learning tasks, including recommendation systems, clustering, and classification, as they enable algorithms to efficiently process and understand complex data by leveraging the relationships captured in the embedded representation.</code></pre>
+<pre><code>- An embedding is a mapping of discrete objects, such as words or items, into a continuous vector space, enabling the representation of complex data in a structured way that captures semantic relationships.
+- In machine learning, embeddings are often used to reduce dimensionality, facilitate similarity calculations, and improve the performance of algorithms in tasks like natural language processing and recommendation systems.</code></pre>
 </div>
-</div></section><section id="key-features" class="slide level2">
-<h2>Key Features</h2>
+</div></section><section id="latent-space" class="slide level2 smaller">
+<h2>Latent Space</h2>
+<div class="cell" data-execution_count="3">
+<div class="sourceCode cell-code" id="cb4"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb4-1"><a href="#cb4-1"></a>completion <span class="op">=</span> client.chat.completions.create(model<span class="op">=</span><span class="st">"gpt-4o-mini"</span>,</span>
+<span id="cb4-2"><a href="#cb4-2"></a>    messages<span class="op">=</span>[</span>
+<span id="cb4-3"><a href="#cb4-3"></a>        {</span>
+<span id="cb4-4"><a href="#cb4-4"></a>          <span class="st">"role"</span>: <span class="st">"system"</span>,</span>
+<span id="cb4-5"><a href="#cb4-5"></a>          <span class="st">"content"</span>: <span class="st">"You provide 2 short bullet points, technical answers."</span></span>
+<span id="cb4-6"><a href="#cb4-6"></a>        },</span>
+<span id="cb4-7"><a href="#cb4-7"></a>        {</span>
+<span id="cb4-8"><a href="#cb4-8"></a>          <span class="st">"role"</span>: <span class="st">"user"</span>,</span>
+<span id="cb4-9"><a href="#cb4-9"></a>          <span class="st">"content"</span>: <span class="st">"What is an embedding?"</span></span>
+<span id="cb4-10"><a href="#cb4-10"></a>        },</span>
+<span id="cb4-11"><a href="#cb4-11"></a>        {</span>
+<span id="cb4-12"><a href="#cb4-12"></a>          <span class="st">"role"</span>: <span class="st">"assistant"</span>,</span>
+<span id="cb4-13"><a href="#cb4-13"></a>          <span class="st">"content"</span>: <span class="st">"- An embedding is a dense vector representation of objects, such as words, sentences, or images, that captures semantic meanings and relationships in a continuous vector space.</span><span class="ch">\n</span><span class="st">- It transforms high-dimensional data into a lower-dimensional format while preserving essential properties, enabling easier computation in machine learning tasks."</span></span>
+<span id="cb4-14"><a href="#cb4-14"></a>        },</span>
+<span id="cb4-15"><a href="#cb4-15"></a>        {</span>
+<span id="cb4-16"><a href="#cb4-16"></a>          <span class="st">"role"</span>: <span class="st">"user"</span>,<span class="st">"content"</span>: <span class="st">"What is the relationship to latent spaces?"</span></span>
+<span id="cb4-17"><a href="#cb4-17"></a>        },</span>
+<span id="cb4-18"><a href="#cb4-18"></a>    ]</span>
+<span id="cb4-19"><a href="#cb4-19"></a>)</span>
+<span id="cb4-20"><a href="#cb4-20"></a><span class="bu">print</span>(completion.choices[<span class="dv">0</span>].message.content)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+
+</section>
+<section id="latent-space-output" class="slide level2 smaller output-location-slide"><h2>Latent Space</h2><div class="cell output-location-slide" data-execution_count="3">
+<div class="cell-output cell-output-stdout">
+<pre><code>- Embeddings can be seen as points in a latent space, where each point corresponds to a data object and its position reflects similarities and relationships to other objects in that space.
+- Latent spaces generally refer to hidden, abstract dimensions generated from data through methods like autoencoders, whereas embeddings are often explicit representations derived from training models such as neural networks.</code></pre>
+</div>
+</div></section><section id="detour-into-openai-others-are-similar" class="slide level2">
+<h2>Detour into OpenAI (others are similar)</h2>
 <ul>
-<li>Embeddings implicitly or explicitly exist in a variety of places</li>
-<li>Related to a notion of a latent space</li>
-<li>The key for our purposes is that norms, in some way, are meaningful in that space
+<li>This is making calls to the OpenAI API.</li>
+<li>Three roles:
 <ul>
-<li>With a norm, you get a sense of similarity (i.e., <span class="math inline">\(||x - y||\)</span> small means close)</li>
-<li>Of course, as we saw with kernels, an inner product induces a norm <span class="math inline">\(||x|| = \sqrt{x^T K x}\)</span> where <span class="math inline">\(K\)</span> is a positive definite kernel</li>
+<li><strong>system</strong>: setup for the LLM to establish the persona, how to respond, etc.</li>
+<li><strong>user</strong>: the question or prompt</li>
+<li><strong>assistant</strong>: the response</li>
 </ul></li>
-<li>Some embeddings, such as graph embeddings, intentionally simplify things while ensuring that norms are preserved</li>
+<li>Note that in a sequence of calculates, we give the entire history including its own responses (tagged as <code>assistant</code>)</li>
+<li>We will come back to this shortly</li>
 </ul>
 </section>
-<section id="examples" class="slide level2">
-<h2>Examples</h2>
+<section id="embeddings-overview" class="slide level2">
+<h2>Embeddings Overview</h2>
 <ul>
-<li>Review Auto-Encoders</li>
-<li>Clustering as a 1-dimension embedding</li>
-<li>PCA as a vector embedding</li>
-<li>Kernels</li>
-<li>Words, sentences, documents, images, sounds, etc.</li>
+<li>Used loosely and inconsistently, but the spirit is the same</li>
+<li>A mapping of some <span class="math inline">\(x \in \mathcal{X}\)</span> to a latent space <span class="math inline">\(\phi(x) \in \mathcal{Z}\)</span></li>
+<li>Typically we want that <span class="math inline">\(\mathcal{Z}\)</span> as a continuous vector space of finite dimension
+<ul>
+<li>Crucially, we can think of distances in that space (e.g., <span class="math inline">\(||\phi(x) - \phi(y)||\)</span>)</li>
+</ul></li>
+<li>The dimension of <span class="math inline">\(\mathcal{Z}\)</span> may be smaller or larger than <span class="math inline">\(\mathcal{X}\)</span>
+<ul>
+<li>If larger, typically embeddings of data <span class="math inline">\(x \in \mu^*\)</span> are close to lower-dimensional manifold e.g., separating hyperplane in <span class="math inline">\(\mathbf{R}^3\)</span> with kernel</li>
+</ul></li>
+<li>Sometimes, as with network embeddings, want to preserve norms
+<ul>
+<li>e.g.&nbsp;if <span class="math inline">\(||x - y||\)</span> is small, then <span class="math inline">\(||\phi(x) - \phi(y)||\)</span> is small</li>
+</ul></li>
 </ul>
 </section>
-<section id="inside-of-neural-networks" class="slide level2">
-<h2>Inside of Neural Networks?</h2>
+<section id="inner-products-implicitly-define-norms-and-embeddings" class="slide level2">
+<h2>Inner Products Implicitly Define Norms (and Embeddings)</h2>
 <ul>
-<li>We keep bringing up <span class="math inline">\(f(x) = \hat{f}(\phi(x))\)</span> as thinking about a representation of <span class="math inline">\(x\)</span> in a latent space</li>
-<li>Can we directly use this as an embedding?</li>
+<li>As we saw with kernels, the embedding may be implicit in an inner product</li>
+<li>Recall: with kernel <span class="math inline">\(K(x,x')\)</span> define a norm as <span class="math inline">\(||x|| = \sqrt{K(x,x)}\)</span></li>
+<li>Kernels induce norms without explicitly forming the feature map, <span class="math inline">\(\phi(x)\)</span>, to the embedding space—which would be defined implicitly by <span class="math inline">\(K(x, x') = \phi(x)^T \phi(x')\)</span>.</li>
+<li>As discussed, the benefit is that the embedding space may be infinite dimensional, but the kernel is finite dimensional. The cost is we cannot directly map <span class="math inline">\(x\)</span> to the embedding space</li>
+</ul>
+</section>
+<section id="cosine-similarity" class="slide level2">
+<h2>Cosine Similarity</h2>
+<ul>
+<li>Canonical case of an inner product (with an associated norm, etc.)</li>
+<li>Cosine similarity is the “angle” between two vectors in the embedding space <span class="math inline">\(z = \phi(x)\)</span> and <span class="math inline">\(z' = \phi(x')\)</span> <span class="math display">\[
+\mathrm{sim}(z, z') = \frac{z \cdot z'}{||z|| ||z'||}
+\]</span></li>
+<li>Interpretation: If <span class="math inline">\(z\)</span> and <span class="math inline">\(z'\)</span> are
+<ol type="1">
+<li>close in the embedding space, then the cosine similarity is close to 1</li>
+<li>orthogonal, then the cosine similarity is 0</li>
+<li>opposite, then the cosine similarity is -1</li>
+</ol></li>
+<li>Norm comparison <span class="math inline">\(||z - z'||\)</span> instead? Works but not invariant to scaling</li>
+</ul>
+</section>
+<section id="learned-vs.-engineered-embeddings" class="slide level2">
+<h2>Learned vs.&nbsp;Engineered Embeddings</h2>
+<ul>
+<li>Embeddings are not related to a specific “supervised” goal, and there may be many useful embeddings for a given data set</li>
+<li>We could engineer them (explicitly or implicitly).
+<ul>
+<li>e.g., count frequency of words in text, define implicitly through a kernel</li>
+</ul></li>
+<li>Or we can use learn them
+<ul>
+<li>e.g., representation learning in a NN, PCA, etc.</li>
+</ul></li>
+<li>Recall that when we fit a neural network, <span class="math inline">\(f(x) = \hat{f}(\phi(x))\)</span>, we think of <span class="math inline">\(\phi(x)\)</span> as an embedding of <span class="math inline">\(x\)</span> in a latent space</li>
+</ul>
+</section>
+<section id="autoencoders-and-compression" class="slide level2">
+<h2>Autoencoders and Compression</h2>
+<ul>
+<li>One sense of “optimality” of embeddings is whether you can find a representation which best compresses the data in a finite dimensional latent space (or a higher-dimensional latent space with a low-rank structure)</li>
+<li>This underlies the idea of using an Autoencoder. See <a href="https://probml.github.io/pml-book/book1.html">ProbML Book 1</a> Section 20.3 and <a href="https://probml.github.io/pml-book/book2.html">ProbML Book 2</a> Section 21</li>
+<li>The idea is to find functions which “encode” the data into a latent space, and then “decode” it back to the original space</li>
+</ul>
+</section>
+<section id="autoencoders-and-dimensionality-reduction" class="slide level2">
+<h2>Autoencoders and Dimensionality Reduction</h2>
+<ul>
+<li>General class of problems which they call auto-encoders in ML/data science
+<ul>
+<li>Function <span class="math inline">\(f\)</span>, the encoder, maps <span class="math inline">\(X\)</span> to a latent space <span class="math inline">\(Z\)</span>, which may be lower-dimensional</li>
+<li>Function <span class="math inline">\(g\)</span>, the decoder, maps points in the latent space <span class="math inline">\(Z\)</span> back to <span class="math inline">\(X\)</span></li>
+<li><span class="math inline">\(\theta_e\)</span> and <span class="math inline">\(\theta_d\)</span> are parameters for <span class="math inline">\(f\)</span> and <span class="math inline">\(g\)</span> which we are trying to find</li>
+</ul></li>
+<li>Then the goal is to find the <span class="math inline">\(\theta_e\)</span> and <span class="math inline">\(\theta_d\)</span> parameters for our encoder, <span class="math inline">\(f\)</span>, and decoder, <span class="math inline">\(g\)</span>, where for as many <span class="math inline">\(X\)</span> as possible we have</li>
+</ul>
+<p><span class="math display">\[
+g(f(x; \theta_e); \theta_d) \approx x
+\]</span></p>
+<ul>
+<li>The <span class="math inline">\(z = f(x;\theta_e)\)</span> may or may not be lower-dimensional</li>
+</ul>
+</section>
+<section id="optimization-problem-for-an-autoencoder" class="slide level2">
+<h2>Optimization Problem for an Autoencoder</h2>
+<ul>
+<li><p>If we had a distribution for <span class="math inline">\(x\)</span> then can solve</p>
+<p><span class="math display">\[
+\min_{\theta_e, \theta_d} \mathbb{E}_{x\sim \mu^*}||g(f(x; \theta_e); \theta_d) - x||_2^2
+\]</span></p></li>
+<li><p>Fit with ERM for <span class="math inline">\(\mathcal{D} \sim \mu^*\)</span></p></li>
+</ul>
+<p><span class="math display">\[
+\min_{\theta_e, \theta_d} \frac{1}{|\mathcal{D}|} \sum_{x \in \mathcal{D}} ||g(f(x; \theta_e); \theta_d) - x||_2^2
+\]</span></p>
+</section>
+<section id="pca-as-the-optimal-linear-autoencoder" class="slide level2">
+<h2>PCA as the Optimal Linear Autoencoder</h2>
+<ul>
+<li>Let <span class="math inline">\(f(x) = W^T x\)</span> and <span class="math inline">\(g(z) = W z\)</span> where <span class="math inline">\(W \in \mathbb{R}^{M \times L}\)</span>. If <span class="math inline">\(\hat{x} \approx W W^T x\)</span>, “reconstruction error” is <span class="math inline">\(||\hat{x} - x||_2^2\)</span>.</li>
+</ul>
+<p><span class="math display">\[
+\min_{W} \frac{1}{N} \sum_{n=1}^N ||W \overbrace{W^T x_n}^{z_n = f(x_n;W)} - x_n||_2^2,\quad \text{with } W^T W = I
+\]</span></p>
+</section></section>
+<section>
+<section id="word-embeddings" class="title-slide slide level1 center">
+<h1>Word Embeddings</h1>
+
+</section>
+<section id="tokens-and-vocabulary" class="slide level2">
+<h2>Tokens and Vocabulary</h2>
+<ul>
+<li>Rather than trying to embed individual characters, it is usually better to encode entire words (and, later, sentences, paragraphs, text+images, etc.)</li>
+<li>If we decide on something that separates them, e.g.&nbsp;whitespace, then we can map words to an integer index for each word</li>
+<li>Lets use a prebuilt tokenizer from Hugging Face. With a different type of data (e.g., historical data) you may want to customize what a “word” is</li>
+</ul>
+<div class="cell" data-execution_count="4">
+<div class="sourceCode cell-code" id="cb6"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb6-1"><a href="#cb6-1"></a>tokenizer <span class="op">=</span> AutoTokenizer.from_pretrained(<span class="st">"bert-base-uncased"</span>)</span>
+<span id="cb6-2"><a href="#cb6-2"></a>tokens <span class="op">=</span> tokenizer.tokenize(<span class="st">"hello, hugging face"</span>)</span>
+<span id="cb6-3"><a href="#cb6-3"></a><span class="bu">print</span>(tokens)</span>
+<span id="cb6-4"><a href="#cb6-4"></a>token_ids <span class="op">=</span> tokenizer.convert_tokens_to_ids(tokens)</span>
+<span id="cb6-5"><a href="#cb6-5"></a><span class="bu">print</span>(token_ids)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+
+</section>
+<section id="tokens-and-vocabulary-output" class="slide level2 output-location-slide"><h2>Tokens and Vocabulary</h2><div class="cell output-location-slide" data-execution_count="4">
+<div class="cell-output cell-output-stdout">
+<pre><code>['hello', ',', 'hugging', 'face']
+[7592, 1010, 17662, 2227]</code></pre>
+</div>
+</div></section><section id="token-ids-to-embeddings" class="slide level2">
+<h2>Token IDs to Embeddings</h2>
+<ul>
+<li>The discrete values for the different words are not inherently comparable</li>
+<li>An embedding will put them in a space where we can consider similarity</li>
+<li>For now, lets use embedding from a prebuilt “model”</li>
+</ul>
+<div class="cell" data-execution_count="5">
+<div class="sourceCode cell-code" id="cb8"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb8-1"><a href="#cb8-1"></a>model <span class="op">=</span> AutoModel.from_pretrained(<span class="st">"bert-base-uncased"</span>)</span>
+<span id="cb8-2"><a href="#cb8-2"></a><span class="kw">def</span> get_embedding(sentence):</span>
+<span id="cb8-3"><a href="#cb8-3"></a>    tokens <span class="op">=</span> tokenizer(sentence, return_tensors<span class="op">=</span><span class="st">"pt"</span>)</span>
+<span id="cb8-4"><a href="#cb8-4"></a>    <span class="cf">with</span> torch.no_grad():</span>
+<span id="cb8-5"><a href="#cb8-5"></a>        outputs <span class="op">=</span> model(<span class="op">**</span>tokens)</span>
+<span id="cb8-6"><a href="#cb8-6"></a>        embeddings <span class="op">=</span> outputs.last_hidden_state</span>
+<span id="cb8-7"><a href="#cb8-7"></a>        <span class="co"># will see there are 3 total tokens, only middle is the sentence</span></span>
+<span id="cb8-8"><a href="#cb8-8"></a>        <span class="cf">return</span> outputs.last_hidden_state[<span class="dv">0</span>,<span class="dv">1</span>:<span class="op">-</span><span class="dv">1</span>,:].squeeze()</span>
+<span id="cb8-9"><a href="#cb8-9"></a>embed <span class="op">=</span> get_embedding(<span class="st">"hello"</span>)</span>
+<span id="cb8-10"><a href="#cb8-10"></a><span class="bu">print</span>(embed.shape)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>torch.Size([768])</code></pre>
+</div>
+</div>
+</section>
+<section id="similarity" class="slide level2">
+<h2>Similarity</h2>
+<ul>
+<li>Measure distances in embedding space with cosine similarity or norms</li>
+<li>Because we are in higher-dimensions, there can be different reasons for similarity. e.g., bank for money vs.&nbsp;the bank of a river, but river and money are not as similar</li>
+</ul>
+<div class="cell" data-execution_count="6">
+<div class="sourceCode cell-code" id="cb10"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb10-1"><a href="#cb10-1"></a>embed_bank <span class="op">=</span> get_embedding(<span class="st">"bank"</span>)</span>
+<span id="cb10-2"><a href="#cb10-2"></a>embed_river <span class="op">=</span> get_embedding(<span class="st">"river"</span>)</span>
+<span id="cb10-3"><a href="#cb10-3"></a>embed_money <span class="op">=</span> get_embedding(<span class="st">"money"</span>)</span>
+<span id="cb10-4"><a href="#cb10-4"></a></span>
+<span id="cb10-5"><a href="#cb10-5"></a><span class="bu">print</span>(<span class="ss">f"sim(bank, river) = </span><span class="sc">{</span>cosine_similarity(embed_bank, embed_river, dim<span class="op">=</span><span class="dv">0</span>)<span class="sc">}</span><span class="ss">"</span>)</span>
+<span id="cb10-6"><a href="#cb10-6"></a><span class="bu">print</span>(<span class="ss">f"sim(bank, money) = </span><span class="sc">{</span>cosine_similarity(embed_bank, embed_money, dim<span class="op">=</span><span class="dv">0</span>)<span class="sc">}</span><span class="ss">"</span>)</span>
+<span id="cb10-7"><a href="#cb10-7"></a><span class="bu">print</span>(<span class="ss">f"sim(river, money) = </span><span class="sc">{</span>cosine_similarity(embed_river, embed_money, dim<span class="op">=</span><span class="dv">0</span>)<span class="sc">}</span><span class="ss">"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>sim(bank, river) = 0.5635619163513184
+sim(bank, money) = 0.6932224035263062
+sim(river, money) = 0.5209330916404724</code></pre>
+</div>
+</div>
+</section>
+<section id="where-did-the-embedding-come-from" class="slide level2">
+<h2>Where Did the Embedding Come From?</h2>
+<ul>
+<li>As we will see below, <code>bert-base-uncased</code> is a model which can predict missing words as its “supervised” goal, <span class="math inline">\(f(x) = \hat{f}(\phi(x))\)</span></li>
+<li>This code just ripped off the <span class="math inline">\(\hat{f}(\cdot)\)</span> layers and use the latent space <span class="math inline">\(\phi(x)\)</span></li>
+<li>It is important to get a sense of how the representations were learned - as they may not be appropriate for your task</li>
+</ul>
+</section>
+<section id="using-openai-api" class="slide level2">
+<h2>Using OpenAI API</h2>
+<div class="cell" data-execution_count="7">
+<div class="sourceCode cell-code" id="cb12"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb12-1"><a href="#cb12-1"></a><span class="kw">def</span> get_openai_embedding(sentence):</span>
+<span id="cb12-2"><a href="#cb12-2"></a>  response <span class="op">=</span> client.embeddings.create(<span class="bu">input</span> <span class="op">=</span> [sentence], model<span class="op">=</span><span class="st">"text-embedding-3-large"</span>)</span>
+<span id="cb12-3"><a href="#cb12-3"></a>  <span class="cf">return</span> torch.tensor(response.data[<span class="dv">0</span>].embedding)</span>
+<span id="cb12-4"><a href="#cb12-4"></a></span>
+<span id="cb12-5"><a href="#cb12-5"></a>embed_bank <span class="op">=</span> get_openai_embedding(<span class="st">"bank"</span>)</span>
+<span id="cb12-6"><a href="#cb12-6"></a>embed_banks <span class="op">=</span> get_openai_embedding(<span class="st">"banks"</span>)</span>
+<span id="cb12-7"><a href="#cb12-7"></a>embed_river <span class="op">=</span> get_openai_embedding(<span class="st">"river"</span>)</span>
+<span id="cb12-8"><a href="#cb12-8"></a>embed_money <span class="op">=</span> get_openai_embedding(<span class="st">"money"</span>)</span>
+<span id="cb12-9"><a href="#cb12-9"></a><span class="bu">print</span>(<span class="ss">f"sim(bank, banks) = </span><span class="sc">{</span>cosine_similarity(embed_bank, embed_banks, dim<span class="op">=</span><span class="dv">0</span>)<span class="sc">}</span><span class="ss">"</span>)</span>
+<span id="cb12-10"><a href="#cb12-10"></a><span class="bu">print</span>(<span class="ss">f"sim(bank, river) = </span><span class="sc">{</span>cosine_similarity(embed_bank, embed_river, dim<span class="op">=</span><span class="dv">0</span>)<span class="sc">}</span><span class="ss">"</span>)</span>
+<span id="cb12-11"><a href="#cb12-11"></a><span class="bu">print</span>(<span class="ss">f"sim(bank, money) = </span><span class="sc">{</span>cosine_similarity(embed_bank, embed_money, dim<span class="op">=</span><span class="dv">0</span>)<span class="sc">}</span><span class="ss">"</span>)</span>
+<span id="cb12-12"><a href="#cb12-12"></a><span class="bu">print</span>(<span class="ss">f"sim(river, money) = </span><span class="sc">{</span>cosine_similarity(embed_river, embed_money, dim<span class="op">=</span><span class="dv">0</span>)<span class="sc">}</span><span class="ss">"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>sim(bank, banks) = 0.7782837152481079
+sim(bank, river) = 0.4269741177558899
+sim(bank, money) = 0.4394715428352356
+sim(river, money) = 0.37469592690467834</code></pre>
+</div>
+</div>
+</section></section>
+<section>
+<section id="bigger-embeddings" class="title-slide slide level1 center">
+<h1>Bigger Embeddings</h1>
+
+</section>
+<section id="bag-of-words" class="slide level2">
+<h2>Bag of Words</h2>
+<ul>
+<li>Words usually occur in sentences, paragraphs, etc.</li>
+<li>Instead of embedding a single word, we can embed a block of text.</li>
+<li>Simple starting point: compare the relative frequency of words
+<ol type="1">
+<li>Turn the text into blocks of tokens with unique identifiers</li>
+<li>Filter out tokens that are not useful (e.g., “the”, “a”, etc.)</li>
+<li>Count the frequency of each token</li>
+<li>The embedding is the vector of the frequency of each token</li>
+</ol></li>
+<li>Many issues with this, but crucially it does not capture any sense of context dependent meaning of words, and is invariant to word order</li>
+</ul>
+</section>
+<section id="sentence-embeddings-with-llms" class="slide level2">
+<h2>Sentence Embeddings with LLMs</h2>
+<ul>
+<li>Encode an entire sentence (i.e., a sequence of tokens) into a single embedding and compare for similarity</li>
+<li>Since individual words are embedded, we just average for the sentence</li>
+</ul>
+<div class="cell" data-execution_count="8">
+<div class="sourceCode cell-code" id="cb14"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb14-1"><a href="#cb14-1"></a>e_1 <span class="op">=</span> get_embedding(<span class="st">"The man bites the dog"</span>).mean(dim<span class="op">=</span><span class="dv">0</span>)</span>
+<span id="cb14-2"><a href="#cb14-2"></a>e_2 <span class="op">=</span> get_embedding(<span class="st">"The dog chased the man"</span>).mean(dim<span class="op">=</span><span class="dv">0</span>)</span>
+<span id="cb14-3"><a href="#cb14-3"></a>e_3 <span class="op">=</span> get_embedding(<span class="st">"The man was chased by the dog"</span>).mean(dim<span class="op">=</span><span class="dv">0</span>)</span>
+<span id="cb14-4"><a href="#cb14-4"></a><span class="bu">print</span>(<span class="ss">f"sim(e_1, e_2) = </span><span class="sc">{</span>cosine_similarity(e_1, e_2, dim<span class="op">=</span><span class="dv">0</span>)<span class="sc">}</span><span class="ss">"</span>)</span>
+<span id="cb14-5"><a href="#cb14-5"></a><span class="bu">print</span>(<span class="ss">f"sim(e_1, e_3) = </span><span class="sc">{</span>cosine_similarity(e_1, e_3, dim<span class="op">=</span><span class="dv">0</span>)<span class="sc">}</span><span class="ss">"</span>)</span>
+<span id="cb14-6"><a href="#cb14-6"></a><span class="bu">print</span>(<span class="ss">f"sim(e_2, e_3) = </span><span class="sc">{</span>cosine_similarity(e_2, e_3, dim<span class="op">=</span><span class="dv">0</span>)<span class="sc">}</span><span class="ss">"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>sim(e_1, e_2) = 0.8429715037345886
+sim(e_1, e_3) = 0.8270692229270935
+sim(e_2, e_3) = 0.9152544736862183</code></pre>
+</div>
+</div>
+<ul>
+<li>Note that the 2nd and 3rd are the most similar, and the 1st and 3rd the least.</li>
+</ul>
+</section>
+<section id="what-about-the-openai-api" class="slide level2">
+<h2>What about the OpenAI API?</h2>
+<div class="cell" data-execution_count="9">
+<div class="sourceCode cell-code" id="cb16"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb16-1"><a href="#cb16-1"></a>e_1 <span class="op">=</span> get_openai_embedding(<span class="st">"The man chased the dog"</span>)</span>
+<span id="cb16-2"><a href="#cb16-2"></a>e_2 <span class="op">=</span> get_openai_embedding(<span class="st">"The dog chased the man"</span>)</span>
+<span id="cb16-3"><a href="#cb16-3"></a>e_3 <span class="op">=</span> get_openai_embedding(<span class="st">"The man was chased by the dog"</span>)</span>
+<span id="cb16-4"><a href="#cb16-4"></a><span class="bu">print</span>(<span class="ss">f"sim(e_1, e_2) = </span><span class="sc">{</span>cosine_similarity(e_1, e_2, dim<span class="op">=</span><span class="dv">0</span>)<span class="sc">}</span><span class="ss">"</span>)</span>
+<span id="cb16-5"><a href="#cb16-5"></a><span class="bu">print</span>(<span class="ss">f"sim(e_1, e_3) = </span><span class="sc">{</span>cosine_similarity(e_1, e_3, dim<span class="op">=</span><span class="dv">0</span>)<span class="sc">}</span><span class="ss">"</span>)</span>
+<span id="cb16-6"><a href="#cb16-6"></a><span class="bu">print</span>(<span class="ss">f"sim(e_2, e_3) = </span><span class="sc">{</span>cosine_similarity(e_2, e_3, dim<span class="op">=</span><span class="dv">0</span>)<span class="sc">}</span><span class="ss">"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>sim(e_1, e_2) = 0.8565571904182434
+sim(e_1, e_3) = 0.8596917390823364
+sim(e_2, e_3) = 0.7909417152404785</code></pre>
+</div>
+</div>
+<ul>
+<li>Now the 2nd and 3rd are least similar! Why? Not sure.</li>
+<li>Depends on the underlying representation, and how it has learned</li>
+<li>Be careful!</li>
+</ul>
+</section>
+<section id="clustering" class="slide level2">
+<h2>Clustering</h2>
+<ul>
+<li>Since embeddings provide a measure of similarity/distance, we can cluster it into groups or use other tools to find interpretations</li>
+<li>There are various algorithms to cluster based on representations, and find the closest elements within the set of data for a new element</li>
+<li>These amount to looking for a low-dimensional approximation of the the embedding
+<ul>
+<li>See <a href="https://scikit-learn.org/stable/modules/generated/sklearn.manifold.TSNE.html">t-SNE (t-Distributed Stochastic Neighbor Embedding)</a> for a common visualization tool</li>
+<li>Generally better than k-means, etc. for this kind of data since similarity is not necessarily Euclidean distance</li>
+</ul></li>
+</ul>
+</section>
+<section id="get-some-random-embeddings" class="slide level2">
+<h2>Get Some Random Embeddings</h2>
+<div class="cell" data-execution_count="10">
+<div class="sourceCode cell-code" id="cb18"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb18-1"><a href="#cb18-1"></a>vocab <span class="op">=</span> tokenizer.get_vocab()</span>
+<span id="cb18-2"><a href="#cb18-2"></a>tokens <span class="op">=</span> <span class="bu">list</span>(vocab.keys())</span>
+<span id="cb18-3"><a href="#cb18-3"></a><span class="bu">print</span>(<span class="ss">f"model has </span><span class="sc">{</span><span class="bu">len</span>(tokens)<span class="sc">}</span><span class="ss"> tokens"</span>)</span>
+<span id="cb18-4"><a href="#cb18-4"></a>full_tokens <span class="op">=</span> [token <span class="cf">for</span> token <span class="kw">in</span> tokens <span class="cf">if</span> <span class="kw">not</span> token.startswith(<span class="st">'##'</span>)]</span>
+<span id="cb18-5"><a href="#cb18-5"></a><span class="bu">print</span>(<span class="ss">f"model has </span><span class="sc">{</span><span class="bu">len</span>(full_tokens)<span class="sc">}</span><span class="ss"> full tokens (e.g. characters, special symbols)"</span>)</span>
+<span id="cb18-6"><a href="#cb18-6"></a>sampled_tokens <span class="op">=</span> np.random.choice(full_tokens, size<span class="op">=</span><span class="dv">100</span>, replace<span class="op">=</span><span class="va">False</span>)</span>
+<span id="cb18-7"><a href="#cb18-7"></a>token_ids <span class="op">=</span> [vocab[token] <span class="cf">for</span> token <span class="kw">in</span> sampled_tokens]</span>
+<span id="cb18-8"><a href="#cb18-8"></a><span class="cf">with</span> torch.no_grad():</span>
+<span id="cb18-9"><a href="#cb18-9"></a>    embeddings <span class="op">=</span> model.embeddings.word_embeddings(torch.tensor(token_ids))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>model has 30522 tokens
+model has 24694 full tokens (e.g. characters, special symbols)</code></pre>
+</div>
+</div>
+</section>
+<section id="visualize-with-t-sne" class="slide level2">
+<h2>Visualize with t-SNE</h2>
+<div class="cell" data-execution_count="11">
+<div class="sourceCode cell-code" id="cb20"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb20-1"><a href="#cb20-1"></a>tsne <span class="op">=</span> TSNE(n_components<span class="op">=</span><span class="dv">2</span>, random_state<span class="op">=</span><span class="dv">0</span>)</span>
+<span id="cb20-2"><a href="#cb20-2"></a>embeddings_2d <span class="op">=</span> tsne.fit_transform(embeddings.numpy())</span>
+<span id="cb20-3"><a href="#cb20-3"></a><span class="co"># Plot the t-SNE results</span></span>
+<span id="cb20-4"><a href="#cb20-4"></a>plt.figure()</span>
+<span id="cb20-5"><a href="#cb20-5"></a><span class="cf">for</span> i, token <span class="kw">in</span> <span class="bu">enumerate</span>(sampled_tokens):</span>
+<span id="cb20-6"><a href="#cb20-6"></a>    x, y <span class="op">=</span> embeddings_2d[i]</span>
+<span id="cb20-7"><a href="#cb20-7"></a>    plt.scatter(x, y)</span>
+<span id="cb20-8"><a href="#cb20-8"></a>    plt.text(x<span class="op">+</span><span class="fl">0.1</span>, y<span class="op">+</span><span class="fl">0.1</span>, token, fontsize<span class="op">=</span><span class="dv">9</span>)</span>
+<span id="cb20-9"><a href="#cb20-9"></a>plt.title(<span class="st">'t-SNE visualization of BERT token embeddings'</span>)</span>
+<span id="cb20-10"><a href="#cb20-10"></a>plt.xlabel(<span class="st">'Dimension 1'</span>)</span>
+<span id="cb20-11"><a href="#cb20-11"></a>plt.ylabel(<span class="st">'Dimension 2'</span>)</span>
+<span id="cb20-12"><a href="#cb20-12"></a>plt.show()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+
+</section>
+<section id="visualize-with-t-sne-output" class="slide level2 output-location-slide"><h2>Visualize with t-SNE</h2><div class="cell output-location-slide" data-execution_count="11">
+<div class="cell-output cell-output-display">
+<p><img data-src="embeddings_nlp_llm_files/figure-revealjs/cell-12-output-1.png" width="827" height="449"></p>
+</div>
+</div></section><section id="classification" class="slide level2">
+<h2>Classification</h2>
+<ul>
+<li>For classification tasks, we can use this embedding with representation learning and softmax (i.e., logit likelihood)</li>
+<li>Basic strategy for classification
+<ol type="1">
+<li>Embed sentences</li>
+<li>Potentially use some NN transformations to get a representation of the embedding</li>
+<li>Use a “softmax” to get a probability distribution over the classes</li>
+<li>Fit with MLE as a “supervised” (multinormal logit) problem</li>
+</ol></li>
+</ul>
+</section>
+<section id="multi-modal-embeddings" class="slide level2">
+<h2>Multi-modal Embeddings</h2>
+<ul>
+<li>Embeddings can be used for more than just text</li>
+<li>Images, audio, etc. can all be embedded</li>
+<li>The key is to have a representation which is useful for the task at hand</li>
+<li>For example, we can embed text and images together to predict the sentiment of a review</li>
 </ul>
 </section></section>
 <section>
-<section id="sequential-data" class="title-slide slide level1 center">
-<h1>Sequential Data</h1>
+<section id="sequential-data-and-token-prediction" class="title-slide slide level1 center">
+<h1>Sequential Data and Token Prediction</h1>
 
 </section>
 <section id="distribution-of-tokens" class="slide level2">
-<h2>Distribution of “tokens”</h2>
+<h2>Distribution of “Tokens”</h2>
 <ul>
 <li>In many cases, data has an inherent sequential ordering. e.g.&nbsp;time series, language, etc.</li>
-<li>For those, we should think of trying conditional probabilities over finite set of possible outcomes</li>
+<li>Consider conditional probabilities over <span class="math inline">\(x_t \in \mathcal{X}\)</span> which is discrete set of outcomes <span class="math inline">\(k = 1, \ldots K\)</span></li>
 <li>Define a “tokens” as <span class="math inline">\(x_1, x_2, \ldots, x_T\)</span> for a sequence of length <span class="math inline">\(T\)</span></li>
-<li>Assume for now that we will consider from <span class="math inline">\(x_t \in \mathcal{X}\)</span> which is discrete</li>
 <li>In the background, the “population distribution” of sequences is given, <span class="math inline">\(\{x_1, \ldots, x_T\} \sim \mu^*\)</span></li>
-<li>Sometimes want to condition on past, othertimes the future (e.g., for semi-supervised learning)</li>
+<li>We may want to condition on the past to predict the next token, or condition on the entire sequence to predict missing ones.</li>
 </ul>
 </section>
-<section id="token-prediction-is-a-conditional-probability" class="slide level2">
-<h2>Token prediction is a Conditional Probability</h2>
+<section id="token-prediction-from-conditional-probabilities" class="slide level2">
+<h2>Token Prediction from Conditional Probabilities</h2>
 <ul>
-<li>Given a sequence <span class="math inline">\(x_1, x_2, \ldots, x_{t-1}\)</span>, we want to find the conditional probability distribution: <span class="math display">\[
-\mathbb{P}(x_t | x_1, x_2, \ldots, x_{t-1})
+<li>Given a sequence <span class="math inline">\(x_1, x_2, \ldots, x_{t-1}\)</span>, model the conditional distribution: <span class="math display">\[
+\mathbb{P}(x_t | x_{t-1}, x_{t-2}, \ldots, x_1)
 \]</span>
 <ul>
 <li>Where in the background these are done with marginal and conditional probabilities from the population distribution <span class="math inline">\(\mu^*\)</span></li>
 </ul></li>
+<li>Basic strategy (details on “transformers” after we see how to use them):
+<ol type="1">
+<li>Do an embedding for each token <span class="math inline">\(x_t\)</span></li>
+<li>Map those embeddings to some representation, <span class="math inline">\(\phi(x_1, \ldots, x_{t-1})\)</span></li>
+<li>Map that with “softmax” to get probabilities over <span class="math inline">\(k = 1, \ldots, K\)</span> for <span class="math inline">\(x_t\)</span></li>
+<li>Fit with MLE as a “supervised” (multinormal logit) problem</li>
+</ol></li>
 </ul>
 </section>
-<section id="how-can-you-condition" class="slide level2">
-<h2>How can you condition?</h2>
-<ul>
-<li>Discuss adding in extra information</li>
-<li>This doesn’t change <span class="math inline">\(\mu\)</span>, but can help with conditioning</li>
-</ul>
-</section>
-<section id="using-the-api" class="slide level2">
-<h2>Using the API</h2>
-<div class="cell" data-execution_count="3">
-<div class="sourceCode cell-code" id="cb4"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb4-1"><a href="#cb4-1"></a>client <span class="op">=</span> OpenAI()</span>
-<span id="cb4-2"><a href="#cb4-2"></a>completion <span class="op">=</span> client.chat.completions.create(</span>
-<span id="cb4-3"><a href="#cb4-3"></a>    model<span class="op">=</span><span class="st">"gpt-4o-mini"</span>,</span>
-<span id="cb4-4"><a href="#cb4-4"></a>    temperature<span class="op">=</span><span class="fl">0.7</span>, top_p<span class="op">=</span><span class="dv">1</span>, max_tokens<span class="op">=</span><span class="dv">300</span>, <span class="co">#optional</span></span>
-<span id="cb4-5"><a href="#cb4-5"></a>    messages<span class="op">=</span>[</span>
-<span id="cb4-6"><a href="#cb4-6"></a>        {</span>
-<span id="cb4-7"><a href="#cb4-7"></a>          <span class="st">"role"</span>: <span class="st">"system"</span>,</span>
-<span id="cb4-8"><a href="#cb4-8"></a>          <span class="st">"content"</span>: <span class="st">"You provide 3 bullet point, technical answers."</span></span>
-<span id="cb4-9"><a href="#cb4-9"></a>        },</span>
-<span id="cb4-10"><a href="#cb4-10"></a>        {</span>
-<span id="cb4-11"><a href="#cb4-11"></a>          <span class="st">"role"</span>: <span class="st">"user"</span>,</span>
-<span id="cb4-12"><a href="#cb4-12"></a>          <span class="st">"content"</span>: <span class="st">"What is an embedding?"</span></span>
-<span id="cb4-13"><a href="#cb4-13"></a>        }</span>
-<span id="cb4-14"><a href="#cb4-14"></a>    ]</span>
-<span id="cb4-15"><a href="#cb4-15"></a>)</span>
-<span id="cb4-16"><a href="#cb4-16"></a><span class="bu">print</span>(completion.choices[<span class="dv">0</span>].message.content)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<section id="provide-conditioning-tokens-in-the-prompt" class="slide level2">
+<h2>Provide Conditioning Tokens in the Prompt</h2>
+<div class="cell" data-execution_count="12">
+<div class="sourceCode cell-code" id="cb21"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb21-1"><a href="#cb21-1"></a>client <span class="op">=</span> OpenAI()</span>
+<span id="cb21-2"><a href="#cb21-2"></a>completion <span class="op">=</span> client.chat.completions.create(</span>
+<span id="cb21-3"><a href="#cb21-3"></a>    model<span class="op">=</span><span class="st">"gpt-4o-mini"</span>,</span>
+<span id="cb21-4"><a href="#cb21-4"></a>    temperature<span class="op">=</span><span class="fl">0.7</span>, <span class="co"># higher temperature adds "entropy"</span></span>
+<span id="cb21-5"><a href="#cb21-5"></a>    messages<span class="op">=</span>[</span>
+<span id="cb21-6"><a href="#cb21-6"></a>        {</span>
+<span id="cb21-7"><a href="#cb21-7"></a>          <span class="st">"role"</span>: <span class="st">"system"</span>,</span>
+<span id="cb21-8"><a href="#cb21-8"></a>          <span class="st">"content"</span>: <span class="st">"You provide 2 short bullet points, technical answers."</span></span>
+<span id="cb21-9"><a href="#cb21-9"></a>        },</span>
+<span id="cb21-10"><a href="#cb21-10"></a>        {</span>
+<span id="cb21-11"><a href="#cb21-11"></a>          <span class="st">"role"</span>: <span class="st">"user"</span>,</span>
+<span id="cb21-12"><a href="#cb21-12"></a>          <span class="st">"content"</span>: <span class="st">"What is an embedding?"</span></span>
+<span id="cb21-13"><a href="#cb21-13"></a>        }</span>
+<span id="cb21-14"><a href="#cb21-14"></a>    ]</span>
+<span id="cb21-15"><a href="#cb21-15"></a>)</span>
+<span id="cb21-16"><a href="#cb21-16"></a><span class="bu">print</span>(completion.choices[<span class="dv">0</span>].message.content)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 
 </section>
-<section id="using-the-api-output" class="slide level2 output-location-slide"><h2>Using the API</h2><div class="cell output-location-slide" data-execution_count="3">
+<section id="provide-conditioning-tokens-in-the-prompt-output" class="slide level2 output-location-slide"><h2>Provide Conditioning Tokens in the Prompt</h2><div class="cell output-location-slide" data-execution_count="12">
 <div class="cell-output cell-output-stdout">
-<pre><code>- **Representation of Data**: An embedding is a mapping of discrete objects, such as words, sentences, or images, into a continuous vector space where similar objects are positioned closer together. This facilitates the application of mathematical operations and machine learning algorithms.
+<pre><code>- An embedding is a mathematical representation of objects (such as words, sentences, or images) in a continuous vector space, where similar objects are located closer together in that space. 
 
-- **Dimensionality Reduction**: By transforming high-dimensional data into lower-dimensional vectors, embeddings help to capture the underlying structure and relationships within the data, making it easier to analyze and visualize.
-
-- **Applications**: Embeddings are widely used in natural language processing (e.g., Word2Vec, GloVe), computer vision (e.g., image embeddings), and recommendation systems, where they help improve the performance of models by providing meaningful representations of the input data.</code></pre>
+- In machine learning, embeddings are commonly used to capture semantic meaning and relationships, allowing algorithms to perform tasks like clustering, classification, and retrieval more effectively.</code></pre>
 </div>
-</div></section><section id="more-for-conditioning" class="slide level2">
-<h2>More for Conditioning?</h2>
-<div class="cell" data-execution_count="4">
-<div class="sourceCode cell-code" id="cb6"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb6-1"><a href="#cb6-1"></a>client <span class="op">=</span> OpenAI()</span>
-<span id="cb6-2"><a href="#cb6-2"></a>completion <span class="op">=</span> client.chat.completions.create(</span>
-<span id="cb6-3"><a href="#cb6-3"></a>    model<span class="op">=</span><span class="st">"gpt-4o-mini"</span>,</span>
-<span id="cb6-4"><a href="#cb6-4"></a>    temperature<span class="op">=</span><span class="fl">0.7</span>, top_p<span class="op">=</span><span class="dv">1</span>, max_tokens<span class="op">=</span><span class="dv">300</span>, <span class="co">#optional</span></span>
-<span id="cb6-5"><a href="#cb6-5"></a>    messages<span class="op">=</span>[</span>
-<span id="cb6-6"><a href="#cb6-6"></a>        {</span>
-<span id="cb6-7"><a href="#cb6-7"></a>          <span class="st">"role"</span>: <span class="st">"system"</span>,</span>
-<span id="cb6-8"><a href="#cb6-8"></a>          <span class="st">"content"</span>: <span class="st">"You provide 3 bullet point, technical answers thinking about images."</span></span>
-<span id="cb6-9"><a href="#cb6-9"></a>        },</span>
-<span id="cb6-10"><a href="#cb6-10"></a>        {</span>
-<span id="cb6-11"><a href="#cb6-11"></a>          <span class="st">"role"</span>: <span class="st">"user"</span>,</span>
-<span id="cb6-12"><a href="#cb6-12"></a>          <span class="st">"content"</span>: <span class="st">"What is an embedding?"</span></span>
-<span id="cb6-13"><a href="#cb6-13"></a>        }</span>
-<span id="cb6-14"><a href="#cb6-14"></a>    ]</span>
-<span id="cb6-15"><a href="#cb6-15"></a>)</span>
-<span id="cb6-16"><a href="#cb6-16"></a><span class="bu">print</span>(completion.choices[<span class="dv">0</span>].message.content)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div></section><section id="concatenating-results" class="slide level2 smaller">
+<h2>Concatenating Results</h2>
+<div class="cell" data-execution_count="13">
+<div class="sourceCode cell-code" id="cb23"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb23-1"><a href="#cb23-1"></a>completion <span class="op">=</span> client.chat.completions.create(model<span class="op">=</span><span class="st">"gpt-4o-mini"</span>,</span>
+<span id="cb23-2"><a href="#cb23-2"></a>    messages<span class="op">=</span>[</span>
+<span id="cb23-3"><a href="#cb23-3"></a>        {</span>
+<span id="cb23-4"><a href="#cb23-4"></a>          <span class="st">"role"</span>: <span class="st">"system"</span>,</span>
+<span id="cb23-5"><a href="#cb23-5"></a>          <span class="st">"content"</span>: <span class="st">"You provide 2 short bullet points, technical answers."</span></span>
+<span id="cb23-6"><a href="#cb23-6"></a>        },</span>
+<span id="cb23-7"><a href="#cb23-7"></a>        {</span>
+<span id="cb23-8"><a href="#cb23-8"></a>          <span class="st">"role"</span>: <span class="st">"user"</span>,</span>
+<span id="cb23-9"><a href="#cb23-9"></a>          <span class="st">"content"</span>: <span class="st">"What is an embedding?"</span></span>
+<span id="cb23-10"><a href="#cb23-10"></a>        },</span>
+<span id="cb23-11"><a href="#cb23-11"></a>        {</span>
+<span id="cb23-12"><a href="#cb23-12"></a>          <span class="st">"role"</span>: <span class="st">"assistant"</span>,</span>
+<span id="cb23-13"><a href="#cb23-13"></a>          <span class="st">"content"</span>: <span class="st">"- An embedding is a dense vector representation of objects, such as words, sentences, or images, that captures semantic meanings and relationships in a continuous vector space.</span><span class="ch">\n</span><span class="st">- It transforms high-dimensional data into a lower-dimensional format while preserving essential properties, enabling easier computation in machine learning tasks."</span></span>
+<span id="cb23-14"><a href="#cb23-14"></a>        },</span>
+<span id="cb23-15"><a href="#cb23-15"></a>        {</span>
+<span id="cb23-16"><a href="#cb23-16"></a>          <span class="st">"role"</span>: <span class="st">"user"</span>,<span class="st">"content"</span>: <span class="st">"What is the relationship to latent spaces?"</span></span>
+<span id="cb23-17"><a href="#cb23-17"></a>        },</span>
+<span id="cb23-18"><a href="#cb23-18"></a>    ]</span>
+<span id="cb23-19"><a href="#cb23-19"></a>)</span>
+<span id="cb23-20"><a href="#cb23-20"></a><span class="bu">print</span>(completion.choices[<span class="dv">0</span>].message.content)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 
-</section><section id="more-for-conditioning-output" class="slide level2 output-location-slide"><h2>More for Conditioning?</h2><div class="cell output-location-slide" data-execution_count="4">
+</section><section id="concatenating-results-output" class="slide level2 smaller output-location-slide"><h2>Concatenating Results</h2><div class="cell output-location-slide" data-execution_count="13">
 <div class="cell-output cell-output-stdout">
-<pre><code>- **Definition**: An embedding is a mathematical representation of objects (such as images, text, or audio) in a continuous vector space, allowing complex data to be expressed in a lower-dimensional format while preserving meaningful relationships and similarities.
-
-- **Application in Images**: In the context of images, embeddings are often generated using convolutional neural networks (CNNs) or other deep learning architectures, transforming raw pixel data into feature vectors that capture essential visual characteristics, enabling tasks like image classification, retrieval, and clustering.
-
-- **Dimensionality Reduction**: Techniques such as t-SNE or PCA can be applied to visualize image embeddings by reducing the high-dimensional feature vectors to two or three dimensions, allowing for the exploration of how similar or different images are based on their embedded representations.</code></pre>
+<pre><code>- Embeddings are often used to map data points into a latent space, which is a lower-dimensional representation where similar objects are closer together, facilitating pattern recognition and similarity measures.
+- The latent space enables the model to encode complex data distributions and relationships in a more compact form, aiding in tasks such as clustering, classification, and generative modeling.</code></pre>
 </div>
 </div></section></section>
 <section>
-<section id="hugging-face" class="title-slide slide level1 center">
-<h1>Hugging Face</h1>
+<section id="classification-and-masking" class="title-slide slide level1 center">
+<h1>Classification and Masking</h1>
 
+</section>
+<section id="hugging-face" class="slide level2">
+<h2>Hugging Face</h2>
+<ul>
+<li>Hugging Face provides a simple interface to many prebuilt transformer models, datasets, etc.</li>
+<li>We can use these to do tasks like sentiment analysis, fill in the blank, etc.</li>
+<li>Unlike the OpenAI API, we can download the models and use them locally, “fine-tune” them, etc.</li>
+<li>See <a href="https://huggingface.co/docs/transformers/quicktour">Quick Tour</a> for more</li>
+</ul>
 </section>
 <section id="pipelines" class="slide level2">
 <h2>Pipelines</h2>
 <ul>
-<li>See https://huggingface.co/docs/transformers/quicktour</li>
-<li>See https://huggingface.co/docs/transformers/main/en/pipeline_tutorial</li>
-<li>“Inference” in ML usually means evaluating functions, not statistical inference</li>
+<li>The <code>pipeline</code> function in Hugging Face is a simple way to use prebuilt models for common tasks. See the <a href="https://huggingface.co/docs/transformers/main/en/pipeline_tutorial">pipeline tutorial</a></li>
 <li>Loads pretrained models from public repositories</li>
-<li>Set <code>device</code>?</li>
 </ul>
-<div class="cell" data-execution_count="5">
-<div class="sourceCode cell-code" id="cb8"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb8-1"><a href="#cb8-1"></a><span class="im">from</span> transformers <span class="im">import</span> pipeline</span>
-<span id="cb8-2"><a href="#cb8-2"></a>classifier <span class="op">=</span> pipeline(<span class="st">"sentiment-analysis"</span>) <span class="co"># defaults to a model</span></span>
-<span id="cb8-3"><a href="#cb8-3"></a>fill_masker <span class="op">=</span> pipeline(model<span class="op">=</span><span class="st">"google-bert/bert-base-uncased"</span>,</span>
-<span id="cb8-4"><a href="#cb8-4"></a>                       <span class="co"># device=0) # use GPU</span></span>
-<span id="cb8-5"><a href="#cb8-5"></a>                       )</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell" data-execution_count="14">
+<div class="sourceCode cell-code" id="cb25"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb25-1"><a href="#cb25-1"></a>classifier <span class="op">=</span> pipeline(<span class="st">"sentiment-analysis"</span>) <span class="co"># defaults to a model</span></span>
+<span id="cb25-2"><a href="#cb25-2"></a>fill_masker <span class="op">=</span> pipeline(model<span class="op">=</span><span class="st">"google-bert/bert-base-uncased"</span>) <span class="co"># device=0) # to use GPU   </span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 </section>
 <section id="sentiment-analysis-defaults-to-positive-or-negative" class="slide level2">
@@ -663,23 +1122,28 @@ Jesse Perla
 <ul>
 <li>Defaulted to <code>distilbert/distilbert-base-uncased-finetuned-sst-2-english</code></li>
 </ul>
-<div class="cell" data-execution_count="6">
-<div class="sourceCode cell-code" id="cb9"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb9-1"><a href="#cb9-1"></a><span class="bu">print</span>(classifier(<span class="st">"Transformers library is great."</span>))</span>
-<span id="cb9-2"><a href="#cb9-2"></a><span class="bu">print</span>(classifier(<span class="st">"Transformers library is awful."</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell" data-execution_count="15">
+<div class="sourceCode cell-code" id="cb26"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb26-1"><a href="#cb26-1"></a><span class="bu">print</span>(classifier(<span class="st">"Transformers library is great."</span>))</span>
+<span id="cb26-2"><a href="#cb26-2"></a><span class="bu">print</span>(classifier(<span class="st">"Transformers library is awful."</span>))</span>
+<span id="cb26-3"><a href="#cb26-3"></a><span class="bu">print</span>(classifier(<span class="st">"I am ok with the transformers."</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>[{'label': 'POSITIVE', 'score': 0.9998424053192139}]
-[{'label': 'NEGATIVE', 'score': 0.9997472167015076}]</code></pre>
+[{'label': 'NEGATIVE', 'score': 0.9997472167015076}]
+[{'label': 'POSITIVE', 'score': 0.9997096657752991}]</code></pre>
 </div>
 </div>
 </section>
 <section id="fill-masked" class="slide level2">
 <h2>Fill Masked</h2>
-<div class="cell columns column-output-location" data-execution_count="7">
+<ul>
+<li>Some, like <a href="https://huggingface.co/nlpaueb/legal-bert-base-uncased">BERT</a>, were trained to predict missing tokens.</li>
+</ul>
+<div class="cell columns column-output-location" data-execution_count="16">
 <div class="column">
-<div class="sourceCode cell-code" id="cb11"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb11-1"><a href="#cb11-1"></a>fill_masker(<span class="st">"This is a simple [MASK]."</span>,</span>
-<span id="cb11-2"><a href="#cb11-2"></a>             top_k<span class="op">=</span><span class="dv">3</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb28"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb28-1"><a href="#cb28-1"></a>fill_masker(<span class="st">"This is a simple [MASK]."</span>,</span>
+<span id="cb28-2"><a href="#cb28-2"></a>             top_k<span class="op">=</span><span class="dv">3</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div><div class="column">
-<div class="cell-output cell-output-display" data-execution_count="7">
+<div class="cell-output cell-output-display" data-execution_count="16">
 <pre><code>[{'score': 0.04227157309651375,
   'token': 3291,
   'token_str': 'problem',
@@ -695,12 +1159,55 @@ Jesse Perla
 </div>
 </div>
 </div>
-<!-- 
+</section></section>
+<section>
+<section id="fine-tuning-and-training" class="title-slide slide level1 center">
+<h1>Fine-Tuning and Training</h1>
+
+</section>
+<section id="good-representations-are-transferable" class="slide level2">
+<h2>Good Representations are Transferable</h2>
+<ul>
+<li>Remember: with most ML methods, the unsupervised part (e.g., learning the <span class="math inline">\(\phi(\cdot)\)</span> is most of the work)</li>
+<li>We have good generalization performance when the representations are especially strong</li>
+<li>Keep in mind that ML is being fit (e.g., with MLE) with a population distribution <span class="math inline">\(\mu^*\)</span> fixed.
+<ul>
+<li>If we are using a different distribution, we need to be careful! This is independent of the downstream task, which</li>
+<li>One option: refine our problem by helping it specialize</li>
+<li>Another: provide more information (e.g.&nbsp;tokens) to condition on</li>
+</ul></li>
+</ul>
+</section>
+<section id="semi-supervised-and-self-supervised-learning" class="slide level2">
+<h2>Semi-Supervised and Self-supervised Learning</h2>
+<ul>
+<li>In many cases, we have a lot of data, but only a small amount of labeled data</li>
+<li>Semi-supervised learning is the idea of using the unlabeled data to improve the model
+<ul>
+<li>e.g., use the unlabeled data to predict the labeled data</li>
+<li>Add auxiliary tasks to the model</li>
+</ul></li>
+<li>Self-supervised learning is the idea of using the data to predict itself
+<ul>
+<li>e.g., mask out some words and predict them</li>
+</ul></li>
+</ul>
+</section>
+<section id="no-shot-and-few-shot-learning" class="slide level2">
+<h2>No-shot and Few-Shot Learning</h2>
+<ul>
+<li>With LLMs… you do not need to fine-tune directly. Can put informaiton in the prompt which lets the model condition as it sees fit.</li>
+<li>If you do this, and don’t even provide an example it is “zero-shot”. I you give it one or two, it is “few-shot” etc.</li>
+</ul>
+</section>
+<section id="llms-and-few-shot-learning" class="slide level2">
+<h2>LLMs and Few Shot Learning</h2>
+<ul>
+<li>With LLMs such as ChatGPT, you can provide the few-shot and zero-shot learning in the prompt itself</li>
+<li>Recall that it is able to condition on past “tokens”, which can include a mix of information, instructions, and examples</li>
+<li>Before we jump into this with more detail, we will need to understand the <strong>transformer</strong> architecture <!-- 
 ## Attention and Similarity
 
-
-## Importance of Transfer Learning
-- Never start fresh!
 
 ## Semi-supervised Learning
 
@@ -719,41 +1226,13 @@ Jesse Perla
 - [openai API](https://platform.openai.com/docs/api-reference/introduction)
 - [Prompts for Economists](https://sites.google.com/view/lastunen/ai-for-economists?authuser=0)
 
-# Setting up the Environment
-## OpenAI
-- Sign up for the [OpenAI Platoform](https://platform.openai.com/)
-  - Free for limited numbers of "tokens"
-- Go to the `API keys` tab and create a key
-- In your terminal, set `OPENAI_API_KEY` to this value (see [here](https://platform.openai.com/docs/quickstart?desktop-os=macOS#create-and-export-an-api-key)) -->
 <!-- 
-# Embeddings
-
-## WHat is an embedding?
-- mapping to a latent space
-- norms are meaningful
-- Remember kernels
-
-## Review Representations
-- Bla
-
-## Review Auto-Encoders
-- Blua
- 
-## Vector embeddings with PCA
-- Bla
-
 # Transformers and Sequential Data
 ## More Details
 - See [Sequential Data and Recursive](https://econdl.github.io/intro/2023/01/20/lecture3.html)
 - See [Transformers](https://econdl.github.io/intro/2023/01/20/lecture4.html) and [More Transformers](https://econdl.github.io/intro/2023/01/21/lecture5.html)
 
-## Next token prediction and entropy
-- doing conditionals, explain how. -->
-</section>
-<section id="tokens" class="slide level2">
-<h2>Tokens</h2>
-<ul>
-<li>Note the token provided by the fill_masker</li>
+ --></li>
 </ul>
 
 <div class="footer footer-default">

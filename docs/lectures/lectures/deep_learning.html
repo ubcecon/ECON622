@@ -29,6 +29,71 @@
       margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
       vertical-align: middle;
     }
+    /* CSS for syntax highlighting */
+    pre > code.sourceCode { white-space: pre; position: relative; }
+    pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+    pre > code.sourceCode > span:empty { height: 1.2em; }
+    .sourceCode { overflow: visible; }
+    code.sourceCode > span { color: inherit; text-decoration: inherit; }
+    div.sourceCode { margin: 1em 0; }
+    pre.sourceCode { margin: 0; }
+    @media screen {
+    div.sourceCode { overflow: auto; }
+    }
+    @media print {
+    pre > code.sourceCode { white-space: pre-wrap; }
+    pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+    }
+    pre.numberSource code
+      { counter-reset: source-line 0; }
+    pre.numberSource code > span
+      { position: relative; left: -4em; counter-increment: source-line; }
+    pre.numberSource code > span > a:first-child::before
+      { content: counter(source-line);
+        position: relative; left: -1em; text-align: right; vertical-align: baseline;
+        border: none; display: inline-block;
+        -webkit-touch-callout: none; -webkit-user-select: none;
+        -khtml-user-select: none; -moz-user-select: none;
+        -ms-user-select: none; user-select: none;
+        padding: 0 4px; width: 4em;
+        color: #aaaaaa;
+      }
+    pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+    div.sourceCode
+      { color: #003b4f; background-color: #f1f3f5; }
+    @media screen {
+    pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+    }
+    code span { color: #003b4f; } /* Normal */
+    code span.al { color: #ad0000; } /* Alert */
+    code span.an { color: #5e5e5e; } /* Annotation */
+    code span.at { color: #657422; } /* Attribute */
+    code span.bn { color: #ad0000; } /* BaseN */
+    code span.bu { } /* BuiltIn */
+    code span.cf { color: #003b4f; } /* ControlFlow */
+    code span.ch { color: #20794d; } /* Char */
+    code span.cn { color: #8f5902; } /* Constant */
+    code span.co { color: #5e5e5e; } /* Comment */
+    code span.cv { color: #5e5e5e; font-style: italic; } /* CommentVar */
+    code span.do { color: #5e5e5e; font-style: italic; } /* Documentation */
+    code span.dt { color: #ad0000; } /* DataType */
+    code span.dv { color: #ad0000; } /* DecVal */
+    code span.er { color: #ad0000; } /* Error */
+    code span.ex { } /* Extension */
+    code span.fl { color: #ad0000; } /* Float */
+    code span.fu { color: #4758ab; } /* Function */
+    code span.im { color: #00769e; } /* Import */
+    code span.in { color: #5e5e5e; } /* Information */
+    code span.kw { color: #003b4f; } /* Keyword */
+    code span.op { color: #5e5e5e; } /* Operator */
+    code span.ot { color: #003b4f; } /* Other */
+    code span.pp { color: #ad0000; } /* Preprocessor */
+    code span.sc { color: #5e5e5e; } /* SpecialChar */
+    code span.ss { color: #20794d; } /* SpecialString */
+    code span.st { color: #20794d; } /* String */
+    code span.va { color: #111111; } /* Variable */
+    code span.vs { color: #20794d; } /* VerbatimString */
+    code span.wa { color: #5e5e5e; font-style: italic; } /* Warning */
   </style>
   <link rel="stylesheet" href="../site_libs/revealjs/dist/theme/quarto.css">
   <link href="../site_libs/revealjs/plugin/quarto-line-highlight/line-highlight.css" rel="stylesheet">
@@ -368,6 +433,9 @@ Jesse Perla
 <li><a href="#/features-and-representations" id="/toc-features-and-representations">Features and Representations</a></li>
 <li><a href="#/neural-networks-part-ii" id="/toc-neural-networks-part-ii">Neural Networks, Part II</a></li>
 <li><a href="#/more-perspectives-on-representations" id="/toc-more-perspectives-on-representations">More Perspectives on Representations</a></li>
+<li><a href="#/differentiating-representations" id="/toc-differentiating-representations">Differentiating Representations</a></li>
+<li><a href="#/hyperparameter-optimization-with-deep-learning" id="/toc-hyperparameter-optimization-with-deep-learning">Hyperparameter Optimization with Deep Learning</a></li>
+<li><a href="#/mlp-regression-example-with-sweep" id="/toc-mlp-regression-example-with-sweep">MLP Regression Example with Sweep</a></li>
 </ul>
 </nav>
 </section>
@@ -392,6 +460,22 @@ Jesse Perla
 <li>Inductive bias and regularization</li>
 </ul></li>
 </ul>
+</section>
+<section id="packages" class="slide level2">
+<h2>Packages</h2>
+<div class="cell" data-execution_count="2">
+<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1"></a><span class="im">import</span> jax</span>
+<span id="cb1-2"><a href="#cb1-2"></a><span class="im">import</span> jax.numpy <span class="im">as</span> jnp</span>
+<span id="cb1-3"><a href="#cb1-3"></a><span class="im">import</span> numpy <span class="im">as</span> np</span>
+<span id="cb1-4"><a href="#cb1-4"></a><span class="im">from</span> jax <span class="im">import</span> random</span>
+<span id="cb1-5"><a href="#cb1-5"></a><span class="im">import</span> optax</span>
+<span id="cb1-6"><a href="#cb1-6"></a><span class="im">import</span> jax_dataloader <span class="im">as</span> jdl</span>
+<span id="cb1-7"><a href="#cb1-7"></a><span class="im">from</span> jax_dataloader.loaders <span class="im">import</span> DataLoaderJAX</span>
+<span id="cb1-8"><a href="#cb1-8"></a><span class="im">from</span> flax <span class="im">import</span> nnx</span>
+<span id="cb1-9"><a href="#cb1-9"></a><span class="im">import</span> torch</span>
+<span id="cb1-10"><a href="#cb1-10"></a><span class="im">import</span> torch.nn <span class="im">as</span> nn</span>
+<span id="cb1-11"><a href="#cb1-11"></a><span class="im">import</span> copy</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
 </section></section>
 <section>
 <section id="neural-networks-part-i" class="title-slide slide level1 center">
@@ -953,7 +1037,7 @@ f(X) = \rho\left(\frac{1}{N}\sum_{x\in X} \phi(x)\right)
 <h2>Out of Distribution Learning</h2>
 <ul>
 <li>We have been discussing a <span class="math inline">\(\mathcal{D}\)</span> from some idealized, constant <span class="math inline">\(p^*(x,y)\)</span></li>
-<li>What if the distribution changes, or our samples are not IID (e.g., in control and reinforcement learning applications where it is <span class="math inline">\(p^*(x,y;f)\)</span>)?</li>
+<li>What if the distribution changes, or our samples are not IID. e.g., in control and reinforcement learning applications where it is <span class="math inline">\(p^*(x,y;f)\)</span>?</li>
 <li>See <a href="https://probml.github.io/pml-book/book1.html">ProbML Book 2</a> Section 19.1 for more</li>
 <li>This is called “robustness to distribution shift”, covariate shift, etc. in different settings</li>
 <li>There are many methods, but one common element is:
@@ -963,8 +1047,677 @@ f(X) = \rho\left(\frac{1}{N}\sum_{x\in X} \phi(x)\right)
 <li>With transfer learning you may be able to adapt very easily</li>
 </ul></li>
 </ul>
+</section></section>
+<section>
+<section id="differentiating-representations" class="title-slide slide level1 center">
+<h1>Differentiating Representations</h1>
 
-<div class="footer footer-default">
+</section>
+<section id="recursive-parameterizations" class="slide level2">
+<h2>Recursive Parameterizations</h2>
+<ul>
+<li><span class="math inline">\(\mathcal{H}\)</span> design is crucial, and we can use economic intuition to guide</li>
+<li>If we are using ``deep’’ learning - where the representations themselves must be learned, then there will recursively defined, nested approximations
+<ul>
+<li>Each of these approximations has its own parameters</li>
+<li>When a gradient is taken in the optimizing process, it is taken with respect to that recursive set of parameters</li>
+</ul></li>
+<li>ML frameworks like Pytorch, Keras, and Flax NNX help keep track of those nested parameters, update gradients, etc.</li>
+</ul>
+</section>
+<section id="flax-nnx-example" class="slide level2">
+<h2>Flax NNX Example</h2>
+<ul>
+<li>We previously say how to create our own <code>MyLinear</code> case for a linear function without an affine term (i.e., no “bias”)</li>
+<li>The “learnable” (i.e, differentiable) parameters are tagged with <code>nnx.Param</code></li>
+</ul>
+<div class="cell" data-execution_count="3">
+<div class="sourceCode cell-code" id="cb2"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb2-1"><a href="#cb2-1"></a><span class="kw">class</span> MyLinear(nnx.Module):</span>
+<span id="cb2-2"><a href="#cb2-2"></a>    <span class="kw">def</span> <span class="fu">__init__</span>(<span class="va">self</span>, in_size, out_size, rngs):</span>
+<span id="cb2-3"><a href="#cb2-3"></a>        <span class="va">self</span>.out_size <span class="op">=</span> out_size</span>
+<span id="cb2-4"><a href="#cb2-4"></a>        <span class="va">self</span>.in_size <span class="op">=</span> in_size</span>
+<span id="cb2-5"><a href="#cb2-5"></a>        <span class="va">self</span>.kernel <span class="op">=</span> nnx.Param(jax.random.normal(rngs(), (<span class="va">self</span>.out_size, <span class="va">self</span>.in_size)))</span>
+<span id="cb2-6"><a href="#cb2-6"></a>    <span class="co"># Similar to Pytorch's forward</span></span>
+<span id="cb2-7"><a href="#cb2-7"></a>    <span class="kw">def</span> <span class="fu">__call__</span>(<span class="va">self</span>, x):</span>
+<span id="cb2-8"><a href="#cb2-8"></a>        <span class="cf">return</span> <span class="va">self</span>.kernel <span class="op">@</span> x</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</section>
+<section id="differentiation-with-respect-to-nnx.module" class="slide level2">
+<h2>Differentiation With Respect to <code>nnx.Module</code></h2>
+<ul>
+<li>Differentiating <code>MyLinear</code> it finds the <code>nnx.Param</code>.</li>
+<li>The return thype of <code>nnx.grad</code> does not perturb <code>out_size</code>, etc.</li>
+</ul>
+<div class="cell columns column-output-location" data-execution_count="4">
+<div class="column">
+<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1"></a><span class="kw">def</span> f_gen(m, x, b):</span>
+<span id="cb3-2"><a href="#cb3-2"></a>    <span class="cf">return</span> jnp.squeeze(m(x) <span class="op">+</span> b)</span>
+<span id="cb3-3"><a href="#cb3-3"></a>rngs <span class="op">=</span> nnx.Rngs(<span class="dv">42</span>)</span>
+<span id="cb3-4"><a href="#cb3-4"></a>N <span class="op">=</span> <span class="dv">3</span></span>
+<span id="cb3-5"><a href="#cb3-5"></a>m <span class="op">=</span> MyLinear(N, <span class="dv">1</span>, rngs <span class="op">=</span> rngs)</span>
+<span id="cb3-6"><a href="#cb3-6"></a>x <span class="op">=</span> jax.random.normal(rngs(), (N,))</span>
+<span id="cb3-7"><a href="#cb3-7"></a>b <span class="op">=</span> <span class="fl">1.0</span></span>
+<span id="cb3-8"><a href="#cb3-8"></a>f <span class="op">=</span> <span class="kw">lambda</span> m: f_gen(m, x, b)</span>
+<span id="cb3-9"><a href="#cb3-9"></a>nnx.grad(f)(m)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div><div class="column">
+<div class="cell-output cell-output-display" data-execution_count="3">
+<pre><code>State({
+  'kernel': VariableState(
+    type=Param,
+    value=Array([[-1.5557193, -0.8495713, -1.1160917]], dtype=float32)
+  )
+})</code></pre>
+</div>
+</div>
+</div>
+</section>
+<section id="nesting" class="slide level2">
+<h2>Nesting</h2>
+<ul>
+<li>This recursively goes through any <code>nnx.Module</code></li>
+<li>Using the built-in <code>nnx.Linear</code> instead, construct a simple NN</li>
+</ul>
+<div class="cell" data-execution_count="5">
+<div class="sourceCode cell-code" id="cb5"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb5-1"><a href="#cb5-1"></a><span class="kw">class</span> MyMLP(nnx.Module):</span>
+<span id="cb5-2"><a href="#cb5-2"></a>    <span class="kw">def</span> <span class="fu">__init__</span>(<span class="va">self</span>, din, dout, width: <span class="bu">int</span>, <span class="op">*</span>, rngs: nnx.Rngs):</span>
+<span id="cb5-3"><a href="#cb5-3"></a>        <span class="va">self</span>.width <span class="op">=</span> width</span>
+<span id="cb5-4"><a href="#cb5-4"></a>        <span class="va">self</span>.linear1 <span class="op">=</span> nnx.Linear(din, width, use_bias <span class="op">=</span> <span class="va">False</span>, rngs<span class="op">=</span>rngs)</span>
+<span id="cb5-5"><a href="#cb5-5"></a>        <span class="va">self</span>.linear2 <span class="op">=</span> nnx.Linear(width, dout, use_bias <span class="op">=</span> <span class="va">True</span>, rngs<span class="op">=</span>rngs)</span>
+<span id="cb5-6"><a href="#cb5-6"></a></span>
+<span id="cb5-7"><a href="#cb5-7"></a>    <span class="kw">def</span> <span class="fu">__call__</span>(<span class="va">self</span>, x: jax.Array):</span>
+<span id="cb5-8"><a href="#cb5-8"></a>        x <span class="op">=</span> <span class="va">self</span>.linear1(x)</span>
+<span id="cb5-9"><a href="#cb5-9"></a>        x <span class="op">=</span> nnx.relu(x)</span>
+<span id="cb5-10"><a href="#cb5-10"></a>        x <span class="op">=</span> <span class="va">self</span>.linear2(x)</span>
+<span id="cb5-11"><a href="#cb5-11"></a>        <span class="cf">return</span> x</span>
+<span id="cb5-12"><a href="#cb5-12"></a>m <span class="op">=</span> MyMLP(N, <span class="dv">1</span>, <span class="dv">2</span>, rngs <span class="op">=</span> rngs)        </span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</section>
+<section id="reverse-mode-ad" class="slide level2">
+<h2>Reverse-mode AD</h2>
+<ul>
+<li>Consider the JVP <code>f(m)</code>. Recall notation in Differentation lecture</li>
+<li>For forward mode, we perturb <span class="math inline">\(f(m)\)</span> and calculate <span class="math display">\[
+\partial f(m)^{\top}[\dot{f}] = \dot{f} \cdot \nabla f(m)
+\]</span></li>
+<li>Given <span class="math inline">\(f : \mathcal{H} \to \mathbb{R}\)</span>, the natural adjoint vector is <span class="math inline">\(\dot{f} = 1\)</span>
+<ul>
+<li>This is what the <code>jax.grad</code> does, for scalar functions</li>
+</ul></li>
+<li>The <code>nnx.grad</code> does this, recursively going through each <code>nnx.Module</code> and its <code>nnx.Param</code> values</li>
+</ul>
+</section>
+<section id="splitting-into-differentiable-parts" class="slide level2 smaller">
+<h2>Splitting into Differentiable Parts</h2>
+<div class="cell columns column-output-location" data-execution_count="6">
+<div class="column">
+<div class="sourceCode cell-code" id="cb6"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb6-1"><a href="#cb6-1"></a>graphdef, state <span class="op">=</span> nnx.split(m)</span>
+<span id="cb6-2"><a href="#cb6-2"></a><span class="bu">print</span>(state)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div><div class="column">
+<div class="cell-output cell-output-stdout">
+<pre><code>State({
+  'linear1': {
+    'bias': VariableState(
+      type=Param,
+      value=None
+    ),
+    'kernel': VariableState(
+      type=Param,
+      value=Array([[-0.11148886,  0.66866976],
+             [-0.09731744, -0.486882  ],
+             [-0.9420541 , -0.13140532]], dtype=float32)
+    )
+  },
+  'linear2': {
+    'bias': VariableState(
+      type=Param,
+      value=Array([0.], dtype=float32)
+    ),
+    'kernel': VariableState(
+      type=Param,
+      value=Array([[-0.1044913 ],
+             [-0.18319812]], dtype=float32)
+    )
+  }
+})</code></pre>
+</div>
+</div>
+</div>
+</section>
+<section id="graphdef-contains-fixed-values-and-metadata" class="slide level2 smaller">
+<h2><code>graphdef</code> Contains Fixed Values and Metadata</h2>
+<div class="cell" data-execution_count="7">
+<div class="cell-output cell-output-stdout">
+<pre><code>GraphDef(
+  nodedef=NodeDef(
+    type=MyMLP,
+    index=0,
+    attributes=('linear1', 'linear2', 'width'),
+    subgraphs={
+      'linear1': NodeDef(
+        type=Linear,
+        index=1,
+        attributes=('bias', 'bias_init', 'dot_general', 'dtype', 'in_features', 'kernel', 'kernel_init', 'out_features', 'param_dtype', 'precision', 'use_bias'),
+        subgraphs={
+          'dtype': NodeDef(
+            type=PytreeType,
+            index=-1,
+            attributes=(),
+            subgraphs={},
+            static_fields={},
+            leaves={},
+            metadata=PyTreeDef(None)
+          ),
+          'precision': NodeDef(
+            type=PytreeType,
+            index=-1,
+            attributes=(),
+            subgraphs={},
+            static_fields={},
+            leaves={},
+            metadata=PyTreeDef(None)
+          )
+        },
+        static_fields={
+          'bias_init': &lt;function zeros at 0x0000026AE86D0E00&gt;,
+          'dot_general': &lt;function dot_general at 0x0000026AE8187060&gt;,
+          'in_features': 3,
+          'kernel_init': &lt;function variance_scaling.&lt;locals&gt;.init at 0x0000026AF2993740&gt;,
+          'out_features': 2,
+          'param_dtype': &lt;class 'jax.numpy.float32'&gt;,
+          'use_bias': False
+        },
+        leaves={
+          'bias': 2,
+          'kernel': 3
+        },
+        metadata=&lt;class 'flax.nnx.nnx.nn.linear.Linear'&gt;
+      ),
+      'linear2': NodeDef(
+        type=Linear,
+        index=4,
+        attributes=('bias', 'bias_init', 'dot_general', 'dtype', 'in_features', 'kernel', 'kernel_init', 'out_features', 'param_dtype', 'precision', 'use_bias'),
+        subgraphs={
+          'dtype': NodeDef(
+            type=PytreeType,
+            index=-1,
+            attributes=(),
+            subgraphs={},
+            static_fields={},
+            leaves={},
+            metadata=PyTreeDef(None)
+          ),
+          'precision': NodeDef(
+            type=PytreeType,
+            index=-1,
+            attributes=(),
+            subgraphs={},
+            static_fields={},
+            leaves={},
+            metadata=PyTreeDef(None)
+          )
+        },
+        static_fields={
+          'bias_init': &lt;function zeros at 0x0000026AE86D0E00&gt;,
+          'dot_general': &lt;function dot_general at 0x0000026AE8187060&gt;,
+          'in_features': 2,
+          'kernel_init': &lt;function variance_scaling.&lt;locals&gt;.init at 0x0000026AF2993740&gt;,
+          'out_features': 1,
+          'param_dtype': &lt;class 'jax.numpy.float32'&gt;,
+          'use_bias': True
+        },
+        leaves={
+          'bias': 5,
+          'kernel': 6
+        },
+        metadata=&lt;class 'flax.nnx.nnx.nn.linear.Linear'&gt;
+      )
+    },
+    static_fields={
+      'width': 2
+    },
+    leaves={},
+    metadata=&lt;class '__main__.MyMLP'&gt;
+  ),
+  index_mapping=None
+)</code></pre>
+</div>
+</div>
+</section>
+<section id="differentiation-with-nested-nnx.module" class="slide level2 smaller">
+<h2>Differentiation with Nested <code>nnx.Module</code></h2>
+<div class="cell columns column-output-location" data-execution_count="8">
+<div class="column">
+<div class="sourceCode cell-code" id="cb9"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb9-1"><a href="#cb9-1"></a>m <span class="op">=</span> MyMLP(N, <span class="dv">1</span>, <span class="dv">2</span>, rngs <span class="op">=</span> rngs)</span>
+<span id="cb9-2"><a href="#cb9-2"></a>delta_m <span class="op">=</span> nnx.grad(f)(m)</span>
+<span id="cb9-3"><a href="#cb9-3"></a>delta_m</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div><div class="column">
+<div class="cell-output cell-output-display" data-execution_count="7">
+<pre><code>State({
+  'linear1': {
+    'bias': VariableState(
+      type=Param,
+      value=None
+    ),
+    'kernel': VariableState(
+      type=Param,
+      value=Array([[-0.784888  , -2.226523  ],
+             [-0.42862383, -1.2158941 ],
+             [-0.5630881 , -1.5973343 ]], dtype=float32)
+    )
+  },
+  'linear2': {
+    'bias': VariableState(
+      type=Param,
+      value=Array([1.], dtype=float32)
+    ),
+    'kernel': VariableState(
+      type=Param,
+      value=Array([[0.97357047],
+             [1.0623739 ]], dtype=float32)
+    )
+  }
+})</code></pre>
+</div>
+</div>
+</div>
+</section>
+<section id="interpreting-the-adjoint" class="slide level2">
+<h2>Interpreting the “Adjoint”</h2>
+<ul>
+<li>This gradient is a recursive structure for a change in the object linearized around the value <span class="math inline">\(m\)</span></li>
+<li>Note that this is a <span class="math inline">\(\delta m\)</span> for the state, and ignores the <code>graphdef</code></li>
+<li>Crucially, we need to do the operation like <span class="math inline">\(m - \eta \,\delta m\)</span> to update the parameters, keeping fixed all of the non-differentiable parts</li>
+<li>The optimization process with find the update wrt the state, apply it, and then reconstruct the new <code>m</code> by applying the graphdef</li>
+</ul>
+</section>
+<section id="split-and-merge" class="slide level2">
+<h2>Split and Merge</h2>
+<ul>
+<li>In that case, we can update the <code>state</code> from before, and make a new type using the <code>graphdef</code></li>
+</ul>
+<div class="cell" data-execution_count="9">
+<div class="sourceCode cell-code" id="cb11"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb11-1"><a href="#cb11-1"></a>eta <span class="op">=</span> <span class="fl">0.01</span> <span class="co"># e.g., a gradient descent update</span></span>
+<span id="cb11-2"><a href="#cb11-2"></a></span>
+<span id="cb11-3"><a href="#cb11-3"></a><span class="co"># jax.tree.map recursively goes through the model</span></span>
+<span id="cb11-4"><a href="#cb11-4"></a><span class="co"># Updates the underlying nnx.Param given the delta_m grad</span></span>
+<span id="cb11-5"><a href="#cb11-5"></a>new_state <span class="op">=</span> jax.tree.<span class="bu">map</span>(</span>
+<span id="cb11-6"><a href="#cb11-6"></a>  <span class="kw">lambda</span> p, g: p <span class="op">-</span> eta<span class="op">*</span>g,</span>
+<span id="cb11-7"><a href="#cb11-7"></a>  state, delta_m) <span class="co"># new_state = state - eta * delta_m</span></span>
+<span id="cb11-8"><a href="#cb11-8"></a>m_new <span class="op">=</span> nnx.merge(graphdef, new_state)</span>
+<span id="cb11-9"><a href="#cb11-9"></a>f(m_new)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="8">
+<pre><code>Array(0.84317195, dtype=float32)</code></pre>
+</div>
+</div>
+</section>
+<section id="manually-splitting-and-merging" class="slide level2">
+<h2>Manually Splitting and Merging</h2>
+<ul>
+<li>The <code>nnx.jit, nnx.vmap, nnx.grad</code> will automatically split and merge for you (i.e., <a href="https://flax.readthedocs.io/en/latest/guides/filters_guide.html">filtering</a>) on <code>nnx.Module</code> types as arguments, then call underlying JAX functions
+<ul>
+<li>Otherwise the <code>nnx.grad</code> etc. would not work without modification since the NN combine differentiable and non-differentiable parts</li>
+</ul></li>
+<li>There is some overhead. You can manually split into the <code>state</code> and <code>graphdef</code> and then merge them back together</li>
+<li>Next we will show that process with a different wrapper for the <code>f_gen</code> function</li>
+</ul>
+</section>
+<section id="functions-of-the-state" class="slide level2">
+<h2>Functions of the <code>state</code></h2>
+<div class="cell columns column-output-location" data-execution_count="10">
+<div class="column">
+<div class="sourceCode cell-code" id="cb13"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb13-1"><a href="#cb13-1"></a>graphdef, state <span class="op">=</span> nnx.split(m)</span>
+<span id="cb13-2"><a href="#cb13-2"></a><span class="at">@jax.jit</span> <span class="co"># note jax.jit instead of nnx.jit</span></span>
+<span id="cb13-3"><a href="#cb13-3"></a><span class="kw">def</span> f_split(state): <span class="co"># closure on graphdef</span></span>
+<span id="cb13-4"><a href="#cb13-4"></a>    m <span class="op">=</span> nnx.merge(graphdef, state)</span>
+<span id="cb13-5"><a href="#cb13-5"></a>    <span class="cf">return</span> f_gen(m, x, b)</span>
+<span id="cb13-6"><a href="#cb13-6"></a><span class="co"># Can use jax.grad, rather than nnx.grad</span></span>
+<span id="cb13-7"><a href="#cb13-7"></a>state_diff <span class="op">=</span> jax.grad(f_split)(state)</span>
+<span id="cb13-8"><a href="#cb13-8"></a><span class="bu">print</span>(state_diff)</span>
+<span id="cb13-9"><a href="#cb13-9"></a>new_state <span class="op">=</span> jax.tree.<span class="bu">map</span>(</span>
+<span id="cb13-10"><a href="#cb13-10"></a>            <span class="kw">lambda</span> p, g: p <span class="op">-</span> eta<span class="op">*</span>g,</span>
+<span id="cb13-11"><a href="#cb13-11"></a>            state, delta_m) </span>
+<span id="cb13-12"><a href="#cb13-12"></a>m_new <span class="op">=</span> nnx.merge(graphdef, new_state)</span>
+<span id="cb13-13"><a href="#cb13-13"></a>f(m_new)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div><div class="column">
+<div class="cell-output cell-output-stdout">
+<pre><code>State({
+  'linear1': {
+    'bias': VariableState(
+      type=Param,
+      value=None
+    ),
+    'kernel': VariableState(
+      type=Param,
+      value=Array([[-0.784888  , -2.226523  ],
+             [-0.42862383, -1.2158941 ],
+             [-0.5630881 , -1.5973343 ]], dtype=float32)
+    )
+  },
+  'linear2': {
+    'bias': VariableState(
+      type=Param,
+      value=Array([1.], dtype=float32)
+    ),
+    'kernel': VariableState(
+      type=Param,
+      value=Array([[0.97357047],
+             [1.0623739 ]], dtype=float32)
+    )
+  }
+})</code></pre>
+</div>
+<div class="cell-output cell-output-display" data-execution_count="9">
+<pre><code>Array(2.8807144, dtype=float32)</code></pre>
+</div>
+</div>
+</div>
+</section>
+<section id="pytorch-and-functorch" class="slide level2">
+<h2>Pytorch (and Functorch)</h2>
+<ul>
+<li>The gradients of structures in JAX are more explicit, as the functions are generally pure (i.e., side-effect free)</li>
+<li>Pytorch, on the other hand, implicitly does these same operations in the background.
+<ul>
+<li>This can lead to concise code, but can also lead to confusion</li>
+</ul></li>
+<li><a href="https://pytorch.org/docs/stable/func.html#torch-func">torch.func</a> is a Torch library intended for more JAX-style function composition</li>
+</ul>
+</section>
+<section id="pytorch-custom-types" class="slide level2">
+<h2>Pytorch Custom Types</h2>
+<ul>
+<li>The equivalent to <code>nnx.Param</code> in Pytorch is <code>torch.nn.Parameter</code></li>
+</ul>
+<div class="cell" data-execution_count="11">
+<div class="sourceCode cell-code" id="cb16"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb16-1"><a href="#cb16-1"></a><span class="kw">class</span> MyLinearTorch(nn.Module):</span>
+<span id="cb16-2"><a href="#cb16-2"></a>    <span class="kw">def</span> <span class="fu">__init__</span>(<span class="va">self</span>, in_size, out_size):</span>
+<span id="cb16-3"><a href="#cb16-3"></a>        <span class="bu">super</span>(MyLinearTorch, <span class="va">self</span>).<span class="fu">__init__</span>()</span>
+<span id="cb16-4"><a href="#cb16-4"></a>        <span class="va">self</span>.out_size <span class="op">=</span> out_size</span>
+<span id="cb16-5"><a href="#cb16-5"></a>        <span class="va">self</span>.in_size <span class="op">=</span> in_size</span>
+<span id="cb16-6"><a href="#cb16-6"></a>        <span class="va">self</span>.kernel <span class="op">=</span> nn.Parameter(torch.randn(out_size, in_size))</span>
+<span id="cb16-7"><a href="#cb16-7"></a>        <span class="co"># Similar to PyTorch's forward</span></span>
+<span id="cb16-8"><a href="#cb16-8"></a>    <span class="kw">def</span> forward(<span class="va">self</span>, x):</span>
+<span id="cb16-9"><a href="#cb16-9"></a>        <span class="cf">return</span> <span class="va">self</span>.kernel <span class="op">@</span> x</span>
+<span id="cb16-10"><a href="#cb16-10"></a><span class="kw">def</span> f_gen_torch(m, x, b):</span>
+<span id="cb16-11"><a href="#cb16-11"></a>    <span class="cf">return</span> torch.squeeze(m(x) <span class="op">+</span> b)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</section>
+<section id="differentiating-modules-in-pytorch" class="slide level2">
+<h2>Differentiating Modules in Pytorch</h2>
+<div class="cell columns column-output-location" data-execution_count="12">
+<div class="column">
+<div class="sourceCode cell-code" id="cb17"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb17-1"><a href="#cb17-1"></a>m <span class="op">=</span> MyLinearTorch(N, <span class="dv">1</span>)</span>
+<span id="cb17-2"><a href="#cb17-2"></a>x_torch <span class="op">=</span> torch.randn(N)</span>
+<span id="cb17-3"><a href="#cb17-3"></a>b_torch <span class="op">=</span> torch.tensor(<span class="fl">1.0</span>)</span>
+<span id="cb17-4"><a href="#cb17-4"></a><span class="kw">def</span> f_torch(m):</span>
+<span id="cb17-5"><a href="#cb17-5"></a>  <span class="cf">return</span> f_gen_torch(m,</span>
+<span id="cb17-6"><a href="#cb17-6"></a>         x_torch, b_torch)</span>
+<span id="cb17-7"><a href="#cb17-7"></a></span>
+<span id="cb17-8"><a href="#cb17-8"></a><span class="co"># Clone the model</span></span>
+<span id="cb17-9"><a href="#cb17-9"></a>m_new <span class="op">=</span> copy.deepcopy(m)</span>
+<span id="cb17-10"><a href="#cb17-10"></a>m_new.zero_grad()</span>
+<span id="cb17-11"><a href="#cb17-11"></a>output <span class="op">=</span> f_torch(m_new)</span>
+<span id="cb17-12"><a href="#cb17-12"></a>output.backward()</span>
+<span id="cb17-13"><a href="#cb17-13"></a><span class="bu">print</span>(m_new.kernel)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div><div class="column">
+<div class="cell-output cell-output-stdout">
+<pre><code>Parameter containing:
+tensor([[-0.6374, -0.7554,  0.5486]], requires_grad=True)</code></pre>
+</div>
+</div>
+</div>
+</section>
+<section id="differentiating-custom-types" class="slide level2">
+<h2>Differentiating Custom Types</h2>
+<div class="cell" data-execution_count="13">
+<div class="sourceCode cell-code" id="cb19"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb19-1"><a href="#cb19-1"></a><span class="kw">class</span> MyMLPTorch(nn.Module):</span>
+<span id="cb19-2"><a href="#cb19-2"></a>    <span class="kw">def</span> <span class="fu">__init__</span>(<span class="va">self</span>, din, dout, width):</span>
+<span id="cb19-3"><a href="#cb19-3"></a>        <span class="bu">super</span>(MyMLPTorch, <span class="va">self</span>).<span class="fu">__init__</span>()</span>
+<span id="cb19-4"><a href="#cb19-4"></a>        <span class="va">self</span>.width <span class="op">=</span> width</span>
+<span id="cb19-5"><a href="#cb19-5"></a>        <span class="va">self</span>.linear1 <span class="op">=</span> nn.Linear(din, width, bias<span class="op">=</span><span class="va">False</span>)</span>
+<span id="cb19-6"><a href="#cb19-6"></a>        <span class="va">self</span>.linear2 <span class="op">=</span> nn.Linear(width, dout, bias<span class="op">=</span><span class="va">True</span>)</span>
+<span id="cb19-7"><a href="#cb19-7"></a></span>
+<span id="cb19-8"><a href="#cb19-8"></a>    <span class="kw">def</span> forward(<span class="va">self</span>, x):</span>
+<span id="cb19-9"><a href="#cb19-9"></a>        x <span class="op">=</span> <span class="va">self</span>.linear1(x)</span>
+<span id="cb19-10"><a href="#cb19-10"></a>        x <span class="op">=</span> torch.relu(x)</span>
+<span id="cb19-11"><a href="#cb19-11"></a>        x <span class="op">=</span> <span class="va">self</span>.linear2(x)</span>
+<span id="cb19-12"><a href="#cb19-12"></a>        <span class="cf">return</span> x</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</section>
+<section id="reverse-mode-ad-updates-in-pytorch" class="slide level2">
+<h2>Reverse-mode AD Updates in Pytorch</h2>
+<div class="cell columns column-output-location" data-execution_count="14">
+<div class="column">
+<div class="sourceCode cell-code" id="cb20"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb20-1"><a href="#cb20-1"></a>m <span class="op">=</span> MyMLPTorch(N, <span class="dv">1</span>, <span class="dv">2</span>)</span>
+<span id="cb20-2"><a href="#cb20-2"></a>m.zero_grad()</span>
+<span id="cb20-3"><a href="#cb20-3"></a>output <span class="op">=</span> f_torch(m)</span>
+<span id="cb20-4"><a href="#cb20-4"></a></span>
+<span id="cb20-5"><a href="#cb20-5"></a><span class="co"># Start with d output = [1.0]</span></span>
+<span id="cb20-6"><a href="#cb20-6"></a>output.backward()</span>
+<span id="cb20-7"><a href="#cb20-7"></a><span class="co"># Now `m` has the gradients</span></span>
+<span id="cb20-8"><a href="#cb20-8"></a></span>
+<span id="cb20-9"><a href="#cb20-9"></a><span class="co"># Manually update parameters recursively</span></span>
+<span id="cb20-10"><a href="#cb20-10"></a><span class="co"># Done in-place, as torch optimizers will do</span></span>
+<span id="cb20-11"><a href="#cb20-11"></a><span class="cf">with</span> torch.no_grad():</span>
+<span id="cb20-12"><a href="#cb20-12"></a>    <span class="co"># Recursively</span></span>
+<span id="cb20-13"><a href="#cb20-13"></a>    <span class="cf">for</span> param <span class="kw">in</span> m.parameters():</span>
+<span id="cb20-14"><a href="#cb20-14"></a>        param <span class="op">-=</span> eta <span class="op">*</span> param.grad</span>
+<span id="cb20-15"><a href="#cb20-15"></a>    <span class="cf">for</span> name, param <span class="kw">in</span> m.named_parameters():</span>
+<span id="cb20-16"><a href="#cb20-16"></a>        <span class="bu">print</span>(<span class="ss">f"</span><span class="sc">{</span>name<span class="sc">}</span><span class="ss">: </span><span class="sc">{</span>param<span class="sc">.</span>numpy()<span class="sc">}</span><span class="ss">"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div><div class="column">
+<div class="cell-output cell-output-stdout">
+<pre><code>linear1.weight: [[ 0.340191    0.4308803   0.16260189]
+ [-0.07866785 -0.35180938  0.44592345]]
+linear2.weight: [[ 0.2432586 -0.7069635]]
+linear2.bias: [-0.41789627]</code></pre>
+</div>
+</div>
+</div>
+</section></section>
+<section>
+<section id="hyperparameter-optimization-with-deep-learning" class="title-slide slide level1 center">
+<h1>Hyperparameter Optimization with Deep Learning</h1>
+
+</section>
+<section id="optimization-is-challenging" class="slide level2">
+<h2>Optimization is Challenging</h2>
+<ul>
+<li>When using complicated representations, we often have many fixed values (e.g.&nbsp;the <code>width</code>) of the representations, as well as tweaks to the optimizer and algorithms</li>
+<li>Collectively we call the values not found through differentiation of the representations themselves <strong>hyperparameters</strong></li>
+<li>When possible, you should use optimizers to find these in a systematic way (i.e., differentiating the solution to the optimizer itself)
+<ul>
+<li>But often you need to do this manually through a combination of brute force, intuition, and experience</li>
+</ul></li>
+</ul>
+</section>
+<section id="commandline-arguments" class="slide level2">
+<h2>Commandline Arguments</h2>
+<ul>
+<li><p>Given that you may want to solve your problem with a variety of different hyperparameters, possibly running in parallel, you need a convenient way to pass the values and see the results</p></li>
+<li><p>One model, framework, OS independent way to do this is to use commandline arguments</p></li>
+<li><p>For example, if you have a python file called <code>mlp_regression_jax_nnx_logging.py</code> that accepts arguments for the width and learning rate, you may call it with</p>
+<div class="sourceCode" id="cb22"><pre class="sourceCode numberSource bash number-lines code-with-copy"><code class="sourceCode bash"><span id="cb22-1"><a href="#cb22-1"></a><span class="ex">python</span> mlp_regression_jax_nnx_logging.py <span class="at">--width</span><span class="op">=</span>128 <span class="at">--lr</span><span class="op">=</span>0.01</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div></li>
+</ul>
+</section>
+<section id="cli-packages" class="slide level2">
+<h2>CLI Packages</h2>
+<ul>
+<li><p>Many python frameworks exist to help you take CLI and convert to calling python functions. One convenient tool is<a href="https://jsonargparse.readthedocs.io/en/stable/">jsonargparse</a></p></li>
+<li><p>Advantage: simply annotate a function with defaults, and it will generate the CLI</p>
+<div class="cell" data-execution_count="15">
+<div class="sourceCode cell-code" id="cb23"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb23-1"><a href="#cb23-1"></a><span class="im">import</span> jsonargparse</span>
+<span id="cb23-2"><a href="#cb23-2"></a><span class="kw">def</span> fit_model(width: <span class="bu">int</span> <span class="op">=</span> <span class="dv">128</span>, lr: <span class="bu">float</span> <span class="op">=</span> <span class="fl">0.01</span>): <span class="co"># etc.</span></span>
+<span id="cb23-3"><a href="#cb23-3"></a>    <span class="co"># ... your code...</span></span>
+<span id="cb23-4"><a href="#cb23-4"></a></span>
+<span id="cb23-5"><a href="#cb23-5"></a><span class="cf">if</span> <span class="va">__name__</span> <span class="op">==</span> <span class="st">"__main__"</span>:</span>
+<span id="cb23-6"><a href="#cb23-6"></a>    jsonargparse.CLI(fit_model)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div></li>
+<li><p>Then can call <code>python mlp_regression_jax_nnx_logging.py</code>, <code>python mlp_regression_jax_nnx_logging.py --width=64</code> etc.</p></li>
+</ul>
+</section>
+<section id="logging" class="slide level2">
+<h2>Logging</h2>
+<ul>
+<li><p>While the CLI file could save output for later interpretation, a common approach in ML is to log results to visualize the optimization process, compare results, etc.</p></li>
+<li><p>One package for this is <a href="https://wandb.ai/">Weights and Biases</a></p></li>
+<li><p>This will log into a website calculations, usually organized by a project name, and let you sort hyperparameters, etc.</p></li>
+<li><p>To use this, setup an account and then add code to initialiize in your python file, then log intermediate results</p>
+<div class="cell" data-execution_count="16">
+<div class="sourceCode cell-code" id="cb24"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb24-1"><a href="#cb24-1"></a><span class="kw">def</span> fit_model(width: <span class="bu">int</span> <span class="op">=</span> <span class="dv">128</span>, lr: <span class="bu">float</span> <span class="op">=</span> <span class="fl">0.01</span>): <span class="co"># etc.</span></span>
+<span id="cb24-2"><a href="#cb24-2"></a>    wandb.init(project<span class="op">=</span><span class="st">"mlp_test"</span>, mode<span class="op">=</span><span class="st">"online"</span>)</span>
+<span id="cb24-3"><a href="#cb24-3"></a>    <span class="co"># ... your code...</span></span>
+<span id="cb24-4"><a href="#cb24-4"></a>    wandb.log({<span class="st">"test_loss"</span>: test_loss}) <span class="co"># etc.  Maybe per epoch</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div></li>
+</ul>
+</section>
+<section id="hpo-sweeps-with-weights-and-biases" class="slide level2">
+<h2>HPO “Sweeps” with Weights and Biases</h2>
+<ul>
+<li><p>Putting together the logging and the CLI, you can setup a process to run the code with a variety of parameters in a “sweep” (e.g., with <a href="https://docs.wandb.ai/guides/sweeps/">sweep file</a>)</p>
+<div class="sourceCode" id="cb25"><pre class="sourceCode numberSource bash number-lines code-with-copy"><code class="sourceCode bash"><span id="cb25-1"><a href="#cb25-1"></a><span class="ex">wandb</span> sweep mlp_regression_jax_nnx_sweep.yaml</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<ul>
+<li>Returns a sweep ID, which you can then run with <code>wandb agent &lt;sweep_id&gt;</code></li>
+<li>Which calls function given instructions (i.e., polling architecture) <code>python mlp_regression_jax_nnx_logging.py --width=128 --lr=0.0015</code> etc.</li>
+<li>Benefit: run with same <code>&lt;sweep_id&gt;</code> on multiple computers/processes/etc.</li>
+</ul></li>
+</ul>
+</section>
+<section id="example-sweep-file" class="slide level2">
+<h2>Example Sweep File</h2>
+<ul>
+<li>Sets up a Bayesian optimization process on <code>lr</code> and <code>width</code> to minimize <code>test_loss</code> (if logged with <code>wandb.log({"test_loss": test_loss})</code>, etc.)</li>
+</ul>
+<div class="sourceCode" id="cb26"><pre class="sourceCode numberSource {yaml} number-lines code-with-copy"><code class="sourceCode"><span id="cb26-1"><a href="#cb26-1"></a>program: lectures/examples/mlp_regression_jax_nnx_logging.py</span>
+<span id="cb26-2"><a href="#cb26-2"></a>name: Sweep Example</span>
+<span id="cb26-3"><a href="#cb26-3"></a>method: bayes</span>
+<span id="cb26-4"><a href="#cb26-4"></a>metric:</span>
+<span id="cb26-5"><a href="#cb26-5"></a>  name: test_loss</span>
+<span id="cb26-6"><a href="#cb26-6"></a>  goal: minimize</span>
+<span id="cb26-7"><a href="#cb26-7"></a>parameters:</span>
+<span id="cb26-8"><a href="#cb26-8"></a>  num_epochs:</span>
+<span id="cb26-9"><a href="#cb26-9"></a>    value: 300 # fixed for all calls</span>
+<span id="cb26-10"><a href="#cb26-10"></a>  lr: # uniformly distributed</span>
+<span id="cb26-11"><a href="#cb26-11"></a>    min: 0.0001</span>
+<span id="cb26-12"><a href="#cb26-12"></a>    max: 0.01</span>
+<span id="cb26-13"><a href="#cb26-13"></a>  width: # discrete values to optimize over</span>
+<span id="cb26-14"><a href="#cb26-14"></a>    values: [64, 128, 256]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</section></section>
+<section>
+<section id="mlp-regression-example-with-sweep" class="title-slide slide level1 center">
+<h1>MLP Regression Example with Sweep</h1>
+
+</section>
+<section id="mlp-regression" class="slide level2">
+<h2>MLP Regression</h2>
+<ul>
+<li>See <a href="examples/mlp_regression_jax_nnx_logging.py">examples/mlp_regression_jax_nnx_logging.py</a> for an example of a simple neural network optimized to fit a linear DGP</li>
+<li>The <span class="math inline">\(\mathcal{H}\)</span> is a simple nesting of <code>nnx.Linear</code> and <code>nnx.relu</code> layers</li>
+</ul>
+<div class="cell" data-execution_count="17">
+<div class="sourceCode cell-code" id="cb27"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb27-1"><a href="#cb27-1"></a><span class="kw">class</span> MyMLP(nnx.Module):</span>
+<span id="cb27-2"><a href="#cb27-2"></a>    <span class="kw">def</span> <span class="fu">__init__</span>(<span class="va">self</span>, din: <span class="bu">int</span>, dout: <span class="bu">int</span>, width: <span class="bu">int</span>, <span class="op">*</span>, rngs: nnx.Rngs):</span>
+<span id="cb27-3"><a href="#cb27-3"></a>        <span class="va">self</span>.linear1 <span class="op">=</span> nnx.Linear(din, width, rngs<span class="op">=</span>rngs)</span>
+<span id="cb27-4"><a href="#cb27-4"></a>        <span class="va">self</span>.linear2 <span class="op">=</span> nnx.Linear(width, width, rngs<span class="op">=</span>rngs)</span>
+<span id="cb27-5"><a href="#cb27-5"></a>        <span class="va">self</span>.linear3 <span class="op">=</span> nnx.Linear(width, dout, rngs<span class="op">=</span>rngs)</span>
+<span id="cb27-6"><a href="#cb27-6"></a></span>
+<span id="cb27-7"><a href="#cb27-7"></a>    <span class="kw">def</span> <span class="fu">__call__</span>(<span class="va">self</span>, x: jax.Array):</span>
+<span id="cb27-8"><a href="#cb27-8"></a>        x <span class="op">=</span> <span class="va">self</span>.linear1(x)</span>
+<span id="cb27-9"><a href="#cb27-9"></a>        x <span class="op">=</span> nnx.relu(x)</span>
+<span id="cb27-10"><a href="#cb27-10"></a>        x <span class="op">=</span> <span class="va">self</span>.linear2(x)</span>
+<span id="cb27-11"><a href="#cb27-11"></a>        x <span class="op">=</span> nnx.relu(x)</span>
+<span id="cb27-12"><a href="#cb27-12"></a>        x <span class="op">=</span> <span class="va">self</span>.linear3(x)</span>
+<span id="cb27-13"><a href="#cb27-13"></a>        <span class="cf">return</span> x</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</section>
+<section id="data-generating-process-and-loss" class="slide level2">
+<h2>Data Generating Process and Loss</h2>
+<ul>
+<li><p>This randomly generates a <span class="math inline">\(\theta\)</span> and then generates data with</p>
+<div class="cell" data-execution_count="18">
+<div class="sourceCode cell-code" id="cb28"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb28-1"><a href="#cb28-1"></a>theta <span class="op">=</span> random.normal(rngs(), (M,))</span>
+<span id="cb28-2"><a href="#cb28-2"></a>X <span class="op">=</span> random.normal(rngs(), (N, M))</span>
+<span id="cb28-3"><a href="#cb28-3"></a>Y <span class="op">=</span> X <span class="op">@</span> theta <span class="op">+</span> sigma <span class="op">*</span> random.normal(rngs(), (N,))  <span class="co"># Adding noise</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div></li>
+<li><p>ERM: with <span class="math inline">\(m \in \mathcal{H}\)</span>, minimize the residuals for batch <code>(X, Y)</code></p>
+<div class="cell" data-execution_count="19">
+<div class="sourceCode cell-code" id="cb29"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb29-1"><a href="#cb29-1"></a><span class="kw">def</span> residual(m, x, y):</span>
+<span id="cb29-2"><a href="#cb29-2"></a>    y_hat <span class="op">=</span> m(x)</span>
+<span id="cb29-3"><a href="#cb29-3"></a>    <span class="cf">return</span> (y_hat <span class="op">-</span> y) <span class="op">**</span> <span class="dv">2</span></span>
+<span id="cb29-4"><a href="#cb29-4"></a><span class="kw">def</span> residuals_loss(m, X, Y):</span>
+<span id="cb29-5"><a href="#cb29-5"></a>    <span class="cf">return</span> jnp.mean(jax.vmap(residual, in_axes<span class="op">=</span>(<span class="va">None</span>, <span class="dv">0</span>, <span class="dv">0</span>))(m, X, Y))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div></li>
+<li><p>Optimizer uses loss differentiated wrt <span class="math inline">\(m\)</span> as discussed</p></li>
+</ul>
+</section>
+<section id="cli" class="slide level2">
+<h2>CLI</h2>
+<ul>
+<li><p>In order to use <code>jsonargparse</code>, this creates a function signature with defaults</p>
+<div class="cell" data-execution_count="20">
+<div class="sourceCode cell-code" id="cb30"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb30-1"><a href="#cb30-1"></a><span class="kw">def</span> fit_model(</span>
+<span id="cb30-2"><a href="#cb30-2"></a>    N: <span class="bu">int</span> <span class="op">=</span> <span class="dv">500</span>,</span>
+<span id="cb30-3"><a href="#cb30-3"></a>    M: <span class="bu">int</span> <span class="op">=</span> <span class="dv">2</span>,</span>
+<span id="cb30-4"><a href="#cb30-4"></a>    sigma: <span class="bu">float</span> <span class="op">=</span> <span class="fl">0.0001</span>,</span>
+<span id="cb30-5"><a href="#cb30-5"></a>    width: <span class="bu">int</span> <span class="op">=</span> <span class="dv">128</span>,</span>
+<span id="cb30-6"><a href="#cb30-6"></a>    lr: <span class="bu">float</span> <span class="op">=</span> <span class="fl">0.001</span>,</span>
+<span id="cb30-7"><a href="#cb30-7"></a>    num_epochs: <span class="bu">int</span> <span class="op">=</span> <span class="dv">2000</span>,</span>
+<span id="cb30-8"><a href="#cb30-8"></a>    batch_size: <span class="bu">int</span> <span class="op">=</span> <span class="dv">512</span>,</span>
+<span id="cb30-9"><a href="#cb30-9"></a>    seed: <span class="bu">int</span> <span class="op">=</span> <span class="dv">42</span>,</span>
+<span id="cb30-10"><a href="#cb30-10"></a>    wandb_project: <span class="bu">str</span> <span class="op">=</span> <span class="st">"econ622_examples"</span>,</span>
+<span id="cb30-11"><a href="#cb30-11"></a>    wandb_mode: <span class="bu">str</span> <span class="op">=</span> <span class="st">"offline"</span>,  <span class="co"># "online", "disabled</span></span>
+<span id="cb30-12"><a href="#cb30-12"></a>):</span>
+<span id="cb30-13"><a href="#cb30-13"></a><span class="co"># ... generate data, fit model, save test_loss</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div></li>
+</ul>
+</section>
+<section id="sweep-file" class="slide level2">
+<h2>Sweep File</h2>
+<div class="sourceCode" id="cb31"><pre class="sourceCode numberSource {yaml} number-lines code-with-copy"><code class="sourceCode"><span id="cb31-1"><a href="#cb31-1"></a>program: lectures/examples/mlp_regression_jax_nnx_logging.py</span>
+<span id="cb31-2"><a href="#cb31-2"></a>name: Sweep Example</span>
+<span id="cb31-3"><a href="#cb31-3"></a>method: bayes</span>
+<span id="cb31-4"><a href="#cb31-4"></a>metric:</span>
+<span id="cb31-5"><a href="#cb31-5"></a>  name: test_loss</span>
+<span id="cb31-6"><a href="#cb31-6"></a>  goal: minimize</span>
+<span id="cb31-7"><a href="#cb31-7"></a>parameters:</span>
+<span id="cb31-8"><a href="#cb31-8"></a>  wandb_mode:</span>
+<span id="cb31-9"><a href="#cb31-9"></a>    value: online # otherwise won't log</span>
+<span id="cb31-10"><a href="#cb31-10"></a>  num_epochs:</span>
+<span id="cb31-11"><a href="#cb31-11"></a>    value: 300</span>
+<span id="cb31-12"><a href="#cb31-12"></a>  lr:</span>
+<span id="cb31-13"><a href="#cb31-13"></a>    min: 0.0001</span>
+<span id="cb31-14"><a href="#cb31-14"></a>    max: 0.01</span>
+<span id="cb31-15"><a href="#cb31-15"></a>  width:</span>
+<span id="cb31-16"><a href="#cb31-16"></a>    values: [64, 128, 256]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</section>
+<section id="run-and-visualize-the-sweep" class="slide level2">
+<h2>Run and Visualize the Sweep</h2>
+<ul>
+<li><p>To run this sweep, you can run the following command (checking the relative location file)</p>
+<div class="sourceCode" id="cb32"><pre class="sourceCode numberSource bash number-lines code-with-copy"><code class="sourceCode bash"><span id="cb32-1"><a href="#cb32-1"></a><span class="ex">wandb</span> sweep lectures/examples/mlp_regression_jax_nnx_sweep.yaml</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div></li>
+<li><p>The output should be something along the lines of</p></li>
+</ul>
+<div class="sourceCode" id="cb33"><pre class="sourceCode numberSource {bash} number-lines code-with-copy"><code class="sourceCode"><span id="cb33-1"><a href="#cb33-1"></a>(econ622) C:\Users\jesse\Documents\GitHub\ECON622_instructor&gt;wandb sweep lectures/examples/mlp_regression_jax_nnx_sweep.yaml</span>
+<span id="cb33-2"><a href="#cb33-2"></a>wandb: Creating sweep from: lectures/examples/mlp_regression_jax_nnx_sweep.yaml</span>
+<span id="cb33-3"><a href="#cb33-3"></a>wandb: Creating sweep with ID: virfdcn6</span>
+<span id="cb33-4"><a href="#cb33-4"></a>wandb: View sweep at: https://wandb.ai/highdimensionaleconlab/ECON622_instructor-lectures_examples/sweeps/virfdcn6</span>
+<span id="cb33-5"><a href="#cb33-5"></a>wandb: Run sweep agent with: wandb agent highdimensionaleconlab/ECON622_instructor-lectures_examples/virfdcn6</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<ul>
+<li>Run <code>wandb agent highdimensionaleconlab/ECON622_instructor-lectures_examples/virfdcn6</code> and go to web to see results in progress</li>
+</ul>
+</section>
+<section id="general-sweep-results" class="slide level2">
+<h2>General Sweep Results</h2>
+
+<img data-src="figures/sweep_1.png" class="r-stretch"></section>
+<section id="correlations-of-parameters-to-hpo-objective" class="slide level2">
+<h2>Correlations of Parameters to HPO Objective</h2>
+
+<img data-src="figures/sweep_2.png" class="r-stretch"></section>
+<section id="sortable-table-of-results" class="slide level2">
+<h2>Sortable Table of Results</h2>
+
+
+<img data-src="figures/sweep_3.png" class="r-stretch"><div class="footer footer-default">
 
 </div>
 </section></section>
