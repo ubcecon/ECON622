@@ -121,13 +121,13 @@ Slides for the lectures can be found [here](https://ubcecon.github.io/ECON622/le
 
 20. **November 25** Finish Kernel Methods and Review "Distances" in a latent space
     - **SLIDES**: Finish [Kernel Methods and Gaussian Processes](https://ubcecon.github.io/ECON622/lectures/lectures/kernel_methods.html)
-22. **November 27** "ML Engineering" and start on embeddings, NLP, and LLMs
+21. **November 27** "ML Engineering"
     - See example code, W&B, etc.  Linear regression, NN regression, pytorch, pytorch lightning, CLI, etc.
-    - **SLIDES**: Finish [Embeddings, NLP, and LLMs](https://ubcecon.github.io/ECON622/lectures/lectures/embeddings_nlp_llm.html)
-24. **December 2** Finish on LLMs and intro to solving functional equations
-25. **December 4** Class Presentations
-
-26. **December 20**
+22. **December 2** LLMs and Embeddings
+    - **SLIDES**: [Embeddings, NLP, and LLMs](https://ubcecon.github.io/ECON622/lectures/lectures/embeddings_nlp_llm.html)
+23. **December 4** Attention and Transformers + Class Presentations
+    - **SLIDES**: [Transformers and Attention](https://ubcecon.github.io/ECON622/lectures/lectures/transformers.html) and
+24. **December 20**
     - Final Project due
 
 
