@@ -552,6 +552,19 @@ Z^j = \text{Attn}(W_Q^j X, W_K^j X, W_V^j X)
 <li>Attention lets one point of the input be strongly influenced by others in a context-dependent way</li>
 <li>See the above, which associates the word “it” with “animal” when the pronoun needs to be interpreted in context</li>
 </ul>
+</section>
+<section id="token-prediction" class="slide level2">
+<h2>Token Prediction</h2>
+<ul>
+<li>Recall with the ChatGPT style prediction of the next token, we need to find a <span class="math inline">\(\mathbb{P}(x_t | x_{t-1}, x_{t-2}, \ldots, x_1)\)</span>
+<ul>
+<li>Where the <span class="math inline">\(t\)</span> might be <span class="math inline">\(128k\)</span> or more, and there might be <span class="math inline">\(50K\)</span> possible discrete <span class="math inline">\(x_t\)</span> states</li>
+</ul></li>
+<li>Attention is central because it can find representations of the <span class="math inline">\(x_{t-1}, x_{t-2}, \ldots, x_1\)</span> for conditioning
+<ul>
+<li>Self-attention makes it possible for the representations to capture the features of the joint distribution of previous tokens</li>
+</ul></li>
+</ul>
 </section></section>
 <section>
 <section id="transformers" class="title-slide slide level1 center">
@@ -564,14 +577,17 @@ Z^j = \text{Attn}(W_Q^j X, W_K^j X, W_V^j X)
 <li>The <strong>transformer</strong> architecture is a highly efficient, numerically stable, parallelizable, and regularized way to use attention</li>
 <li>Transformers are built using:
 <ul>
-<li>One or another blocks for <strong>Multi-headed-attention</strong> layers. Sometimes nested</li>
-<li>Flexible NN approximations to map the MHA output to a nonlinear function</li>
-<li>A number of tricks, e.g.&nbsp;LayerNorm, Dropout, etc. to make the model more numerically stable and regularized</li>
+<li>One or more <strong>Multi-head self-attention</strong> layers</li>
+<li>Flexible NN approximations (<strong>feed forward</strong> in diagram) to map the MHA output to a nonlinear functions</li>
+<li>Positional encoding tricks to encode ordering of data</li>
+<li>Softmax (i.e., logit) to map high-dimensional latent spaces to probabilities</li>
+<li>Various tricks (LayerNorm, Dropout) , etc. to make the model more numerically stable and regularized</li>
+<li>“Masking” and other ways to enable self-supervised learning and various tasks, and ensure training is done token-by-token</li>
 </ul></li>
 </ul>
 </section>
-<section id="encoder-decoder-transformer-architecture" class="slide level2">
-<h2>Encoder-Decoder Transformer Architecture</h2>
+<section id="example-encoder-decoder-transformer-architecture" class="slide level2">
+<h2>Example Encoder-Decoder Transformer Architecture</h2>
 
 <img data-src="figures/transformer.jpg" class="r-stretch"></section>
 <section id="sequence-to-sequence" class="slide level2">
@@ -581,21 +597,27 @@ Z^j = \text{Attn}(W_Q^j X, W_K^j X, W_V^j X)
 <ul>
 <li>i.e., the <span class="math inline">\(\mathbb{P}(y_1, \ldots y_T|x_1, \ldots x_T)\)</span> where <span class="math inline">\(T\)</span> might be enormous, and <span class="math inline">\(x,y\)</span> might allow tens of thousands of tokens</li>
 </ul></li>
-<li>The design of these typically uses a transformer to encode <span class="math inline">\(x_1,\ldots x_T\)</span> into a representation, then another encode to take the representation back to the <span class="math inline">\(y_1, \ldots y_T\)</span> tokens</li>
+<li>The design of these typically uses a transformer to encode <span class="math inline">\(x_1,\ldots x_T\)</span> into a representation, then another to decode, and take the representation back to the <span class="math inline">\(y_1, \ldots y_T\)</span> tokens</li>
 </ul>
 </section>
 <section id="decoder-only-transformer" class="slide level2">
 <h2>Decoder-Only Transformer</h2>
 <ul>
-<li>To generate text token by token, as in the Sequential Generation, ChatGPT/etc. will use a single transformer</li>
-<li>This embeds the previous tokens to generate a PMF over the next one.</li>
-<li>This is called an decoder only because the end-result is the token output</li>
+<li>To generate text token by token, as in the Sequential Generation can use a single transformer
+<ul>
+<li>i.e., the <span class="math inline">\(\mathbb{P}(x_{T+1}|x_1, \ldots x_T)\)</span></li>
+</ul></li>
+<li>This embeds the previous tokens, <span class="math inline">\(x_1, \ldots x_T\)</span> to generate a PMF over the next one.</li>
+<li>Decoder-only because a single transformer is used the end-result is the token output probabilities</li>
 </ul>
 </section>
 <section id="encoder-only-transformer" class="slide level2">
 <h2>Encoder-Only Transformer</h2>
 <ul>
-<li>For tasks like classification, the transformer can be be used to simply encode an internal representation of the input</li>
+<li>For tasks like classification, the transformer can be be used to simply encode an internal representation of the input for a downstream task like classification
+<ul>
+<li>i.e., the <span class="math inline">\(\mathbb{P}(\text{Class}(x_1, \ldots x_T) = C_i |x_1, \ldots x_T)\)</span></li>
+</ul></li>
 <li>Then the final layer can be used to classify the input using standard techniques</li>
 <li>This is called an Encoder-Only transformer because the end-result is the internal representation</li>
 </ul>

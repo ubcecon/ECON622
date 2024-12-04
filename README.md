@@ -126,7 +126,7 @@ Slides for the lectures can be found [here](https://ubcecon.github.io/ECON622/le
 22. **December 2** LLMs and Embeddings
     - **SLIDES**: [Embeddings, NLP, and LLMs](https://ubcecon.github.io/ECON622/lectures/lectures/embeddings_nlp_llm.html)
 23. **December 4** Attention and Transformers + Class Presentations
-    - **SLIDES**: [Transformers and Attention](https://ubcecon.github.io/ECON622/lectures/lectures/transformers.html) and
+    - **SLIDES**: [Transformers and Attention](https://ubcecon.github.io/ECON622/lectures/lectures/transformers.html)
 24. **December 20**
     - Final Project due
 
