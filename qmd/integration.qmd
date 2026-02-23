@@ -73,7 +73,7 @@ $$
 ## Shares: version 1
 
 ```{julia}
-function share(δ, Σ, dFν, x)
+function share(δ, Σ, dFν, x, ∫)
   function shareν(ν)
     s = exp.(δ .+ x*Σ*ν)
     return(s./sum(s))
@@ -93,7 +93,7 @@ end
 
 ```{julia}
 @doc raw"""
-    share(δ, Σ, dFν, x)
+    share(δ, Σ, dFν, x, ∫)
 
 Computes shares in random coefficient logit with mean tastes `δ`, observed characteristics `x`, unobserved taste distribution `dFν`, and taste covariances `Σ`.
 
@@ -103,12 +103,14 @@ Computes shares in random coefficient logit with mean tastes `δ`, observed char
 - `Σ` `K` by `K` matrix
 - `dFν` distribution of length `K` vector
 - `x` `J` by `K` array
+- `∫` function that takes a function and a distribution and returns the integral of the function with respect to the distribution
+
 
 # Returns
 
 - vector of length `J` consisting of $s_1$, ..., $s_J$
 """
-function share(δ, Σ, dFν, x)
+function share(δ, Σ, dFν, x, ∫)
   J,K = size(x)
   (length(δ) == J) || error("length(δ)=$(length(δ)) != size(x,1)=$J")
   K,K == size(Σ) || error("size(x,1)=$J != size(Σ)=$(size(Σ))")
@@ -181,7 +183,7 @@ EC.reset!(f)
 ## Integration: Quasi-Monte-Carlo
 
 - Use "low discrepency sequences" to reduce variance of Monte-Carlo integrals
-- Error is $O\left(\frac{\log(n)^d}{n})$ for integrating $d$ dimensional function with $n$ draws
+- Error is $O\left(\frac{\log(n)^d}{n}\right)$ for integrating $d$ dimensional function with $n$ draws
 - See [Owen (2023)](https://artowen.su.domains/mc/practicalqmc.pdf) for details
 
 ```{julia}
@@ -208,7 +210,16 @@ S = 1_000
 @show mean(abs(∫mc(f,dx,ndraw=100) - trueint) for s in 1:S)
 ```
 
-## Integration: Quadrature
+## Integration: Gaussian Quadrature
+
+$$
+\int f(x) dF(x) \approx \sum_{i=1}^n w_i f(x_i)
+$$
+- $x_i$ and $w_i$ chosen to make approximation exact for polynomials of degree $\leq 2n-1$
+- Error is $O(n^{-r/d} )$ for $r$ times differentiable $f: \R^d \to \R$
+
+
+## Integration: Gaussian Quadrature
 
 ```{julia}
 using FastGaussQuadrature, LinearAlgebra
@@ -226,6 +237,12 @@ end
 
 ## Integration: Sparse Grid Quadrature
 
+- Naive Gaussian quadrature in $d$ dimensions takes product of 1-dimensional quadrature rules -- curse of dimensionality
+- Sparse grids use subset of 1-dimensional quadrature points
+- Error $O(n^{-r}(\log n)^{(d-1)(r+1)})$
+
+## Integration: Sparse Grid Quadrature
+
 ```{julia}
 using SparseGrids
 function ∫sgq(f, dx::MvNormal; order=5)
@@ -237,6 +254,16 @@ end
 
 ## Integration: Adaptive Cubature
 
+- Adaptive integration methods compute
+$$
+\int f(x) dF(x) \approx \sum_{i=1}^n w_i f(x_i) = I_n(f)
+$$
+for increasing $n$ until $|I_n(f) - I_m(f)|$ is small
+- Provides explicit error estimate
+- Be careful when nested inside other interative methods
+
+## Integration: Adaptive Cubature
+
 ```{julia}
 using HCubature
 function ∫cuba(f, dx; rtol=1e-4)
@@ -244,42 +271,6 @@ function ∫cuba(f, dx; rtol=1e-4)
   x(t) = t./(1 .- t.^2)
   Dx(t) = prod((1 .+ t.^2)./(1 .- t.^2).^2)
   hcubature(t->f(x(t))*pdf(dx,x(t))*Dx(t), -ones(D),ones(D), rtol=rtol)[1]
-end
-```
-
-"""
-    share(δ, Σ, dFν, x)
-
-Computes
-```math
-s_{j} = \int \frac{e^{\delta_{j} + x_{j}'\Sigma \nu}} {\sum_{k = 0}^J e^{\delta_{k} + x_{k}'\Sigma \nu}} dF\nu
-```
-
-# Arguments
-
-- `δ` vector of length `J`
-- `Σ` `K` by `K` matrix
-- `dFν` distributino of length `K` vector
-- `x` `J` by `K` array
-
-# Returns
-
-- vector of length `J` consisting of $s_1$, ..., $s_J$
-"""
-function share(δ, Σ, dFν, x)
-  J,K = size(x)
-  (length(δ) == J) || error("length(δ)=$(length(δ)) != size(x,1)=$J")
-  K,K == size(Σ) || error("size(x,1)=$J != size(Σ)=$(size(Σ))")
-  function shareν(ν)
-    s = δ .+ x*Σ*ν
-    s .-= maximum(s)
-    s .= exp.(s)
-    s ./= sum(s)
-    return(s)
-  end
-  return(∫(shareν, dFν))
-end
-
 end
 ```
 

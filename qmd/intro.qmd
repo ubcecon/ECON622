@@ -22,6 +22,16 @@ format:
 engine: julia
 ---
 
+
+
+# Some Motivating Examples
+
+::: {.notes}
+
+To give some motivation and a common thread for the material that we will cover, we will focus on learning computational techniques useful for structural econometrics. Most of these techniques will be applicable to computational economics and scientific computing more broadly.
+
+:::
+
 $$
 \def\Er{{\mathrm{E}}}
 \def\En{{\mathbb{E}_n}}
@@ -37,16 +47,11 @@ $$
 \DeclareMathOperator*{\plim}{plim}
 \DeclareMathOperator*{\argmax}{argmax}
 \DeclareMathOperator*{\argmin}{argmin}
+\newcommand{\etae}{{\boldsymbol{\eta}}}
+\def\ke{{\mathbf{k}}}
+\def\xe{{\mathbf{x}}}
 $$
 
-
-# Some Motivating Examples
-
-::: {.notes}
-
-To give some motivation and a common thread for the material that we will cover, we will focus on learning computational techniques useful for structural econometrics. Most of these techniques will be applicable to computational economics and scientific computing more broadly.
-
-:::
 
 # Extremum Estimators
 
@@ -59,28 +64,30 @@ $$
 - Parameter $\theta \in \Theta$
 - Data-dependent objective function $Q_n: \Theta \to \R$
 
-## Example: Least-Squares
+# Examples
+
+## Least-Squares
 
 - Model:
   $$
   y_i = x_i'\beta + \epsilon_i
   $$
-- $Q_n(\beta) = \frac{1}{n} \sum_{i=1} (y_i - x_i'\beta)^2
+- $Q_n(\beta) = \frac{1}{n} \sum_{i=1} (y_i - x_i'\beta)^2$
 
-## Example: Maximum Likelihood
+## Maximum Likelihood
 
 - Model: $y_i$ has conditional pdf $f(y|x_i;\theta)$, independent across $i$
 - $Q_n(\theta) = -\frac{1}{n} \sum_{i=1}^n \log\left(f(y_i | x_i; \theta)\right)$
 
 
-## Example: Generalized Method of Moments
+## Generalized Method of Moments
 
 - Model:
   $$
   \Er\left[g(y_i,x_i,\theta_0) \right] = 0
   $$
   for moment function $g(y_i,x_i,\cdot): \Theta \to \R^k$
-- $Q_n(\theta) = \left(\frac{1}{n}\sum_{i=1}^n g(y_i,x_i,\theta)\right)' W \left(\frac{1}{n}\sum_{i=1}^n g(y_i,x_i,\theta)\right)
+- $Q_n(\theta) = \left(\frac{1}{n}\sum_{i=1}^n g(y_i,x_i,\theta)\right)' W \left(\frac{1}{n}\sum_{i=1}^n g(y_i,x_i,\theta)\right)$
 
 ::: {.notes}
 
@@ -90,29 +97,29 @@ Moment function or conditional density come from some economic model. We will br
 
 # Example: Consumption and Assets
 
-## Example: Consumption and Assets
+## Consumption and Assets
 
 - @hs1982
 - Model
 $$
 \begin{align*}
-\max_{c_t, q_t} & \Er\left[ \sum_{t=0}^\infty \beta^t u(c_t) | \mathcal{I}_0 \right] \\
+\max_{c_t, q_t} & \Er\left[ \sum_{t=0}^\infty \beta^t u(c_t) \Biggm| \mathcal{I}_0 \right] \\
 \text{s.t. } & \;\; p_t q_t + c_t \leq (p_t + d_t)q_{t-1} + y_t
 \end{align*}
 $$
 
-## Example: Consumption and Assets
+## Consumption and Assets
 
 - Cleverly rearrange first order conditions:
 $$
-\Er\left[\beta \frac{u'(c_{t+1})}{u'(c_t)} \underbrace{\frac{p_{t+1} + d_{t+1}}{p_t}}_{R_t} | \mathcal{I}_s \right] = 1 \text{ for } s \leq t
+\Er\left[\beta \frac{u'(c_{t+1})}{u'(c_t)} \underbrace{\frac{p_{t+1} + d_{t+1}}{p_t}}_{R_t} \Biggm| \mathcal{I}_s \right] = 1 \text{ for } s \leq t
 $$
 
-## Example: Consumption and Assets
+## Consumption and Assets
 
 - Assume $u(c) = \frac{c^{1-\gamma}}{1-\gamma}$
 $$
-\Er\left[\beta \frac{c_{t+1}^{-\gamma}}{c_t^{-\gamma}} R_t | \mathcal{I}_s \right] = 1 \text{ for } s \leq t
+\Er\left[\beta \frac{c_{t+1}^{-\gamma}}{c_t^{-\gamma}} R_t \Biggm| \mathcal{I}_s \right] = 1 \text{ for } s \leq t
 $$
 - Model implies
 $$
@@ -126,7 +133,7 @@ $$
 
 # Example: Random Coefficients Demand
 
-## Example: Random Coefficients Demand
+## Random Coefficients Demand
 
 - @blp1995
 - Consumers choose product:
@@ -136,7 +143,7 @@ $$
   - $\nu_i \sim N(0,I_k)$, $\epsilon_{ijt} \sim$ Type I Extreme Value
   - Unobserved demand shock $\xi_{jt}$
 
-## Example: Random Coefficients Demand
+## Random Coefficients Demand
 
 - Aggregate demand:
 $$
@@ -144,7 +151,7 @@ s_{jt} = \int \frac{e^{x_{jt}'(\bar{\beta} + \Sigma \nu) + \xi_{jt}}} {\sum_{k =
 $$
 
 
-## Example: Random Coefficients Demand
+## Random Coefficients Demand
 
 - Instruments $Z_{jt}$ with $E[\xi_{jt} Z_{jt}] = 0$
 - $g(s_{jt},x_{jt}, Z_{jt}, \bar{\beta},\Sigma) = \left(\delta_{jt}(s_{\cdot t}, x_{\cdot t},\beta,\Sigma) - x_{jt}'\bar{\beta}\right) Z_{jt}$
@@ -155,7 +162,7 @@ $$
 
 # Example: Insurance and Drug Demand
 
-## Example: Insurance and Drug Demand
+## Insurance and Drug Demand
 
 - @efs2015
 - Risk-neutral forward-looking individual faces uncertain health shocks, choose whether or not to fill prescriptions
@@ -170,9 +177,9 @@ $$
     - $\lambda$ follows a Markov process $H(\lambda |\lambda ^{\prime })$
 
 - Insurance defines $c(\theta ,x)$ -- the out-of-pocket cost
-   associated with a prescription that costs $\theta $ when total spending so far is $x$
+   associated with a prescription that costs $\theta$ when total spending so far is $x$
 
-## Example: Insurance and Drug Demand
+## Insurance and Drug Demand
 
 - Flow utility
     $$
@@ -204,11 +211,91 @@ $$
     with terminal condition $v(x,0)=0$ for all $x$
 
 
-## Example: Insurance and Drug Demand
+## Insurance and Drug Demand
 
 - Estimate by simulated method of moments
   - Simulate model
   - Minimize difference between observed summary statistics and summary statistics in simulated data
+
+
+# Example: Pipeline Investment Incentives
+
+## Pipeline Investment
+
+- @ss2025
+- Pipeline $i$, year $t$, chooses investment $i_{it}$
+- Capital evolves as $k_{it+1} = k_{it} + i_{it}$
+- Common exogenous state variable $s_t$
+- Private investment cost shock $\eta_{it}$
+- Profits $\pi(k_{it},\ke_{-it}, s_t)$
+- Investment cost $\tilde{c}(i_{it},k_{it},\ke_{-it},\eta_{it})$
+- Others strategies $\sigma_{-i}(\ke_t,s_t,\etae_{-it})$
+
+## Pipeline Investment: Bellman Equation
+
+- Bellman equation
+$$
+\begin{align}
+  V(k_{it},\ke_{-it},s_{t},\eta_{it}) = \max_{i_{it}} & \pi(k_{it},\ke_{-it}, s_{t}) - \tilde{c}(i_{it},
+                                                        k_{it}, s_t, \eta_{it}) + \\
+  & + \beta \Er\left[ V(k_{it} + i_{it},\ke_{-it} + \sigma_{-i}(\ke_t,s_t,\etae_{-it}),s_{t+1}) \bigm|
+                                     s_{t}, \ke_{-it}, k_{it} + i_{it}, \eta_{it} \right]
+\end{align}
+$$
+
+## Pipeline Investment: First Order Condition and Envelope Theorem
+
+- First order condition
+$$
+  \frac{\partial \tilde{c}}{\partial i}(i_{it},\xe_{t}, \eta_{it}) = \beta \Er\left[ \frac{\partial V}{\partial k_i}(\xe_{t+1}, \eta_{it+1})
+\biggm| i_{it}, \xe_{t}, \eta_{it} \right]
+$$
+
+- Envelope theorem
+
+$$
+\begin{align}
+  \frac{\partial V}{\partial k_i}(\xe_{t}, \eta_{it}) = & \frac{\partial \pi}{\partial k_i}(\xe_{t},\eta_{it}) - \frac{\partial \tilde{c}}{\partial k_i}(i_{it}, \xe_{t}, \eta_{it})  + \notag \\
+  & + \beta \Er\left[ \frac{\partial V}{\partial k_i}(\xe_{t+1}, \eta_{it+1})
+    + \frac{\partial V}{\partial \ke_{-i}}(\xe_{t+1}, \eta_{it+1}) \frac{\partial \sigma_{-i}}{\partial k_i}(\xe_{t}, \etae_{-it}) \biggm | i_{it}, \xe_{t}, \eta_{it} \right] \notag \\
+  = & \frac{\partial \pi}{\partial k_i}(\xe_{t},\eta_{it}) - \frac{\partial \tilde{c}}{\partial k_i}(i_{it},\xe_{t}, \eta_{it}) + \frac{\partial \tilde{c}}{\partial i}(i_{it}, \xe_{it}, \eta_{it})
+      + \beta \Er\left[ \frac{\partial V}{\partial \ke_{-i}}(\xe_{t+1},\eta_{it+1}) \frac{\partial \sigma_{-i}}{\partial k_i}(\xe_{t}, \etae_{-it}) \biggm| i_{it}, \xe_t, \eta_{it} \right]
+\end{align}
+$$
+
+## Pipeline Investment: Euler-like equation
+
+$$
+\begin{aligned}
+  \frac{\partial \tilde{c}}{\partial i}(i_{it}, \xe_{t}, \eta_{it})
+  = & \beta \Er\left[ \frac{\partial \pi}{\partial k}(\xe_{t+1}, \eta_{it+1})
+    + \frac{\partial \tilde{c}}{\partial i}(i_{it+1}, \xe_{t+1}, \eta_{it+1})
+    - \frac{\partial \tilde{c}}{\partial k}(i_{it+1}, \xe_{t+1}, \eta_{it+1})
+  \biggm|
+      i_{it}, \xe_{t}, \eta_{it} \right] + \\
+    & + \beta^2 \Er\left[\frac{\partial V}{\partial \ke_{-i}}(\xe_{t+2}, \eta_{it+2}) \frac{\partial \sigma_{-i}}{\partial k_i}(\xe_{t+1}, \etae_{-it+1}) \biggm| i_{it}, \xe_{t}, \eta_{it} \right]
+\end{aligned}
+$$
+
+- Estimation: $\pi$ and $\Er[\cdot|\cdot]$ can be estimated from observed data, use those to recover $\tilde{c}$
+
+## Pipeline Investment: Identifying Investment Cost
+
+- Conditional expectation operators:
+$$
+    \mathcal{E}_{\sigma}(f)(\xe_t,\eta_{it}) = \Er\left[f(\xe_{t+1},\eta_{it+1})  \left( I + \frac{\partial \sigma_{-i}}{\partial \ke_{-i}}(\xe_t, \etae_{-it})  \right)\bigm|i^*(\xe_t,\eta_t),\xe_t,\eta_{it}\right].
+$$
+and
+$$
+\mathcal{E}(f)(\xe_t, \eta_{it}) = \Er[f(\xe_{t+1},\eta_{it+1})| i^*(\xe_t,\eta_{it}),\xe_t, \eta_{it}]
+$$
+- Investment cost solves
+$$
+  \frac{\partial \tilde{c}}{\partial i} = \beta \mathcal{E} \left( \frac{\partial \pi}{\partial k} + \frac{\partial \tilde{c}}{\partial i} - \frac{\partial \tilde{c}}{\partial k} +
+    \beta\mathcal{E}\left( \left(\left(I - \beta \mathcal{E}_\sigma \right)^{-1} \left(\frac{\partial \pi}{\partial \ke_{-i}} - \frac{\partial \tilde{c}}{\partial \ke_{-i}} \right)\right) \times \frac{\partial \sigma_{-i}}{\partial k} \right) \right)
+$$
+
+
 
 # Implementing
 
@@ -219,6 +306,6 @@ $$
   - Helpful to compute both objective function and its derivatives
 - Random coefficients demand model also needs to solve nonlinear equations and compute integrals
 - Drug example needs numeric dynamic programming - function approximation and numeric integration
-
+- Pipeline example involves differential equation, conditional expectation operators
 
 # References

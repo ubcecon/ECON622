@@ -4,6 +4,7 @@ author: Paul Schrimpf
 date: last-modified
 bibliography: 622.bib
 execute:
+  eval: false
   echo: true
   cache: true
   freeze: auto
