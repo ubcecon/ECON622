@@ -4,7 +4,7 @@ author: Paul Schrimpf
 date: last-modified
 bibliography: 622.bib
 execute:
-  eval: false
+  eval: true
   echo: true
   cache: true
   freeze: auto
@@ -168,33 +168,38 @@ Computes shares in random coefficient logit with mean tastes `δ`, observed char
 - vector of length `J` consisting of $s_1$, ..., $s_J$
 """
 function share(δ, Σ, dFν, x, ∫ = ∫cuba)
-  J,K = size(x)
-  (length(δ) == J) || error("length(δ)=$(length(δ)) != size(x,1)=$J")
-  (K,K) === size(Σ) || error("size(x,2)=$K != size(Σ)=$(size(Σ))")
-  function shareν(ν)
-    s = δ + x*Σ*ν
-    s .-= maximum(s)
-    s .= exp.(s)
-    s ./= sum(s)
-    return(s)
-  end
-  return(∫(shareν, dFν))
+    J,K = size(x)
+    (length(δ) == J) || error("length(δ)=$(length(δ)) != size(x,1)=$J")
+    ((K,K) === size(Σ)) || error("size(x,2)=$K != size(Σ)=$(size(Σ))")
+    function shareν(ν)
+        s = δ + x*Σ*ν
+        s .-= maximum(s)
+        s .= exp.(s)
+        s ./= sum(s)
+        return(s)
+    end
+    return(∫(shareν, dFν))
 end
 
 using HCubature
 function ∫cuba(f, dx; rtol=1e-4)
-  D = length(dx)
-  x(t) = t./(1 .- t.^2)
-  Dx(t) = prod((1 .+ t.^2)./(1 .- t.^2).^2)
-  hcubature(t->f(x(t))*pdf(dx,x(t))*Dx(t), -ones(D),ones(D), rtol=rtol)[1]
+    D = length(dx)
+    x(t) = t./(1 .- t.^2)
+    Dx(t) = prod((1 .+ t.^2)./(1 .- t.^2).^2)
+    hcubature(t->f(x(t))*pdf(dx,x(t))*Dx(t), -ones(D),ones(D), rtol=rtol)[1]
 end
 
 using SparseGrids, FastGaussQuadrature, Distributions
 function ∫sgq(f, dx::MvNormal; order=5)
-  X, W = sparsegrid(length(dx), order, gausshermite, sym=true)
-  L = cholesky(dx.Σ).L
-  sum(f(√2*L*x + dx.μ)*w for (x,w) ∈ zip(X,W))/(π^(length(dx)/2))
+    X, W = sparsegrid(length(dx), order, gausshermite, sym=true)
+    L = cholesky(dx.Σ).L
+    d = length(dx)
+    rootdetΣ = 1 #abs(det(sqrt(2)*L))
+    wnorm = (π)^(d/2) * rootdetΣ
+    sum(f(√2*L*x + dx.μ)*w for (x,w) ∈ zip(X,W))/wnorm
 end
+
+∫mc(f, dx; ndraw=100) = mean(f(rand(dx)) for i in 1:ndraw)
 ```
 
 ## Solving for $\delta$
@@ -213,8 +218,10 @@ s = share(δ, Σ, dFν, x, ∫sgq)
 
 # try to recover δ
 using NonlinearSolve, LinearAlgebra
-p = (Σ=Σ, x=x)
-F(d, p) = share([0, d...],p.Σ,dFν, p.x,∫sgq) - s
+p = (Σ=Σ, x=x, ∫=∫sgq, dFν=dFν, s=s)
+function F(d, p)
+    share([0, d...],p.Σ,p.dFν, p.x,p.∫) - p.s
+end
 d0 = zeros(length(δ)-1)
 prob = NonlinearProblem(F, d0, p)
 sol = solve(prob, show_trace=Val(true), trace_level=TraceAll())
@@ -234,10 +241,39 @@ solr = solve(prob, RobustMultiNewton(), show_trace=Val(true), trace_level=TraceA
 
 ```{julia}
 using FixedPointAcceleration
-G(δ,p) = log.(s) - log.(share([0,δ...], Σ, dFν, x, ∫sgq))
-probfp = NonlinearProblem(G, d0, nothing)
-solfp = solve(probfp, FixedPointAccelerationJL(algorithm=:Anderson, m=1) )
+function G(δ,p)
+    d=log.(p.s) - log.(share([0,δ...], p.Σ, p.dFν, p.x, p.∫))
+    return(d[2:end])
+end
+probfp = NonlinearProblem(G, d0, p)
+solfp = solve(probfp,
+              FixedPointAccelerationJL(algorithm=:Anderson),
+              show_trace=Val(true), trace_level=TraceAll() )
 ```
+
+## Choosing Algorithm
+
+- Best algorithm depends on problem and goal
+- Can be tradeoff between fast performance in typical case versus robustly solve all cases
+- [NonlinearSolve.jl's recommended methods](https://docs.sciml.ai/NonlinearSolve/stable/solvers/nonlinear_system_solvers/#Recommended-Methods) are usually a good choice
+- Fastest algorithm will depend on problem size, implementation of equations, etc
+- Benchmark if speed is important
+
+## Benchmarking
+
+```{julia}
+using BenchmarkTools
+@benchmark solve(probfp)
+```
+
+```{julia}
+@benchmark solve(probfp, FixedPointAccelerationJL())
+```
+
+```{julia}
+@benchmark solve(probfp, RobustMultiNewton())
+```
+
 
 
 # References

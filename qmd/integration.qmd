@@ -74,11 +74,11 @@ $$
 
 ```{julia}
 function share(δ, Σ, dFν, x, ∫)
-  function shareν(ν)
-    s = exp.(δ .+ x*Σ*ν)
-    return(s./sum(s))
-  end
-  return(∫(shareν, dFν))
+    function shareν(ν)
+        s = exp.(δ .+ x * Σ * ν)
+        return (s ./ sum(s))
+    end
+    return (∫(shareν, dFν))
 end
 ```
 
@@ -111,17 +111,17 @@ Computes shares in random coefficient logit with mean tastes `δ`, observed char
 - vector of length `J` consisting of $s_1$, ..., $s_J$
 """
 function share(δ, Σ, dFν, x, ∫)
-  J,K = size(x)
-  (length(δ) == J) || error("length(δ)=$(length(δ)) != size(x,1)=$J")
-  K,K == size(Σ) || error("size(x,1)=$J != size(Σ)=$(size(Σ))")
-  function shareν(ν)
-    s = δ .+ x*Σ*ν
-    s .-= maximum(s)
-    s .= exp.(s)
-    s ./= sum(s)
-    return(s)
-  end
-  return(∫(shareν, dFν))
+    J, K = size(x)
+    (length(δ) == J) || error("length(δ)=$(length(δ)) != size(x,1)=$J")
+    K, K == size(Σ) || error("size(x,1)=$J != size(Σ)=$(size(Σ))")
+    function shareν(ν)
+        s = δ .+ x * Σ * ν
+        s .-= maximum(s)
+        s .= exp.(s)
+        s ./= sum(s)
+        return (s)
+    end
+    return (∫(shareν, dFν))
 end
 ```
 
@@ -138,31 +138,31 @@ end
 
 ```{julia}
 using Distributions, Statistics
-∫mc(f, dx; ndraw=100)=mean(f(rand(dx)) for i in 1:ndraw)
+∫mc(f, dx; ndraw=100) = mean(f(rand(dx)) for i in 1:ndraw)
 ```
 
 ```{julia}
 module EC
 
 mutable struct EvaluationCounter
-  f::Function
-  n::Int
+    f::Function
+    n::Int
 end
 
 EvaluationCounter(f) = EvaluationCounter(f, 0)
 
 function (ec::EvaluationCounter)(x)
-  ec.n += 1
-  return ec.f(x)
+    ec.n += 1
+    return ec.f(x)
 end
 
 import Base: show
 function show(io::IO, ec::EvaluationCounter)
-  print(io, "evaluated $(ec.f) $(ec.n) times")
+    print(io, "evaluated $(ec.f) $(ec.n) times")
 end
 
 function reset!(ec::EvaluationCounter)
-  ec.n = 0
+    ec.n = 0
 end
 
 end
@@ -170,12 +170,12 @@ end
 using Distributions
 dx = Normal(0, 1)
 
-f = EC.EvaluationCounter(x->x^2)
+f = EC.EvaluationCounter(x -> x^2)
 trueint = 1.0
 
 EC.reset!(f)
 intmc = ∫mc(f, dx, ndraw=100)
-@show intmc, trueint, intmc-trueint
+@show intmc, trueint, intmc - trueint
 @show f
 EC.reset!(f)
 ```
@@ -189,25 +189,25 @@ EC.reset!(f)
 ```{julia}
 using Sobol
 import Base.Iterators: take
-function ∫s(f,dx::AbstractMvNormal;ndraw=100)
-  marginals = [Normal(dx.μ[i], sqrt(dx.Σ[i,i])) for i in 1:length(dx)]
-  invcdf(x) = quantile.(marginals,x)
-  ss = skip(SobolSeq(length(dx)),ndraw)
-  mean(f(invcdf(x)) for x in take(ss,ndraw))
+function ∫s(f, dx::AbstractMvNormal; ndraw=100)
+    marginals = [Normal(dx.μ[i], sqrt(dx.Σ[i, i])) for i in 1:length(dx)]
+    invcdf(x) = quantile.(marginals, x)
+    ss = skip(SobolSeq(length(dx)), ndraw)
+    mean(f(invcdf(x)) for x in take(ss, ndraw))
 end
 
-function ∫s(f,dx::Normal;ndraw=100)
-  invcdf(x) = quantile(dx,x)
-  ss = skip(SobolSeq(length(dx)),ndraw)
-  mean(f(invcdf(x[1])) for x in take(ss,ndraw))
+function ∫s(f, dx::Normal; ndraw=100)
+    invcdf(x) = quantile(dx, x)
+    ss = skip(SobolSeq(length(dx)), ndraw)
+    mean(f(invcdf(x[1])) for x in take(ss, ndraw))
 end
 ```
 
 ```{julia}
-f = x->x^2
+f = x -> x^2
 S = 1_000
-@show mean(abs(∫s(f,dx,ndraw=100) - trueint) for s in 1:S)
-@show mean(abs(∫mc(f,dx,ndraw=100) - trueint) for s in 1:S)
+@show mean(abs(∫s(f, dx, ndraw=100) - trueint) for s in 1:S)
+@show mean(abs(∫mc(f, dx, ndraw=100) - trueint) for s in 1:S)
 ```
 
 ## Integration: Gaussian Quadrature
@@ -225,13 +225,13 @@ $$
 using FastGaussQuadrature, LinearAlgebra
 import Base.Iterators: product, repeated
 function ∫q(f, dx::MvNormal; ndraw=100)
-  n = Int(ceil(ndraw^(1/length(dx))))
-  x, w = gausshermite(n)
-  L = cholesky(dx.Σ).L
-  sum(f(√2*L*vcat(xs...) + dx.μ)*prod(ws)
-      for (xs,ws) ∈ zip(product(repeated(x, length(dx))...),
-                        product(repeated(w, length(dx))...))
-        )/(π^(length(dx)/2))
+    n = Int(ceil(ndraw^(1 / length(dx))))
+    x, w = gausshermite(n)
+    L = cholesky(dx.Σ).L
+    sum(f(√2 * L * vcat(xs...) + dx.μ) * prod(ws)
+        for (xs, ws) ∈ zip(product(repeated(x, length(dx))...),
+        product(repeated(w, length(dx))...))
+    ) / (π^(length(dx) / 2))
 end
 ```
 
@@ -246,9 +246,12 @@ end
 ```{julia}
 using SparseGrids
 function ∫sgq(f, dx::MvNormal; order=5)
-  X, W = sparsegrid(length(dx), order, gausshermite, sym=true)
-  L = cholesky(dx.Σ).L
-  sum(f(√2*L*x + dx.μ)*w for (x,w) ∈ zip(X,W))/(π^(length(dx)/2))
+    X, W = sparsegrid(length(dx), order, gausshermite, sym=true)
+    L = cholesky(dx.Σ).L
+    d = length(dx)
+    rootdetΣ = abs(det(L))
+    wnorm = (π)^(d/2) #* rootdetΣ
+    sum(f(√2 * L * x + dx.μ) * w for (x, w) ∈ zip(X, W)) / wnorm
 end
 ```
 
@@ -267,12 +270,70 @@ for increasing $n$ until $|I_n(f) - I_m(f)|$ is small
 ```{julia}
 using HCubature
 function ∫cuba(f, dx; rtol=1e-4)
-  D = length(dx)
-  x(t) = t./(1 .- t.^2)
-  Dx(t) = prod((1 .+ t.^2)./(1 .- t.^2).^2)
-  hcubature(t->f(x(t))*pdf(dx,x(t))*Dx(t), -ones(D),ones(D), rtol=rtol)[1]
+    D = length(dx)
+    x(t) = t ./ (1 .- t .^ 2)
+    Dx(t) = prod((1 .+ t .^ 2) ./ (1 .- t .^ 2) .^ 2)
+    hcubature(t -> f(x(t)) * pdf(dx, x(t)) * Dx(t), -ones(D), ones(D), rtol=rtol)[1]
 end
 ```
 
+## Choosing an Integration Method
+
+```{mermaid}
+%%| echo : false
+flowchart TD
+    Dim[Dimension of Integral, d?]
+    Dim -->|d <= 2| Quadrature[Gaussian Quadrature<br>Adaptive Cubature]
+    Dim -->|2 < d < 10| Moderate[Moderate Dimension]
+    Dim -->|d >= 10| High[High Dimension]
+
+    Moderate --> Smooth{Function Smooth and<br>Well-Behaved?}
+    Smooth -->|Yes| Sparse[Sparse Grids / Smolyak]
+    Smooth -->|No| QMC1[Quasi-Monte Carlo]
+
+    High --> Dist{Complex Target<br>Distribution?}
+    Dist -->|Yes| MCMC[MCMC / Importance Sampling]
+    Dist -->|No| QMC2[Quasi-Monte Carlo<br>Monte Carlo]
+```
+
+## Testing
+
+```{julia}
+using Test
+@testset "Integration" begin
+    testfunctions = (
+        (x->1,"x->1"),
+        (x->sum(x),"x->sum(x)"),
+        (x->norm(x)^2, "x->norm(x)^2"),
+        (x->exp(norm(x))/(1+exp(norm(x))), "x->exp(norm(x))/(1+exp(norm(x)))")
+    )
+
+    C = rand(4,4)
+    tol = 1e-2
+    distributions = (
+        MvNormal(zeros(2),I(2)),
+        MvNormal(rand(4), C'*C + I(4))
+    )
+    baselinemethod=(f,dx)->∫mc(f,dx,ndraw=ceil(Int,10/tol^2))
+    methods = (((f,dx)->∫s(f,dx,ndraw=10_000), "QMC"),
+               ((f,dx)->∫q(f,dx,ndraw=80), "gauss-hermite") ,
+               ((f,dx)->∫sgq(f,dx,order=5), "sparse grid"),
+               (∫cuba, "cuba") )
+    for ∫ ∈ methods
+        for (fs,dx) ∈ Iterators.product(testfunctions, distributions)
+            f=fs[1]
+            target = baselinemethod(f,dx)
+            result = ∫[1](f,dx)
+            atol = 2*max(abs(target)*tol,tol)
+            #@test target ≈ result atol=atol
+            if norm(target-result)>atol
+                x = rand(dx)
+                println("failed on f=$(fs[2]), dx=$(dx), ∫=$(∫[2])")
+                println(target," ", result)
+            end
+        end
+    end
+end
+```
 
 # References

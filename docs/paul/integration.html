@@ -10,7 +10,7 @@
   <meta name="generator" content="quarto-1.8.27">
 
   <meta name="author" content="Paul Schrimpf">
-  <meta name="dcterms.date" content="2026-02-23">
+  <meta name="dcterms.date" content="2026-02-25">
   <title>ECON 622 – Integration</title>
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
@@ -210,6 +210,9 @@
       margin-right: 0; 
     }
   </style>
+  <script src="site_libs/quarto-diagram/mermaid.min.js"></script>
+  <script src="site_libs/quarto-diagram/mermaid-init.js"></script>
+  <link href="site_libs/quarto-diagram/mermaid.css" rel="stylesheet">
 </head>
 <body class="quarto-dark">
   <div class="reveal">
@@ -226,7 +229,7 @@ Paul Schrimpf
 </div>
 </div>
 
-  <p class="date">2026-02-23</p>
+  <p class="date">2026-02-25</p>
 </section>
 <section class="slide level2">
 
@@ -292,11 +295,11 @@ s_{jt} = \int \frac{e^{\delta_{jt} + x_{jt}'\Sigma \nu}} {\sum_{k = 0}^J e^{\del
 <h2>Shares: version 1</h2>
 <div id="2" class="cell" data-execution_count="1">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb1"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb1-1"><a></a><span class="kw">function</span> <span class="fu">share</span>(δ, Σ, dFν, x, ∫)</span>
-<span id="cb1-2"><a></a>  <span class="kw">function</span> <span class="fu">shareν</span>(ν)</span>
-<span id="cb1-3"><a></a>    s <span class="op">=</span> <span class="fu">exp</span>.(δ <span class="op">.+</span> x<span class="op">*</span>Σ<span class="op">*</span>ν)</span>
-<span id="cb1-4"><a></a>    <span class="cf">return</span>(s<span class="op">./</span><span class="fu">sum</span>(s))</span>
-<span id="cb1-5"><a></a>  <span class="kw">end</span></span>
-<span id="cb1-6"><a></a>  <span class="cf">return</span>(<span class="fu">∫</span>(shareν, dFν))</span>
+<span id="cb1-2"><a></a>    <span class="kw">function</span> <span class="fu">shareν</span>(ν)</span>
+<span id="cb1-3"><a></a>        s <span class="op">=</span> <span class="fu">exp</span>.(δ <span class="op">.+</span> x <span class="op">*</span> Σ <span class="op">*</span> ν)</span>
+<span id="cb1-4"><a></a>        <span class="cf">return</span> (s <span class="op">./</span> <span class="fu">sum</span>(s))</span>
+<span id="cb1-5"><a></a>    <span class="kw">end</span></span>
+<span id="cb1-6"><a></a>    <span class="cf">return</span> (<span class="fu">∫</span>(shareν, dFν))</span>
 <span id="cb1-7"><a></a><span class="kw">end</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-display" data-execution_count="1">
 <pre><code>share (generic function with 1 method)</code></pre>
@@ -331,17 +334,17 @@ s_{jt} = \int \frac{e^{\delta_{jt} + x_{jt}'\Sigma \nu}} {\sum_{k = 0}^J e^{\del
 <span id="cb3-17"><a></a><span class="st">- vector of length `J` consisting of $s_1$, ..., $s_J$</span></span>
 <span id="cb3-18"><a></a><span class="st">"""</span></span>
 <span id="cb3-19"><a></a><span class="kw">function</span> <span class="fu">share</span>(δ, Σ, dFν, x, ∫)</span>
-<span id="cb3-20"><a></a>  J,K <span class="op">=</span> <span class="fu">size</span>(x)</span>
-<span id="cb3-21"><a></a>  (<span class="fu">length</span>(δ) <span class="op">==</span> J) <span class="op">||</span> <span class="fu">error</span>(<span class="st">"length(δ)=</span><span class="sc">$</span>(<span class="fu">length</span>(δ))<span class="st"> != size(x,1)=</span><span class="sc">$</span>J<span class="st">"</span>)</span>
-<span id="cb3-22"><a></a>  K,K <span class="op">==</span> <span class="fu">size</span>(Σ) <span class="op">||</span> <span class="fu">error</span>(<span class="st">"size(x,1)=</span><span class="sc">$</span>J<span class="st"> != size(Σ)=</span><span class="sc">$</span>(<span class="fu">size</span>(Σ))<span class="st">"</span>)</span>
-<span id="cb3-23"><a></a>  <span class="kw">function</span> <span class="fu">shareν</span>(ν)</span>
-<span id="cb3-24"><a></a>    s <span class="op">=</span> δ <span class="op">.+</span> x<span class="op">*</span>Σ<span class="op">*</span>ν</span>
-<span id="cb3-25"><a></a>    s <span class="op">.-=</span> <span class="fu">maximum</span>(s)</span>
-<span id="cb3-26"><a></a>    s <span class="op">.=</span> <span class="fu">exp</span>.(s)</span>
-<span id="cb3-27"><a></a>    s <span class="op">./=</span> <span class="fu">sum</span>(s)</span>
-<span id="cb3-28"><a></a>    <span class="cf">return</span>(s)</span>
-<span id="cb3-29"><a></a>  <span class="kw">end</span></span>
-<span id="cb3-30"><a></a>  <span class="cf">return</span>(<span class="fu">∫</span>(shareν, dFν))</span>
+<span id="cb3-20"><a></a>    J, K <span class="op">=</span> <span class="fu">size</span>(x)</span>
+<span id="cb3-21"><a></a>    (<span class="fu">length</span>(δ) <span class="op">==</span> J) <span class="op">||</span> <span class="fu">error</span>(<span class="st">"length(δ)=</span><span class="sc">$</span>(<span class="fu">length</span>(δ))<span class="st"> != size(x,1)=</span><span class="sc">$</span>J<span class="st">"</span>)</span>
+<span id="cb3-22"><a></a>    K, K <span class="op">==</span> <span class="fu">size</span>(Σ) <span class="op">||</span> <span class="fu">error</span>(<span class="st">"size(x,1)=</span><span class="sc">$</span>J<span class="st"> != size(Σ)=</span><span class="sc">$</span>(<span class="fu">size</span>(Σ))<span class="st">"</span>)</span>
+<span id="cb3-23"><a></a>    <span class="kw">function</span> <span class="fu">shareν</span>(ν)</span>
+<span id="cb3-24"><a></a>        s <span class="op">=</span> δ <span class="op">.+</span> x <span class="op">*</span> Σ <span class="op">*</span> ν</span>
+<span id="cb3-25"><a></a>        s <span class="op">.-=</span> <span class="fu">maximum</span>(s)</span>
+<span id="cb3-26"><a></a>        s <span class="op">.=</span> <span class="fu">exp</span>.(s)</span>
+<span id="cb3-27"><a></a>        s <span class="op">./=</span> <span class="fu">sum</span>(s)</span>
+<span id="cb3-28"><a></a>        <span class="cf">return</span> (s)</span>
+<span id="cb3-29"><a></a>    <span class="kw">end</span></span>
+<span id="cb3-30"><a></a>    <span class="cf">return</span> (<span class="fu">∫</span>(shareν, dFν))</span>
 <span id="cb3-31"><a></a><span class="kw">end</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-display" data-execution_count="1">
 <pre><code>Main.Notebook.share</code></pre>
@@ -358,22 +361,7 @@ s_{jt} = \int \frac{e^{\delta_{jt} + x_{jt}'\Sigma \nu}} {\sum_{k = 0}^J e^{\del
 <h2>Integration: Monte-Carlo</h2>
 <div id="6" class="cell" data-execution_count="1">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb5"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb5-1"><a></a><span class="im">using</span> <span class="bu">Distributions</span>, <span class="bu">Statistics</span></span>
-<span id="cb5-2"><a></a><span class="fu">∫mc</span>(f, dx; ndraw<span class="op">=</span><span class="fl">100</span>)<span class="op">=</span><span class="fu">mean</span>(<span class="fu">f</span>(<span class="fu">rand</span>(dx)) <span class="cf">for</span> i <span class="kw">in</span> <span class="fl">1</span><span class="op">:</span>ndraw)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-<div class="cell-output cell-output-stdout">
-<div class="ansi-escaped-output">
-<pre><span class="ansi-green-fg ansi-bold">Precompiling</span> packages...
-    246.1 ms<span class="ansi-green-fg">  ✓ </span><span class="ansi-bright-black-fg">PtrArrays</span>
-    254.6 ms<span class="ansi-green-fg">  ✓ </span><span class="ansi-bright-black-fg">AliasTables</span>
-   1226.7 ms<span class="ansi-green-fg">  ✓ </span><span class="ansi-bright-black-fg">SpecialFunctions</span>
-    497.9 ms<span class="ansi-green-fg">  ✓ </span><span class="ansi-bright-black-fg">HypergeometricFunctions</span>
-   1568.1 ms<span class="ansi-green-fg">  ✓ </span><span class="ansi-bright-black-fg">StatsBase</span>
-    341.8 ms<span class="ansi-green-fg">  ✓ </span><span class="ansi-bright-black-fg">PDMats → StatsBaseExt</span>
-   1204.5 ms<span class="ansi-green-fg">  ✓ </span><span class="ansi-bright-black-fg">StatsFuns</span>
-   2169.0 ms<span class="ansi-green-fg">  ✓ </span>Distributions
-  8 dependencies successfully precompiled in 5 seconds. 33 already precompiled.
-</pre>
-</div>
-</div>
+<span id="cb5-2"><a></a><span class="fu">∫mc</span>(f, dx; ndraw<span class="op">=</span><span class="fl">100</span>) <span class="op">=</span> <span class="fu">mean</span>(<span class="fu">f</span>(<span class="fu">rand</span>(dx)) <span class="cf">for</span> i <span class="kw">in</span> <span class="fl">1</span><span class="op">:</span>ndraw)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-display" data-execution_count="1">
 <pre><code>∫mc (generic function with 1 method)</code></pre>
 </div>
@@ -382,24 +370,24 @@ s_{jt} = \int \frac{e^{\delta_{jt} + x_{jt}'\Sigma \nu}} {\sum_{k = 0}^J e^{\del
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb7"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb7-1"><a></a><span class="kw">module</span> EC</span>
 <span id="cb7-2"><a></a></span>
 <span id="cb7-3"><a></a><span class="kw">mutable struct</span> EvaluationCounter</span>
-<span id="cb7-4"><a></a>  f<span class="op">::</span><span class="dt">Function</span></span>
-<span id="cb7-5"><a></a>  n<span class="op">::</span><span class="dt">Int</span></span>
+<span id="cb7-4"><a></a>    f<span class="op">::</span><span class="dt">Function</span></span>
+<span id="cb7-5"><a></a>    n<span class="op">::</span><span class="dt">Int</span></span>
 <span id="cb7-6"><a></a><span class="kw">end</span></span>
 <span id="cb7-7"><a></a></span>
 <span id="cb7-8"><a></a><span class="fu">EvaluationCounter</span>(f) <span class="op">=</span> <span class="fu">EvaluationCounter</span>(f, <span class="fl">0</span>)</span>
 <span id="cb7-9"><a></a></span>
 <span id="cb7-10"><a></a><span class="kw">function</span> (ec<span class="op">::</span><span class="dt">EvaluationCounter</span>)(x)</span>
-<span id="cb7-11"><a></a>  ec.n <span class="op">+=</span> <span class="fl">1</span></span>
-<span id="cb7-12"><a></a>  <span class="cf">return</span> ec.<span class="fu">f</span>(x)</span>
+<span id="cb7-11"><a></a>    ec.n <span class="op">+=</span> <span class="fl">1</span></span>
+<span id="cb7-12"><a></a>    <span class="cf">return</span> ec.<span class="fu">f</span>(x)</span>
 <span id="cb7-13"><a></a><span class="kw">end</span></span>
 <span id="cb7-14"><a></a></span>
 <span id="cb7-15"><a></a><span class="im">import</span> <span class="bu">Base</span>: show</span>
 <span id="cb7-16"><a></a><span class="kw">function</span> <span class="fu">show</span>(io<span class="op">::</span><span class="dt">IO</span>, ec<span class="op">::</span><span class="dt">EvaluationCounter</span>)</span>
-<span id="cb7-17"><a></a>  <span class="fu">print</span>(io, <span class="st">"evaluated </span><span class="sc">$</span>(ec.f)<span class="st"> </span><span class="sc">$</span>(ec.n)<span class="st"> times"</span>)</span>
+<span id="cb7-17"><a></a>    <span class="fu">print</span>(io, <span class="st">"evaluated </span><span class="sc">$</span>(ec.f)<span class="st"> </span><span class="sc">$</span>(ec.n)<span class="st"> times"</span>)</span>
 <span id="cb7-18"><a></a><span class="kw">end</span></span>
 <span id="cb7-19"><a></a></span>
 <span id="cb7-20"><a></a><span class="kw">function</span> <span class="fu">reset!</span>(ec<span class="op">::</span><span class="dt">EvaluationCounter</span>)</span>
-<span id="cb7-21"><a></a>  ec.n <span class="op">=</span> <span class="fl">0</span></span>
+<span id="cb7-21"><a></a>    ec.n <span class="op">=</span> <span class="fl">0</span></span>
 <span id="cb7-22"><a></a><span class="kw">end</span></span>
 <span id="cb7-23"><a></a></span>
 <span id="cb7-24"><a></a><span class="kw">end</span></span>
@@ -407,16 +395,16 @@ s_{jt} = \int \frac{e^{\delta_{jt} + x_{jt}'\Sigma \nu}} {\sum_{k = 0}^J e^{\del
 <span id="cb7-26"><a></a><span class="im">using</span> <span class="bu">Distributions</span></span>
 <span id="cb7-27"><a></a>dx <span class="op">=</span> <span class="fu">Normal</span>(<span class="fl">0</span>, <span class="fl">1</span>)</span>
 <span id="cb7-28"><a></a></span>
-<span id="cb7-29"><a></a>f <span class="op">=</span> EC.<span class="fu">EvaluationCounter</span>(x<span class="op">-&gt;</span>x<span class="op">^</span><span class="fl">2</span>)</span>
+<span id="cb7-29"><a></a>f <span class="op">=</span> EC.<span class="fu">EvaluationCounter</span>(x <span class="op">-&gt;</span> x<span class="op">^</span><span class="fl">2</span>)</span>
 <span id="cb7-30"><a></a>trueint <span class="op">=</span> <span class="fl">1.0</span></span>
 <span id="cb7-31"><a></a></span>
 <span id="cb7-32"><a></a>EC.<span class="fu">reset!</span>(f)</span>
 <span id="cb7-33"><a></a>intmc <span class="op">=</span> <span class="fu">∫mc</span>(f, dx, ndraw<span class="op">=</span><span class="fl">100</span>)</span>
-<span id="cb7-34"><a></a><span class="pp">@show</span> intmc, trueint, intmc<span class="op">-</span>trueint</span>
+<span id="cb7-34"><a></a><span class="pp">@show</span> intmc, trueint, intmc <span class="op">-</span> trueint</span>
 <span id="cb7-35"><a></a><span class="pp">@show</span> f</span>
 <span id="cb7-36"><a></a>EC.<span class="fu">reset!</span>(f)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>(intmc, trueint, intmc - trueint) = (0.9150530951337115, 1.0, -0.08494690486628853)
+<pre><code>(intmc, trueint, intmc - trueint) = (1.0611575919429865, 1.0, 0.06115759194298653)
 f = evaluated #6 100 times</code></pre>
 </div>
 <div class="cell-output cell-output-display" data-execution_count="1">
@@ -434,33 +422,33 @@ f = evaluated #6 100 times</code></pre>
 <div id="10" class="cell" data-execution_count="1">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb10"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb10-1"><a></a><span class="im">using</span> <span class="bu">Sobol</span></span>
 <span id="cb10-2"><a></a><span class="im">import</span> <span class="bu">Base.Iterators</span>: take</span>
-<span id="cb10-3"><a></a><span class="kw">function</span> <span class="fu">∫s</span>(f,dx<span class="op">::</span><span class="dt">AbstractMvNormal</span>;ndraw<span class="op">=</span><span class="fl">100</span>)</span>
-<span id="cb10-4"><a></a>  marginals <span class="op">=</span> [<span class="fu">Normal</span>(dx.μ[i], <span class="fu">sqrt</span>(dx.Σ[i,i])) for i <span class="kw">in</span> <span class="fl">1</span><span class="op">:</span><span class="fu">length</span>(dx)]</span>
-<span id="cb10-5"><a></a>  <span class="fu">invcdf</span>(x) <span class="op">=</span> <span class="fu">quantile</span>.(marginals,x)</span>
-<span id="cb10-6"><a></a>  ss <span class="op">=</span> <span class="fu">skip</span>(<span class="fu">SobolSeq</span>(<span class="fu">length</span>(dx)),ndraw)</span>
-<span id="cb10-7"><a></a>  <span class="fu">mean</span>(<span class="fu">f</span>(<span class="fu">invcdf</span>(x)) <span class="cf">for</span> x <span class="kw">in</span> <span class="fu">take</span>(ss,ndraw))</span>
+<span id="cb10-3"><a></a><span class="kw">function</span> <span class="fu">∫s</span>(f, dx<span class="op">::</span><span class="dt">AbstractMvNormal</span>; ndraw<span class="op">=</span><span class="fl">100</span>)</span>
+<span id="cb10-4"><a></a>    marginals <span class="op">=</span> [<span class="fu">Normal</span>(dx.μ[i], <span class="fu">sqrt</span>(dx.Σ[i, i])) for i <span class="kw">in</span> <span class="fl">1</span><span class="op">:</span><span class="fu">length</span>(dx)]</span>
+<span id="cb10-5"><a></a>    <span class="fu">invcdf</span>(x) <span class="op">=</span> <span class="fu">quantile</span>.(marginals, x)</span>
+<span id="cb10-6"><a></a>    ss <span class="op">=</span> <span class="fu">skip</span>(<span class="fu">SobolSeq</span>(<span class="fu">length</span>(dx)), ndraw)</span>
+<span id="cb10-7"><a></a>    <span class="fu">mean</span>(<span class="fu">f</span>(<span class="fu">invcdf</span>(x)) <span class="cf">for</span> x <span class="kw">in</span> <span class="fu">take</span>(ss, ndraw))</span>
 <span id="cb10-8"><a></a><span class="cf">end</span></span>
 <span id="cb10-9"><a></a></span>
-<span id="cb10-10"><a></a><span class="kw">function</span> <span class="fu">∫s</span>(f,dx<span class="op">::</span><span class="dt">Normal</span>;ndraw<span class="op">=</span><span class="fl">100</span>)</span>
-<span id="cb10-11"><a></a>  <span class="fu">invcdf</span>(x) <span class="op">=</span> <span class="fu">quantile</span>(dx,x)</span>
-<span id="cb10-12"><a></a>  ss <span class="op">=</span> <span class="fu">skip</span>(<span class="fu">SobolSeq</span>(<span class="fu">length</span>(dx)),ndraw)</span>
-<span id="cb10-13"><a></a>  <span class="fu">mean</span>(<span class="fu">f</span>(<span class="fu">invcdf</span>(x[<span class="fl">1</span>])) <span class="cf">for</span> x <span class="kw">in</span> <span class="fu">take</span>(ss,ndraw))</span>
+<span id="cb10-10"><a></a><span class="kw">function</span> <span class="fu">∫s</span>(f, dx<span class="op">::</span><span class="dt">Normal</span>; ndraw<span class="op">=</span><span class="fl">100</span>)</span>
+<span id="cb10-11"><a></a>    <span class="fu">invcdf</span>(x) <span class="op">=</span> <span class="fu">quantile</span>(dx, x)</span>
+<span id="cb10-12"><a></a>    ss <span class="op">=</span> <span class="fu">skip</span>(<span class="fu">SobolSeq</span>(<span class="fu">length</span>(dx)), ndraw)</span>
+<span id="cb10-13"><a></a>    <span class="fu">mean</span>(<span class="fu">f</span>(<span class="fu">invcdf</span>(x[<span class="fl">1</span>])) <span class="cf">for</span> x <span class="kw">in</span> <span class="fu">take</span>(ss, ndraw))</span>
 <span id="cb10-14"><a></a><span class="cf">end</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-display" data-execution_count="1">
 <pre><code>∫s (generic function with 2 methods)</code></pre>
 </div>
 </div>
 <div id="12" class="cell" data-execution_count="1">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb12"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb12-1"><a></a>f <span class="op">=</span> x<span class="op">-&gt;</span>x<span class="op">^</span><span class="fl">2</span></span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb12"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb12-1"><a></a>f <span class="op">=</span> x <span class="op">-&gt;</span> x<span class="op">^</span><span class="fl">2</span></span>
 <span id="cb12-2"><a></a>S <span class="op">=</span> <span class="fl">1_000</span></span>
-<span id="cb12-3"><a></a><span class="pp">@show</span> <span class="fu">mean</span>(<span class="fu">abs</span>(<span class="fu">∫s</span>(f,dx,ndraw<span class="op">=</span><span class="fl">100</span>) <span class="op">-</span> trueint) <span class="cf">for</span> s <span class="kw">in</span> <span class="fl">1</span><span class="op">:</span>S)</span>
-<span id="cb12-4"><a></a><span class="pp">@show</span> <span class="fu">mean</span>(<span class="fu">abs</span>(<span class="fu">∫mc</span>(f,dx,ndraw<span class="op">=</span><span class="fl">100</span>) <span class="op">-</span> trueint) <span class="cf">for</span> s <span class="kw">in</span> <span class="fl">1</span><span class="op">:</span>S)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<span id="cb12-3"><a></a><span class="pp">@show</span> <span class="fu">mean</span>(<span class="fu">abs</span>(<span class="fu">∫s</span>(f, dx, ndraw<span class="op">=</span><span class="fl">100</span>) <span class="op">-</span> trueint) <span class="cf">for</span> s <span class="kw">in</span> <span class="fl">1</span><span class="op">:</span>S)</span>
+<span id="cb12-4"><a></a><span class="pp">@show</span> <span class="fu">mean</span>(<span class="fu">abs</span>(<span class="fu">∫mc</span>(f, dx, ndraw<span class="op">=</span><span class="fl">100</span>) <span class="op">-</span> trueint) <span class="cf">for</span> s <span class="kw">in</span> <span class="fl">1</span><span class="op">:</span>S)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>mean((abs(∫s(f, dx, ndraw = 100) - trueint) for s = 1:S)) = 0.02875751885407857
-mean((abs(∫mc(f, dx, ndraw = 100) - trueint) for s = 1:S)) = 0.1074260147662449</code></pre>
+mean((abs(∫mc(f, dx, ndraw = 100) - trueint) for s = 1:S)) = 0.1173042241441584</code></pre>
 </div>
 <div class="cell-output cell-output-display" data-execution_count="1">
-<pre><code>0.1074260147662449</code></pre>
+<pre><code>0.1173042241441584</code></pre>
 </div>
 </div>
 </section>
@@ -476,29 +464,14 @@ mean((abs(∫mc(f, dx, ndraw = 100) - trueint) for s = 1:S)) = 0.107426014766244
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb15"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb15-1"><a></a><span class="im">using</span> <span class="bu">FastGaussQuadrature</span>, <span class="bu">LinearAlgebra</span></span>
 <span id="cb15-2"><a></a><span class="im">import</span> <span class="bu">Base.Iterators</span>: product, repeated</span>
 <span id="cb15-3"><a></a><span class="kw">function</span> <span class="fu">∫q</span>(f, dx<span class="op">::</span><span class="dt">MvNormal</span>; ndraw<span class="op">=</span><span class="fl">100</span>)</span>
-<span id="cb15-4"><a></a>  n <span class="op">=</span> <span class="fu">Int</span>(<span class="fu">ceil</span>(ndraw<span class="op">^</span>(<span class="fl">1</span><span class="op">/</span><span class="fu">length</span>(dx))))</span>
-<span id="cb15-5"><a></a>  x, w <span class="op">=</span> <span class="fu">gausshermite</span>(n)</span>
-<span id="cb15-6"><a></a>  L <span class="op">=</span> <span class="fu">cholesky</span>(dx.Σ).L</span>
-<span id="cb15-7"><a></a>  <span class="fu">sum</span>(<span class="fu">f</span>(<span class="fu">√2*L*vcat</span>(xs<span class="op">...</span>) <span class="op">+</span> dx.μ)<span class="fu">*prod</span>(ws)</span>
-<span id="cb15-8"><a></a>      <span class="cf">for</span> (xs,ws) <span class="op">∈</span> <span class="fu">zip</span>(<span class="fu">product</span>(<span class="fu">repeated</span>(x, <span class="fu">length</span>(dx))<span class="op">...</span>),</span>
-<span id="cb15-9"><a></a>                        <span class="fu">product</span>(<span class="fu">repeated</span>(w, <span class="fu">length</span>(dx))<span class="op">...</span>))</span>
-<span id="cb15-10"><a></a>        )<span class="op">/</span>(<span class="cn">π</span><span class="op">^</span>(<span class="fu">length</span>(dx)<span class="op">/</span><span class="fl">2</span>))</span>
+<span id="cb15-4"><a></a>    n <span class="op">=</span> <span class="fu">Int</span>(<span class="fu">ceil</span>(ndraw<span class="op">^</span>(<span class="fl">1</span> <span class="op">/</span> <span class="fu">length</span>(dx))))</span>
+<span id="cb15-5"><a></a>    x, w <span class="op">=</span> <span class="fu">gausshermite</span>(n)</span>
+<span id="cb15-6"><a></a>    L <span class="op">=</span> <span class="fu">cholesky</span>(dx.Σ).L</span>
+<span id="cb15-7"><a></a>    <span class="fu">sum</span>(<span class="fu">f</span>(√<span class="fl">2</span> <span class="op">*</span> L <span class="op">*</span> <span class="fu">vcat</span>(xs<span class="op">...</span>) <span class="op">+</span> dx.μ) <span class="op">*</span> <span class="fu">prod</span>(ws)</span>
+<span id="cb15-8"><a></a>        <span class="cf">for</span> (xs, ws) <span class="op">∈</span> <span class="fu">zip</span>(<span class="fu">product</span>(<span class="fu">repeated</span>(x, <span class="fu">length</span>(dx))<span class="op">...</span>),</span>
+<span id="cb15-9"><a></a>        <span class="fu">product</span>(<span class="fu">repeated</span>(w, <span class="fu">length</span>(dx))<span class="op">...</span>))</span>
+<span id="cb15-10"><a></a>    ) <span class="op">/</span> (<span class="cn">π</span><span class="op">^</span>(<span class="fu">length</span>(dx) <span class="op">/</span> <span class="fl">2</span>))</span>
 <span id="cb15-11"><a></a><span class="cf">end</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-<div class="cell-output cell-output-stdout">
-<div class="ansi-escaped-output">
-<pre><span class="ansi-green-fg ansi-bold">Precompiling</span> packages...
-   3780.6 ms<span class="ansi-green-fg">  ✓ </span>StaticArrays
-    604.4 ms<span class="ansi-green-fg">  ✓ </span>FastGaussQuadrature
-  2 dependencies successfully precompiled in 4 seconds. 15 already precompiled.
-<span class="ansi-green-fg ansi-bold">Precompiling</span> packages...
-    303.9 ms<span class="ansi-green-fg">  ✓ </span><span class="ansi-bright-black-fg">FillArrays → FillArraysStaticArraysExt</span>
-  1 dependency successfully precompiled in 0 seconds. 9 already precompiled.
-<span class="ansi-green-fg ansi-bold">Precompiling</span> packages...
-    291.6 ms<span class="ansi-green-fg">  ✓ </span>StaticArrays → StaticArraysStatisticsExt
-  1 dependency successfully precompiled in 0 seconds. 9 already precompiled.
-</pre>
-</div>
-</div>
 <div class="cell-output cell-output-display" data-execution_count="1">
 <pre><code>∫q (generic function with 1 method)</code></pre>
 </div>
@@ -517,18 +490,13 @@ mean((abs(∫mc(f, dx, ndraw = 100) - trueint) for s = 1:S)) = 0.107426014766244
 <div id="16" class="cell" data-execution_count="1">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb17"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb17-1"><a></a><span class="im">using</span> <span class="bu">SparseGrids</span></span>
 <span id="cb17-2"><a></a><span class="kw">function</span> <span class="fu">∫sgq</span>(f, dx<span class="op">::</span><span class="dt">MvNormal</span>; order<span class="op">=</span><span class="fl">5</span>)</span>
-<span id="cb17-3"><a></a>  X, W <span class="op">=</span> <span class="fu">sparsegrid</span>(<span class="fu">length</span>(dx), order, gausshermite, sym<span class="op">=</span><span class="cn">true</span>)</span>
-<span id="cb17-4"><a></a>  L <span class="op">=</span> <span class="fu">cholesky</span>(dx.Σ).L</span>
-<span id="cb17-5"><a></a>  <span class="fu">sum</span>(<span class="fu">f</span>(√<span class="fl">2</span><span class="op">*</span>L<span class="op">*</span>x <span class="op">+</span> dx.μ)<span class="op">*</span>w <span class="cf">for</span> (x,w) <span class="op">∈</span> <span class="fu">zip</span>(X,W))<span class="op">/</span>(<span class="cn">π</span><span class="op">^</span>(<span class="fu">length</span>(dx)<span class="op">/</span><span class="fl">2</span>))</span>
-<span id="cb17-6"><a></a><span class="cf">end</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-<div class="cell-output cell-output-stdout">
-<div class="ansi-escaped-output">
-<pre><span class="ansi-green-fg ansi-bold">Precompiling</span> packages...
-    430.3 ms<span class="ansi-green-fg">  ✓ </span>SparseGrids
-  1 dependency successfully precompiled in 0 seconds. 18 already precompiled.
-</pre>
-</div>
-</div>
+<span id="cb17-3"><a></a>    X, W <span class="op">=</span> <span class="fu">sparsegrid</span>(<span class="fu">length</span>(dx), order, gausshermite, sym<span class="op">=</span><span class="cn">true</span>)</span>
+<span id="cb17-4"><a></a>    L <span class="op">=</span> <span class="fu">cholesky</span>(dx.Σ).L</span>
+<span id="cb17-5"><a></a>    d <span class="op">=</span> <span class="fu">length</span>(dx)</span>
+<span id="cb17-6"><a></a>    rootdetΣ <span class="op">=</span> <span class="fu">abs</span>(<span class="fu">det</span>(L))</span>
+<span id="cb17-7"><a></a>    wnorm <span class="op">=</span> (<span class="cn">π</span>)<span class="op">^</span>(d<span class="op">/</span><span class="fl">2</span>) <span class="co">#* rootdetΣ</span></span>
+<span id="cb17-8"><a></a>    <span class="fu">sum</span>(<span class="fu">f</span>(√<span class="fl">2</span> <span class="op">*</span> L <span class="op">*</span> x <span class="op">+</span> dx.μ) <span class="op">*</span> w <span class="cf">for</span> (x, w) <span class="op">∈</span> <span class="fu">zip</span>(X, W)) <span class="op">/</span> wnorm</span>
+<span id="cb17-9"><a></a><span class="cf">end</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-display" data-execution_count="1">
 <pre><code>∫sgq (generic function with 1 method)</code></pre>
 </div>
@@ -549,22 +517,111 @@ mean((abs(∫mc(f, dx, ndraw = 100) - trueint) for s = 1:S)) = 0.107426014766244
 <div id="18" class="cell" data-execution_count="1">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb19"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb19-1"><a></a><span class="im">using</span> <span class="bu">HCubature</span></span>
 <span id="cb19-2"><a></a><span class="kw">function</span> <span class="fu">∫cuba</span>(f, dx; rtol<span class="op">=</span><span class="fl">1e-4</span>)</span>
-<span id="cb19-3"><a></a>  D <span class="op">=</span> <span class="fu">length</span>(dx)</span>
-<span id="cb19-4"><a></a>  <span class="fu">x</span>(t) <span class="op">=</span> t<span class="op">./</span>(<span class="fl">1</span> <span class="op">.-</span> t<span class="op">.^</span><span class="fl">2</span>)</span>
-<span id="cb19-5"><a></a>  <span class="fu">Dx</span>(t) <span class="op">=</span> <span class="fu">prod</span>((<span class="fl">1</span> <span class="op">.+</span> t<span class="op">.^</span><span class="fl">2</span>)<span class="op">./</span>(<span class="fl">1</span> <span class="op">.-</span> t<span class="op">.^</span><span class="fl">2</span>)<span class="op">.^</span><span class="fl">2</span>)</span>
-<span id="cb19-6"><a></a>  <span class="fu">hcubature</span>(<span class="fu">t-&gt;f</span>(<span class="fu">x</span>(t))<span class="fu">*pdf</span>(dx,<span class="fu">x</span>(t))<span class="fu">*Dx</span>(t), <span class="fu">-ones</span>(D),<span class="fu">ones</span>(D), rtol<span class="op">=</span>rtol)[<span class="fl">1</span>]</span>
+<span id="cb19-3"><a></a>    D <span class="op">=</span> <span class="fu">length</span>(dx)</span>
+<span id="cb19-4"><a></a>    <span class="fu">x</span>(t) <span class="op">=</span> t <span class="op">./</span> (<span class="fl">1</span> <span class="op">.-</span> t <span class="op">.^</span> <span class="fl">2</span>)</span>
+<span id="cb19-5"><a></a>    <span class="fu">Dx</span>(t) <span class="op">=</span> <span class="fu">prod</span>((<span class="fl">1</span> <span class="op">.+</span> t <span class="op">.^</span> <span class="fl">2</span>) <span class="op">./</span> (<span class="fl">1</span> <span class="op">.-</span> t <span class="op">.^</span> <span class="fl">2</span>) <span class="op">.^</span> <span class="fl">2</span>)</span>
+<span id="cb19-6"><a></a>    <span class="fu">hcubature</span>(t <span class="op">-&gt;</span> <span class="fu">f</span>(<span class="fu">x</span>(t)) <span class="op">*</span> <span class="fu">pdf</span>(dx, <span class="fu">x</span>(t)) <span class="op">*</span> <span class="fu">Dx</span>(t), <span class="fu">-ones</span>(D), <span class="fu">ones</span>(D), rtol<span class="op">=</span>rtol)[<span class="fl">1</span>]</span>
 <span id="cb19-7"><a></a><span class="kw">end</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-display" data-execution_count="1">
+<pre><code>∫cuba (generic function with 1 method)</code></pre>
+</div>
+</div>
+</section>
+<section id="choosing-an-integration-method" class="slide level2">
+<h2>Choosing an Integration Method</h2>
+<div class="cell" data-reveal="true" data-layout-align="default">
+<div class="cell-output-display">
+<div>
+<p></p><figure class=""><p></p>
+<div>
+<pre class="mermaid mermaid-js">flowchart TD
+    Dim[Dimension of Integral, d?]
+    Dim --&gt;|d &lt;= 2| Quadrature[Gaussian Quadrature&lt;br&gt;Adaptive Cubature]
+    Dim --&gt;|2 &lt; d &lt; 10| Moderate[Moderate Dimension]
+    Dim --&gt;|d &gt;= 10| High[High Dimension]
+
+    Moderate --&gt; Smooth{Function Smooth and&lt;br&gt;Well-Behaved?}
+    Smooth --&gt;|Yes| Sparse[Sparse Grids / Smolyak]
+    Smooth --&gt;|No| QMC1[Quasi-Monte Carlo]
+
+    High --&gt; Dist{Complex Target&lt;br&gt;Distribution?}
+    Dist --&gt;|Yes| MCMC[MCMC / Importance Sampling]
+    Dist --&gt;|No| QMC2[Quasi-Monte Carlo&lt;br&gt;Monte Carlo]
+</pre>
+</div>
+<p></p></figure><p></p>
+</div>
+</div>
+</div>
+</section>
+<section id="testing" class="slide level2">
+<h2>Testing</h2>
+<div id="20" class="cell" data-execution_count="1">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb21"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb21-1"><a></a><span class="im">using</span> <span class="bu">Test</span></span>
+<span id="cb21-2"><a></a><span class="pp">@testset</span> <span class="st">"Integration"</span> <span class="cf">begin</span></span>
+<span id="cb21-3"><a></a>    testfunctions <span class="op">=</span> (</span>
+<span id="cb21-4"><a></a>        (x<span class="op">-&gt;</span><span class="fl">1</span>,<span class="st">"x-&gt;1"</span>),</span>
+<span id="cb21-5"><a></a>        (<span class="fu">x-&gt;sum</span>(x),<span class="st">"x-&gt;sum(x)"</span>),</span>
+<span id="cb21-6"><a></a>        (<span class="fu">x-&gt;norm</span>(x)<span class="op">^</span><span class="fl">2</span>, <span class="st">"x-&gt;norm(x)^2"</span>),</span>
+<span id="cb21-7"><a></a>        (<span class="fu">x-&gt;exp</span>(<span class="fu">norm</span>(x))<span class="op">/</span>(<span class="fl">1</span><span class="fu">+exp</span>(<span class="fu">norm</span>(x))), <span class="st">"x-&gt;exp(norm(x))/(1+exp(norm(x)))"</span>)</span>
+<span id="cb21-8"><a></a>    )</span>
+<span id="cb21-9"><a></a></span>
+<span id="cb21-10"><a></a>    C <span class="op">=</span> <span class="fu">rand</span>(<span class="fl">4</span>,<span class="fl">4</span>)</span>
+<span id="cb21-11"><a></a>    tol <span class="op">=</span> <span class="fl">1e-2</span></span>
+<span id="cb21-12"><a></a>    distributions <span class="op">=</span> (</span>
+<span id="cb21-13"><a></a>        <span class="fu">MvNormal</span>(<span class="fu">zeros</span>(<span class="fl">2</span>),<span class="fu">I</span>(<span class="fl">2</span>)),</span>
+<span id="cb21-14"><a></a>        <span class="fu">MvNormal</span>(<span class="fu">rand</span>(<span class="fl">4</span>), C<span class="op">'*</span>C <span class="op">+</span> <span class="fu">I</span>(<span class="fl">4</span>))</span>
+<span id="cb21-15"><a></a>    )</span>
+<span id="cb21-16"><a></a>    baselinemethod<span class="op">=</span>(f,dx)<span class="fu">-&gt;∫mc</span>(f,dx,ndraw<span class="op">=</span><span class="fu">ceil</span>(<span class="dt">Int</span>,<span class="fl">10</span><span class="op">/</span>tol<span class="op">^</span><span class="fl">2</span>))</span>
+<span id="cb21-17"><a></a>    methods <span class="op">=</span> (((f,dx)<span class="fu">-&gt;∫s</span>(f,dx,ndraw<span class="op">=</span><span class="fl">10_000</span>), <span class="st">"QMC"</span>),</span>
+<span id="cb21-18"><a></a>               ((f,dx)<span class="fu">-&gt;∫q</span>(f,dx,ndraw<span class="op">=</span><span class="fl">80</span>), <span class="st">"gauss-hermite"</span>) ,</span>
+<span id="cb21-19"><a></a>               ((f,dx)<span class="fu">-&gt;∫sgq</span>(f,dx,order<span class="op">=</span><span class="fl">5</span>), <span class="st">"sparse grid"</span>),</span>
+<span id="cb21-20"><a></a>               (∫cuba, <span class="st">"cuba"</span>) )</span>
+<span id="cb21-21"><a></a>    <span class="cf">for</span> ∫ <span class="op">∈</span> methods</span>
+<span id="cb21-22"><a></a>        <span class="cf">for</span> (fs,dx) <span class="op">∈</span> <span class="bu">Iterators</span>.<span class="fu">product</span>(testfunctions, distributions)</span>
+<span id="cb21-23"><a></a>            f<span class="op">=</span>fs[<span class="fl">1</span>]</span>
+<span id="cb21-24"><a></a>            target <span class="op">=</span> <span class="fu">baselinemethod</span>(f,dx)</span>
+<span id="cb21-25"><a></a>            result <span class="op">=</span> ∫[<span class="fl">1</span>](f,dx)</span>
+<span id="cb21-26"><a></a>            atol <span class="op">=</span> <span class="fl">2</span><span class="fu">*max</span>(<span class="fu">abs</span>(target)<span class="op">*</span>tol,tol)</span>
+<span id="cb21-27"><a></a>            <span class="co">#@test target ≈ result atol=atol</span></span>
+<span id="cb21-28"><a></a>            <span class="cf">if</span> <span class="fu">norm</span>(target<span class="op">-</span>result)<span class="op">&gt;</span>atol</span>
+<span id="cb21-29"><a></a>                x <span class="op">=</span> <span class="fu">rand</span>(dx)</span>
+<span id="cb21-30"><a></a>                <span class="fu">println</span>(<span class="st">"failed on f=</span><span class="sc">$</span>(fs[<span class="fl">2</span>])<span class="st">, dx=</span><span class="sc">$</span>(dx)<span class="st">, ∫=</span><span class="sc">$</span>(∫[<span class="fl">2</span>])<span class="st">"</span>)</span>
+<span id="cb21-31"><a></a>                <span class="fu">println</span>(target,<span class="st">" "</span>, result)</span>
+<span id="cb21-32"><a></a>            <span class="cf">end</span></span>
+<span id="cb21-33"><a></a>        <span class="cf">end</span></span>
+<span id="cb21-34"><a></a>    <span class="cf">end</span></span>
+<span id="cb21-35"><a></a><span class="cf">end</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
 <div class="ansi-escaped-output">
-<pre><span class="ansi-green-fg ansi-bold">Precompiling</span> packages...
-    463.1 ms<span class="ansi-green-fg">  ✓ </span><span class="ansi-bright-black-fg">Combinatorics</span>
-   1383.7 ms<span class="ansi-green-fg">  ✓ </span>HCubature
-  2 dependencies successfully precompiled in 2 seconds. 11 already precompiled.
+<pre>failed on f=x-&gt;exp(norm(x))/(1+exp(norm(x))), dx=DiagNormal(
+dim: 2
+μ: [0.0, 0.0]
+Σ: [1.0 0.0; 0.0 1.0]
+)
+, ∫=sparse grid
+0.7589297236273503 0.6050491899328833
+failed on f=x-&gt;sum(x), dx=FullNormal(
+dim: 4
+μ: [0.3253255867557334, 0.22854123078291455, 0.792631687270502, 0.4018903696552496]
+Σ: [2.8965965547240584 2.286883364057918 2.1230930571767 1.232741682274224; 2.286883364057918 4.053132264887253 2.7880861184516266 1.6986855638063563; 2.1230930571767 2.7880861184516266 3.5831543559483365 1.5638761846196862; 1.232741682274224 1.6986855638063563 1.5638761846196862 2.036434752417636]
+)
+, ∫=sparse grid
+1.711156567835575 1.7483888744643947
+failed on f=x-&gt;exp(norm(x))/(1+exp(norm(x))), dx=FullNormal(
+dim: 4
+μ: [0.3253255867557334, 0.22854123078291455, 0.792631687270502, 0.4018903696552496]
+Σ: [2.8965965547240584 2.286883364057918 2.1230930571767 1.232741682274224; 2.286883364057918 4.053132264887253 2.7880861184516266 1.6986855638063563; 2.1230930571767 2.7880861184516266 3.5831543559483365 1.5638761846196862; 1.232741682274224 1.6986855638063563 1.5638761846196862 2.036434752417636]
+)
+, ∫=sparse grid
+0.9262812346551518 0.9477629126956173
+<span class="ansi-bold">Test Summary: | </span><span class="ansi-cyan-fg ansi-bold">Total  </span><span class="ansi-bold">Time</span>
+Integration   | <span class="ansi-cyan-fg">    0  </span>9.0s
 </pre>
 </div>
 </div>
 <div class="cell-output cell-output-display" data-execution_count="1">
-<pre><code>∫cuba (generic function with 1 method)</code></pre>
+<pre><code>Test.DefaultTestSet("Integration", Any[], 0, false, false, true, 1.772051036770856e9, 1.772051045811771e9, false, "/home/paul/ECON622/qmd/integration.qmd", Random.Xoshiro(0x12cae4d216e78aea, 0xe01a1dabd6be4d08, 0x5d6dee1cf982bc93, 0xf52cac47c43e46c0, 0x3a779a5cd8641021))</code></pre>
 </div>
 </div>
 </section></section>
