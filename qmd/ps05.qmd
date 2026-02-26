@@ -1,0 +1,101 @@
+---
+title: Problem Set 5
+author: Paul Schrimpf
+date: last-modified
+bibliography: 622.bib
+execute:
+  eval: true
+  echo: true
+  cache: true
+  freeze: auto
+format:
+  html:
+    embed-resources: true
+engine: julia
+---
+
+
+Write your answers in a literate programming format (I recommend Quarto, but jupyter (use IJulia.jl), Pluto.jl, Weave.jl, or Literate.jl are also fine). Please include both the original file and an html or pdf output. You can freely use AI tools, but just state what you used. You can use code from lecture, Julia packages, and other sources.
+
+
+$$
+\def\Er{{\mathrm{E}}}
+\def\En{{\mathbb{E}_n}}
+\def\cov{{\mathrm{Cov}}}
+\def\var{{\mathrm{Var}}}
+\def\R{{\mathbb{R}}}
+\def\arg{{\mathrm{arg}}}
+\newcommand\norm[1]{\left\lVert#1\right\rVert}
+\def\rank{{\mathrm{rank}}}
+\newcommand{\inpr}{ \overset{p^*_{\scriptscriptstyle n}}{\longrightarrow}}
+\def\inprob{{\,{\buildrel p \over \rightarrow}\,}}
+\def\indist{\,{\buildrel d \over \rightarrow}\,}
+\DeclareMathOperator*{\plim}{plim}
+\DeclareMathOperator*{\argmax}{argmax}
+\DeclareMathOperator*{\argmin}{argmin}
+$$
+
+# Setup
+
+If you haven't already, install Julia, an editor, and whatever literate programming tool you're using (Quarto needs to be installed separately. For the others, just add the appropriate Julia package).
+
+
+# Problem 1
+
+1. What is your intended field?
+2. Give an example of a paper that contains the sort of models you want to be able to compute.
+
+# Problem 2
+
+We will a consider a variant of the random coefficients demand model
+where instead of choosing 1 good, individuals can buy or not buy each
+good separately. Goods are index by $j =1, ..., J$. The utility of
+individual $i$ from buying a set of goods $\mathcal{J} \subseteq \{1...J\}$ is
+$$
+\sum_{j \in \mathcal{J}} \delta_j + x_j \Sigma \nu_i + \epsilon_{ij}
+$$
+where $\delta_j \in \R$, $x_j \in \R^k$, $\Sigma \in \R^{k \times \ell}$,
+$\nu_i \in \R^\ell$, and $\epsilon_{ij} \in \R$. Assume that $\epsilon_{ij}$ are independent and Type-I extreme value distributed. Consumers buy the bundle of goods that maximizes their utility. In other words, $\mathcal{J}$ will be bought if
+$$
+\delta_j + x_j \Sigma \nu_i + \epsilon_{ij} \geq 0 \forall j \in \mathcal{J}
+$$
+and
+$$
+\delta_j + x_j \Sigma \nu_i + \epsilon_{ij} < 0 \forall j \not\in \mathcal{J}.
+$$
+
+Suppose $\nu_i \in N(0,I_\ell)$. Write a function that computes the average probability that a bundle, $\mathcal{J}$, will be bought given $\delta$, $x$, and $\Sigma$.
+
+```{julia}
+function pbundle(𝒥, δ, x, Σ)
+    # your code here
+end
+```
+
+# Problem 3
+
+Suppose you observe all bundle purchase probabilities and want to solve for the $\delta$ that generate them given $x$ and $\Sigma$. Write a function to do this. [**Hint: there are more bundles than $\delta$'s, so you don't need to use all of them. I suggest choosing $J$ relatively simple probabilities to solve for $\delta$ --- What is the probability that good $j$ is purchased?**]
+
+```{julia}
+# your code here
+```
+
+# Problem 4
+
+Test your code for a variety of values of $x$, $\delta$, $\Sigma$, etc.
+
+```{julia}
+using Test
+
+@testset "solving for δ" begin
+    # check that correctly solve for δ across a range of problems
+end
+```
+
+# Problem 5
+
+Let $J=2$ and suppose that good 2 can only be purchased if good 1 is also purchased. (Good 1 can still be purchased alone). Modify your code for this situation. Include both the `pbundle` function and solving for $\delta$.
+
+```{julia}
+# your code here
+```
