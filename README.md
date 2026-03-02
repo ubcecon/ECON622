@@ -14,7 +14,7 @@ See [Syllabus](syllabus.md) for more details
 ## Problem Sets
 
 **Jesse**: see the [schedule](https://jlperla.github.io/grad_econ_ML/pages/schedule.html)
-**Paul**: see [problemsets.md](problemsets.md)
+**Paul**: see [canvas](canvas.ubc.ca)
 
 ## Lectures
 
@@ -37,12 +37,12 @@ For the first half of the course, see the [schedule](https://jlperla.github.io/g
 3. **March 2**: Nonlinear Equation Solving
    - [Slides](https://ubcecon.github.io/ECON622/paul/equationsolving.html)
     - Self-study: [Design patterns: good practices and structured thinking](https://juliateachingctu.github.io/Scientific-Programming-in-Julia/dev/lecture_03/lecture/)
-4. **March 4**: Project Best Practices
+4. **March 2**: Project Best Practices
    - [Slides](https://ubcecon.github.io/ECON622/paul/bestpractices.html)
    - Self-study: [Package development, unit tests, & CI](https://juliateachingctu.github.io/Scientific-Programming-in-Julia/dev/lecture_04/lecture/)
    - Self-study: [Testing and Packages](https://julia.quantecon.org/software_engineering/testing.html)
    - Self-study: [Git and Github](https://julia.quantecon.org/software_engineering/version_control.html)
-5. **March 9**: clean up example project, introduction to automatic differentiation
+5. **March 5**: clean up example project, introduction to automatic differentiation
    - In class: [automatic differentiation packages](qmd/autodiff.qmd), [slides](https://ubcecon.github.io/ECON622/paul/autodiff.html)
    - Self-study: [Automatic Differentation in *Scientific Programming in Julia*](https://juliateachingctu.github.io/Scientific-Programming-in-Julia/dev/lecture_08/lecture/)
    - Self-study: [Differentiation for Hackers](https://github.com/MikeInnes/diff-zoo)
