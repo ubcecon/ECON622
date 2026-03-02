@@ -10,7 +10,7 @@
   <meta name="generator" content="quarto-1.8.27">
 
   <meta name="author" content="Paul Schrimpf">
-  <meta name="dcterms.date" content="2026-02-23">
+  <meta name="dcterms.date" content="2026-03-02">
   <title>ECON 622 – Best Practices</title>
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
@@ -116,7 +116,7 @@
     div.csl-indent {
       margin-left: 2em;
     }  </style>
-  <link rel="stylesheet" href="site_libs/revealjs/dist/theme/quarto-6ae29d241dba1d02babb97ce1fbe8bdd.css">
+  <link rel="stylesheet" href="site_libs/revealjs/dist/theme/quarto-73806f0e93c0950b605bb3afe7220856.css">
   <link href="site_libs/revealjs/plugin/quarto-line-highlight/line-highlight.css" rel="stylesheet">
   <link href="site_libs/revealjs/plugin/reveal-menu/menu.css" rel="stylesheet">
   <link href="site_libs/revealjs/plugin/reveal-menu/quarto-menu.css" rel="stylesheet">
@@ -226,7 +226,7 @@ Paul Schrimpf
 </div>
 </div>
 
-  <p class="date">2026-02-23</p>
+  <p class="date">2026-03-02</p>
 </section>
 <section class="slide level2">
 
@@ -322,7 +322,10 @@ Paul Schrimpf
 <h2>git</h2>
 <ul>
 <li>Use it</li>
-<li><a href="https://mint.westdri.ca/git/intro_intro">git intro and tutorial</a> and <a href="https://www.youtube.com/watch?v=nulmjJq5Fz0">webinar</a></li>
+<li><a href="https://mint.westdri.ca/git/intro_intro">git intro and tutorial</a> and <a href="https://www.youtube.com/watch?v=nulmjJq5Fz0">webinar recording</a>
+<ul>
+<li><a href="https://docs.google.com/forms/d/e/1FAIpQLSf0eYiXCPvhql1Ql2icoZHjs5sbLzLJwevDH0LqgouvAdfL8A/viewform">Intro course on March 5</a> and <a href="https://docs.google.com/forms/d/e/1FAIpQLSdNrWmVg9xV-zZ0q-dg7uVhQi34Y6f4X201qfdk68cRnV5K1w/viewform">follow-up course on March 10</a></li>
+</ul></li>
 </ul>
 </section></section>
 <section>
@@ -330,15 +333,18 @@ Paul Schrimpf
 <h1>Julia Tools</h1>
 
 </section>
-<section id="tool-setup-for-julia" class="slide level2">
-<h2>Tool Setup for Julia</h2>
+<section id="create-packages" class="slide level2">
+<h2>Create Packages</h2>
 <ul>
-<li>Organize code into a package</li>
+<li>Organize code into a package
+<ul>
+<li>enables: testing, Revise.jl, version control, code reuse, distribution, etc</li>
+</ul></li>
 <li>Good advice aimed at scientific computing projects: <a href="https://j-fu.github.io/marginalia/julia/project-workflow/">Julia: Project Workflow</a></li>
 <li>Setup your package with a project skeleton
 <ul>
-<li><a href="https://github.com/JuliaCI/PkgTemplates.jl"><code>PkgTemplates.jl</code></a></li>
 <li><a href="https://github.com/abelsiqueira/BestieTemplate.jl"><code>BestieTemplate.jl</code></a></li>
+<li><a href="https://github.com/JuliaCI/PkgTemplates.jl"><code>PkgTemplates.jl</code></a></li>
 <li><a href="https://juliadynamics.github.io/DrWatson.jl/stable/"><code>DoctorWatson.jl</code></a></li>
 <li><span class="citation" data-cites="haider2021">Haider, Riesch, and Jirauschek (<a href="#/references" role="doc-biblioref" onclick="">2021</a>)</span> for similar idea for other languages</li>
 </ul></li>
@@ -377,18 +383,49 @@ Paul Schrimpf
 <span id="cb3-2"><a></a>BestieTemplate.<span class="fu">generate</span>(<span class="st">"TestPackage"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 </section>
+<section id="dependencies-and-where-to-install-them" class="slide level2">
+<h2>Dependencies and Where to Install Them</h2>
+<ul>
+<li>In the default/global project: (reached by <code>activate</code> in pkg mode) put utilities that you always want available</li>
+<li>In each project environment (i.e.&nbsp;<code>activate .</code> when in TestPackage directory) put dependencies that are required for the re-usable code in the package in <code>TestPackage/src</code></li>
+<li>Some dependencies are required for a task, like running tests or creating documents, but not strictly needed for everything a package might be used for these go in an environment in <code>TestPackage/test</code> or <code>TestPackage/docs</code>
+<ul>
+<li>Or edit <code>TestPackage/Project.toml</code> as described in the <a href="https://pkgdocs.julialang.org/v1/creating-packages/#Test-specific-dependencies">Pkg docs</a></li>
+</ul></li>
+</ul>
+</section>
+<section id="my-default-project" class="slide level2">
+<h2>My Default Project</h2>
+<div id="10" class="cell" data-execution_count="0">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb4"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb4-1"><a></a>(<span class="pp">@v1</span><span class="fl">.12</span>) pkg<span class="op">&gt;</span> activate</span>
+<span id="cb4-2"><a></a>  Activating project at <span class="ss">`~/.julia/environments/v1.12`</span></span>
+<span id="cb4-3"><a></a>(<span class="pp">@v1</span><span class="fl">.12</span>) pkg<span class="op">&gt;</span> st</span>
+<span id="cb4-4"><a></a>Status <span class="ss">`~/.julia/environments/v1.12/Project.toml`</span></span>
+<span id="cb4-5"><a></a>  [<span class="fl">6e4</span>b80f9] BenchmarkTools v1<span class="fl">.6.3</span></span>
+<span id="cb4-6"><a></a>  [<span class="fl">31</span>a5f54b] Debugger v0<span class="fl">.7.16</span></span>
+<span id="cb4-7"><a></a>  [b2ad6718] EmacsVterm v0<span class="fl">.3.0</span></span>
+<span id="cb4-8"><a></a>  [<span class="fl">7073</span>ff75] IJulia v1<span class="fl">.34.4</span></span>
+<span id="cb4-9"><a></a>  [<span class="fl">5903</span>a43b] Infiltrator v1<span class="fl">.9.7</span></span>
+<span id="cb4-10"><a></a>  [<span class="fl">5</span>fb14364] OhMyREPL v0<span class="fl">.5.32</span></span>
+<span id="cb4-11"><a></a>  [<span class="fl">295</span>af30f] Revise v3<span class="fl">.13.2</span></span>
+<span id="cb4-12"><a></a>  [<span class="fl">0</span>c614874] TerminalPager v0<span class="fl">.6.10</span> [loaded<span class="op">:</span> v0<span class="fl">.6.9</span>]</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+</section>
 <section id="tests" class="slide level2">
 <h2>Tests</h2>
 <ul>
 <li>essential</li>
 <li>organize code into small functions, test them all</li>
 <li>test both your code and code from others that you rely on</li>
+<li>use either <a href="https://docs.julialang.org/en/v1/stdlib/Test/">standard library <code>Tests</code></a> or <a href="https://www.julia-vscode.org/docs/stable/userguide/testitems/"><code>TestItems.jl</code></a> (good VS Code integration)</li>
 </ul>
 </section>
 <section id="documentation" class="slide level2">
 <h2>Documentation</h2>
 <ul>
 <li>create it for others and your future self</li>
+<li>at least <a href="https://docs.julialang.org/en/v1/manual/documentation/">doc strings</a></li>
+<li>use <a href="https://documenter.juliadocs.org/stable/">Documenter.jl</a> to generate html documentation</li>
 </ul>
 </section>
 <section id="continuous-integration" class="slide level2">
@@ -427,6 +464,16 @@ Paul Schrimpf
 <li>JET.jl for detecting type stability problems (advanced)</li>
 </ul></li>
 <li>formatters check for following text formatting standards around indentation and such</li>
+</ul>
+</section>
+<section id="debugging" class="slide level2">
+<h2>Debugging</h2>
+<ul>
+<li>adding <code>println</code>, <code>@show</code>, or similar is an okay starting point</li>
+<li><code>Infiltrator.jl</code> and <code>Debugger.jl</code> lets you halt execution anywhere and examine variables
+<ul>
+<li><a href="https://modernjuliaworkflows.org/writing/#debugging">MoJuWo on debugging</a></li>
+</ul></li>
 </ul>
 </section>
 <section id="further-reading" class="slide level2">

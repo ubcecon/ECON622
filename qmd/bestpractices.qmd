@@ -10,7 +10,7 @@ execute:
   freeze: auto
 format:
   revealjs:
-    theme: blood
+    theme: night
     smaller: true
     min-scale: 0.1
     max-scale: 3.0
@@ -78,18 +78,20 @@ $$
 ## git
 
 - Use it
-- [git intro and tutorial](https://mint.westdri.ca/git/intro_intro) and [webinar](https://www.youtube.com/watch?v=nulmjJq5Fz0)
+- [git intro and tutorial](https://mint.westdri.ca/git/intro_intro) and [webinar recording](https://www.youtube.com/watch?v=nulmjJq5Fz0)
+  - [Intro course on March 5](https://docs.google.com/forms/d/e/1FAIpQLSf0eYiXCPvhql1Ql2icoZHjs5sbLzLJwevDH0LqgouvAdfL8A/viewform) and [follow-up course on March 10](https://docs.google.com/forms/d/e/1FAIpQLSdNrWmVg9xV-zZ0q-dg7uVhQi34Y6f4X201qfdk68cRnV5K1w/viewform)
 
 
 # Julia Tools
 
-## Tool Setup for Julia
+## Create Packages
 
 - Organize code into a package
+  - enables: testing, Revise.jl, version control, code reuse, distribution, etc
 - Good advice aimed at scientific computing projects: [Julia: Project Workflow](https://j-fu.github.io/marginalia/julia/project-workflow/)
 - Setup your package with a project skeleton
-  - [`PkgTemplates.jl`](https://github.com/JuliaCI/PkgTemplates.jl)
   - [`BestieTemplate.jl`](https://github.com/abelsiqueira/BestieTemplate.jl)
+  - [`PkgTemplates.jl`](https://github.com/JuliaCI/PkgTemplates.jl)
   - [`DoctorWatson.jl`](https://juliadynamics.github.io/DrWatson.jl/stable/)
   - @haider2021 for similar idea for other languages
 
@@ -135,15 +137,46 @@ using BestieTemplate
 BestieTemplate.generate("TestPackage")
 ```
 
+
+## Dependencies and Where to Install Them
+
+- In the default/global project: (reached by `activate` in pkg mode) put utilities that you always want available
+- In each project environment (i.e. `activate .` when in TestPackage directory) put dependencies that are required for the re-usable code in the package in `TestPackage/src`
+- Some dependencies are required for a task, like running tests or creating documents, but not strictly needed for everything a package might be used for these go in an environment in `TestPackage/test` or `TestPackage/docs`
+  - Or edit `TestPackage/Project.toml` as described in the [Pkg docs](https://pkgdocs.julialang.org/v1/creating-packages/#Test-specific-dependencies)
+
+## My Default Project
+
+```{julia}
+#| eval: false
+(@v1.12) pkg> activate
+  Activating project at `~/.julia/environments/v1.12`
+(@v1.12) pkg> st
+Status `~/.julia/environments/v1.12/Project.toml`
+  [6e4b80f9] BenchmarkTools v1.6.3
+  [31a5f54b] Debugger v0.7.16
+  [b2ad6718] EmacsVterm v0.3.0
+  [7073ff75] IJulia v1.34.4
+  [5903a43b] Infiltrator v1.9.7
+  [5fb14364] OhMyREPL v0.5.32
+  [295af30f] Revise v3.13.2
+  [0c614874] TerminalPager v0.6.10 [loaded: v0.6.9]
+```
+
+
 ## Tests
 
 - essential
 - organize code into small functions, test them all
 - test both your code and code from others that you rely on
+- use either [standard library `Tests`](https://docs.julialang.org/en/v1/stdlib/Test/)
+  or [`TestItems.jl`](https://www.julia-vscode.org/docs/stable/userguide/testitems/) (good VS Code integration)
 
 ## Documentation
 
 - create it for others and your future self
+- at least [doc strings](https://docs.julialang.org/en/v1/manual/documentation/)
+- use [Documenter.jl](https://documenter.juliadocs.org/stable/) to generate html documentation
 
 ## Continuous Integration
 
@@ -171,6 +204,11 @@ BestieTemplate.generate("TestPackage")
   - JET.jl for detecting type stability problems (advanced)
 - formatters check for following text formatting standards around indentation and such
 
+## Debugging
+
+- adding `println`, `@show`, or similar is an okay starting point
+- `Infiltrator.jl` and `Debugger.jl` lets you halt execution anywhere and examine variables
+   - [MoJuWo on debugging](https://modernjuliaworkflows.org/writing/#debugging)
 
 ## Further Reading
 
