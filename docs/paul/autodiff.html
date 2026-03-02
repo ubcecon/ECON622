@@ -10,7 +10,7 @@
   <meta name="generator" content="quarto-1.8.27">
 
   <meta name="author" content="Paul Schrimpf">
-  <meta name="dcterms.date" content="2026-02-23">
+  <meta name="dcterms.date" content="2026-03-02">
   <title>ECON 622 – Automatic Differentiation</title>
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
@@ -96,7 +96,7 @@
     code span.vs { color: #abe338; } /* VerbatimString */
     code span.wa { color: #dcc6e0; } /* Warning */
   </style>
-  <link rel="stylesheet" href="site_libs/revealjs/dist/theme/quarto-6ae29d241dba1d02babb97ce1fbe8bdd.css">
+  <link rel="stylesheet" href="site_libs/revealjs/dist/theme/quarto-73806f0e93c0950b605bb3afe7220856.css">
   <link href="site_libs/revealjs/plugin/quarto-line-highlight/line-highlight.css" rel="stylesheet">
   <link href="site_libs/revealjs/plugin/reveal-menu/menu.css" rel="stylesheet">
   <link href="site_libs/revealjs/plugin/reveal-menu/quarto-menu.css" rel="stylesheet">
@@ -206,7 +206,7 @@ Paul Schrimpf
 </div>
 </div>
 
-  <p class="date">2026-02-23</p>
+  <p class="date">2026-03-02</p>
 </section>
 <section>
 <section id="introduction" class="title-slide slide level1 center">
@@ -342,7 +342,7 @@ Paul Schrimpf
 </ul>
 <div id="8" class="cell" data-execution_count="0">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb4"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb4-1"><a></a><span class="kw">function</span> <span class="fu">wontwork</span>(x)</span>
-<span id="cb4-2"><a></a>  y <span class="op">=</span> <span class="fu">zeros</span>(<span class="fu">eltype</span>(x),<span class="fu">size</span>(x))</span>
+<span id="cb4-2"><a></a>  y <span class="op">=</span> <span class="fu">zeros</span>(<span class="fu">size</span>(x))</span>
 <span id="cb4-3"><a></a>  <span class="cf">for</span> i <span class="op">∈</span> <span class="fu">eachindex</span>(x)</span>
 <span id="cb4-4"><a></a>    y[i] <span class="op">+=</span> x[i]<span class="op">*</span>i</span>
 <span id="cb4-5"><a></a>  <span class="cf">end</span></span>
@@ -360,34 +360,23 @@ Paul Schrimpf
 <span id="cb4-17"><a></a><span class="fu">betterstyle</span>(x) <span class="op">=</span> <span class="fu">sum</span>(v<span class="op">*</span>i <span class="cf">for</span> (i,v) <span class="kw">in</span> <span class="fu">enumerate</span>(x))</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 </section>
-<section id="zygote" class="slide level2">
-<h2>Zygote</h2>
+<section id="reverse-mode-ad" class="slide level2">
+<h2>Reverse Mode AD</h2>
 <ul>
-<li><a href="https://fluxml.ai/Zygote.jl/latest/">Zygote.jl</a></li>
-<li>Does not allow mutating arrays</li>
-<li>Quite mature, but possibly some bugs remain</li>
-<li>Apparently hard to develop, unclear future</li>
+<li>Reverse mode AD is a much harder problem</li>
+<li>Various systems tradeoff complexity, efficiency, and scope of code compatibility</li>
 </ul>
-</section>
-<section id="zygote-example" class="slide level2">
-<h2>Zygote Example</h2>
-<div id="10" class="cell" data-execution_count="0">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb5"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb5-1"><a></a><span class="im">import</span> <span class="bu">Zygote</span></span>
-<span id="cb5-2"><a></a><span class="im">using</span> <span class="bu">LinearAlgebra</span></span>
-<span id="cb5-3"><a></a><span class="pp">@time</span> ∇Lz <span class="op">=</span>  Zygote.<span class="fu">gradient</span>(<span class="fu">b-&gt;logit_likelihood</span>(b,y,x),β<span class="fl">0</span>)[<span class="fl">1</span>]</span>
-<span id="cb5-4"><a></a><span class="fu">norm</span>(∇L <span class="op">-</span> ∇Lz)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-</div>
 </section>
 <section id="enzyme" class="slide level2">
 <h2>Enzyme</h2>
 <p><a href="https://enzymead.github.io/Enzyme.jl/stable/">“Enzyme performs automatic differentiation (AD) of statically analyzable LLVM. It is highly-efficient and its ability to perform AD on optimized code allows Enzyme to meet or exceed the performance of state-of-the-art AD tools.”</a></p>
-<div id="12" class="cell" data-execution_count="0">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb6"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb6-1"><a></a><span class="im">import</span> <span class="bu">Enzyme</span></span>
-<span id="cb6-2"><a></a><span class="im">import</span> <span class="bu">Enzyme</span>: Active, Duplicated, Const</span>
-<span id="cb6-3"><a></a></span>
-<span id="cb6-4"><a></a>db <span class="op">=</span> <span class="fu">zero</span>(β<span class="fl">0</span>)</span>
-<span id="cb6-5"><a></a><span class="pp">@time</span> Enzyme.<span class="fu">autodiff</span>(Enzyme.ReverseWithPrimal,logit_likelihood, Active, <span class="fu">Duplicated</span>(β<span class="fl">0</span>,db), <span class="fu">Const</span>(y), <span class="fu">Const</span>(x))</span>
-<span id="cb6-6"><a></a>db</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div id="10" class="cell" data-execution_count="0">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb5"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb5-1"><a></a><span class="im">import</span> <span class="bu">Enzyme</span></span>
+<span id="cb5-2"><a></a><span class="im">import</span> <span class="bu">Enzyme</span>: Active, Duplicated, Const</span>
+<span id="cb5-3"><a></a></span>
+<span id="cb5-4"><a></a>db <span class="op">=</span> <span class="fu">zero</span>(β<span class="fl">0</span>)</span>
+<span id="cb5-5"><a></a><span class="pp">@time</span> Enzyme.<span class="fu">autodiff</span>(Enzyme.ReverseWithPrimal,logit_likelihood, Active, <span class="fu">Duplicated</span>(β<span class="fl">0</span>,db), <span class="fu">Const</span>(y), <span class="fu">Const</span>(x))</span>
+<span id="cb5-6"><a></a>db</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 </section>
 <section id="enzyme-notes" class="slide level2">
@@ -395,39 +384,54 @@ Paul Schrimpf
 <ul>
 <li>Documentation is not suited to beginners</li>
 <li>Does not work on all Julia code, but cases where it fails are not well documented. Calling <code>Enzyme.API.runtimeActivity!(true)</code> works around some errors.</li>
-<li>Cryptic error messages. Enzyme operates on LLVM IR, and error messages often reference the point in the LLVM IR where the error occurred. Figuring out what Julia code the LLVM IR corresponds to is not easy.
+<li>Cryptic error messages. Enzyme operates on LLVM IR, and error messages often reference the point in the LLVM IR where the error occurred. Figuring out what Julia code the LLVM IR corresponds to is not easy.</li>
+<li>These may be better now than two years ago when I first wrote this slide</li>
+<li>Working off of LLVM IR means it depends on internals of Julia’s compiler
 <ul>
-<li>These may be better now than last year when I first wrote this slide</li>
+<li>Can break with new Julia versions and take weeks to months to fix</li>
 </ul></li>
 </ul>
-<div id="14" class="cell" data-execution_count="0">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb7"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb7-1"><a></a>Enzyme.API.<span class="fu">runtimeActivity!</span>(<span class="cn">false</span>)</span>
-<span id="cb7-2"><a></a><span class="fu">f1</span>(a,b) <span class="op">=</span> <span class="fu">sum</span>(a<span class="op">.*</span>b)</span>
-<span id="cb7-3"><a></a>dima <span class="op">=</span> <span class="fl">30000</span></span>
-<span id="cb7-4"><a></a>a <span class="op">=</span> <span class="fu">ones</span>(dima)</span>
-<span id="cb7-5"><a></a>b <span class="op">=</span> <span class="fu">rand</span>(dima)</span>
-<span id="cb7-6"><a></a>da <span class="op">=</span> <span class="fu">zeros</span>(dima)</span>
-<span id="cb7-7"><a></a><span class="pp">@time</span> Enzyme.<span class="fu">autodiff</span>(Enzyme.ReverseWithPrimal, f1, <span class="fu">Duplicated</span>(a,da),<span class="fu">Const</span>(b))</span>
-<span id="cb7-8"><a></a>da</span>
-<span id="cb7-9"><a></a></span>
-<span id="cb7-10"><a></a><span class="fu">f3</span>(a,b) <span class="op">=</span> <span class="fu">sum</span>(a[i]<span class="op">*</span>b[i] <span class="cf">for</span> i <span class="op">∈</span> <span class="fu">eachindex</span>(a))</span>
-<span id="cb7-11"><a></a>da <span class="op">=</span> <span class="fu">zeros</span>(dima)</span>
-<span id="cb7-12"><a></a>Enzyme.<span class="fu">autodiff</span>(Enzyme.ReverseWithPrimal, f3, <span class="fu">Duplicated</span>(a,da),<span class="fu">Const</span>(b))</span>
-<span id="cb7-13"><a></a>da</span>
-<span id="cb7-14"><a></a></span>
-<span id="cb7-15"><a></a><span class="cf">if</span> (<span class="cn">false</span>) <span class="co"># will trigger enzyme error without runtimeactivity</span></span>
-<span id="cb7-16"><a></a>  <span class="fu">f2</span>(a,b) <span class="op">=</span> <span class="fu">sum</span>(a<span class="op">*</span>b <span class="cf">for</span> (a,b) <span class="op">∈</span> <span class="fu">zip</span>(a,b))</span>
-<span id="cb7-17"><a></a>  da <span class="op">=</span> <span class="fu">zeros</span>(dima)</span>
-<span id="cb7-18"><a></a>  <span class="pp">@time</span> Enzyme.<span class="fu">autodiff</span>(Enzyme.ReverseWithPrimal, f2, <span class="fu">Duplicated</span>(a,da), <span class="fu">Const</span>(b))</span>
-<span id="cb7-19"><a></a>  da</span>
-<span id="cb7-20"><a></a><span class="cf">end</span></span>
-<span id="cb7-21"><a></a></span>
-<span id="cb7-22"><a></a>Enzyme.API.<span class="fu">runtimeActivity!</span>(<span class="cn">true</span>)</span>
-<span id="cb7-23"><a></a><span class="fu">f2</span>(a,b) <span class="op">=</span> <span class="fu">sum</span>(a<span class="op">*</span>b <span class="cf">for</span> (a,b) <span class="op">∈</span> <span class="fu">zip</span>(a,b))</span>
-<span id="cb7-24"><a></a>da <span class="op">=</span> <span class="fu">zeros</span>(dima)</span>
-<span id="cb7-25"><a></a><span class="pp">@time</span> Enzyme.<span class="fu">autodiff</span>(Enzyme.ReverseWithPrimal, f2, <span class="fu">Duplicated</span>(a,da), <span class="fu">Const</span>(b))</span>
-<span id="cb7-26"><a></a>da</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div id="12" class="cell" data-execution_count="0">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb6"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb6-1"><a></a>Enzyme.API.<span class="fu">runtimeActivity!</span>(<span class="cn">false</span>)</span>
+<span id="cb6-2"><a></a><span class="fu">f1</span>(a,b) <span class="op">=</span> <span class="fu">sum</span>(a<span class="op">.*</span>b)</span>
+<span id="cb6-3"><a></a>dima <span class="op">=</span> <span class="fl">30000</span></span>
+<span id="cb6-4"><a></a>a <span class="op">=</span> <span class="fu">ones</span>(dima)</span>
+<span id="cb6-5"><a></a>b <span class="op">=</span> <span class="fu">rand</span>(dima)</span>
+<span id="cb6-6"><a></a>da <span class="op">=</span> <span class="fu">zeros</span>(dima)</span>
+<span id="cb6-7"><a></a><span class="pp">@time</span> Enzyme.<span class="fu">autodiff</span>(Enzyme.ReverseWithPrimal, f1, <span class="fu">Duplicated</span>(a,da),<span class="fu">Const</span>(b))</span>
+<span id="cb6-8"><a></a>da</span>
+<span id="cb6-9"><a></a></span>
+<span id="cb6-10"><a></a><span class="fu">f3</span>(a,b) <span class="op">=</span> <span class="fu">sum</span>(a[i]<span class="op">*</span>b[i] <span class="cf">for</span> i <span class="op">∈</span> <span class="fu">eachindex</span>(a))</span>
+<span id="cb6-11"><a></a>da <span class="op">=</span> <span class="fu">zeros</span>(dima)</span>
+<span id="cb6-12"><a></a>Enzyme.<span class="fu">autodiff</span>(Enzyme.ReverseWithPrimal, f3, <span class="fu">Duplicated</span>(a,da),<span class="fu">Const</span>(b))</span>
+<span id="cb6-13"><a></a>da</span>
+<span id="cb6-14"><a></a></span>
+<span id="cb6-15"><a></a><span class="cf">if</span> (<span class="cn">false</span>) <span class="co"># will trigger enzyme error without runtimeactivity</span></span>
+<span id="cb6-16"><a></a>  <span class="fu">f2</span>(a,b) <span class="op">=</span> <span class="fu">sum</span>(a<span class="op">*</span>b <span class="cf">for</span> (a,b) <span class="op">∈</span> <span class="fu">zip</span>(a,b))</span>
+<span id="cb6-17"><a></a>  da <span class="op">=</span> <span class="fu">zeros</span>(dima)</span>
+<span id="cb6-18"><a></a>  <span class="pp">@time</span> Enzyme.<span class="fu">autodiff</span>(Enzyme.ReverseWithPrimal, f2, <span class="fu">Duplicated</span>(a,da), <span class="fu">Const</span>(b))</span>
+<span id="cb6-19"><a></a>  da</span>
+<span id="cb6-20"><a></a><span class="cf">end</span></span>
+<span id="cb6-21"><a></a></span>
+<span id="cb6-22"><a></a>Enzyme.API.<span class="fu">runtimeActivity!</span>(<span class="cn">true</span>)</span>
+<span id="cb6-23"><a></a><span class="fu">f2</span>(a,b) <span class="op">=</span> <span class="fu">sum</span>(a<span class="op">*</span>b <span class="cf">for</span> (a,b) <span class="op">∈</span> <span class="fu">zip</span>(a,b))</span>
+<span id="cb6-24"><a></a>da <span class="op">=</span> <span class="fu">zeros</span>(dima)</span>
+<span id="cb6-25"><a></a><span class="pp">@time</span> Enzyme.<span class="fu">autodiff</span>(Enzyme.ReverseWithPrimal, f2, <span class="fu">Duplicated</span>(a,da), <span class="fu">Const</span>(b))</span>
+<span id="cb6-26"><a></a>da</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
+</section>
+<section id="mooncake" class="slide level2">
+<h2>Mooncake</h2>
+<ul>
+<li><a href="https://chalk-lab.github.io/Mooncake.jl/dev/#Mooncake.jl">Mooncake.jl</a> performant reverse and forward mode AD supporting arbitrary Julia code
+<ul>
+<li>a few <a href="https://chalk-lab.github.io/Mooncake.jl/dev/known_limitations/">known limitation</a></li>
+</ul></li>
+<li>Operates on Julia IR
+<ul>
+<li>Julia updates can be incompatibility with Mooncake, and often take weeks to months to fix</li>
+</ul></li>
+</ul>
 </section>
 <section id="finitediff" class="slide level2">
 <h2>FiniteDiff</h2>
@@ -436,12 +440,19 @@ Paul Schrimpf
 <li>use a package for finite differences to handle rounding error well</li>
 </ul>
 </section>
-<section id="chainrules" class="slide level2">
-<h2>ChainRules</h2>
+<section id="symbolic-differentiation" class="slide level2">
+<h2>Symbolic Differentiation</h2>
 <ul>
-<li><a href="https://github.com/JuliaDiff/ChainRules.jl">ChainRules</a></li>
-<li>used by many AD packages to define the derivatives of various functions.</li>
-<li>Useful if you want to define a custom derivative rule for a function.</li>
+<li>Represent calculation symbolicly, compute symbolic derivative, convert to numeric function</li>
+<li>Best used to differentiate relatively small functions</li>
+<li><a href="https://docs.sciml.ai/Symbolics/stable/">Symbolics.jl</a>
+<ul>
+<li>More used, better tested</li>
+</ul></li>
+<li><a href="https://github.com/brianguenter/FastDifferentiation.jl">FastDifferentiation.jl</a>
+<ul>
+<li>Faster, but <a href="https://github.com/brianguenter/FastDifferentiation.jl/issues/65">fails in complex cases</a></li>
+</ul></li>
 </ul>
 </section>
 <section id="differentiationinterface" class="slide level2">
@@ -449,18 +460,18 @@ Paul Schrimpf
 <ul>
 <li><a href="https://github.com/gdalle/DifferentiationInterface.jl">DifferentiationInterface</a> gives a single interface for many differentiation packages</li>
 </ul>
-<div id="16" class="cell" data-execution_count="0">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb8"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb8-1"><a></a><span class="im">import</span> <span class="bu">DifferentiationInterface</span> as DI</span>
-<span id="cb8-2"><a></a>DI.<span class="fu">gradient</span>(<span class="fu">b-&gt;logit_likelihood</span>(b,y,x), DI.<span class="fu">AutoEnzyme</span>(),β<span class="fl">0</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div id="14" class="cell" data-execution_count="0">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb7"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb7-1"><a></a><span class="im">import</span> <span class="bu">DifferentiationInterface</span> as DI</span>
+<span id="cb7-2"><a></a>DI.<span class="fu">gradient</span>(<span class="fu">b-&gt;logit_likelihood</span>(b,y,x), DI.<span class="fu">AutoEnzyme</span>(),β<span class="fl">0</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <ul>
 <li>improve performance by reusing intermediate variables</li>
 </ul>
-<div id="18" class="cell" data-execution_count="0">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb9"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb9-1"><a></a>backend <span class="op">=</span> DI.<span class="fu">AutoEnzyme</span>()</span>
-<span id="cb9-2"><a></a>dcache <span class="op">=</span> DI.<span class="fu">prepare_gradient</span>(<span class="fu">b-&gt;logit_likelihood</span>(b,y,x), backend, β<span class="fl">0</span>)</span>
-<span id="cb9-3"><a></a>grad <span class="op">=</span> <span class="fu">zero</span>(β<span class="fl">0</span>)</span>
-<span id="cb9-4"><a></a>DI.<span class="fu">gradient!</span>(<span class="fu">b-&gt;logit_likelihood</span>(b,y,x),grad, backend,β<span class="fl">0</span> , dcache)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div id="16" class="cell" data-execution_count="0">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb8"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb8-1"><a></a>backend <span class="op">=</span> DI.<span class="fu">AutoEnzyme</span>()</span>
+<span id="cb8-2"><a></a>dcache <span class="op">=</span> DI.<span class="fu">prepare_gradient</span>(<span class="fu">b-&gt;logit_likelihood</span>(b,y,x), backend, β<span class="fl">0</span>)</span>
+<span id="cb8-3"><a></a>grad <span class="op">=</span> <span class="fu">zero</span>(β<span class="fl">0</span>)</span>
+<span id="cb8-4"><a></a>DI.<span class="fu">gradient!</span>(<span class="fu">b-&gt;logit_likelihood</span>(b,y,x),grad, backend,β<span class="fl">0</span> , dcache)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 </section></section>
 <section>
@@ -474,6 +485,14 @@ Paul Schrimpf
 <li><a href="https://juliadiff.org/">https://juliadiff.org/</a></li>
 </ul>
 </section>
+<section id="chainrules" class="slide level2">
+<h2>ChainRules</h2>
+<ul>
+<li><a href="https://github.com/JuliaDiff/ChainRules.jl">ChainRules</a></li>
+<li>used by many AD packages to define the derivatives of various functions.</li>
+<li>Useful if you want to define a custom derivative rule for a function.</li>
+</ul>
+</section>
 <section id="reversediff.jl" class="slide level2">
 <h2>ReverseDiff.jl</h2>
 <ul>
@@ -482,18 +501,26 @@ Paul Schrimpf
 <li><p><a href="https://juliadiff.org/ReverseDiff.jl/limits/">limitations</a>. Importantly, code must be generic and mutation of arrays is not allowed.</p></li>
 </ul>
 </section>
-<section id="yota.jl" class="slide level2">
-<h2>Yota.jl</h2>
-<ul>
-<li><a href="https://github.com/dfdx/Yota.jl">Yota.jl</a> another tape based package</li>
-<li>Compatible with Chainrules.jl</li>
-<li>Somewhat newer and less popular</li>
-<li><a href="https://dfdx.github.io/Yota.jl/dev/design/">Its documentation has a very nice explanation of how it works.</a></li>
-</ul>
-</section>
 <section id="tracker" class="slide level2">
 <h2>Tracker</h2>
-<p><a href="https://github.com/FluxML/Tracker.jl">Tracker</a> is a tape based reverse mode package. It was the default autodiff package in Flux before being replaced by Zygote. No longer under active development.</p>
+<p><a href="https://github.com/FluxML/Tracker.jl">Tracker</a> is a tape based reverse mode package. It was the default autodiff package in Flux before being replaced by Zygote. No longer under active development, but solid and still used.</p>
+</section>
+<section id="zygote" class="slide level2">
+<h2>Zygote</h2>
+<ul>
+<li><a href="https://fluxml.ai/Zygote.jl/latest/">Zygote.jl</a></li>
+<li>Does not allow mutating arrays</li>
+<li>Hard to develop and maintain, being phased out</li>
+</ul>
+</section>
+<section id="zygote-example" class="slide level2">
+<h2>Zygote Example</h2>
+<div id="18" class="cell" data-execution_count="0">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb9"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb9-1"><a></a><span class="im">import</span> <span class="bu">Zygote</span></span>
+<span id="cb9-2"><a></a><span class="im">using</span> <span class="bu">LinearAlgebra</span></span>
+<span id="cb9-3"><a></a><span class="pp">@time</span> ∇Lz <span class="op">=</span>  Zygote.<span class="fu">gradient</span>(<span class="fu">b-&gt;logit_likelihood</span>(b,y,x),β<span class="fl">0</span>)[<span class="fl">1</span>]</span>
+<span id="cb9-4"><a></a><span class="fu">norm</span>(∇L <span class="op">-</span> ∇Lz)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
 </section>
 <section id="diffractor" class="slide level2">
 <h2>Diffractor</h2>

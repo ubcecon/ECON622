@@ -242,7 +242,7 @@
     "href": "index.html",
     "title": "ECON 622: Computational Economics",
     "section": "",
-    "text": "Slides\n\nIntroduction\nIntegration\nNonlinear Equation Solving\nBest Practices"
+    "text": "Slides\n\nIntroduction\nIntegration\nNonlinear Equation Solving\nBest Practices\nAutomatic Differentiation"
   },
   {
     "objectID": "bestpractices.html#goals",
@@ -389,14 +389,14 @@
     "href": "autodiff.html#forwarddiff-notes",
     "title": "Automatic Differentiation",
     "section": "ForwardDiff Notes",
-    "text": "ForwardDiff Notes\n\nFor \\(f: \\mathbb{R}^n \\to \\mathbb{R}^m\\), the computation scales with \\(n\\)\n\nbest for moderate \\(n\\)\n\nCode must be generic\n\nbe careful when allocating arrays\n\n\n\nfunction wontwork(x)\n  y = zeros(eltype(x),size(x))\n  for i ∈ eachindex(x)\n    y[i] += x[i]*i\n  end\n  return(sum(y))\nend\n\nfunction willwork(x)\n  y = zero(x)\n  for i ∈ eachindex(x)\n    y[i] += x[i]*i\n  end\n  return(sum(y))\nend\n\nbetterstyle(x) = sum(v*i for (i,v) in enumerate(x))"
+    "text": "ForwardDiff Notes\n\nFor \\(f: \\mathbb{R}^n \\to \\mathbb{R}^m\\), the computation scales with \\(n\\)\n\nbest for moderate \\(n\\)\n\nCode must be generic\n\nbe careful when allocating arrays\n\n\n\nfunction wontwork(x)\n  y = zeros(size(x))\n  for i ∈ eachindex(x)\n    y[i] += x[i]*i\n  end\n  return(sum(y))\nend\n\nfunction willwork(x)\n  y = zero(x)\n  for i ∈ eachindex(x)\n    y[i] += x[i]*i\n  end\n  return(sum(y))\nend\n\nbetterstyle(x) = sum(v*i for (i,v) in enumerate(x))"
   },
   {
     "objectID": "autodiff.html#zygote",
     "href": "autodiff.html#zygote",
     "title": "Automatic Differentiation",
     "section": "Zygote",
-    "text": "Zygote\n\nZygote.jl\nDoes not allow mutating arrays\nQuite mature, but possibly some bugs remain\nApparently hard to develop, unclear future"
+    "text": "Zygote\n\nZygote.jl\nDoes not allow mutating arrays\nHard to develop and maintain, being phased out"
   },
   {
     "objectID": "autodiff.html#zygote-example",
@@ -417,7 +417,7 @@
     "href": "autodiff.html#enzyme-notes",
     "title": "Automatic Differentiation",
     "section": "Enzyme Notes",
-    "text": "Enzyme Notes\n\nDocumentation is not suited to beginners\nDoes not work on all Julia code, but cases where it fails are not well documented. Calling Enzyme.API.runtimeActivity!(true) works around some errors.\nCryptic error messages. Enzyme operates on LLVM IR, and error messages often reference the point in the LLVM IR where the error occurred. Figuring out what Julia code the LLVM IR corresponds to is not easy.\n\nThese may be better now than last year when I first wrote this slide\n\n\n\nEnzyme.API.runtimeActivity!(false)\nf1(a,b) = sum(a.*b)\ndima = 30000\na = ones(dima)\nb = rand(dima)\nda = zeros(dima)\n@time Enzyme.autodiff(Enzyme.ReverseWithPrimal, f1, Duplicated(a,da),Const(b))\nda\n\nf3(a,b) = sum(a[i]*b[i] for i ∈ eachindex(a))\nda = zeros(dima)\nEnzyme.autodiff(Enzyme.ReverseWithPrimal, f3, Duplicated(a,da),Const(b))\nda\n\nif (false) # will trigger enzyme error without runtimeactivity\n  f2(a,b) = sum(a*b for (a,b) ∈ zip(a,b))\n  da = zeros(dima)\n  @time Enzyme.autodiff(Enzyme.ReverseWithPrimal, f2, Duplicated(a,da), Const(b))\n  da\nend\n\nEnzyme.API.runtimeActivity!(true)\nf2(a,b) = sum(a*b for (a,b) ∈ zip(a,b))\nda = zeros(dima)\n@time Enzyme.autodiff(Enzyme.ReverseWithPrimal, f2, Duplicated(a,da), Const(b))\nda"
+    "text": "Enzyme Notes\n\nDocumentation is not suited to beginners\nDoes not work on all Julia code, but cases where it fails are not well documented. Calling Enzyme.API.runtimeActivity!(true) works around some errors.\nCryptic error messages. Enzyme operates on LLVM IR, and error messages often reference the point in the LLVM IR where the error occurred. Figuring out what Julia code the LLVM IR corresponds to is not easy.\nThese may be better now than two years ago when I first wrote this slide\nWorking off of LLVM IR means it depends on internals of Julia’s compiler\n\nCan break with new Julia versions and take weeks to months to fix\n\n\n\nEnzyme.API.runtimeActivity!(false)\nf1(a,b) = sum(a.*b)\ndima = 30000\na = ones(dima)\nb = rand(dima)\nda = zeros(dima)\n@time Enzyme.autodiff(Enzyme.ReverseWithPrimal, f1, Duplicated(a,da),Const(b))\nda\n\nf3(a,b) = sum(a[i]*b[i] for i ∈ eachindex(a))\nda = zeros(dima)\nEnzyme.autodiff(Enzyme.ReverseWithPrimal, f3, Duplicated(a,da),Const(b))\nda\n\nif (false) # will trigger enzyme error without runtimeactivity\n  f2(a,b) = sum(a*b for (a,b) ∈ zip(a,b))\n  da = zeros(dima)\n  @time Enzyme.autodiff(Enzyme.ReverseWithPrimal, f2, Duplicated(a,da), Const(b))\n  da\nend\n\nEnzyme.API.runtimeActivity!(true)\nf2(a,b) = sum(a*b for (a,b) ∈ zip(a,b))\nda = zeros(dima)\n@time Enzyme.autodiff(Enzyme.ReverseWithPrimal, f2, Duplicated(a,da), Const(b))\nda"
   },
   {
     "objectID": "autodiff.html#finitediff",
@@ -466,7 +466,7 @@
     "href": "autodiff.html#tracker",
     "title": "Automatic Differentiation",
     "section": "Tracker",
-    "text": "Tracker\nTracker is a tape based reverse mode package. It was the default autodiff package in Flux before being replaced by Zygote. No longer under active development."
+    "text": "Tracker\nTracker is a tape based reverse mode package. It was the default autodiff package in Flux before being replaced by Zygote. No longer under active development, but solid and still used."
   },
   {
     "objectID": "autodiff.html#diffractor",
@@ -1055,5 +1055,26 @@
     "title": "Best Practices",
     "section": "Debugging",
     "text": "Debugging\n\nadding println, @show, or similar is an okay starting point\nInfiltrator.jl and Debugger.jl lets you halt execution anywhere and examine variables\n\nMoJuWo on debugging"
+  },
+  {
+    "objectID": "autodiff.html#reverse-mode-ad",
+    "href": "autodiff.html#reverse-mode-ad",
+    "title": "Automatic Differentiation",
+    "section": "Reverse Mode AD",
+    "text": "Reverse Mode AD\n\nReverse mode AD is a much harder problem\nVarious systems tradeoff complexity, efficiency, and scope of code compatibility"
+  },
+  {
+    "objectID": "autodiff.html#mooncake",
+    "href": "autodiff.html#mooncake",
+    "title": "Automatic Differentiation",
+    "section": "Mooncake",
+    "text": "Mooncake\n\nMooncake.jl performant reverse and forward mode AD supporting arbitrary Julia code\n\na few known limitation\n\nOperates on Julia IR\n\nJulia updates can be incompatibility with Mooncake, and often take weeks to months to fix"
+  },
+  {
+    "objectID": "autodiff.html#symbolic-differentiation",
+    "href": "autodiff.html#symbolic-differentiation",
+    "title": "Automatic Differentiation",
+    "section": "Symbolic Differentiation",
+    "text": "Symbolic Differentiation\n\nRepresent calculation symbolicly, compute symbolic derivative, convert to numeric function\nBest used to differentiate relatively small functions\nSymbolics.jl\n\nMore used, better tested\n\nFastDifferentiation.jl\n\nFaster, but fails in complex cases"
   }
 ]
