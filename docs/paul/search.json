@@ -382,14 +382,14 @@
     "href": "autodiff.html#forwarddiff-example",
     "title": "Automatic Differentiation",
     "section": "ForwardDiff Example",
-    "text": "ForwardDiff Example\n\nusing Distributions\nfunction simulate_logit(observations, β)\n  x = randn(observations, length(β))\n  y = (x*β + rand(Logistic(), observations)) .&gt;= 0.0\n  return((y=y,x=x))\nend\n\nfunction logit_likelihood(β,y,x)\n  p = map(xb -&gt; cdf(Logistic(),xb), x*β)\n  sum(log.(ifelse.(y, p, 1.0 .- p)))\nend\n\nn = 500\nk = 3\nβ0 = ones(k)\n(y,x) = simulate_logit(n,β0)\n\nimport ForwardDiff\n∇L = ForwardDiff.gradient(b-&gt;logit_likelihood(b,y,x),β0)"
+    "text": "ForwardDiff Example\n\nusing Distributions, BenchmarkTools\nfunction simulate_logit(observations, β)\n  x = randn(observations, length(β))\n  y = (x*β + rand(Logistic(), observations)) .&gt;= 0.0\n  return((y=y,x=x))\nend\n\nfunction logit_likelihood(β,y,x)\n  p = map(xb -&gt; cdf(Logistic(),xb), x*β)\n  sum(log.(ifelse.(y, p, 1.0 .- p)))\nend\n\nn = 500\nk = 3\nβ0 = ones(k)\n(y,x) = simulate_logit(n,β0)\n\nimport ForwardDiff\n@btime ∇L = ForwardDiff.gradient(b-&gt;logit_likelihood(b,y,x),β0)"
   },
   {
     "objectID": "autodiff.html#forwarddiff-notes",
     "href": "autodiff.html#forwarddiff-notes",
     "title": "Automatic Differentiation",
     "section": "ForwardDiff Notes",
-    "text": "ForwardDiff Notes\n\nFor \\(f: \\mathbb{R}^n \\to \\mathbb{R}^m\\), the computation scales with \\(n\\)\n\nbest for moderate \\(n\\)\n\nCode must be generic\n\nbe careful when allocating arrays\n\n\n\nfunction wontwork(x)\n  y = zeros(size(x))\n  for i ∈ eachindex(x)\n    y[i] += x[i]*i\n  end\n  return(sum(y))\nend\n\nfunction willwork(x)\n  y = zero(x)\n  for i ∈ eachindex(x)\n    y[i] += x[i]*i\n  end\n  return(sum(y))\nend\n\nbetterstyle(x) = sum(v*i for (i,v) in enumerate(x))"
+    "text": "ForwardDiff Notes\n\nFor \\(f: \\mathbb{R}^n \\to \\mathbb{R}^m\\), the computation scales with \\(n\\)\n\nbest for moderate \\(n\\)\nThroughout the slides, take the timings with a grain of salt — they depend on dimensions, and on the implementation of the code being differentiated\n\nCode must be generic\n\nbe careful when allocating arrays\n\n\n\nfunction wontwork(x)\n  y = zeros(size(x))\n  for i ∈ eachindex(x)\n    y[i] += x[i]*i\n  end\n  return(sum(y))\nend\n\nfunction willwork(x)\n  y = zero(x)\n  for i ∈ eachindex(x)\n    y[i] += x[i]*i\n  end\n  return(sum(y))\nend\n\nbetterstyle(x) = sum(v*i for (i,v) in enumerate(x))"
   },
   {
     "objectID": "autodiff.html#zygote",
@@ -410,14 +410,14 @@
     "href": "autodiff.html#enzyme",
     "title": "Automatic Differentiation",
     "section": "Enzyme",
-    "text": "Enzyme\n“Enzyme performs automatic differentiation (AD) of statically analyzable LLVM. It is highly-efficient and its ability to perform AD on optimized code allows Enzyme to meet or exceed the performance of state-of-the-art AD tools.”\n\nimport Enzyme\nimport Enzyme: Active, Duplicated, Const\n\ndb = zero(β0)\n@time Enzyme.autodiff(Enzyme.ReverseWithPrimal,logit_likelihood, Active, Duplicated(β0,db), Const(y), Const(x))\ndb"
+    "text": "Enzyme\n“Enzyme performs automatic differentiation (AD) of statically analyzable LLVM. It is highly-efficient and its ability to perform AD on optimized code allows Enzyme to meet or exceed the performance of state-of-the-art AD tools.”\n\nimport Enzyme\nimport Enzyme: Active, Duplicated, Const, BatchDuplicated\n\ndb = zero(β0)\n@btime Enzyme.autodiff(Enzyme.ReverseWithPrimal,logit_likelihood, Active, Duplicated(β0,db), Const(y), Const(x))\ndb\n\n\nusing LinearAlgebra\nv = Tuple(Float64.(I(length(β0))[:,j]) for j in 1:length(β0))\n@btime dbf = Enzyme.autodiff(Enzyme.ForwardWithPrimal, logit_likelihood, BatchDuplicated(β0,v), Const(y), Const(x))\n# or\n@btime dbf = Enzyme.gradient(Enzyme.ForwardWithPrimal, logit_likelihood, β0, Const(y), Const(x))"
   },
   {
     "objectID": "autodiff.html#enzyme-notes",
     "href": "autodiff.html#enzyme-notes",
     "title": "Automatic Differentiation",
     "section": "Enzyme Notes",
-    "text": "Enzyme Notes\n\nDocumentation is not suited to beginners\nDoes not work on all Julia code, but cases where it fails are not well documented. Calling Enzyme.API.runtimeActivity!(true) works around some errors.\nCryptic error messages. Enzyme operates on LLVM IR, and error messages often reference the point in the LLVM IR where the error occurred. Figuring out what Julia code the LLVM IR corresponds to is not easy.\nThese may be better now than two years ago when I first wrote this slide\nWorking off of LLVM IR means it depends on internals of Julia’s compiler\n\nCan break with new Julia versions and take weeks to months to fix\n\n\n\nEnzyme.API.runtimeActivity!(false)\nf1(a,b) = sum(a.*b)\ndima = 30000\na = ones(dima)\nb = rand(dima)\nda = zeros(dima)\n@time Enzyme.autodiff(Enzyme.ReverseWithPrimal, f1, Duplicated(a,da),Const(b))\nda\n\nf3(a,b) = sum(a[i]*b[i] for i ∈ eachindex(a))\nda = zeros(dima)\nEnzyme.autodiff(Enzyme.ReverseWithPrimal, f3, Duplicated(a,da),Const(b))\nda\n\nif (false) # will trigger enzyme error without runtimeactivity\n  f2(a,b) = sum(a*b for (a,b) ∈ zip(a,b))\n  da = zeros(dima)\n  @time Enzyme.autodiff(Enzyme.ReverseWithPrimal, f2, Duplicated(a,da), Const(b))\n  da\nend\n\nEnzyme.API.runtimeActivity!(true)\nf2(a,b) = sum(a*b for (a,b) ∈ zip(a,b))\nda = zeros(dima)\n@time Enzyme.autodiff(Enzyme.ReverseWithPrimal, f2, Duplicated(a,da), Const(b))\nda"
+    "text": "Enzyme Notes\n\nDocumentation is not suited to beginners\nDoes not work on all Julia code, but cases where it fails are not well documented. Calling Enzyme.API.runtimeActivity!(true) works around some errors.\nCryptic error messages. Enzyme operates on LLVM IR, and error messages often reference the point in the LLVM IR where the error occurred. Figuring out what Julia code the LLVM IR corresponds to is not easy.\nSee Enzyme.jl FAQ if getting strange errors\n\nAbove three downsides may be better now than two years ago when I first wrote this slide\n\nWorking off of LLVM IR means it depends on internals of Julia’s compiler\n\nCan break with new Julia versions and take weeks to months to fix"
   },
   {
     "objectID": "autodiff.html#finitediff",
@@ -438,7 +438,7 @@
     "href": "autodiff.html#differentiationinterface",
     "title": "Automatic Differentiation",
     "section": "DifferentiationInterface",
-    "text": "DifferentiationInterface\n\nDifferentiationInterface gives a single interface for many differentiation packages\n\n\nimport DifferentiationInterface as DI\nDI.gradient(b-&gt;logit_likelihood(b,y,x), DI.AutoEnzyme(),β0)\n\n\nimprove performance by reusing intermediate variables\n\n\nbackend = DI.AutoEnzyme()\ndcache = DI.prepare_gradient(b-&gt;logit_likelihood(b,y,x), backend, β0)\ngrad = zero(β0)\nDI.gradient!(b-&gt;logit_likelihood(b,y,x),grad, backend,β0 , dcache)"
+    "text": "DifferentiationInterface\n\nDifferentiationInterface gives a single interface for many differentiation packages\n\n\nimport DifferentiationInterface as DI\nDI.gradient(b-&gt;logit_likelihood(b,y,x), DI.AutoEnzyme(),β0)\n\n\nimprove performance by reusing intermediate variables\n\n\nbackend = DI.AutoEnzyme()\nℒ = b-&gt;logit_likelihood(b,y,x)\ndcache = DI.prepare_gradient(ℒ, backend, β0)\ngrad = zero(β0)\nDI.gradient!(ℒ,grad, dcache, backend,β0)"
   },
   {
     "objectID": "autodiff.html#other-packages-1",
@@ -473,7 +473,7 @@
     "href": "autodiff.html#diffractor",
     "title": "Automatic Differentiation",
     "section": "Diffractor",
-    "text": "Diffractor\nDiffractor is automatic differentiation package in development. It was once hoped to be the future of AD in Julia, but has been delayed. It plans to have both forward and reverse mode, but only forward mode is available so far."
+    "text": "Diffractor\nDiffractor is an automatic differentiation package in development. It was once hoped to be the future of AD in Julia, but has been delayed. It plans to have both forward and reverse mode, but only forward mode is available so far."
   },
   {
     "objectID": "optimization.html#optimization-1",
@@ -1076,5 +1076,33 @@
     "title": "Automatic Differentiation",
     "section": "Symbolic Differentiation",
     "text": "Symbolic Differentiation\n\nRepresent calculation symbolicly, compute symbolic derivative, convert to numeric function\nBest used to differentiate relatively small functions\nSymbolics.jl\n\nMore used, better tested\n\nFastDifferentiation.jl\n\nFaster, but fails in complex cases"
+  },
+  {
+    "objectID": "autodiff.html#enzyme-reactant",
+    "href": "autodiff.html#enzyme-reactant",
+    "title": "Automatic Differentiation",
+    "section": "Enzyme + Reactant",
+    "text": "Enzyme + Reactant\n\nReactant.jl compiles Julia to MLIR\n\nuseful for getting fast code for GPU or TPU\n\nEnzyme can act on MLIR instead of LLVM IR\nSometimes Reactant + Enzyme is updated more quickly than Enzyme directly on Julia\nSome limitations in Julia code supported, especially with dynamic control flow"
+  },
+  {
+    "objectID": "autodiff.html#reactant",
+    "href": "autodiff.html#reactant",
+    "title": "Automatic Differentiation",
+    "section": "Reactant",
+    "text": "Reactant\n\nimport Reactant\nusing Test\nxr = Reactant.to_rarray(x)\nyr = Reactant.to_rarray(Int.(y))\nβr = Reactant.to_rarray(β0)\n\nfunction logit_likelihood_r(β,y,x)\n    p = map(xb -&gt; 1/(1+exp(-xb)), x*β)\n    sum(x-&gt;log(x[1]^x[2]*(1.0 - x[1])^(1-x[2])), zip(p,y))\nend\n@test logit_likelihood_r(β0, y, x) ≈ logit_likelihood(β0, y, x)\n\n∇llreact = Reactant.@compile Enzyme.gradient(Enzyme.ReverseWithPrimal,logit_likelihood_r, βr, Const(yr), Const(xr))\n@btime ∇llreact(Enzyme.ReverseWithPrimal, logit_likelihood_r, βr, Const(yr), Const(xr))"
+  },
+  {
+    "objectID": "autodiff.html#mooncake-1",
+    "href": "autodiff.html#mooncake-1",
+    "title": "Automatic Differentiation",
+    "section": "Mooncake",
+    "text": "Mooncake\n\nimport Mooncake as MC\nℒ = b-&gt;logit_likelihood(b,y,x)\ncache = MC.prepare_gradient_cache(ℒ, β0)\n@btime val, grad = MC.value_and_gradient!!(cache, ℒ, β0)"
+  },
+  {
+    "objectID": "autodiff.html#fastdifferentiation.jl",
+    "href": "autodiff.html#fastdifferentiation.jl",
+    "title": "Automatic Differentiation",
+    "section": "FastDifferentiation.jl",
+    "text": "FastDifferentiation.jl\n\nimport FastDifferentiation as FD\nβs=FD.make_variables(:β, length(β0))\nFD.@variables ys\nxs = FD.make_variables(:x, length(β0))\nfunction logit_likei(β,y,x)\n    p = cdf(Logistic(),x'*β)\n    log(p^(y)*(1-p)^(1-y))\nend\nlogit_likei(βs,ys,xs)\n\n\n∇logit_likei_ex = FD.jacobian([logit_likei(βs, ys, xs)], βs)\n\n\n∇logit_likei = FD.make_function(∇logit_likei_ex, βs, [ys], xs, in_place=false)\nfunction ∇logit_likelihood_FD(β,y,x)\n    sum(∇logit_likei(β, [y[i]], x[i,:]) for i in 1:length(y))\nend\n@btime ∇logit_likelihood_FD(β0,y,x)"
   }
 ]

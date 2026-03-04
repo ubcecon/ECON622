@@ -108,7 +108,7 @@ Forward.fdx(f,2.0)
 ## ForwardDiff Example
 
 ```{julia}
-using Distributions
+using Distributions, BenchmarkTools
 function simulate_logit(observations, β)
   x = randn(observations, length(β))
   y = (x*β + rand(Logistic(), observations)) .>= 0.0
@@ -126,13 +126,14 @@ k = 3
 (y,x) = simulate_logit(n,β0)
 
 import ForwardDiff
-∇L = ForwardDiff.gradient(b->logit_likelihood(b,y,x),β0)
+@btime ∇L = ForwardDiff.gradient(b->logit_likelihood(b,y,x),β0)
 ```
 
 ## ForwardDiff Notes
 
 - For $f: \mathbb{R}^n \to \mathbb{R}^m$, the computation scales with $n$
    - best for moderate $n$
+   - Throughout the slides, take the timings with a grain of salt --- they depend on dimensions, and on the implementation of the code being differentiated
 - Code must be generic
    - be careful when allocating arrays
 
@@ -170,12 +171,19 @@ betterstyle(x) = sum(v*i for (i,v) in enumerate(x))
 
 ```{julia}
 import Enzyme
-import Enzyme: Active, Duplicated, Const
+import Enzyme: Active, Duplicated, Const, BatchDuplicated
 
 db = zero(β0)
-@time Enzyme.autodiff(Enzyme.ReverseWithPrimal,logit_likelihood, Active, Duplicated(β0,db), Const(y), Const(x))
+@btime Enzyme.autodiff(Enzyme.ReverseWithPrimal,logit_likelihood, Active, Duplicated(β0,db), Const(y), Const(x))
 db
+```
 
+```{julia}
+using LinearAlgebra
+v = Tuple(Float64.(I(length(β0))[:,j]) for j in 1:length(β0))
+@btime dbf = Enzyme.autodiff(Enzyme.ForwardWithPrimal, logit_likelihood, BatchDuplicated(β0,v), Const(y), Const(x))
+# or
+@btime dbf = Enzyme.gradient(Enzyme.ForwardWithPrimal, logit_likelihood, β0, Const(y), Const(x))
 ```
 
 ## Enzyme Notes
@@ -183,39 +191,75 @@ db
 - Documentation is not suited to beginners
 - Does not work on all Julia code, but cases where it fails are not well documented. Calling `Enzyme.API.runtimeActivity!(true)` works around some errors.
 - Cryptic error messages. Enzyme operates on LLVM IR, and error messages often reference the point in the LLVM IR where the error occurred. Figuring out what Julia code the LLVM IR corresponds to is not easy.
-- These may be better now than two years ago when I first wrote this slide
+- See [Enzyme.jl FAQ](https://enzyme.mit.edu/index.fcgi/julia/stable/faq/) if getting strange errors
+
+Above three downsides may be better now than two years ago when I first wrote this slide
+
 - Working off of LLVM IR means it depends on internals of Julia's compiler
   - Can break with new Julia versions and take weeks to months to fix
 
 
+<!-- ## Enzyme Example -->
+
+<!-- - This doesn't seem to be a problem anymore -->
+
+<!-- ```{julia} -->
+<!-- Enzyme.API.runtimeActivity!(false) -->
+<!-- f1(a,b) = sum(a.*b) -->
+<!-- dima = 30000 -->
+<!-- a = ones(dima) -->
+<!-- b = rand(dima) -->
+<!-- da = zeros(dima) -->
+<!-- @time Enzyme.autodiff(Enzyme.ReverseWithPrimal, f1, Duplicated(a,da),Const(b)) -->
+<!-- da -->
+
+<!-- f3(a,b) = sum(a[i]*b[i] for i ∈ eachindex(a)) -->
+<!-- da = zeros(dima) -->
+<!-- Enzyme.autodiff(Enzyme.ReverseWithPrimal, f3, Duplicated(a,da),Const(b)) -->
+<!-- da -->
+
+<!-- if (false) # will trigger enzyme error without runtimeactivity -->
+<!--   f2(a,b) = sum(a*b for (a,b) ∈ zip(a,b)) -->
+<!--   da = zeros(dima) -->
+<!--   @time Enzyme.autodiff(Enzyme.ReverseWithPrimal, f2, Duplicated(a,da), Const(b)) -->
+<!--   da -->
+<!-- end -->
+
+<!-- Enzyme.API.runtimeActivity!(true) -->
+<!-- f2(a,b) = sum(a*b for (a,b) ∈ zip(a,b)) -->
+<!-- da = zeros(dima) -->
+<!-- @time Enzyme.autodiff(Enzyme.ReverseWithPrimal, f2, Duplicated(a,da), Const(b)) -->
+<!-- da -->
+<!-- ``` -->
+
+
+## Enzyme + Reactant
+
+- [Reactant.jl](https://github.com/EnzymeAD/Reactant.jl) compiles Julia to MLIR
+  - useful for getting fast code for GPU or TPU
+- Enzyme can act on MLIR instead of LLVM IR
+- Sometimes Reactant + Enzyme is updated more quickly than Enzyme directly on Julia
+- Some limitations in Julia code supported, especially with dynamic control flow
+
+## Reactant
+
 ```{julia}
-Enzyme.API.runtimeActivity!(false)
-f1(a,b) = sum(a.*b)
-dima = 30000
-a = ones(dima)
-b = rand(dima)
-da = zeros(dima)
-@time Enzyme.autodiff(Enzyme.ReverseWithPrimal, f1, Duplicated(a,da),Const(b))
-da
+import Reactant
+using Test
+xr = Reactant.to_rarray(x)
+yr = Reactant.to_rarray(Int.(y))
+βr = Reactant.to_rarray(β0)
 
-f3(a,b) = sum(a[i]*b[i] for i ∈ eachindex(a))
-da = zeros(dima)
-Enzyme.autodiff(Enzyme.ReverseWithPrimal, f3, Duplicated(a,da),Const(b))
-da
-
-if (false) # will trigger enzyme error without runtimeactivity
-  f2(a,b) = sum(a*b for (a,b) ∈ zip(a,b))
-  da = zeros(dima)
-  @time Enzyme.autodiff(Enzyme.ReverseWithPrimal, f2, Duplicated(a,da), Const(b))
-  da
+function logit_likelihood_r(β,y,x)
+    p = map(xb -> 1/(1+exp(-xb)), x*β)
+    sum(x->log(x[1]^x[2]*(1.0 - x[1])^(1-x[2])), zip(p,y))
 end
+@test logit_likelihood_r(β0, y, x) ≈ logit_likelihood(β0, y, x)
 
-Enzyme.API.runtimeActivity!(true)
-f2(a,b) = sum(a*b for (a,b) ∈ zip(a,b))
-da = zeros(dima)
-@time Enzyme.autodiff(Enzyme.ReverseWithPrimal, f2, Duplicated(a,da), Const(b))
-da
+∇llreact = Reactant.@compile Enzyme.gradient(Enzyme.ReverseWithPrimal,logit_likelihood_r, βr, Const(yr), Const(xr))
+@btime ∇llreact(Enzyme.ReverseWithPrimal, logit_likelihood_r, βr, Const(yr), Const(xr))
 ```
+
 
 ## Mooncake
 
@@ -223,6 +267,15 @@ da
   - a few [known limitation](https://chalk-lab.github.io/Mooncake.jl/dev/known_limitations/)
 - Operates on Julia IR
   - Julia updates can be incompatibility with Mooncake, and often take weeks to months to fix
+
+## Mooncake
+
+```{julia}
+import Mooncake as MC
+ℒ = b->logit_likelihood(b,y,x)
+cache = MC.prepare_gradient_cache(ℒ, β0)
+@btime val, grad = MC.value_and_gradient!!(cache, ℒ, β0)
+```
 
 
 ## FiniteDiff
@@ -239,6 +292,33 @@ da
 - [FastDifferentiation.jl](https://github.com/brianguenter/FastDifferentiation.jl)
   - Faster, but [fails in complex cases](https://github.com/brianguenter/FastDifferentiation.jl/issues/65)
 
+## FastDifferentiation.jl
+
+```{julia}
+import FastDifferentiation as FD
+βs=FD.make_variables(:β, length(β0))
+FD.@variables ys
+xs = FD.make_variables(:x, length(β0))
+function logit_likei(β,y,x)
+    p = cdf(Logistic(),x'*β)
+    log(p^(y)*(1-p)^(1-y))
+end
+logit_likei(βs,ys,xs)
+```
+
+```{julia}
+∇logit_likei_ex = FD.jacobian([logit_likei(βs, ys, xs)], βs)
+```
+
+```{julia}
+∇logit_likei = FD.make_function(∇logit_likei_ex, βs, [ys], xs, in_place=false)
+function ∇logit_likelihood_FD(β,y,x)
+    sum(∇logit_likei(β, [y[i]], x[i,:]) for i in 1:length(y))
+end
+@btime ∇logit_likelihood_FD(β0,y,x)
+```
+
+
 
 ## DifferentiationInterface
 
@@ -253,9 +333,10 @@ DI.gradient(b->logit_likelihood(b,y,x), DI.AutoEnzyme(),β0)
 
 ```{julia}
 backend = DI.AutoEnzyme()
-dcache = DI.prepare_gradient(b->logit_likelihood(b,y,x), backend, β0)
+ℒ = b->logit_likelihood(b,y,x)
+dcache = DI.prepare_gradient(ℒ, backend, β0)
 grad = zero(β0)
-DI.gradient!(b->logit_likelihood(b,y,x),grad, backend,β0 , dcache)
+DI.gradient!(ℒ,grad, dcache, backend,β0)
 ```
 
 # Other Packages
@@ -292,6 +373,7 @@ DI.gradient!(b->logit_likelihood(b,y,x),grad, backend,β0 , dcache)
 ## Zygote Example
 
 ```{julia}
+#| eval: false
 import Zygote
 using LinearAlgebra
 @time ∇Lz =  Zygote.gradient(b->logit_likelihood(b,y,x),β0)[1]
@@ -301,7 +383,7 @@ norm(∇L - ∇Lz)
 
 ## Diffractor
 
-[Diffractor](https://github.com/JuliaDiff/Diffractor.jl) is automatic differentiation package in development. It was once hoped to be the future of AD in Julia, but has been delayed. It plans to have both forward and reverse mode, but only forward mode is available so far.
+[Diffractor](https://github.com/JuliaDiff/Diffractor.jl) is an automatic differentiation package in development. It was once hoped to be the future of AD in Julia, but has been delayed. It plans to have both forward and reverse mode, but only forward mode is available so far.
 
 
 # References
