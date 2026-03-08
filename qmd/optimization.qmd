@@ -4,7 +4,7 @@ author : Paul Schrimpf
 date: last-modified
 bibliography: 622.bib
 execute:
-  eval: false
+  eval: true
   echo: true
   cache: true
   freeze: auto
@@ -90,16 +90,19 @@ for unconstrained nonlinear problems without too many variables (maybe up to a f
 - [Optim docs](https://julianlsolvers.github.io/Optim.jl/stable/)
 
 ```{julia}
-import Optim
+import Optim, ADTypes, ForwardDiff
+using PrettyTables
 β = ones(2)
 f = cueiv(β;σ=0.1,ρ=0.5)[1]
 β0 = zero(β)
 
 sol=Optim.optimize(f, β0, Optim.NelderMead())
-sol=Optim.optimize(f,β0, Optim.LBFGS(), autodiff=:forward)
-sol=Optim.optimize(f,β0, Optim.LBFGS(m=20, linesearch=Optim.LineSearches.BackTracking()), autodiff=:forward)
-sol=Optim.optimize(f,β0,Optim.NewtonTrustRegion(), autodiff=:forward)
+sol=Optim.optimize(f,β0, Optim.LBFGS(), autodiff=ADTypes.AutoForwardDiff())
+sol=Optim.optimize(f,β0, Optim.LBFGS(m=20, linesearch=Optim.LineSearches.BackTracking()), autodiff=ADTypes.AutoForwardDiff())
+sol=Optim.optimize(f,β0,Optim.NewtonTrustRegion(), autodiff=ADTypes.AutoForwardDiff())
+```
 
+```{julia}
 β = ones(20)
 f =  cueiv(β)[1]
 β0 = zero(β)
@@ -162,7 +165,7 @@ print(stats)
 
 - [JuMP](https://jump.dev/) is a modelling language for optimization in Julia
 - many solvers
-- best when write problem in special JuMP syntax
+- best with problem written in special JuMP syntax
   - efficiently calculate derivatives and recognize special problem structure such as linearity, sparsity, etc.
 
 
@@ -171,12 +174,13 @@ using JuMP
 import MadNLP, Ipopt
 k = 10
 β = ones(k)
-f,x,y,z =  cueiv(β; γ = I + zeros(k,k))
+f,x,y,z =  cueiv(β; γ = I(k))
 β0 = zero(β)
 n,k = size(x)
 
 # sub-optimal usage of JuMP
 m = Model(()->MadNLP.Optimizer(print_level=MadNLP.INFO, max_iter=100))
+#m = Model(Ipopt.Optimizer)
 @variable(m, β[1:k])
 @operator(m, op_f, k, (x...)->f(vcat(x...))) # hides internals of f from JuMP
 @objective(m, Min, op_f(β...))
@@ -215,6 +219,13 @@ optimize!(m3)
 JuMP.value.(β3)
 ```
 
+## ExaModels
+
+- [ExaModels.jl](https://exanauts.github.io/ExaModels.jl/stable/#What-is-ExaModels.jl?)
+- Somewhat similar to JuMP, but focused on nonlinear programs
+  - less friendly syntax
+  - better preformance for some problems
+- GPU support
 
 ## Ipopt
 
