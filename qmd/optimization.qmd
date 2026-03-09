@@ -10,8 +10,8 @@ execute:
   freeze: auto
 format:
   revealjs:
-    code-fold: true
-    theme: blood
+    code-fold: false
+    theme: night
     smaller: true
     min-scale: 0.1
     max-scale: 3.0
@@ -58,6 +58,7 @@ end
 ```
 
 ```{julia}
+#| code-fold: true
 using Plots
 β = ones(2)
 f, x, y ,z = cueiv(β;σ=0.1,ρ=0.9)
@@ -102,15 +103,18 @@ sol=Optim.optimize(f,β0, Optim.LBFGS(m=20, linesearch=Optim.LineSearches.BackTr
 sol=Optim.optimize(f,β0,Optim.NewtonTrustRegion(), autodiff=ADTypes.AutoForwardDiff())
 ```
 
+## Tougher in Higher Dimension
+
 ```{julia}
 β = ones(20)
 f =  cueiv(β)[1]
 β0 = zero(β)
 sol=Optim.optimize(f, β0, Optim.NelderMead())
-sol=Optim.optimize(f,β0, Optim.LBFGS(), autodiff=:forward)
-sol=Optim.optimize(f,β0, Optim.LBFGS(m=20, linesearch=Optim.LineSearches.BackTracking()), autodiff=:forward)
-sol=Optim.optimize(f,β0,Optim.NewtonTrustRegion(), autodiff=:forward)
+sol=Optim.optimize(f,β0, Optim.LBFGS(), autodiff=ADTypes.AutoForwardDiff())
+sol=Optim.optimize(f,β0, Optim.LBFGS(m=20, linesearch=Optim.LineSearches.BackTracking()), autodiff=ADTypes.AutoForwardDiff())
+sol=Optim.optimize(f,β0,Optim.NewtonTrustRegion(), autodiff=ADTypes.AutoForwardDiff())
 ```
+
 
 ## Optimization.jl
 
@@ -226,6 +230,7 @@ JuMP.value.(β3)
   - less friendly syntax
   - better preformance for some problems
 - GPU support
+
 
 ## Ipopt
 

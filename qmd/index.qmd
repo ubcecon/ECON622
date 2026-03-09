@@ -14,3 +14,5 @@ author: "Paul Schrimpf"
 4. [Best Practices](bestpractices.qmd)
 
 5. [Automatic Differentiation](autodiff.qmd)
+
+6. [Optimization](optimization.qmd)
