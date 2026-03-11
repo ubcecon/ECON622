@@ -10,7 +10,7 @@
   <meta name="generator" content="quarto-1.8.27">
 
   <meta name="author" content="Paul Schrimpf">
-  <meta name="dcterms.date" content="2026-03-09">
+  <meta name="dcterms.date" content="2026-03-10">
   <title>ECON 622 – Solving Nonlinear Equations</title>
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
@@ -226,7 +226,7 @@ Paul Schrimpf
 </div>
 </div>
 
-  <p class="date">2026-03-09</p>
+  <p class="date">2026-03-10</p>
 </section>
 <section class="slide level2">
 
@@ -463,7 +463,43 @@ x_{s+1} = x_s + F'(x_s)^{-1} F(x_s)
 <span id="cb3-26"><a></a><span class="fu">println</span>(<span class="st">"Error: </span><span class="sc">$</span>(<span class="fu">norm</span>(sol.u <span class="op">-</span> δ))<span class="st">"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
 <div class="ansi-escaped-output">
-<pre>Algorithm: <span class="ansi-green-fg ansi-bold">NewtonRaphson(</span>
+<pre><span class="ansi-green-fg ansi-bold">Precompiling</span> packages...
+    356.8 ms<span class="ansi-green-fg">  ✓ </span><span class="ansi-bright-black-fg">RecursiveArrayTools → RecursiveArrayToolsForwardDiffExt</span>
+    590.7 ms<span class="ansi-green-fg">  ✓ </span><span class="ansi-bright-black-fg">PreallocationTools → PreallocationToolsForwardDiffExt</span>
+   3361.4 ms<span class="ansi-green-fg">  ✓ </span><span class="ansi-bright-black-fg">Krylov</span>
+   5829.0 ms<span class="ansi-green-fg">  ✓ </span><span class="ansi-bright-black-fg">SciMLBase</span>
+    606.5 ms<span class="ansi-green-fg">  ✓ </span><span class="ansi-bright-black-fg">SciMLBase → SciMLBaseDifferentiationInterfaceExt</span>
+    677.5 ms<span class="ansi-green-fg">  ✓ </span><span class="ansi-bright-black-fg">SciMLBase → SciMLBaseChainRulesCoreExt</span>
+   1485.3 ms<span class="ansi-green-fg">  ✓ </span><span class="ansi-bright-black-fg">SciMLBase → SciMLBaseForwardDiffExt</span>
+   1985.5 ms<span class="ansi-green-fg">  ✓ </span><span class="ansi-bright-black-fg">SciMLJacobianOperators</span>
+   2500.7 ms<span class="ansi-green-fg">  ✓ </span><span class="ansi-bright-black-fg">LineSearch</span>
+   4893.8 ms<span class="ansi-green-fg">  ✓ </span><span class="ansi-bright-black-fg">LinearSolve</span>
+   4089.9 ms<span class="ansi-green-fg">  ✓ </span><span class="ansi-bright-black-fg">NonlinearSolveBase</span>
+    764.8 ms<span class="ansi-green-fg">  ✓ </span><span class="ansi-bright-black-fg">NonlinearSolveBase → NonlinearSolveBaseLineSearchExt</span>
+    779.3 ms<span class="ansi-green-fg">  ✓ </span><span class="ansi-bright-black-fg">NonlinearSolveBase → NonlinearSolveBaseChainRulesCoreExt</span>
+    894.0 ms<span class="ansi-green-fg">  ✓ </span><span class="ansi-bright-black-fg">NonlinearSolveBase → NonlinearSolveBaseSparseArraysExt</span>
+   2079.1 ms<span class="ansi-green-fg">  ✓ </span><span class="ansi-bright-black-fg">LinearSolve → LinearSolveForwardDiffExt</span>
+   1325.0 ms<span class="ansi-green-fg">  ✓ </span><span class="ansi-bright-black-fg">NonlinearSolveBase → NonlinearSolveBaseForwardDiffExt</span>
+   2573.9 ms<span class="ansi-green-fg">  ✓ </span><span class="ansi-bright-black-fg">LinearSolve → LinearSolveSparseArraysExt</span>
+   1672.3 ms<span class="ansi-green-fg">  ✓ </span><span class="ansi-bright-black-fg">NonlinearSolveBase → NonlinearSolveBaseLinearSolveExt</span>
+   2407.5 ms<span class="ansi-green-fg">  ✓ </span><span class="ansi-bright-black-fg">BracketingNonlinearSolve</span>
+   1289.3 ms<span class="ansi-green-fg">  ✓ </span><span class="ansi-bright-black-fg">LinearSolve → LinearSolveEnzymeExt</span>
+    728.5 ms<span class="ansi-green-fg">  ✓ </span><span class="ansi-bright-black-fg">BracketingNonlinearSolve → BracketingNonlinearSolveForwardDiffExt</span>
+    707.3 ms<span class="ansi-green-fg">  ✓ </span><span class="ansi-bright-black-fg">BracketingNonlinearSolve → BracketingNonlinearSolveChainRulesCoreExt</span>
+   4046.4 ms<span class="ansi-green-fg">  ✓ </span><span class="ansi-bright-black-fg">NonlinearSolveSpectralMethods</span>
+    725.6 ms<span class="ansi-green-fg">  ✓ </span><span class="ansi-bright-black-fg">NonlinearSolveSpectralMethods → NonlinearSolveSpectralMethodsForwardDiffExt</span>
+   4511.2 ms<span class="ansi-green-fg">  ✓ </span>SimpleNonlinearSolve
+    710.0 ms<span class="ansi-green-fg">  ✓ </span>SimpleNonlinearSolve → SimpleNonlinearSolveChainRulesCoreExt
+   7217.9 ms<span class="ansi-green-fg">  ✓ </span><span class="ansi-bright-black-fg">NonlinearSolveQuasiNewton</span>
+   1210.2 ms<span class="ansi-green-fg">  ✓ </span><span class="ansi-bright-black-fg">NonlinearSolveQuasiNewton → NonlinearSolveQuasiNewtonForwardDiffExt</span>
+  11884.1 ms<span class="ansi-green-fg">  ✓ </span><span class="ansi-bright-black-fg">NonlinearSolveFirstOrder</span>
+   5671.8 ms<span class="ansi-green-fg">  ✓ </span>NonlinearSolve
+  30 dependencies successfully precompiled in 32 seconds. 123 already precompiled.
+<span class="ansi-green-fg ansi-bold">Precompiling</span> packages...
+    688.0 ms<span class="ansi-green-fg">  ✓ </span><span class="ansi-bright-black-fg">SciMLBase → SciMLBaseDistributionsExt</span>
+  1 dependency successfully precompiled in 1 seconds. 95 already precompiled.
+
+Algorithm: <span class="ansi-green-fg ansi-bold">NewtonRaphson(</span>
 <span class="ansi-green-fg ansi-bold">    descent = NewtonDescent(),</span>
 <span class="ansi-green-fg ansi-bold">    autodiff = AutoForwardDiff(),</span>
 <span class="ansi-green-fg ansi-bold">    vjp_autodiff = AutoFiniteDiff(</span>
@@ -479,21 +515,17 @@ x_{s+1} = x_s + F'(x_s)^{-1} F(x_s)
 ----        -------------           -----------             -------             
 Iter        f(u) inf-norm           Step 2-norm             cond(J)             
 ----        -------------           -----------             -------             
-0           2.45237251e-01          0.00000000e+00          2.34514165e+00      
-1           5.53505334e-02          7.64604551e-01          -1.00000000e+00     
-2           1.41630880e-02          4.52537696e-01          -1.00000000e+00     
-3           3.15460474e-03          2.00098511e-01          -1.00000000e+00     
-4           4.86332602e-04          8.23878535e-02          -1.00000000e+00     
-5           2.34302830e-05          1.83647375e-02          -1.00000000e+00     
-6           6.62641342e-08          9.80082729e-04          -1.00000000e+00     
-7           5.36227313e-13          2.78816926e-06          -1.00000000e+00     
-8           2.22044605e-16          2.25620219e-11          -1.00000000e+00     
-Final       2.22044605e-16      
+0           1.52359564e-01          0.00000000e+00          2.07468713e+00      
+1           1.65661499e-02          4.95751011e-01          -1.00000000e+00     
+2           3.89855724e-04          6.41510368e-02          -1.00000000e+00     
+3           2.39515391e-07          1.71979494e-03          -1.00000000e+00     
+4           9.12880882e-14          9.92093278e-07          -1.00000000e+00     
+Final       9.12880882e-14      
 ----------------------      
-True δ: [0.037426489706381405, -1.48537113248969]
-Solved δ: [0.037426489706379636, -1.4853711324896943]
-||F(sol.u)||: 2.2729511820139823e-16
-Error: 4.574878581983742e-15
+True δ: [-0.027039049695910644, -0.5599894534029164]
+Solved δ: [-0.02703904969589968, -0.5599894534025214]
+||F(sol.u)||: 1.1197942522895471e-13
+Error: 3.9516946465613327e-13
 </pre>
 </div>
 </div>
@@ -535,21 +567,17 @@ Error: 4.574878581983742e-15
 ----        -------------           -----------             -------             
 Iter        f(u) inf-norm           Step 2-norm             cond(J)             
 ----        -------------           -----------             -------             
-0           2.45237251e-01          0.00000000e+00          2.34514165e+00      
-1           2.36149706e-01          2.76280145e-02          -1.00000000e+00     
-2           2.18314004e-01          5.52560291e-02          -1.00000000e+00     
-3           1.84114762e-01          1.10512058e-01          -1.00000000e+00     
-4           1.22421463e-01          2.21024116e-01          -1.00000000e+00     
-5           7.66296412e-02          3.03908160e-01          -1.00000000e+00     
-6           5.21332205e-02          3.03908160e-01          -1.00000000e+00     
-7           1.71102161e-02          3.03908160e-01          -1.00000000e+00     
-8           4.19412667e-03          2.56746361e-01          -1.00000000e+00     
-9           7.13931788e-04          9.89698368e-02          -1.00000000e+00     
-10          4.64191072e-05          2.58092787e-02          -1.00000000e+00     
-11          2.57277704e-07          1.93081073e-03          -1.00000000e+00     
-12          8.07962031e-12          1.08247519e-05          -1.00000000e+00     
-13          2.22044605e-16          3.39969140e-10          -1.00000000e+00     
-Final       2.22044605e-16      
+0           1.52359564e-01          0.00000000e+00          2.07468713e+00      
+1           1.46330690e-01          1.69855287e-02          -1.00000000e+00     
+2           1.34406641e-01          3.39710573e-02          -1.00000000e+00     
+3           1.11128094e-01          6.79421147e-02          -1.00000000e+00     
+4           6.71535256e-02          1.35884229e-01          -1.00000000e+00     
+5           4.01948151e-02          1.86840815e-01          -1.00000000e+00     
+6           6.94466492e-03          1.86840815e-01          -1.00000000e+00     
+7           7.30014718e-05          2.88929665e-02          -1.00000000e+00     
+8           8.45273683e-09          3.09915597e-04          -1.00000000e+00     
+9           1.52655666e-16          3.59166821e-08          -1.00000000e+00     
+Final       1.52655666e-16      
 ----------------------      
 </pre>
 </div>
@@ -557,37 +585,46 @@ Final       2.22044605e-16
 <div class="cell-output cell-output-display" data-execution_count="1">
 <pre><code>retcode: Success
 u: 2-element Vector{Float64}:
-  0.03742648970638135
- -1.4853711324896857</code></pre>
+ -0.027039049695910745
+ -0.5599894534029162</code></pre>
 </div>
 </div>
 <div id="8" class="cell" data-execution_count="1">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb6"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb6-1"><a></a><span class="im">using</span> <span class="bu">FixedPointAcceleration</span></span>
-<span id="cb6-2"><a></a><span class="kw">function</span> <span class="fu">G</span>(δ,p)</span>
-<span id="cb6-3"><a></a>    d<span class="op">=</span><span class="fu">log</span>.(p.s) <span class="op">-</span> <span class="fu">log</span>.(<span class="fu">share</span>([<span class="fl">0</span>,δ<span class="op">...</span>], p.Σ, p.dFν, p.x, p.∫))</span>
-<span id="cb6-4"><a></a>    <span class="cf">return</span>(d[<span class="fl">2</span><span class="op">:</span><span class="kw">end</span>])</span>
-<span id="cb6-5"><a></a><span class="kw">end</span></span>
-<span id="cb6-6"><a></a>probfp <span class="op">=</span> <span class="fu">NonlinearProblem</span>(G, d0, p)</span>
-<span id="cb6-7"><a></a>solfp <span class="op">=</span> <span class="fu">solve</span>(probfp,</span>
-<span id="cb6-8"><a></a>              <span class="fu">FixedPointAccelerationJL</span>(algorithm<span class="op">=:</span>Anderson),</span>
-<span id="cb6-9"><a></a>              show_trace<span class="op">=</span><span class="fu">Val</span>(<span class="cn">true</span>), trace_level<span class="op">=</span><span class="fu">TraceAll</span>() )</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<span id="cb6-2"><a></a><span class="im">import</span> <span class="bu">NaNMath</span></span>
+<span id="cb6-3"><a></a><span class="kw">function</span> <span class="fu">G</span>(δ,p)</span>
+<span id="cb6-4"><a></a>    d<span class="op">=</span>NaNMath.<span class="fu">log</span>.(p.s) <span class="op">-</span> NaNMath.<span class="fu">log</span>.(<span class="fu">share</span>([<span class="fl">0</span>,δ<span class="op">...</span>], p.Σ, p.dFν, p.x, p.∫))</span>
+<span id="cb6-5"><a></a>    <span class="cf">return</span>(d[<span class="fl">2</span><span class="op">:</span><span class="kw">end</span>])</span>
+<span id="cb6-6"><a></a><span class="kw">end</span></span>
+<span id="cb6-7"><a></a>probfp <span class="op">=</span> <span class="fu">NonlinearProblem</span>(G, d0, p)</span>
+<span id="cb6-8"><a></a>solfp <span class="op">=</span> <span class="fu">solve</span>(probfp,</span>
+<span id="cb6-9"><a></a>              <span class="fu">FixedPointAccelerationJL</span>(algorithm<span class="op">=:</span>Anderson),</span>
+<span id="cb6-10"><a></a>              show_trace<span class="op">=</span><span class="fu">Val</span>(<span class="cn">true</span>), trace_level<span class="op">=</span><span class="fu">TraceAll</span>() )</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>                                          Algorithm: Anderson. Iteration:     1. Convergence:     2.24845817. Time: 2026-03-09T14:08:07.043
-                           Used:  0 lags. Algorithm: Anderson. Iteration:     2. Convergence:   0.4550835084. Time: 2026-03-09T14:08:07.043
-Condition number is   1.0. Used:  2 lags. Algorithm: Anderson. Iteration:     3. Convergence:    1.098591371. Time: 2026-03-09T14:08:07.043
-Condition number is  21.0. Used:  3 lags. Algorithm: Anderson. Iteration:     4. Convergence:    2.880478636. Time: 2026-03-09T14:08:07.043
-Condition number is  16.0. Used:  3 lags. Algorithm: Anderson. Iteration:     5. Convergence:    2.826673516. Time: 2026-03-09T14:08:07.043
-Condition number is  10.0. Used:  3 lags. Algorithm: Anderson. Iteration:     6. Convergence:    1.739284339. Time: 2026-03-09T14:08:07.043
-Condition number is   5.1. Used:  3 lags. Algorithm: Anderson. Iteration:     7. Convergence:     1.30244055. Time: 2026-03-09T14:08:07.043
-Condition number is   3.5. Used:  3 lags. Algorithm: Anderson. Iteration:     8. Convergence:    4.435186334. Time: 2026-03-09T14:08:07.043
-Condition number is   4.7. Used:  3 lags. Algorithm: Anderson. Iteration:     9. Convergence:    2.237961754. Time: 2026-03-09T14:08:07.043
-Condition number is   3.8. Used:  3 lags. </code></pre>
+<div class="ansi-escaped-output">
+<pre><span class="ansi-green-fg ansi-bold">Precompiling</span> packages...
+   1391.0 ms<span class="ansi-green-fg">  ✓ </span>NonlinearSolve → NonlinearSolveFixedPointAccelerationExt
+  1 dependency successfully precompiled in 2 seconds. 154 already precompiled.
+                                          Algorithm: Anderson. Iteration:     1. Convergence:   0.8976354766. Time: 2026-03-11T12:26:40.237
+                           Used:  0 lags. Algorithm: Anderson. Iteration:     2. Convergence:    1.709150011. Time: 2026-03-11T12:26:41.828
+Condition number is   1.0. Used:  2 lags. Algorithm: Anderson. Iteration:     3. Convergence:   0.3675223765. Time: 2026-03-11T12:26:41.837
+Condition number is  38.0. Used:  3 lags. Algorithm: Anderson. Iteration:     4. Convergence:   0.2798232133. Time: 2026-03-11T12:26:41.837
+Condition number is   1.0. Used:  2 lags. Algorithm: Anderson. Iteration:     5. Convergence:  0.01167858532. Time: 2026-03-11T12:26:41.837
+Condition number is  32.0. Used:  3 lags. Algorithm: Anderson. Iteration:     6. Convergence:  0.01434927187. Time: 2026-03-11T12:26:41.837
+Condition number is  27.0. Used:  3 lags. Algorithm: Anderson. Iteration:     7. Convergence: 0.001734941312. Time: 2026-03-11T12:26:41.837
+Condition number is   2.2. Used:  3 lags. Algorithm: Anderson. Iteration:     8. Convergence: 1.010411201e-5. Time: 2026-03-11T12:26:41.837
+Condition number is   1.0. Used:  2 lags. Algorithm: Anderson. Iteration:     9. Convergence: 5.621106913e-8. Time: 2026-03-11T12:26:41.837
+Condition number is   1.0. Used:  2 lags. Algorithm: Anderson. Iteration:    10. Convergence: 1.142894046e-8. Time: 2026-03-11T12:26:41.837
+Condition number is   1.0. Used:  2 lags. Algorithm: Anderson. Iteration:    11. Convergence: 3.238480595e-10. Time: 2026-03-11T12:26:41.837
+Condition number is 190.0. Used:  3 lags. Algorithm: Anderson. Iteration:    12. Convergence: 5.551115123e-16. Time: 2026-03-11T12:26:41.837
+</pre>
+</div>
 </div>
 <div class="cell-output cell-output-display" data-execution_count="1">
-<pre><code>retcode: Failure
+<pre><code>retcode: Success
 u: 2-element Vector{Float64}:
- 0.0
- 0.0</code></pre>
+ -0.02703904969591097
+ -0.5599894534029165</code></pre>
 </div>
 </div>
 </section>
@@ -604,52 +641,52 @@ u: 2-element Vector{Float64}:
 <section id="benchmarking" class="slide level2">
 <h2>Benchmarking</h2>
 <div id="10" class="cell" data-execution_count="1">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb9"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb9-1"><a></a><span class="im">using</span> <span class="bu">BenchmarkTools</span></span>
-<span id="cb9-2"><a></a><span class="pp">@benchmark</span> <span class="fu">solve</span>(probfp)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb8"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb8-1"><a></a><span class="im">using</span> <span class="bu">BenchmarkTools</span></span>
+<span id="cb8-2"><a></a><span class="pp">@benchmark</span> <span class="fu">solve</span>(probfp)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-display" data-execution_count="1">
 <div class="ansi-escaped-output">
-<pre>BenchmarkTools.Trial: 8235 samples with 1 evaluation per sample.
- Range <span class="ansi-bright-black-fg">(</span><span class="ansi-cyan-fg ansi-bold">min</span> … <span class="ansi-magenta-fg">max</span><span class="ansi-bright-black-fg">):  </span><span class="ansi-cyan-fg ansi-bold">420.294 μs</span> … <span class="ansi-magenta-fg"> 29.821 ms</span>  <span class="ansi-bright-black-fg">┊</span> GC <span class="ansi-bright-black-fg">(</span>min … max<span class="ansi-bright-black-fg">): </span> 0.00% … 97.38%
- Time  <span class="ansi-bright-black-fg">(</span><span class="ansi-blue-fg ansi-bold">median</span><span class="ansi-bright-black-fg">):     </span><span class="ansi-blue-fg ansi-bold">481.289 μs               </span><span class="ansi-bright-black-fg">┊</span> GC <span class="ansi-bright-black-fg">(</span>median<span class="ansi-bright-black-fg">):    </span> 0.00%
- Time  <span class="ansi-bright-black-fg">(</span><span class="ansi-green-fg ansi-bold">mean</span> ± <span class="ansi-green-fg">σ</span><span class="ansi-bright-black-fg">):   </span><span class="ansi-green-fg ansi-bold">605.956 μs</span> ± <span class="ansi-green-fg">968.474 μs</span>  <span class="ansi-bright-black-fg">┊</span> GC <span class="ansi-bright-black-fg">(</span>mean ± σ<span class="ansi-bright-black-fg">):  </span>13.07% ±  8.01%
+<pre>BenchmarkTools.Trial: 8821 samples with 1 evaluation per sample.
+ Range <span class="ansi-bright-black-fg">(</span><span class="ansi-cyan-fg ansi-bold">min</span> … <span class="ansi-magenta-fg">max</span><span class="ansi-bright-black-fg">):  </span><span class="ansi-cyan-fg ansi-bold">361.404 μs</span> … <span class="ansi-magenta-fg"> 17.326 ms</span>  <span class="ansi-bright-black-fg">┊</span> GC <span class="ansi-bright-black-fg">(</span>min … max<span class="ansi-bright-black-fg">): </span> 0.00% … 95.65%
+ Time  <span class="ansi-bright-black-fg">(</span><span class="ansi-blue-fg ansi-bold">median</span><span class="ansi-bright-black-fg">):     </span><span class="ansi-blue-fg ansi-bold">480.940 μs               </span><span class="ansi-bright-black-fg">┊</span> GC <span class="ansi-bright-black-fg">(</span>median<span class="ansi-bright-black-fg">):    </span> 0.00%
+ Time  <span class="ansi-bright-black-fg">(</span><span class="ansi-green-fg ansi-bold">mean</span> ± <span class="ansi-green-fg">σ</span><span class="ansi-bright-black-fg">):   </span><span class="ansi-green-fg ansi-bold">564.624 μs</span> ± <span class="ansi-green-fg">732.676 μs</span>  <span class="ansi-bright-black-fg">┊</span> GC <span class="ansi-bright-black-fg">(</span>mean ± σ<span class="ansi-bright-black-fg">):  </span>12.76% ±  9.39%
 
-   ▁██▄    <span class="ansi-blue-fg"> </span>                 <span class="ansi-green-fg"> </span>                                   
-  ▃████▇▆▄▃<span class="ansi-blue-fg">▂</span>▂▂▂▂▃▂▂▂▂▂▃▃▃▃▃▄▄<span class="ansi-green-fg">▄</span>▅▅▅▄▄▃▃▂▃▂▂▂▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁ ▂
-  420 μs<span class="ansi-bright-black-fg">           Histogram: frequency by time</span>          835 μs <span class="ansi-bold">&lt;</span>
+  █<span class="ansi-blue-fg">▅</span><span class="ansi-green-fg"> </span>                                                            
+  █<span class="ansi-blue-fg">█</span><span class="ansi-green-fg">▅</span>▃▂▂▂▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▂ ▂
+  361 μs<span class="ansi-bright-black-fg">           Histogram: frequency by time</span>         6.83 ms <span class="ansi-bold">&lt;</span>
 
- Memory estimate<span class="ansi-bright-black-fg">: </span><span class="ansi-yellow-fg">1.36 MiB</span>, allocs estimate<span class="ansi-bright-black-fg">: </span><span class="ansi-yellow-fg">29564</span>.</pre>
+ Memory estimate<span class="ansi-bright-black-fg">: </span><span class="ansi-yellow-fg">1.21 MiB</span>, allocs estimate<span class="ansi-bright-black-fg">: </span><span class="ansi-yellow-fg">26289</span>.</pre>
 </div>
 </div>
 </div>
 <div id="12" class="cell" data-execution_count="1">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb10"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb10-1"><a></a><span class="pp">@benchmark</span> <span class="fu">solve</span>(probfp, <span class="fu">FixedPointAccelerationJL</span>())</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb9"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb9-1"><a></a><span class="pp">@benchmark</span> <span class="fu">solve</span>(probfp, <span class="fu">FixedPointAccelerationJL</span>())</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-display" data-execution_count="1">
 <div class="ansi-escaped-output">
-<pre>BenchmarkTools.Trial: 10000 samples with 1 evaluation per sample.
- Range <span class="ansi-bright-black-fg">(</span><span class="ansi-cyan-fg ansi-bold">min</span> … <span class="ansi-magenta-fg">max</span><span class="ansi-bright-black-fg">):  </span><span class="ansi-cyan-fg ansi-bold">292.773 μs</span> … <span class="ansi-magenta-fg"> 31.153 ms</span>  <span class="ansi-bright-black-fg">┊</span> GC <span class="ansi-bright-black-fg">(</span>min … max<span class="ansi-bright-black-fg">): </span> 0.00% … 97.81%
- Time  <span class="ansi-bright-black-fg">(</span><span class="ansi-blue-fg ansi-bold">median</span><span class="ansi-bright-black-fg">):     </span><span class="ansi-blue-fg ansi-bold">348.639 μs               </span><span class="ansi-bright-black-fg">┊</span> GC <span class="ansi-bright-black-fg">(</span>median<span class="ansi-bright-black-fg">):    </span> 0.00%
- Time  <span class="ansi-bright-black-fg">(</span><span class="ansi-green-fg ansi-bold">mean</span> ± <span class="ansi-green-fg">σ</span><span class="ansi-bright-black-fg">):   </span><span class="ansi-green-fg ansi-bold">424.135 μs</span> ± <span class="ansi-green-fg">812.131 μs</span>  <span class="ansi-bright-black-fg">┊</span> GC <span class="ansi-bright-black-fg">(</span>mean ± σ<span class="ansi-bright-black-fg">):  </span>13.09% ±  6.86%
+<pre>BenchmarkTools.Trial: 9276 samples with 1 evaluation per sample.
+ Range <span class="ansi-bright-black-fg">(</span><span class="ansi-cyan-fg ansi-bold">min</span> … <span class="ansi-magenta-fg">max</span><span class="ansi-bright-black-fg">):  </span><span class="ansi-cyan-fg ansi-bold">340.043 μs</span> … <span class="ansi-magenta-fg"> 14.487 ms</span>  <span class="ansi-bright-black-fg">┊</span> GC <span class="ansi-bright-black-fg">(</span>min … max<span class="ansi-bright-black-fg">): </span> 0.00% … 94.37%
+ Time  <span class="ansi-bright-black-fg">(</span><span class="ansi-blue-fg ansi-bold">median</span><span class="ansi-bright-black-fg">):     </span><span class="ansi-blue-fg ansi-bold">463.587 μs               </span><span class="ansi-bright-black-fg">┊</span> GC <span class="ansi-bright-black-fg">(</span>median<span class="ansi-bright-black-fg">):    </span> 0.00%
+ Time  <span class="ansi-bright-black-fg">(</span><span class="ansi-green-fg ansi-bold">mean</span> ± <span class="ansi-green-fg">σ</span><span class="ansi-bright-black-fg">):   </span><span class="ansi-green-fg ansi-bold">538.219 μs</span> ± <span class="ansi-green-fg">733.351 μs</span>  <span class="ansi-bright-black-fg">┊</span> GC <span class="ansi-bright-black-fg">(</span>mean ± σ<span class="ansi-bright-black-fg">):  </span>14.45% ±  9.99%
 
-    ▅█▅▁    <span class="ansi-blue-fg"> </span>             <span class="ansi-green-fg"> </span>                                      
-  ▂▇████▆▅▄▃<span class="ansi-blue-fg">▂</span>▃▄▄▃▃▃▄▄▄▅▅▅▅<span class="ansi-green-fg">▅</span>▅▅▄▃▃▃▂▂▂▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁ ▂
-  293 μs<span class="ansi-bright-black-fg">           Histogram: frequency by time</span>          622 μs <span class="ansi-bold">&lt;</span>
+  █<span class="ansi-blue-fg">█</span><span class="ansi-green-fg"> </span>                                                            
+  █<span class="ansi-blue-fg">█</span><span class="ansi-green-fg">▄</span>▃▂▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▂▂▂ ▂
+  340 μs<span class="ansi-bright-black-fg">           Histogram: frequency by time</span>         6.77 ms <span class="ansi-bold">&lt;</span>
 
- Memory estimate<span class="ansi-bright-black-fg">: </span><span class="ansi-yellow-fg">958.78 KiB</span>, allocs estimate<span class="ansi-bright-black-fg">: </span><span class="ansi-yellow-fg">20279</span>.</pre>
+ Memory estimate<span class="ansi-bright-black-fg">: </span><span class="ansi-yellow-fg">1.23 MiB</span>, allocs estimate<span class="ansi-bright-black-fg">: </span><span class="ansi-yellow-fg">23815</span>.</pre>
 </div>
 </div>
 </div>
 <div id="14" class="cell" data-execution_count="1">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb11"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb11-1"><a></a><span class="pp">@benchmark</span> <span class="fu">solve</span>(probfp, <span class="fu">RobustMultiNewton</span>())</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb10"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb10-1"><a></a><span class="pp">@benchmark</span> <span class="fu">solve</span>(probfp, <span class="fu">RobustMultiNewton</span>())</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-display" data-execution_count="1">
 <div class="ansi-escaped-output">
-<pre>BenchmarkTools.Trial: 8538 samples with 1 evaluation per sample.
- Range <span class="ansi-bright-black-fg">(</span><span class="ansi-cyan-fg ansi-bold">min</span> … <span class="ansi-magenta-fg">max</span><span class="ansi-bright-black-fg">):  </span><span class="ansi-cyan-fg ansi-bold">403.863 μs</span> … <span class="ansi-magenta-fg"> 34.326 ms</span>  <span class="ansi-bright-black-fg">┊</span> GC <span class="ansi-bright-black-fg">(</span>min … max<span class="ansi-bright-black-fg">): </span> 0.00% … 97.97%
- Time  <span class="ansi-bright-black-fg">(</span><span class="ansi-blue-fg ansi-bold">median</span><span class="ansi-bright-black-fg">):     </span><span class="ansi-blue-fg ansi-bold">472.523 μs               </span><span class="ansi-bright-black-fg">┊</span> GC <span class="ansi-bright-black-fg">(</span>median<span class="ansi-bright-black-fg">):    </span> 0.00%
- Time  <span class="ansi-bright-black-fg">(</span><span class="ansi-green-fg ansi-bold">mean</span> ± <span class="ansi-green-fg">σ</span><span class="ansi-bright-black-fg">):   </span><span class="ansi-green-fg ansi-bold">584.252 μs</span> ± <span class="ansi-green-fg">974.636 μs</span>  <span class="ansi-bright-black-fg">┊</span> GC <span class="ansi-bright-black-fg">(</span>mean ± σ<span class="ansi-bright-black-fg">):  </span>13.40% ±  8.00%
+<pre>BenchmarkTools.Trial: 7943 samples with 1 evaluation per sample.
+ Range <span class="ansi-bright-black-fg">(</span><span class="ansi-cyan-fg ansi-bold">min</span> … <span class="ansi-magenta-fg">max</span><span class="ansi-bright-black-fg">):  </span><span class="ansi-cyan-fg ansi-bold">409.545 μs</span> … <span class="ansi-magenta-fg"> 18.648 ms</span>  <span class="ansi-bright-black-fg">┊</span> GC <span class="ansi-bright-black-fg">(</span>min … max<span class="ansi-bright-black-fg">): </span> 0.00% … 95.27%
+ Time  <span class="ansi-bright-black-fg">(</span><span class="ansi-blue-fg ansi-bold">median</span><span class="ansi-bright-black-fg">):     </span><span class="ansi-blue-fg ansi-bold">522.528 μs               </span><span class="ansi-bright-black-fg">┊</span> GC <span class="ansi-bright-black-fg">(</span>median<span class="ansi-bright-black-fg">):    </span> 0.00%
+ Time  <span class="ansi-bright-black-fg">(</span><span class="ansi-green-fg ansi-bold">mean</span> ± <span class="ansi-green-fg">σ</span><span class="ansi-bright-black-fg">):   </span><span class="ansi-green-fg ansi-bold">628.151 μs</span> ± <span class="ansi-green-fg">812.485 μs</span>  <span class="ansi-bright-black-fg">┊</span> GC <span class="ansi-bright-black-fg">(</span>mean ± σ<span class="ansi-bright-black-fg">):  </span>13.12% ±  9.60%
 
-     ▁▇█▆▃▁<span class="ansi-blue-fg"> </span>              <span class="ansi-green-fg"> </span>                                      
-  ▂▂▅██████<span class="ansi-blue-fg">▆</span>▅▅▄▄▄▄▅▄▄▃▄▅▄▄<span class="ansi-green-fg">▄</span>▃▃▃▃▂▂▂▂▂▂▂▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁ ▂
-  404 μs<span class="ansi-bright-black-fg">           Histogram: frequency by time</span>          870 μs <span class="ansi-bold">&lt;</span>
+  █<span class="ansi-blue-fg">▄</span><span class="ansi-green-fg"> </span>                                                            
+  █<span class="ansi-blue-fg">█</span><span class="ansi-green-fg">▅</span>▃▂▂▂▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▂▂ ▂
+  410 μs<span class="ansi-bright-black-fg">           Histogram: frequency by time</span>         7.48 ms <span class="ansi-bold">&lt;</span>
 
  Memory estimate<span class="ansi-bright-black-fg">: </span><span class="ansi-yellow-fg">1.36 MiB</span>, allocs estimate<span class="ansi-bright-black-fg">: </span><span class="ansi-yellow-fg">29609</span>.</pre>
 </div>

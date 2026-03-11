@@ -298,7 +298,7 @@ then $\Vert \hat{f} - f_0 \Vert_{L^2(\mu)} \approx O(n^{-s/r_k})$
 ## Target Function
 
 ```{julia}
-
+#| eval : false
 using Symbolics
 
 flowprofits_expr = begin
@@ -309,7 +309,7 @@ flowprofits_expr = begin
     #rts = 9//10
     #ces(k,l,m) = (k^ρ + l^ρ + m^ρ)^(rts/ρ)
     profits(k,l,m,ω,pm,py) = py*exp(ω)*p
-
+    mstar = symbolic_solve(Symbolics.derivative(profits,m) ~ 0, m)
     build_function(profits(k,l,mstar,ω,pm,py), k,l,ω,pm,py)
 end
 ```
