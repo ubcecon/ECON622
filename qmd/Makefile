@@ -1,7 +1,7 @@
 ROOTDIR := $(dir $(realpath $(lastword $(MAKEFILE_LIST))))
 OUTDIR := $(abspath $(ROOTDIR)/../docs/paul/)
 SRCDIR := $(abspath $(ROOTDIR))
-QMDFILES := $(shell find $(SRCDIR) -type f -name '*.qmd')
+QMDFILES := $(filter-out %sol.qmd, $(shell find $(SRCDIR) -type f -name '*.qmd'))
 HTMLFILES := $(patsubst $(SRCDIR)%,$(OUTDIR)%,$(QMDFILES:.qmd=.html))
 
 #QMDWITHCODE := $(shell grep -rl '```{python}' $(QMDFILES))

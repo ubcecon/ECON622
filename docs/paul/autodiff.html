@@ -10,7 +10,7 @@
   <meta name="generator" content="quarto-1.8.27">
 
   <meta name="author" content="Paul Schrimpf">
-  <meta name="dcterms.date" content="2026-03-03">
+  <meta name="dcterms.date" content="2026-03-09">
   <title>ECON 622 – Automatic Differentiation</title>
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
@@ -206,7 +206,7 @@ Paul Schrimpf
 </div>
 </div>
 
-  <p class="date">2026-03-03</p>
+  <p class="date">2026-03-09</p>
 </section>
 <section>
 <section id="introduction" class="title-slide slide level1 center">
@@ -222,7 +222,7 @@ Paul Schrimpf
 </section>
 <section id="finite-differences" class="slide level2">
 <h2>Finite Differences</h2>
-<div id="2" class="cell" data-execution_count="0">
+<div id="2" class="cell" data-execution_count="1">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb1"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb1-1"><a></a><span class="fu">f</span>(x) <span class="op">=</span> <span class="fu">sin</span>(x)<span class="op">/</span>(<span class="fl">1.0</span><span class="fu">+exp</span>(x))</span>
 <span id="cb1-2"><a></a></span>
 <span id="cb1-3"><a></a><span class="kw">function</span> <span class="fu">dxfin</span>(f,x)</span>
@@ -234,46 +234,52 @@ Paul Schrimpf
 <span id="cb1-9"><a></a><span class="kw">end</span></span>
 <span id="cb1-10"><a></a></span>
 <span id="cb1-11"><a></a><span class="fu">dxfin</span>(f, <span class="fl">2.0</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-display" data-execution_count="1">
+<pre><code>-0.1450763155960872</code></pre>
+</div>
 </div>
 </section>
 <section id="forward-automatic-differentiation" class="slide level2">
 <h2>Forward Automatic Differentiation</h2>
-<div id="4" class="cell" data-execution_count="0">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb2"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb2-1"><a></a><span class="kw">module</span> Forward</span>
-<span id="cb2-2"><a></a></span>
-<span id="cb2-3"><a></a><span class="kw">struct</span> Dual{T}</span>
-<span id="cb2-4"><a></a>  v<span class="op">::</span><span class="dt">T</span></span>
-<span id="cb2-5"><a></a>  dv<span class="op">::</span><span class="dt">T</span></span>
-<span id="cb2-6"><a></a><span class="kw">end</span></span>
-<span id="cb2-7"><a></a></span>
-<span id="cb2-8"><a></a><span class="fu">Dual</span>(x<span class="op">::</span><span class="dt">T</span>) <span class="kw">where</span> {T} <span class="op">=</span> <span class="fu">Dual</span>(x, <span class="fu">one</span>(x))</span>
-<span id="cb2-9"><a></a></span>
-<span id="cb2-10"><a></a><span class="im">import</span> <span class="bu">Base</span>: +, sin, exp, *, /</span>
-<span id="cb2-11"><a></a></span>
-<span id="cb2-12"><a></a><span class="kw">function</span> (<span class="op">+</span>)(a<span class="op">::</span><span class="dt">T</span>, x<span class="op">::</span><span class="dt">Dual{T}</span>) <span class="kw">where</span> {T}</span>
-<span id="cb2-13"><a></a>  <span class="fu">Dual</span>(a<span class="op">+</span>x.v, x.dv)</span>
-<span id="cb2-14"><a></a><span class="kw">end</span></span>
-<span id="cb2-15"><a></a></span>
-<span id="cb2-16"><a></a><span class="kw">function</span> (<span class="op">*</span>)(y<span class="op">::</span><span class="dt">Dual</span>, x<span class="op">::</span><span class="dt">Dual</span>)</span>
-<span id="cb2-17"><a></a>  <span class="fu">Dual</span>(y.v<span class="op">*</span>x.v, x.v<span class="op">*</span>y.dv <span class="op">+</span> x.dv<span class="op">*</span>y.v)</span>
-<span id="cb2-18"><a></a><span class="kw">end</span></span>
-<span id="cb2-19"><a></a></span>
-<span id="cb2-20"><a></a><span class="kw">function</span> (<span class="op">/</span>)(x<span class="op">::</span><span class="dt">Dual</span>, y<span class="op">::</span><span class="dt">Dual</span>)</span>
-<span id="cb2-21"><a></a>  <span class="fu">Dual</span>(x.v<span class="op">/</span>y.v, x.dv<span class="op">/</span>y.v <span class="op">-</span> x.v<span class="op">*</span>y.dv<span class="op">/</span>y.v<span class="op">^</span><span class="fl">2</span>)</span>
-<span id="cb2-22"><a></a><span class="kw">end</span></span>
-<span id="cb2-23"><a></a></span>
-<span id="cb2-24"><a></a><span class="fu">exp</span>(x<span class="op">::</span><span class="dt">Dual</span>) <span class="op">=</span> <span class="fu">Dual</span>(<span class="fu">exp</span>(x.v), <span class="fu">exp</span>(x.v)<span class="op">*</span>x.dv)</span>
-<span id="cb2-25"><a></a><span class="fu">sin</span>(x<span class="op">::</span><span class="dt">Dual</span>) <span class="op">=</span> <span class="fu">Dual</span>(<span class="fu">sin</span>(x.v), <span class="fu">cos</span>(x.v)<span class="op">*</span>x.dv)</span>
-<span id="cb2-26"><a></a></span>
-<span id="cb2-27"><a></a></span>
-<span id="cb2-28"><a></a><span class="kw">function</span> <span class="fu">fdx</span>(f,x)</span>
-<span id="cb2-29"><a></a>  out<span class="op">=</span><span class="fu">f</span>(<span class="fu">Dual</span>(x))</span>
-<span id="cb2-30"><a></a>  (out.v, out.dv)</span>
-<span id="cb2-31"><a></a><span class="kw">end</span></span>
-<span id="cb2-32"><a></a></span>
-<span id="cb2-33"><a></a><span class="kw">end</span></span>
-<span id="cb2-34"><a></a></span>
-<span id="cb2-35"><a></a>Forward.<span class="fu">fdx</span>(f,<span class="fl">2.0</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div id="4" class="cell" data-execution_count="1">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb3"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb3-1"><a></a><span class="kw">module</span> Forward</span>
+<span id="cb3-2"><a></a></span>
+<span id="cb3-3"><a></a><span class="kw">struct</span> Dual{T}</span>
+<span id="cb3-4"><a></a>  v<span class="op">::</span><span class="dt">T</span></span>
+<span id="cb3-5"><a></a>  dv<span class="op">::</span><span class="dt">T</span></span>
+<span id="cb3-6"><a></a><span class="kw">end</span></span>
+<span id="cb3-7"><a></a></span>
+<span id="cb3-8"><a></a><span class="fu">Dual</span>(x<span class="op">::</span><span class="dt">T</span>) <span class="kw">where</span> {T} <span class="op">=</span> <span class="fu">Dual</span>(x, <span class="fu">one</span>(x))</span>
+<span id="cb3-9"><a></a></span>
+<span id="cb3-10"><a></a><span class="im">import</span> <span class="bu">Base</span>: +, sin, exp, *, /</span>
+<span id="cb3-11"><a></a></span>
+<span id="cb3-12"><a></a><span class="kw">function</span> (<span class="op">+</span>)(a<span class="op">::</span><span class="dt">T</span>, x<span class="op">::</span><span class="dt">Dual{T}</span>) <span class="kw">where</span> {T}</span>
+<span id="cb3-13"><a></a>  <span class="fu">Dual</span>(a<span class="op">+</span>x.v, x.dv)</span>
+<span id="cb3-14"><a></a><span class="kw">end</span></span>
+<span id="cb3-15"><a></a></span>
+<span id="cb3-16"><a></a><span class="kw">function</span> (<span class="op">*</span>)(y<span class="op">::</span><span class="dt">Dual</span>, x<span class="op">::</span><span class="dt">Dual</span>)</span>
+<span id="cb3-17"><a></a>  <span class="fu">Dual</span>(y.v<span class="op">*</span>x.v, x.v<span class="op">*</span>y.dv <span class="op">+</span> x.dv<span class="op">*</span>y.v)</span>
+<span id="cb3-18"><a></a><span class="kw">end</span></span>
+<span id="cb3-19"><a></a></span>
+<span id="cb3-20"><a></a><span class="kw">function</span> (<span class="op">/</span>)(x<span class="op">::</span><span class="dt">Dual</span>, y<span class="op">::</span><span class="dt">Dual</span>)</span>
+<span id="cb3-21"><a></a>  <span class="fu">Dual</span>(x.v<span class="op">/</span>y.v, x.dv<span class="op">/</span>y.v <span class="op">-</span> x.v<span class="op">*</span>y.dv<span class="op">/</span>y.v<span class="op">^</span><span class="fl">2</span>)</span>
+<span id="cb3-22"><a></a><span class="kw">end</span></span>
+<span id="cb3-23"><a></a></span>
+<span id="cb3-24"><a></a><span class="fu">exp</span>(x<span class="op">::</span><span class="dt">Dual</span>) <span class="op">=</span> <span class="fu">Dual</span>(<span class="fu">exp</span>(x.v), <span class="fu">exp</span>(x.v)<span class="op">*</span>x.dv)</span>
+<span id="cb3-25"><a></a><span class="fu">sin</span>(x<span class="op">::</span><span class="dt">Dual</span>) <span class="op">=</span> <span class="fu">Dual</span>(<span class="fu">sin</span>(x.v), <span class="fu">cos</span>(x.v)<span class="op">*</span>x.dv)</span>
+<span id="cb3-26"><a></a></span>
+<span id="cb3-27"><a></a></span>
+<span id="cb3-28"><a></a><span class="kw">function</span> <span class="fu">fdx</span>(f,x)</span>
+<span id="cb3-29"><a></a>  out<span class="op">=</span><span class="fu">f</span>(<span class="fu">Dual</span>(x))</span>
+<span id="cb3-30"><a></a>  (out.v, out.dv)</span>
+<span id="cb3-31"><a></a><span class="kw">end</span></span>
+<span id="cb3-32"><a></a></span>
+<span id="cb3-33"><a></a><span class="kw">end</span></span>
+<span id="cb3-34"><a></a></span>
+<span id="cb3-35"><a></a>Forward.<span class="fu">fdx</span>(f,<span class="fl">2.0</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-display" data-execution_count="1">
+<pre><code>(0.10839091026481387, -0.14507631594729084)</code></pre>
+</div>
 </div>
 </section>
 <section id="reverse-automatic-differentiation" class="slide level2">
@@ -306,26 +312,35 @@ Paul Schrimpf
 </section>
 <section id="forwarddiff-example" class="slide level2">
 <h2>ForwardDiff Example</h2>
-<div id="6" class="cell" data-execution_count="0">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb3"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb3-1"><a></a><span class="im">using</span> <span class="bu">Distributions</span>, <span class="bu">BenchmarkTools</span></span>
-<span id="cb3-2"><a></a><span class="kw">function</span> <span class="fu">simulate_logit</span>(observations, β)</span>
-<span id="cb3-3"><a></a>  x <span class="op">=</span> <span class="fu">randn</span>(observations, <span class="fu">length</span>(β))</span>
-<span id="cb3-4"><a></a>  y <span class="op">=</span> (x<span class="op">*</span>β <span class="op">+</span> <span class="fu">rand</span>(<span class="fu">Logistic</span>(), observations)) <span class="op">.&gt;=</span> <span class="fl">0.0</span></span>
-<span id="cb3-5"><a></a>  <span class="cf">return</span>((y<span class="op">=</span>y,x<span class="op">=</span>x))</span>
-<span id="cb3-6"><a></a><span class="kw">end</span></span>
-<span id="cb3-7"><a></a></span>
-<span id="cb3-8"><a></a><span class="kw">function</span> <span class="fu">logit_likelihood</span>(β,y,x)</span>
-<span id="cb3-9"><a></a>  p <span class="op">=</span> <span class="fu">map</span>(xb <span class="op">-&gt;</span> <span class="fu">cdf</span>(<span class="fu">Logistic</span>(),xb), x<span class="op">*</span>β)</span>
-<span id="cb3-10"><a></a>  <span class="fu">sum</span>(<span class="fu">log</span>.(<span class="fu">ifelse</span>.(y, p, <span class="fl">1.0</span> <span class="op">.-</span> p)))</span>
-<span id="cb3-11"><a></a><span class="kw">end</span></span>
-<span id="cb3-12"><a></a></span>
-<span id="cb3-13"><a></a>n <span class="op">=</span> <span class="fl">500</span></span>
-<span id="cb3-14"><a></a>k <span class="op">=</span> <span class="fl">3</span></span>
-<span id="cb3-15"><a></a>β<span class="fl">0</span> <span class="op">=</span> <span class="fu">ones</span>(k)</span>
-<span id="cb3-16"><a></a>(y,x) <span class="op">=</span> <span class="fu">simulate_logit</span>(n,β<span class="fl">0</span>)</span>
-<span id="cb3-17"><a></a></span>
-<span id="cb3-18"><a></a><span class="im">import</span> <span class="bu">ForwardDiff</span></span>
-<span id="cb3-19"><a></a><span class="pp">@btime</span> ∇L <span class="op">=</span> ForwardDiff.<span class="fu">gradient</span>(<span class="fu">b-&gt;logit_likelihood</span>(b,y,x),β<span class="fl">0</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div id="6" class="cell" data-execution_count="1">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb5"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb5-1"><a></a><span class="im">using</span> <span class="bu">Distributions</span>, <span class="bu">BenchmarkTools</span></span>
+<span id="cb5-2"><a></a><span class="kw">function</span> <span class="fu">simulate_logit</span>(observations, β)</span>
+<span id="cb5-3"><a></a>  x <span class="op">=</span> <span class="fu">randn</span>(observations, <span class="fu">length</span>(β))</span>
+<span id="cb5-4"><a></a>  y <span class="op">=</span> (x<span class="op">*</span>β <span class="op">+</span> <span class="fu">rand</span>(<span class="fu">Logistic</span>(), observations)) <span class="op">.&gt;=</span> <span class="fl">0.0</span></span>
+<span id="cb5-5"><a></a>  <span class="cf">return</span>((y<span class="op">=</span>y,x<span class="op">=</span>x))</span>
+<span id="cb5-6"><a></a><span class="kw">end</span></span>
+<span id="cb5-7"><a></a></span>
+<span id="cb5-8"><a></a><span class="kw">function</span> <span class="fu">logit_likelihood</span>(β,y,x)</span>
+<span id="cb5-9"><a></a>  p <span class="op">=</span> <span class="fu">map</span>(xb <span class="op">-&gt;</span> <span class="fu">cdf</span>(<span class="fu">Logistic</span>(),xb), x<span class="op">*</span>β)</span>
+<span id="cb5-10"><a></a>  <span class="fu">sum</span>(<span class="fu">log</span>.(<span class="fu">ifelse</span>.(y, p, <span class="fl">1.0</span> <span class="op">.-</span> p)))</span>
+<span id="cb5-11"><a></a><span class="kw">end</span></span>
+<span id="cb5-12"><a></a></span>
+<span id="cb5-13"><a></a>n <span class="op">=</span> <span class="fl">500</span></span>
+<span id="cb5-14"><a></a>k <span class="op">=</span> <span class="fl">3</span></span>
+<span id="cb5-15"><a></a>β<span class="fl">0</span> <span class="op">=</span> <span class="fu">ones</span>(k)</span>
+<span id="cb5-16"><a></a>(y,x) <span class="op">=</span> <span class="fu">simulate_logit</span>(n,β<span class="fl">0</span>)</span>
+<span id="cb5-17"><a></a></span>
+<span id="cb5-18"><a></a><span class="im">import</span> <span class="bu">ForwardDiff</span></span>
+<span id="cb5-19"><a></a><span class="pp">@btime</span> ∇L <span class="op">=</span> ForwardDiff.<span class="fu">gradient</span>(<span class="fu">b-&gt;logit_likelihood</span>(b,y,x),β<span class="fl">0</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>  6.893 μs (18 allocations: 47.60 KiB)</code></pre>
+</div>
+<div class="cell-output cell-output-display" data-execution_count="1">
+<pre><code>3-element Vector{Float64}:
+ -12.731371842600478
+   8.01221169776328
+  -4.290498731541103</code></pre>
+</div>
 </div>
 </section>
 <section id="forwarddiff-notes" class="slide level2">
@@ -342,23 +357,23 @@ Paul Schrimpf
 </ul></li>
 </ul>
 <div id="8" class="cell" data-execution_count="0">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb4"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb4-1"><a></a><span class="kw">function</span> <span class="fu">wontwork</span>(x)</span>
-<span id="cb4-2"><a></a>  y <span class="op">=</span> <span class="fu">zeros</span>(<span class="fu">size</span>(x))</span>
-<span id="cb4-3"><a></a>  <span class="cf">for</span> i <span class="op">∈</span> <span class="fu">eachindex</span>(x)</span>
-<span id="cb4-4"><a></a>    y[i] <span class="op">+=</span> x[i]<span class="op">*</span>i</span>
-<span id="cb4-5"><a></a>  <span class="cf">end</span></span>
-<span id="cb4-6"><a></a>  <span class="cf">return</span>(<span class="fu">sum</span>(y))</span>
-<span id="cb4-7"><a></a><span class="kw">end</span></span>
-<span id="cb4-8"><a></a></span>
-<span id="cb4-9"><a></a><span class="kw">function</span> <span class="fu">willwork</span>(x)</span>
-<span id="cb4-10"><a></a>  y <span class="op">=</span> <span class="fu">zero</span>(x)</span>
-<span id="cb4-11"><a></a>  <span class="cf">for</span> i <span class="op">∈</span> <span class="fu">eachindex</span>(x)</span>
-<span id="cb4-12"><a></a>    y[i] <span class="op">+=</span> x[i]<span class="op">*</span>i</span>
-<span id="cb4-13"><a></a>  <span class="cf">end</span></span>
-<span id="cb4-14"><a></a>  <span class="cf">return</span>(<span class="fu">sum</span>(y))</span>
-<span id="cb4-15"><a></a><span class="kw">end</span></span>
-<span id="cb4-16"><a></a></span>
-<span id="cb4-17"><a></a><span class="fu">betterstyle</span>(x) <span class="op">=</span> <span class="fu">sum</span>(v<span class="op">*</span>i <span class="cf">for</span> (i,v) <span class="kw">in</span> <span class="fu">enumerate</span>(x))</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb8"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb8-1"><a></a><span class="kw">function</span> <span class="fu">wontwork</span>(x)</span>
+<span id="cb8-2"><a></a>  y <span class="op">=</span> <span class="fu">zeros</span>(<span class="fu">size</span>(x))</span>
+<span id="cb8-3"><a></a>  <span class="cf">for</span> i <span class="op">∈</span> <span class="fu">eachindex</span>(x)</span>
+<span id="cb8-4"><a></a>    y[i] <span class="op">+=</span> x[i]<span class="op">*</span>i</span>
+<span id="cb8-5"><a></a>  <span class="cf">end</span></span>
+<span id="cb8-6"><a></a>  <span class="cf">return</span>(<span class="fu">sum</span>(y))</span>
+<span id="cb8-7"><a></a><span class="kw">end</span></span>
+<span id="cb8-8"><a></a></span>
+<span id="cb8-9"><a></a><span class="kw">function</span> <span class="fu">willwork</span>(x)</span>
+<span id="cb8-10"><a></a>  y <span class="op">=</span> <span class="fu">zero</span>(x)</span>
+<span id="cb8-11"><a></a>  <span class="cf">for</span> i <span class="op">∈</span> <span class="fu">eachindex</span>(x)</span>
+<span id="cb8-12"><a></a>    y[i] <span class="op">+=</span> x[i]<span class="op">*</span>i</span>
+<span id="cb8-13"><a></a>  <span class="cf">end</span></span>
+<span id="cb8-14"><a></a>  <span class="cf">return</span>(<span class="fu">sum</span>(y))</span>
+<span id="cb8-15"><a></a><span class="kw">end</span></span>
+<span id="cb8-16"><a></a></span>
+<span id="cb8-17"><a></a><span class="fu">betterstyle</span>(x) <span class="op">=</span> <span class="fu">sum</span>(v<span class="op">*</span>i <span class="cf">for</span> (i,v) <span class="kw">in</span> <span class="fu">enumerate</span>(x))</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 </section>
 <section id="reverse-mode-ad" class="slide level2">
@@ -371,20 +386,42 @@ Paul Schrimpf
 <section id="enzyme" class="slide level2">
 <h2>Enzyme</h2>
 <p><a href="https://enzymead.github.io/Enzyme.jl/stable/">“Enzyme performs automatic differentiation (AD) of statically analyzable LLVM. It is highly-efficient and its ability to perform AD on optimized code allows Enzyme to meet or exceed the performance of state-of-the-art AD tools.”</a></p>
-<div id="10" class="cell" data-execution_count="0">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb5"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb5-1"><a></a><span class="im">import</span> <span class="bu">Enzyme</span></span>
-<span id="cb5-2"><a></a><span class="im">import</span> <span class="bu">Enzyme</span>: Active, Duplicated, Const, BatchDuplicated</span>
-<span id="cb5-3"><a></a></span>
-<span id="cb5-4"><a></a>db <span class="op">=</span> <span class="fu">zero</span>(β<span class="fl">0</span>)</span>
-<span id="cb5-5"><a></a><span class="pp">@btime</span> Enzyme.<span class="fu">autodiff</span>(Enzyme.ReverseWithPrimal,logit_likelihood, Active, <span class="fu">Duplicated</span>(β<span class="fl">0</span>,db), <span class="fu">Const</span>(y), <span class="fu">Const</span>(x))</span>
-<span id="cb5-6"><a></a>db</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div id="10" class="cell" data-execution_count="1">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb9"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb9-1"><a></a><span class="im">import</span> <span class="bu">Enzyme</span></span>
+<span id="cb9-2"><a></a><span class="im">import</span> <span class="bu">Enzyme</span>: Active, Duplicated, Const, BatchDuplicated</span>
+<span id="cb9-3"><a></a></span>
+<span id="cb9-4"><a></a>db <span class="op">=</span> <span class="fu">zero</span>(β<span class="fl">0</span>)</span>
+<span id="cb9-5"><a></a><span class="pp">@btime</span> Enzyme.<span class="fu">autodiff</span>(Enzyme.ReverseWithPrimal,logit_likelihood, Active, <span class="fu">Duplicated</span>(β<span class="fl">0</span>,db), <span class="fu">Const</span>(y), <span class="fu">Const</span>(x))</span>
+<span id="cb9-6"><a></a>db</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>'znver5' is not a recognized processor for this target (ignoring processor)
+'znver5' is not a recognized processor for this target (ignoring processor)
+'znver5' is not a recognized processor for this target (ignoring processor)
+'znver5' is not a recognized processor for this target (ignoring processor)
+'znver5' is not a recognized processor for this target (ignoring processor)
+'znver5' is not a recognized processor for this target (ignoring processor)
+  11.111 μs (20 allocations: 24.06 KiB)</code></pre>
 </div>
-<div id="12" class="cell" data-execution_count="0">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb6"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb6-1"><a></a><span class="im">using</span> <span class="bu">LinearAlgebra</span></span>
-<span id="cb6-2"><a></a>v <span class="op">=</span> <span class="fu">Tuple</span>(<span class="fu">Float64</span>.(<span class="fu">I</span>(<span class="fu">length</span>(β<span class="fl">0</span>))[<span class="op">:</span>,j]) <span class="cf">for</span> j <span class="kw">in</span> <span class="fl">1</span><span class="op">:</span><span class="fu">length</span>(β<span class="fl">0</span>))</span>
-<span id="cb6-3"><a></a><span class="pp">@btime</span> dbf <span class="op">=</span> Enzyme.<span class="fu">autodiff</span>(Enzyme.ForwardWithPrimal, logit_likelihood, <span class="fu">BatchDuplicated</span>(β<span class="fl">0</span>,v), <span class="fu">Const</span>(y), <span class="fu">Const</span>(x))</span>
-<span id="cb6-4"><a></a><span class="co"># or</span></span>
-<span id="cb6-5"><a></a><span class="pp">@btime</span> dbf <span class="op">=</span> Enzyme.<span class="fu">gradient</span>(Enzyme.ForwardWithPrimal, logit_likelihood, β<span class="fl">0</span>, <span class="fu">Const</span>(y), <span class="fu">Const</span>(x))</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-display" data-execution_count="1">
+<pre><code>3-element Vector{Float64}:
+ -3.9162590984088196e6
+  2.464612403722244e6
+ -1.3197874433059106e6</code></pre>
+</div>
+</div>
+<div id="12" class="cell" data-execution_count="1">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb12"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb12-1"><a></a><span class="im">using</span> <span class="bu">LinearAlgebra</span></span>
+<span id="cb12-2"><a></a>v <span class="op">=</span> <span class="fu">Tuple</span>(<span class="fu">Float64</span>.(<span class="fu">I</span>(<span class="fu">length</span>(β<span class="fl">0</span>))[<span class="op">:</span>,j]) <span class="cf">for</span> j <span class="kw">in</span> <span class="fl">1</span><span class="op">:</span><span class="fu">length</span>(β<span class="fl">0</span>))</span>
+<span id="cb12-3"><a></a><span class="pp">@btime</span> dbf <span class="op">=</span> Enzyme.<span class="fu">autodiff</span>(Enzyme.ForwardWithPrimal, logit_likelihood, <span class="fu">BatchDuplicated</span>(β<span class="fl">0</span>,v), <span class="fu">Const</span>(y), <span class="fu">Const</span>(x))</span>
+<span id="cb12-4"><a></a><span class="co"># or</span></span>
+<span id="cb12-5"><a></a><span class="pp">@btime</span> dbf <span class="op">=</span> Enzyme.<span class="fu">gradient</span>(Enzyme.ForwardWithPrimal, logit_likelihood, β<span class="fl">0</span>, <span class="fu">Const</span>(y), <span class="fu">Const</span>(x))</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>  6.406 μs (36 allocations: 48.09 KiB)
+  6.883 μs (55 allocations: 48.70 KiB)</code></pre>
+</div>
+<div class="cell-output cell-output-display" data-execution_count="1">
+<pre><code>(derivs = ([-12.73137184260048, 8.012211697763275, -4.290498731541106], nothing, nothing), val = -256.2174868842282)</code></pre>
+</div>
 </div>
 </section>
 <section id="enzyme-notes" class="slide level2">
@@ -444,21 +481,34 @@ Paul Schrimpf
 </section>
 <section id="reactant" class="slide level2">
 <h2>Reactant</h2>
-<div id="14" class="cell" data-execution_count="0">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb7"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb7-1"><a></a><span class="im">import</span> <span class="bu">Reactant</span></span>
-<span id="cb7-2"><a></a><span class="im">using</span> <span class="bu">Test</span></span>
-<span id="cb7-3"><a></a>xr <span class="op">=</span> Reactant.<span class="fu">to_rarray</span>(x)</span>
-<span id="cb7-4"><a></a>yr <span class="op">=</span> Reactant.<span class="fu">to_rarray</span>(<span class="fu">Int</span>.(y))</span>
-<span id="cb7-5"><a></a>βr <span class="op">=</span> Reactant.<span class="fu">to_rarray</span>(β<span class="fl">0</span>)</span>
-<span id="cb7-6"><a></a></span>
-<span id="cb7-7"><a></a><span class="kw">function</span> <span class="fu">logit_likelihood_r</span>(β,y,x)</span>
-<span id="cb7-8"><a></a>    p <span class="op">=</span> <span class="fu">map</span>(xb <span class="op">-&gt;</span> <span class="fl">1</span><span class="op">/</span>(<span class="fl">1</span><span class="fu">+exp</span>(<span class="op">-</span>xb)), x<span class="op">*</span>β)</span>
-<span id="cb7-9"><a></a>    <span class="fu">sum</span>(<span class="fu">x-&gt;log</span>(x[<span class="fl">1</span>]<span class="op">^</span>x[<span class="fl">2</span>]<span class="fu">*</span>(<span class="fl">1.0</span> <span class="op">-</span> x[<span class="fl">1</span>])<span class="op">^</span>(<span class="fl">1</span><span class="op">-</span>x[<span class="fl">2</span>])), <span class="fu">zip</span>(p,y))</span>
-<span id="cb7-10"><a></a><span class="kw">end</span></span>
-<span id="cb7-11"><a></a><span class="pp">@test</span> <span class="fu">logit_likelihood_r</span>(β<span class="fl">0</span>, y, x) <span class="op">≈</span> <span class="fu">logit_likelihood</span>(β<span class="fl">0</span>, y, x)</span>
-<span id="cb7-12"><a></a></span>
-<span id="cb7-13"><a></a>∇llreact <span class="op">=</span> Reactant.<span class="pp">@compile</span> Enzyme.<span class="fu">gradient</span>(Enzyme.ReverseWithPrimal,logit_likelihood_r, βr, <span class="fu">Const</span>(yr), <span class="fu">Const</span>(xr))</span>
-<span id="cb7-14"><a></a><span class="pp">@btime</span> <span class="fu">∇llreact</span>(Enzyme.ReverseWithPrimal, logit_likelihood_r, βr, <span class="fu">Const</span>(yr), <span class="fu">Const</span>(xr))</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div id="14" class="cell" data-execution_count="1">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb15"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb15-1"><a></a><span class="im">import</span> <span class="bu">Reactant</span></span>
+<span id="cb15-2"><a></a><span class="im">using</span> <span class="bu">Test</span></span>
+<span id="cb15-3"><a></a>xr <span class="op">=</span> Reactant.<span class="fu">to_rarray</span>(x)</span>
+<span id="cb15-4"><a></a>yr <span class="op">=</span> Reactant.<span class="fu">to_rarray</span>(<span class="fu">Int</span>.(y))</span>
+<span id="cb15-5"><a></a>βr <span class="op">=</span> Reactant.<span class="fu">to_rarray</span>(β<span class="fl">0</span>)</span>
+<span id="cb15-6"><a></a></span>
+<span id="cb15-7"><a></a><span class="kw">function</span> <span class="fu">logit_likelihood_r</span>(β,y,x)</span>
+<span id="cb15-8"><a></a>    p <span class="op">=</span> <span class="fu">map</span>(xb <span class="op">-&gt;</span> <span class="fl">1</span><span class="op">/</span>(<span class="fl">1</span><span class="fu">+exp</span>(<span class="op">-</span>xb)), x<span class="op">*</span>β)</span>
+<span id="cb15-9"><a></a>    <span class="fu">sum</span>(<span class="fu">x-&gt;log</span>(x[<span class="fl">1</span>]<span class="op">^</span>x[<span class="fl">2</span>]<span class="fu">*</span>(<span class="fl">1.0</span> <span class="op">-</span> x[<span class="fl">1</span>])<span class="op">^</span>(<span class="fl">1</span><span class="op">-</span>x[<span class="fl">2</span>])), <span class="fu">zip</span>(p,y))</span>
+<span id="cb15-10"><a></a><span class="kw">end</span></span>
+<span id="cb15-11"><a></a><span class="pp">@test</span> <span class="fu">logit_likelihood_r</span>(β<span class="fl">0</span>, y, x) <span class="op">≈</span> <span class="fu">logit_likelihood</span>(β<span class="fl">0</span>, y, x)</span>
+<span id="cb15-12"><a></a></span>
+<span id="cb15-13"><a></a>∇llreact <span class="op">=</span> Reactant.<span class="pp">@compile</span> Enzyme.<span class="fu">gradient</span>(Enzyme.ReverseWithPrimal,logit_likelihood_r, βr, <span class="fu">Const</span>(yr), <span class="fu">Const</span>(xr))</span>
+<span id="cb15-14"><a></a><span class="pp">@btime</span> <span class="fu">∇llreact</span>(Enzyme.ReverseWithPrimal, logit_likelihood_r, βr, <span class="fu">Const</span>(yr), <span class="fu">Const</span>(xr))</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>WARNING: All log messages before absl::InitializeLog() is called are written to STDERR
+I0000 00:00:1773084761.107001  110766 service.cc:153] XLA service 0x1a70a5f0 initialized for platform CUDA (this does not guarantee that XLA will be used). Devices:
+I0000 00:00:1773084761.107019  110766 service.cc:161]   StreamExecutor [0]: NVIDIA GeForce RTX 4070 Ti SUPER, Compute Capability 8.9 (Driver: 13.1.0; Runtime: 13.0.0; Toolkit: 13.0.0; DNN: 9.14.0)
+I0000 00:00:1773084761.107557  110766 se_gpu_pjrt_client.cc:1511] Using BFC allocator.
+I0000 00:00:1773084761.107573  110766 gpu_helpers.cc:141] XLA backend allocating 12533268480 bytes on device 0 for BFCAllocator.
+I0000 00:00:1773084761.107587  110766 gpu_helpers.cc:183] XLA backend will use up to 4177756160 bytes on device 0 for CollectiveBFCAllocator.
+I0000 00:00:1773084761.112634  110766 cuda_dnn.cc:461] Loaded cuDNN version 91400
+  11.752 μs (21 allocations: 576 bytes)</code></pre>
+</div>
+<div class="cell-output cell-output-display" data-execution_count="1">
+<pre><code>(derivs = (Reactant.ConcretePJRTArray{Float64, 1, 1}([-12.731371842600486, 8.012211697763268, -4.290498731541099]), nothing, nothing), val = Reactant.ConcretePJRTNumber{Float64, 1}(-256.21748688422826))</code></pre>
+</div>
 </div>
 </section>
 <section id="mooncake" class="slide level2">
@@ -476,11 +526,17 @@ Paul Schrimpf
 </section>
 <section id="mooncake-1" class="slide level2">
 <h2>Mooncake</h2>
-<div id="16" class="cell" data-execution_count="0">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb8"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb8-1"><a></a><span class="im">import</span> <span class="bu">Mooncake</span> as MC</span>
-<span id="cb8-2"><a></a>ℒ <span class="op">=</span> <span class="fu">b-&gt;logit_likelihood</span>(b,y,x)</span>
-<span id="cb8-3"><a></a>cache <span class="op">=</span> MC.<span class="fu">prepare_gradient_cache</span>(ℒ, β<span class="fl">0</span>)</span>
-<span id="cb8-4"><a></a><span class="pp">@btime</span> val, grad <span class="op">=</span> MC.<span class="fu">value_and_gradient!!</span>(cache, ℒ, β<span class="fl">0</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div id="16" class="cell" data-execution_count="1">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb18"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb18-1"><a></a><span class="im">import</span> <span class="bu">Mooncake</span> as MC</span>
+<span id="cb18-2"><a></a>ℒ <span class="op">=</span> <span class="fu">b-&gt;logit_likelihood</span>(b,y,x)</span>
+<span id="cb18-3"><a></a>cache <span class="op">=</span> MC.<span class="fu">prepare_gradient_cache</span>(ℒ, β<span class="fl">0</span>)</span>
+<span id="cb18-4"><a></a><span class="pp">@btime</span> val, grad <span class="op">=</span> MC.<span class="fu">value_and_gradient!!</span>(cache, ℒ, β<span class="fl">0</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>  18.184 μs (63 allocations: 41.34 KiB)</code></pre>
+</div>
+<div class="cell-output cell-output-display" data-execution_count="1">
+<pre><code>(-256.2174868842282, (Mooncake.NoTangent(), [-12.731371842600486, 8.012211697763279, -4.290498731541106]))</code></pre>
+</div>
 </div>
 </section>
 <section id="finitediff" class="slide level2">
@@ -507,26 +563,40 @@ Paul Schrimpf
 </section>
 <section id="fastdifferentiation.jl" class="slide level2">
 <h2>FastDifferentiation.jl</h2>
-<div id="18" class="cell" data-execution_count="0">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb9"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb9-1"><a></a><span class="im">import</span> <span class="bu">FastDifferentiation</span> as FD</span>
-<span id="cb9-2"><a></a>βs<span class="op">=</span>FD.<span class="fu">make_variables</span>(<span class="op">:</span>β, <span class="fu">length</span>(β<span class="fl">0</span>))</span>
-<span id="cb9-3"><a></a>FD.<span class="pp">@variables</span> ys</span>
-<span id="cb9-4"><a></a>xs <span class="op">=</span> FD.<span class="fu">make_variables</span>(<span class="op">:</span>x, <span class="fu">length</span>(β<span class="fl">0</span>))</span>
-<span id="cb9-5"><a></a><span class="kw">function</span> <span class="fu">logit_likei</span>(β,y,x)</span>
-<span id="cb9-6"><a></a>    p <span class="op">=</span> <span class="fu">cdf</span>(<span class="fu">Logistic</span>(),x<span class="op">'*</span>β)</span>
-<span id="cb9-7"><a></a>    <span class="fu">log</span>(p<span class="op">^</span>(y)<span class="fu">*</span>(<span class="fl">1</span><span class="op">-</span>p)<span class="op">^</span>(<span class="fl">1</span><span class="op">-</span>y))</span>
-<span id="cb9-8"><a></a><span class="kw">end</span></span>
-<span id="cb9-9"><a></a><span class="fu">logit_likei</span>(βs,ys,xs)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div id="18" class="cell" data-execution_count="1">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb21"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb21-1"><a></a><span class="im">import</span> <span class="bu">FastDifferentiation</span> as FD</span>
+<span id="cb21-2"><a></a>βs<span class="op">=</span>FD.<span class="fu">make_variables</span>(<span class="op">:</span>β, <span class="fu">length</span>(β<span class="fl">0</span>))</span>
+<span id="cb21-3"><a></a>FD.<span class="pp">@variables</span> ys</span>
+<span id="cb21-4"><a></a>xs <span class="op">=</span> FD.<span class="fu">make_variables</span>(<span class="op">:</span>x, <span class="fu">length</span>(β<span class="fl">0</span>))</span>
+<span id="cb21-5"><a></a><span class="kw">function</span> <span class="fu">logit_likei</span>(β,y,x)</span>
+<span id="cb21-6"><a></a>    p <span class="op">=</span> <span class="fu">cdf</span>(<span class="fu">Logistic</span>(),x<span class="op">'*</span>β)</span>
+<span id="cb21-7"><a></a>    <span class="fu">log</span>(p<span class="op">^</span>(y)<span class="fu">*</span>(<span class="fl">1</span><span class="op">-</span>p)<span class="op">^</span>(<span class="fl">1</span><span class="op">-</span>y))</span>
+<span id="cb21-8"><a></a><span class="kw">end</span></span>
+<span id="cb21-9"><a></a><span class="fu">logit_likei</span>(βs,ys,xs)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-display" data-execution_count="1">
+<pre><code>log((((1 / (exp(-((((x1 * β1) + (x2 * β2)) + (x3 * β3)))) + 1)) ^ ys) * ((1 - (1 / (exp(-((((x1 * β1) + (x2 * β2)) + (x3 * β3)))) + 1))) ^ (1 - ys))))</code></pre>
 </div>
-<div id="20" class="cell" data-execution_count="0">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb10"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb10-1"><a></a>∇logit_likei_ex <span class="op">=</span> FD.<span class="fu">jacobian</span>([<span class="fu">logit_likei</span>(βs, ys, xs)], βs)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
-<div id="22" class="cell" data-execution_count="0">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb11"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb11-1"><a></a>∇logit_likei <span class="op">=</span> FD.<span class="fu">make_function</span>(∇logit_likei_ex, βs, [ys], xs, in_place<span class="op">=</span><span class="cn">false</span>)</span>
-<span id="cb11-2"><a></a><span class="kw">function</span> <span class="fu">∇logit_likelihood_FD</span>(β,y,x)</span>
-<span id="cb11-3"><a></a>    <span class="fu">sum</span>(<span class="fu">∇logit_likei</span>(β, [y[i]], x[i,<span class="op">:</span>]) <span class="cf">for</span> i <span class="kw">in</span> <span class="fl">1</span><span class="op">:</span><span class="fu">length</span>(y))</span>
-<span id="cb11-4"><a></a><span class="cf">end</span></span>
-<span id="cb11-5"><a></a><span class="pp">@btime</span> <span class="fu">∇logit_likelihood_FD</span>(β<span class="fl">0</span>,y,x)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div id="20" class="cell" data-execution_count="1">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb23"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb23-1"><a></a>∇logit_likei_ex <span class="op">=</span> FD.<span class="fu">jacobian</span>([<span class="fu">logit_likei</span>(βs, ys, xs)], βs)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-display" data-execution_count="1">
+<pre><code>1×3 Matrix{FastDifferentiation.Node}:
+ (-(((((1 / (((1 / (exp(-((((x1 * β1) + (x2 * β2)) + (x3 * β3)))) + 1)) ^ ys) * ((1 - (1 / (exp(-((((x1 * β1) + (x2 * β2)) + (x3 * β3)))) + 1))) ^ (1 - ys)))) * ((((1 - (1 / (exp(-((((x1 * β1) + (x2 * β2)) + (x3 * β3)))) + 1))) ^ (1 - ys)) * (ys * ((1 / (exp(-((((x1 * β1) + (x2 * β2)) + (x3 * β3)))) + 1)) ^ (ys - 1)))) + -((((1 / (exp(-((((x1 * β1) + (x2 * β2)) + (x3 * β3)))) + 1)) ^ ys) * ((1 - ys) * ((1 - (1 / (exp(-((((x1 * β1) + (x2 * β2)) + (x3 * β3)))) + 1))) ^ ((1 - ys) - 1))))))) * -(((1 / (exp(-((((x1 * β1) + (x2 * β2)) + (x3 * β3)))) + 1)) / (exp(-((((x1 * β1) + (x2 * β2)) + (x3 * β3)))) + 1)))) * exp(-((((x1 * β1) + (x2 * β2)) + (x3 * β3)))))) * x1)  …  (-(((((1 / (((1 / (exp(-((((x1 * β1) + (x2 * β2)) + (x3 * β3)))) + 1)) ^ ys) * ((1 - (1 / (exp(-((((x1 * β1) + (x2 * β2)) + (x3 * β3)))) + 1))) ^ (1 - ys)))) * ((((1 - (1 / (exp(-((((x1 * β1) + (x2 * β2)) + (x3 * β3)))) + 1))) ^ (1 - ys)) * (ys * ((1 / (exp(-((((x1 * β1) + (x2 * β2)) + (x3 * β3)))) + 1)) ^ (ys - 1)))) + -((((1 / (exp(-((((x1 * β1) + (x2 * β2)) + (x3 * β3)))) + 1)) ^ ys) * ((1 - ys) * ((1 - (1 / (exp(-((((x1 * β1) + (x2 * β2)) + (x3 * β3)))) + 1))) ^ ((1 - ys) - 1))))))) * -(((1 / (exp(-((((x1 * β1) + (x2 * β2)) + (x3 * β3)))) + 1)) / (exp(-((((x1 * β1) + (x2 * β2)) + (x3 * β3)))) + 1)))) * exp(-((((x1 * β1) + (x2 * β2)) + (x3 * β3)))))) * x3)</code></pre>
+</div>
+</div>
+<div id="22" class="cell" data-execution_count="1">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb25"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb25-1"><a></a>∇logit_likei <span class="op">=</span> FD.<span class="fu">make_function</span>(∇logit_likei_ex, βs, [ys], xs, in_place<span class="op">=</span><span class="cn">false</span>)</span>
+<span id="cb25-2"><a></a><span class="kw">function</span> <span class="fu">∇logit_likelihood_FD</span>(β,y,x)</span>
+<span id="cb25-3"><a></a>    <span class="fu">sum</span>(<span class="fu">∇logit_likei</span>(β, [y[i]], x[i,<span class="op">:</span>]) <span class="cf">for</span> i <span class="kw">in</span> <span class="fl">1</span><span class="op">:</span><span class="fu">length</span>(y))</span>
+<span id="cb25-4"><a></a><span class="cf">end</span></span>
+<span id="cb25-5"><a></a><span class="pp">@btime</span> <span class="fu">∇logit_likelihood_FD</span>(β<span class="fl">0</span>,y,x)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>  65.925 μs (6497 allocations: 242.06 KiB)</code></pre>
+</div>
+<div class="cell-output cell-output-display" data-execution_count="1">
+<pre><code>1×3 Matrix{Float64}:
+ -12.7314  8.01221  -4.2905</code></pre>
+</div>
 </div>
 </section>
 <section id="differentiationinterface" class="slide level2">
@@ -534,19 +604,31 @@ Paul Schrimpf
 <ul>
 <li><a href="https://github.com/gdalle/DifferentiationInterface.jl">DifferentiationInterface</a> gives a single interface for many differentiation packages</li>
 </ul>
-<div id="24" class="cell" data-execution_count="0">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb12"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb12-1"><a></a><span class="im">import</span> <span class="bu">DifferentiationInterface</span> as DI</span>
-<span id="cb12-2"><a></a>DI.<span class="fu">gradient</span>(<span class="fu">b-&gt;logit_likelihood</span>(b,y,x), DI.<span class="fu">AutoEnzyme</span>(),β<span class="fl">0</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div id="24" class="cell" data-execution_count="1">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb28"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb28-1"><a></a><span class="im">import</span> <span class="bu">DifferentiationInterface</span> as DI</span>
+<span id="cb28-2"><a></a>DI.<span class="fu">gradient</span>(<span class="fu">b-&gt;logit_likelihood</span>(b,y,x), DI.<span class="fu">AutoEnzyme</span>(),β<span class="fl">0</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-display" data-execution_count="1">
+<pre><code>3-element Vector{Float64}:
+ -12.7313718426005
+   8.01221169776327
+  -4.290498731541116</code></pre>
+</div>
 </div>
 <ul>
 <li>improve performance by reusing intermediate variables</li>
 </ul>
-<div id="26" class="cell" data-execution_count="0">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb13"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb13-1"><a></a>backend <span class="op">=</span> DI.<span class="fu">AutoEnzyme</span>()</span>
-<span id="cb13-2"><a></a>ℒ <span class="op">=</span> <span class="fu">b-&gt;logit_likelihood</span>(b,y,x)</span>
-<span id="cb13-3"><a></a>dcache <span class="op">=</span> DI.<span class="fu">prepare_gradient</span>(ℒ, backend, β<span class="fl">0</span>)</span>
-<span id="cb13-4"><a></a>grad <span class="op">=</span> <span class="fu">zero</span>(β<span class="fl">0</span>)</span>
-<span id="cb13-5"><a></a>DI.<span class="fu">gradient!</span>(ℒ,grad, dcache, backend,β<span class="fl">0</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div id="26" class="cell" data-execution_count="1">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb30"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb30-1"><a></a>backend <span class="op">=</span> DI.<span class="fu">AutoEnzyme</span>()</span>
+<span id="cb30-2"><a></a>ℒ <span class="op">=</span> <span class="fu">b-&gt;logit_likelihood</span>(b,y,x)</span>
+<span id="cb30-3"><a></a>dcache <span class="op">=</span> DI.<span class="fu">prepare_gradient</span>(ℒ, backend, β<span class="fl">0</span>)</span>
+<span id="cb30-4"><a></a>grad <span class="op">=</span> <span class="fu">zero</span>(β<span class="fl">0</span>)</span>
+<span id="cb30-5"><a></a>DI.<span class="fu">gradient!</span>(ℒ,grad, dcache, backend,β<span class="fl">0</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-display" data-execution_count="1">
+<pre><code>3-element Vector{Float64}:
+ -12.7313718426005
+   8.01221169776327
+  -4.290498731541116</code></pre>
+</div>
 </div>
 </section></section>
 <section>
@@ -591,10 +673,10 @@ Paul Schrimpf
 <section id="zygote-example" class="slide level2">
 <h2>Zygote Example</h2>
 <div id="28" class="cell" data-execution_count="0">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb14"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb14-1"><a></a><span class="im">import</span> <span class="bu">Zygote</span></span>
-<span id="cb14-2"><a></a><span class="im">using</span> <span class="bu">LinearAlgebra</span></span>
-<span id="cb14-3"><a></a><span class="pp">@time</span> ∇Lz <span class="op">=</span>  Zygote.<span class="fu">gradient</span>(<span class="fu">b-&gt;logit_likelihood</span>(b,y,x),β<span class="fl">0</span>)[<span class="fl">1</span>]</span>
-<span id="cb14-4"><a></a><span class="fu">norm</span>(∇L <span class="op">-</span> ∇Lz)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb32"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb32-1"><a></a><span class="im">import</span> <span class="bu">Zygote</span></span>
+<span id="cb32-2"><a></a><span class="im">using</span> <span class="bu">LinearAlgebra</span></span>
+<span id="cb32-3"><a></a><span class="pp">@time</span> ∇Lz <span class="op">=</span>  Zygote.<span class="fu">gradient</span>(<span class="fu">b-&gt;logit_likelihood</span>(b,y,x),β<span class="fl">0</span>)[<span class="fl">1</span>]</span>
+<span id="cb32-4"><a></a><span class="fu">norm</span>(∇L <span class="op">-</span> ∇Lz)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 </section>
 <section id="diffractor" class="slide level2">

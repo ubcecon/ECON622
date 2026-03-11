@@ -10,7 +10,7 @@
   <meta name="generator" content="quarto-1.8.27">
 
   <meta name="author" content="Paul Schrimpf">
-  <meta name="dcterms.date" content="2026-02-25">
+  <meta name="dcterms.date" content="2026-03-09">
   <title>ECON 622 – Solving Nonlinear Equations</title>
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
@@ -116,7 +116,7 @@
     div.csl-indent {
       margin-left: 2em;
     }  </style>
-  <link rel="stylesheet" href="site_libs/revealjs/dist/theme/quarto-6ae29d241dba1d02babb97ce1fbe8bdd.css">
+  <link rel="stylesheet" href="site_libs/revealjs/dist/theme/quarto-73806f0e93c0950b605bb3afe7220856.css">
   <link href="site_libs/revealjs/plugin/quarto-line-highlight/line-highlight.css" rel="stylesheet">
   <link href="site_libs/revealjs/plugin/reveal-menu/menu.css" rel="stylesheet">
   <link href="site_libs/revealjs/plugin/reveal-menu/quarto-menu.css" rel="stylesheet">
@@ -226,7 +226,7 @@ Paul Schrimpf
 </div>
 </div>
 
-  <p class="date">2026-02-25</p>
+  <p class="date">2026-03-09</p>
 </section>
 <section class="slide level2">
 
@@ -479,18 +479,21 @@ x_{s+1} = x_s + F'(x_s)^{-1} F(x_s)
 ----        -------------           -----------             -------             
 Iter        f(u) inf-norm           Step 2-norm             cond(J)             
 ----        -------------           -----------             -------             
-0           2.17844312e-01          0.00000000e+00          2.66105922e+00      
-1           3.01041802e-02          9.57630954e-01          -1.00000000e+00     
-2           1.06076420e-03          1.58841877e-01          -1.00000000e+00     
-3           7.60398825e-07          3.07129498e-03          -1.00000000e+00     
-4           8.54705196e-13          4.83528939e-06          -1.00000000e+00     
-5           1.11022302e-16          1.55733653e-12          -1.00000000e+00     
-Final       1.11022302e-16      
+0           2.45237251e-01          0.00000000e+00          2.34514165e+00      
+1           5.53505334e-02          7.64604551e-01          -1.00000000e+00     
+2           1.41630880e-02          4.52537696e-01          -1.00000000e+00     
+3           3.15460474e-03          2.00098511e-01          -1.00000000e+00     
+4           4.86332602e-04          8.23878535e-02          -1.00000000e+00     
+5           2.34302830e-05          1.83647375e-02          -1.00000000e+00     
+6           6.62641342e-08          9.80082729e-04          -1.00000000e+00     
+7           5.36227313e-13          2.78816926e-06          -1.00000000e+00     
+8           2.22044605e-16          2.25620219e-11          -1.00000000e+00     
+Final       2.22044605e-16      
 ----------------------      
-True δ: [0.629289934231809, 0.8800783709746217]
-Solved δ: [0.6292899342318088, 0.8800783709746214]
-||F(sol.u)||: 1.1102230246251565e-16
-Error: 4.002966042486721e-16
+True δ: [0.037426489706381405, -1.48537113248969]
+Solved δ: [0.037426489706379636, -1.4853711324896943]
+||F(sol.u)||: 2.2729511820139823e-16
+Error: 4.574878581983742e-15
 </pre>
 </div>
 </div>
@@ -532,18 +535,21 @@ Error: 4.002966042486721e-16
 ----        -------------           -----------             -------             
 Iter        f(u) inf-norm           Step 2-norm             cond(J)             
 ----        -------------           -----------             -------             
-0           2.17844312e-01          0.00000000e+00          2.66105922e+00      
-1           2.06530099e-01          2.61381267e-02          -1.00000000e+00     
-2           1.83533014e-01          5.22762533e-02          -1.00000000e+00     
-3           1.54953511e-01          1.04552507e-01          -1.00000000e+00     
-4           1.13030863e-01          2.09105013e-01          -1.00000000e+00     
-5           7.95722570e-02          2.87519393e-01          -1.00000000e+00     
-6           4.03571968e-02          2.87519393e-01          -1.00000000e+00     
-7           4.73972324e-03          2.87519393e-01          -1.00000000e+00     
-8           4.14266328e-05          3.97717073e-02          -1.00000000e+00     
-9           1.78417997e-09          2.56069249e-04          -1.00000000e+00     
-10          2.77555756e-16          1.51535425e-08          -1.00000000e+00     
-Final       2.77555756e-16      
+0           2.45237251e-01          0.00000000e+00          2.34514165e+00      
+1           2.36149706e-01          2.76280145e-02          -1.00000000e+00     
+2           2.18314004e-01          5.52560291e-02          -1.00000000e+00     
+3           1.84114762e-01          1.10512058e-01          -1.00000000e+00     
+4           1.22421463e-01          2.21024116e-01          -1.00000000e+00     
+5           7.66296412e-02          3.03908160e-01          -1.00000000e+00     
+6           5.21332205e-02          3.03908160e-01          -1.00000000e+00     
+7           1.71102161e-02          3.03908160e-01          -1.00000000e+00     
+8           4.19412667e-03          2.56746361e-01          -1.00000000e+00     
+9           7.13931788e-04          9.89698368e-02          -1.00000000e+00     
+10          4.64191072e-05          2.58092787e-02          -1.00000000e+00     
+11          2.57277704e-07          1.93081073e-03          -1.00000000e+00     
+12          8.07962031e-12          1.08247519e-05          -1.00000000e+00     
+13          2.22044605e-16          3.39969140e-10          -1.00000000e+00     
+Final       2.22044605e-16      
 ----------------------      
 </pre>
 </div>
@@ -551,8 +557,8 @@ Final       2.77555756e-16
 <div class="cell-output cell-output-display" data-execution_count="1">
 <pre><code>retcode: Success
 u: 2-element Vector{Float64}:
- 0.6292899342318091
- 0.8800783709746216</code></pre>
+  0.03742648970638135
+ -1.4853711324896857</code></pre>
 </div>
 </div>
 <div id="8" class="cell" data-execution_count="1">
@@ -566,24 +572,22 @@ u: 2-element Vector{Float64}:
 <span id="cb6-8"><a></a>              <span class="fu">FixedPointAccelerationJL</span>(algorithm<span class="op">=:</span>Anderson),</span>
 <span id="cb6-9"><a></a>              show_trace<span class="op">=</span><span class="fu">Val</span>(<span class="cn">true</span>), trace_level<span class="op">=</span><span class="fu">TraceAll</span>() )</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>                                          Algorithm: Anderson. Iteration:     1. Convergence:    0.864178016. Time: 2026-02-25T12:25:32.602
-                           Used:  0 lags. Algorithm: Anderson. Iteration:     2. Convergence:   0.6755762912. Time: 2026-02-25T12:25:32.618
-Condition number is   1.0. Used:  2 lags. Algorithm: Anderson. Iteration:     3. Convergence:    0.124983431. Time: 2026-02-25T12:25:32.618
-Condition number is   6.7. Used:  3 lags. Algorithm: Anderson. Iteration:     4. Convergence:  0.07034521609. Time: 2026-02-25T12:25:32.618
-Condition number is 110.0. Used:  3 lags. Algorithm: Anderson. Iteration:     5. Convergence:   0.1450122999. Time: 2026-02-25T12:25:32.618
-Condition number is   2.4. Used:  3 lags. Algorithm: Anderson. Iteration:     6. Convergence:  0.02858382226. Time: 2026-02-25T12:25:32.618
-Condition number is   8.2. Used:  3 lags. Algorithm: Anderson. Iteration:     7. Convergence: 0.007913438692. Time: 2026-02-25T12:25:32.618
-Condition number is   9.8. Used:  3 lags. Algorithm: Anderson. Iteration:     8. Convergence: 0.0004159526633. Time: 2026-02-25T12:25:32.618
-Condition number is  57.0. Used:  3 lags. Algorithm: Anderson. Iteration:     9. Convergence: 8.002950233e-6. Time: 2026-02-25T12:25:32.619
-Condition number is 430.0. Used:  3 lags. Algorithm: Anderson. Iteration:    10. Convergence:  1.30947629e-7. Time: 2026-02-25T12:25:32.619
-Condition number is 550.0. Used:  3 lags. Algorithm: Anderson. Iteration:    11. Convergence: 1.397293392e-11. Time: 2026-02-25T12:25:32.619
-Condition number is   1.0. Used:  2 lags. Algorithm: Anderson. Iteration:    12. Convergence: 1.789679516e-13. Time: 2026-02-25T12:25:32.619</code></pre>
+<pre><code>                                          Algorithm: Anderson. Iteration:     1. Convergence:     2.24845817. Time: 2026-03-09T14:08:07.043
+                           Used:  0 lags. Algorithm: Anderson. Iteration:     2. Convergence:   0.4550835084. Time: 2026-03-09T14:08:07.043
+Condition number is   1.0. Used:  2 lags. Algorithm: Anderson. Iteration:     3. Convergence:    1.098591371. Time: 2026-03-09T14:08:07.043
+Condition number is  21.0. Used:  3 lags. Algorithm: Anderson. Iteration:     4. Convergence:    2.880478636. Time: 2026-03-09T14:08:07.043
+Condition number is  16.0. Used:  3 lags. Algorithm: Anderson. Iteration:     5. Convergence:    2.826673516. Time: 2026-03-09T14:08:07.043
+Condition number is  10.0. Used:  3 lags. Algorithm: Anderson. Iteration:     6. Convergence:    1.739284339. Time: 2026-03-09T14:08:07.043
+Condition number is   5.1. Used:  3 lags. Algorithm: Anderson. Iteration:     7. Convergence:     1.30244055. Time: 2026-03-09T14:08:07.043
+Condition number is   3.5. Used:  3 lags. Algorithm: Anderson. Iteration:     8. Convergence:    4.435186334. Time: 2026-03-09T14:08:07.043
+Condition number is   4.7. Used:  3 lags. Algorithm: Anderson. Iteration:     9. Convergence:    2.237961754. Time: 2026-03-09T14:08:07.043
+Condition number is   3.8. Used:  3 lags. </code></pre>
 </div>
 <div class="cell-output cell-output-display" data-execution_count="1">
-<pre><code>retcode: Success
+<pre><code>retcode: Failure
 u: 2-element Vector{Float64}:
- 0.6292899342321292
- 0.8800783709747876</code></pre>
+ 0.0
+ 0.0</code></pre>
 </div>
 </div>
 </section>
@@ -602,26 +606,18 @@ u: 2-element Vector{Float64}:
 <div id="10" class="cell" data-execution_count="1">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb9"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb9-1"><a></a><span class="im">using</span> <span class="bu">BenchmarkTools</span></span>
 <span id="cb9-2"><a></a><span class="pp">@benchmark</span> <span class="fu">solve</span>(probfp)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-<div class="cell-output cell-output-stdout">
-<div class="ansi-escaped-output">
-<pre><span class="ansi-green-fg ansi-bold">Precompiling</span> packages...
-    643.4 ms<span class="ansi-green-fg">  ✓ </span>QuartoNotebookWorkerJSONExt<span class="ansi-bright-black-fg"> (serial)</span>
-  1 dependency successfully precompiled in 1 seconds
-</pre>
-</div>
-</div>
 <div class="cell-output cell-output-display" data-execution_count="1">
 <div class="ansi-escaped-output">
-<pre>BenchmarkTools.Trial: 9036 samples with 1 evaluation per sample.
- Range <span class="ansi-bright-black-fg">(</span><span class="ansi-cyan-fg ansi-bold">min</span> … <span class="ansi-magenta-fg">max</span><span class="ansi-bright-black-fg">):  </span><span class="ansi-cyan-fg ansi-bold">362.175 μs</span> … <span class="ansi-magenta-fg"> 19.896 ms</span>  <span class="ansi-bright-black-fg">┊</span> GC <span class="ansi-bright-black-fg">(</span>min … max<span class="ansi-bright-black-fg">): </span> 0.00% … 96.33%
- Time  <span class="ansi-bright-black-fg">(</span><span class="ansi-blue-fg ansi-bold">median</span><span class="ansi-bright-black-fg">):     </span><span class="ansi-blue-fg ansi-bold">460.721 μs               </span><span class="ansi-bright-black-fg">┊</span> GC <span class="ansi-bright-black-fg">(</span>median<span class="ansi-bright-black-fg">):    </span> 0.00%
- Time  <span class="ansi-bright-black-fg">(</span><span class="ansi-green-fg ansi-bold">mean</span> ± <span class="ansi-green-fg">σ</span><span class="ansi-bright-black-fg">):   </span><span class="ansi-green-fg ansi-bold">551.283 μs</span> ± <span class="ansi-green-fg">829.864 μs</span>  <span class="ansi-bright-black-fg">┊</span> GC <span class="ansi-bright-black-fg">(</span>mean ± σ<span class="ansi-bright-black-fg">):  </span>12.82% ±  8.21%
+<pre>BenchmarkTools.Trial: 8235 samples with 1 evaluation per sample.
+ Range <span class="ansi-bright-black-fg">(</span><span class="ansi-cyan-fg ansi-bold">min</span> … <span class="ansi-magenta-fg">max</span><span class="ansi-bright-black-fg">):  </span><span class="ansi-cyan-fg ansi-bold">420.294 μs</span> … <span class="ansi-magenta-fg"> 29.821 ms</span>  <span class="ansi-bright-black-fg">┊</span> GC <span class="ansi-bright-black-fg">(</span>min … max<span class="ansi-bright-black-fg">): </span> 0.00% … 97.38%
+ Time  <span class="ansi-bright-black-fg">(</span><span class="ansi-blue-fg ansi-bold">median</span><span class="ansi-bright-black-fg">):     </span><span class="ansi-blue-fg ansi-bold">481.289 μs               </span><span class="ansi-bright-black-fg">┊</span> GC <span class="ansi-bright-black-fg">(</span>median<span class="ansi-bright-black-fg">):    </span> 0.00%
+ Time  <span class="ansi-bright-black-fg">(</span><span class="ansi-green-fg ansi-bold">mean</span> ± <span class="ansi-green-fg">σ</span><span class="ansi-bright-black-fg">):   </span><span class="ansi-green-fg ansi-bold">605.956 μs</span> ± <span class="ansi-green-fg">968.474 μs</span>  <span class="ansi-bright-black-fg">┊</span> GC <span class="ansi-bright-black-fg">(</span>mean ± σ<span class="ansi-bright-black-fg">):  </span>13.07% ±  8.01%
 
-      ▃▇█▆▄▂     <span class="ansi-blue-fg"> </span>              <span class="ansi-green-fg">▁</span>                                
-  ▁▂▃▆██████▆▅▄▄▃<span class="ansi-blue-fg">▄</span>▄▄▄▃▃▃▃▄▄▄▆▇▇█<span class="ansi-green-fg">█</span>▇▆▆▅▄▃▃▂▂▂▂▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁ ▃
-  362 μs<span class="ansi-bright-black-fg">           Histogram: frequency by time</span>          751 μs <span class="ansi-bold">&lt;</span>
+   ▁██▄    <span class="ansi-blue-fg"> </span>                 <span class="ansi-green-fg"> </span>                                   
+  ▃████▇▆▄▃<span class="ansi-blue-fg">▂</span>▂▂▂▂▃▂▂▂▂▂▃▃▃▃▃▄▄<span class="ansi-green-fg">▄</span>▅▅▅▄▄▃▃▂▃▂▂▂▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁ ▂
+  420 μs<span class="ansi-bright-black-fg">           Histogram: frequency by time</span>          835 μs <span class="ansi-bold">&lt;</span>
 
- Memory estimate<span class="ansi-bright-black-fg">: </span><span class="ansi-yellow-fg">1.21 MiB</span>, allocs estimate<span class="ansi-bright-black-fg">: </span><span class="ansi-yellow-fg">26285</span>.</pre>
+ Memory estimate<span class="ansi-bright-black-fg">: </span><span class="ansi-yellow-fg">1.36 MiB</span>, allocs estimate<span class="ansi-bright-black-fg">: </span><span class="ansi-yellow-fg">29564</span>.</pre>
 </div>
 </div>
 </div>
@@ -629,16 +625,16 @@ u: 2-element Vector{Float64}:
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb10"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb10-1"><a></a><span class="pp">@benchmark</span> <span class="fu">solve</span>(probfp, <span class="fu">FixedPointAccelerationJL</span>())</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-display" data-execution_count="1">
 <div class="ansi-escaped-output">
-<pre>BenchmarkTools.Trial: 9820 samples with 1 evaluation per sample.
- Range <span class="ansi-bright-black-fg">(</span><span class="ansi-cyan-fg ansi-bold">min</span> … <span class="ansi-magenta-fg">max</span><span class="ansi-bright-black-fg">):  </span><span class="ansi-cyan-fg ansi-bold">341.235 μs</span> … <span class="ansi-magenta-fg"> 19.540 ms</span>  <span class="ansi-bright-black-fg">┊</span> GC <span class="ansi-bright-black-fg">(</span>min … max<span class="ansi-bright-black-fg">): </span> 0.00% … 96.20%
- Time  <span class="ansi-bright-black-fg">(</span><span class="ansi-blue-fg ansi-bold">median</span><span class="ansi-bright-black-fg">):     </span><span class="ansi-blue-fg ansi-bold">424.974 μs               </span><span class="ansi-bright-black-fg">┊</span> GC <span class="ansi-bright-black-fg">(</span>median<span class="ansi-bright-black-fg">):    </span> 0.00%
- Time  <span class="ansi-bright-black-fg">(</span><span class="ansi-green-fg ansi-bold">mean</span> ± <span class="ansi-green-fg">σ</span><span class="ansi-bright-black-fg">):   </span><span class="ansi-green-fg ansi-bold">508.047 μs</span> ± <span class="ansi-green-fg">796.446 μs</span>  <span class="ansi-bright-black-fg">┊</span> GC <span class="ansi-bright-black-fg">(</span>mean ± σ<span class="ansi-bright-black-fg">):  </span>13.39% ±  8.24%
+<pre>BenchmarkTools.Trial: 10000 samples with 1 evaluation per sample.
+ Range <span class="ansi-bright-black-fg">(</span><span class="ansi-cyan-fg ansi-bold">min</span> … <span class="ansi-magenta-fg">max</span><span class="ansi-bright-black-fg">):  </span><span class="ansi-cyan-fg ansi-bold">292.773 μs</span> … <span class="ansi-magenta-fg"> 31.153 ms</span>  <span class="ansi-bright-black-fg">┊</span> GC <span class="ansi-bright-black-fg">(</span>min … max<span class="ansi-bright-black-fg">): </span> 0.00% … 97.81%
+ Time  <span class="ansi-bright-black-fg">(</span><span class="ansi-blue-fg ansi-bold">median</span><span class="ansi-bright-black-fg">):     </span><span class="ansi-blue-fg ansi-bold">348.639 μs               </span><span class="ansi-bright-black-fg">┊</span> GC <span class="ansi-bright-black-fg">(</span>median<span class="ansi-bright-black-fg">):    </span> 0.00%
+ Time  <span class="ansi-bright-black-fg">(</span><span class="ansi-green-fg ansi-bold">mean</span> ± <span class="ansi-green-fg">σ</span><span class="ansi-bright-black-fg">):   </span><span class="ansi-green-fg ansi-bold">424.135 μs</span> ± <span class="ansi-green-fg">812.131 μs</span>  <span class="ansi-bright-black-fg">┊</span> GC <span class="ansi-bright-black-fg">(</span>mean ± σ<span class="ansi-bright-black-fg">):  </span>13.09% ±  6.86%
 
-    ▃█▆▅▂      <span class="ansi-blue-fg"> </span>            <span class="ansi-green-fg"> </span>                                    
-  ▂▅██████▆▄▅▅▄<span class="ansi-blue-fg">▄</span>▄▄▄▄▅▅▆▇▇▇▇▇<span class="ansi-green-fg">▆</span>▅▅▄▃▃▂▂▂▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁ ▃
-  341 μs<span class="ansi-bright-black-fg">           Histogram: frequency by time</span>          738 μs <span class="ansi-bold">&lt;</span>
+    ▅█▅▁    <span class="ansi-blue-fg"> </span>             <span class="ansi-green-fg"> </span>                                      
+  ▂▇████▆▅▄▃<span class="ansi-blue-fg">▂</span>▃▄▄▃▃▃▄▄▄▅▅▅▅<span class="ansi-green-fg">▅</span>▅▅▄▃▃▃▂▂▂▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁ ▂
+  293 μs<span class="ansi-bright-black-fg">           Histogram: frequency by time</span>          622 μs <span class="ansi-bold">&lt;</span>
 
- Memory estimate<span class="ansi-bright-black-fg">: </span><span class="ansi-yellow-fg">1.12 MiB</span>, allocs estimate<span class="ansi-bright-black-fg">: </span><span class="ansi-yellow-fg">23724</span>.</pre>
+ Memory estimate<span class="ansi-bright-black-fg">: </span><span class="ansi-yellow-fg">958.78 KiB</span>, allocs estimate<span class="ansi-bright-black-fg">: </span><span class="ansi-yellow-fg">20279</span>.</pre>
 </div>
 </div>
 </div>
@@ -646,16 +642,16 @@ u: 2-element Vector{Float64}:
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb11"><pre class="sourceCode numberSource julia number-lines code-with-copy"><code class="sourceCode julia"><span id="cb11-1"><a></a><span class="pp">@benchmark</span> <span class="fu">solve</span>(probfp, <span class="fu">RobustMultiNewton</span>())</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-display" data-execution_count="1">
 <div class="ansi-escaped-output">
-<pre>BenchmarkTools.Trial: 7276 samples with 1 evaluation per sample.
- Range <span class="ansi-bright-black-fg">(</span><span class="ansi-cyan-fg ansi-bold">min</span> … <span class="ansi-magenta-fg">max</span><span class="ansi-bright-black-fg">):  </span><span class="ansi-cyan-fg ansi-bold">460.271 μs</span> … <span class="ansi-magenta-fg"> 21.390 ms</span>  <span class="ansi-bright-black-fg">┊</span> GC <span class="ansi-bright-black-fg">(</span>min … max<span class="ansi-bright-black-fg">): </span> 0.00% … 95.77%
- Time  <span class="ansi-bright-black-fg">(</span><span class="ansi-blue-fg ansi-bold">median</span><span class="ansi-bright-black-fg">):     </span><span class="ansi-blue-fg ansi-bold">579.992 μs               </span><span class="ansi-bright-black-fg">┊</span> GC <span class="ansi-bright-black-fg">(</span>median<span class="ansi-bright-black-fg">):    </span> 0.00%
- Time  <span class="ansi-bright-black-fg">(</span><span class="ansi-green-fg ansi-bold">mean</span> ± <span class="ansi-green-fg">σ</span><span class="ansi-bright-black-fg">):   </span><span class="ansi-green-fg ansi-bold">685.785 μs</span> ± <span class="ansi-green-fg">937.117 μs</span>  <span class="ansi-bright-black-fg">┊</span> GC <span class="ansi-bright-black-fg">(</span>mean ± σ<span class="ansi-bright-black-fg">):  </span>12.92% ±  9.02%
+<pre>BenchmarkTools.Trial: 8538 samples with 1 evaluation per sample.
+ Range <span class="ansi-bright-black-fg">(</span><span class="ansi-cyan-fg ansi-bold">min</span> … <span class="ansi-magenta-fg">max</span><span class="ansi-bright-black-fg">):  </span><span class="ansi-cyan-fg ansi-bold">403.863 μs</span> … <span class="ansi-magenta-fg"> 34.326 ms</span>  <span class="ansi-bright-black-fg">┊</span> GC <span class="ansi-bright-black-fg">(</span>min … max<span class="ansi-bright-black-fg">): </span> 0.00% … 97.97%
+ Time  <span class="ansi-bright-black-fg">(</span><span class="ansi-blue-fg ansi-bold">median</span><span class="ansi-bright-black-fg">):     </span><span class="ansi-blue-fg ansi-bold">472.523 μs               </span><span class="ansi-bright-black-fg">┊</span> GC <span class="ansi-bright-black-fg">(</span>median<span class="ansi-bright-black-fg">):    </span> 0.00%
+ Time  <span class="ansi-bright-black-fg">(</span><span class="ansi-green-fg ansi-bold">mean</span> ± <span class="ansi-green-fg">σ</span><span class="ansi-bright-black-fg">):   </span><span class="ansi-green-fg ansi-bold">584.252 μs</span> ± <span class="ansi-green-fg">974.636 μs</span>  <span class="ansi-bright-black-fg">┊</span> GC <span class="ansi-bright-black-fg">(</span>mean ± σ<span class="ansi-bright-black-fg">):  </span>13.40% ±  8.00%
 
-   ▂█▇▂     <span class="ansi-blue-fg"> </span>        <span class="ansi-green-fg"> </span>                                           
-  ▃█████▇▆▅▅<span class="ansi-blue-fg">▅</span>▅▅▅▆▆▇█▇<span class="ansi-green-fg">▇</span>▇▆▅▄▃▃▃▃▂▃▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂▁▂▂▂▂▂▂▁▁▂▁▂ ▃
-  460 μs<span class="ansi-bright-black-fg">           Histogram: frequency by time</span>         1.17 ms <span class="ansi-bold">&lt;</span>
+     ▁▇█▆▃▁<span class="ansi-blue-fg"> </span>              <span class="ansi-green-fg"> </span>                                      
+  ▂▂▅██████<span class="ansi-blue-fg">▆</span>▅▅▄▄▄▄▅▄▄▃▄▅▄▄<span class="ansi-green-fg">▄</span>▃▃▃▃▂▂▂▂▂▂▂▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁▁ ▂
+  404 μs<span class="ansi-bright-black-fg">           Histogram: frequency by time</span>          870 μs <span class="ansi-bold">&lt;</span>
 
- Memory estimate<span class="ansi-bright-black-fg">: </span><span class="ansi-yellow-fg">1.51 MiB</span>, allocs estimate<span class="ansi-bright-black-fg">: </span><span class="ansi-yellow-fg">32882</span>.</pre>
+ Memory estimate<span class="ansi-bright-black-fg">: </span><span class="ansi-yellow-fg">1.36 MiB</span>, allocs estimate<span class="ansi-bright-black-fg">: </span><span class="ansi-yellow-fg">29609</span>.</pre>
 </div>
 </div>
 </div>

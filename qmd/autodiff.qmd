@@ -244,6 +244,7 @@ Above three downsides may be better now than two years ago when I first wrote th
 ## Reactant
 
 ```{julia}
+#| eval: false
 import Reactant
 using Test
 xr = Reactant.to_rarray(x)

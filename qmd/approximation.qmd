@@ -4,13 +4,13 @@ author: Paul Schrimpf
 date: last-modified
 bibliography: 622.bib
 execute:
-  eval: false
+  eval: true
   echo: true
   cache: true
   freeze: auto
 format:
   revealjs:
-    theme: blood
+    theme: night
     smaller: true
     width: 1280
     height: 960
@@ -94,7 +94,7 @@ I say "typically" because one has to be careful about what these norms are to ge
 :::
 
 
-## $\Vert f_0 - f \Vert$
+## Approximation Error Bounds
 
 ::: {.incremental}
 
@@ -180,7 +180,7 @@ The constant $C$ is not really constant, but $k^{-s/d}$ is the dominant term
 $$
 \sum_{i=1}^n \sum_{j=1}^n c_i k(x_i,x_j) c_j \geq 0 \forall c, x \in \R^n
 $$
-- Construct an associated Hilbert space
+- Construct an associated inner-product space
 $$
 \mathcal{K}^{pre} = \mathrm{span}\{ \sum_{j=1}^m c_j k(x_j, \cdot): c_j \in \R, x_j \in \R^d, m \in \mathbb{N}\}
 $$
@@ -202,7 +202,8 @@ completion of $\mathcal{K}^{pre}$ is a Hilbert space
 ## Interpolation in RKHS
 
 - Given $\{x_i, f(x_i)\}_{i=1}^n$, there is unique $\tilde{f} \in S_X \equiv \{ \sum_{i=1}^n c_i k(x_i, \cdot) \}$ such that $\tilde{f}(x_i) = f(x_i)$
--$\tilde{f}$ solves
+
+- $\tilde{f}$ solves
 $$
 \min_{g \in \mathcal{K}} \Vert g \Vert_{\mathcal{K}} \, s.t. \, g(x_i) = f(x_i) \text{ for } i=1,...,n
 $$
@@ -234,7 +235,7 @@ and
 $$
 k(x,y) = \sum \lambda_i \phi_i(x) \bar{\phi_i}(y)
 $$
-- Feature map $k(x,y) = \langle (\sqrt{\lambda_i} \phi_i(x))_{i=1}^\infty, (\sqrt{\lambda_i} \phi_i(x))_{i=1}^\infty \rangle_{\ell^2}$
+- Feature map $k(x,y) = \langle (\sqrt{\lambda_i} \phi_i(x))_{i=1}^\infty, (\sqrt{\lambda_i} \phi_i(y))_{i=1}^\infty \rangle_{\ell^2}$
 - Link between inner product and norm in $\mathcal{K}$ and in $L^2(\mu)$
 
 :::
@@ -275,7 +276,7 @@ $$
 - @bach2024 chapter 7
 - If $k$ is translation invariant and $f$ is $s$ times differentiable,
 $$
-\inf_{f \in \mathcal{K}} \Vert f - f_0 \Vert_{L^2(\mu)} + \lambda \Vert f \Vert_{\mathcal{K}} \approx O(\lambda^(s/r_k))
+\inf_{f \in \mathcal{K}} \Vert f - f_0 \Vert_{L^2(\mu)} + \lambda \Vert f \Vert_{\mathcal{K}} \approx O(\lambda^{s/r_k})
 $$
 where $r_k$ depends on $k$ and need $r_k > d/2 > s$ (if $s \geq r_k$, then $f_0 \in \mathcal{K}$ and can do better)
 - If sample $x_i \sim \mu$ and interpolate
@@ -291,53 +292,42 @@ then $\Vert \hat{f} - f_0 \Vert_{L^2(\mu)} \approx O(n^{-s/r_k})$
 - @bach2024
 
 
-# Application
+# Example
 
-## Investment with adjustment costs and productivity
 
-- Price taking firm, output $y = e^\omega F(k,\ell,m)$, prices $p_y, p_m, p_\ell, p_k$
-- Each period, $m$, flexibly chosen given predetermined $k, \ell$
-$$
-\max_{m} p_y e^\omega F(k,\ell,m) - p_m m
-$$
-
+## Target Function
 
 ```{julia}
-using ModelingToolkit, NonlinearSolve, Symbolics
-@variables m
-@parameters k, l, ω, pm, py
-Dm = Differential(m)
-production(k,l,m) = k^(2//10)*l^(4//10)*m^(3//10)
-#ρ = 5
-#rts = 9//10
-#ces(k,l,m) = (k^ρ + l^ρ + m^ρ)^(rts/ρ)
-profits(k,l,m,ω,pm,py) = py*exp(ω)*production(k,l,m) - pm*m
-mstar = symbolic_solve(Symbolics.derivative(profits(k,l,m,ω,pm,py),m) ~ 0 ,m)[1]
-profits(k,l,mstar,ω,pm,py)
 
-flowprofits = eval(build_function(profits(k,l,mstar,ω,pm,py), k,l,ω,pm,py))
+using Symbolics
+
+flowprofits_expr = begin
+    @variables m
+    @variables k, l, ω, pm, py
+    production(k,l,m) = k^(2//10)*l^(4//10)*m^(3//10)
+    #ρ = 5
+    #rts = 9//10
+    #ces(k,l,m) = (k^ρ + l^ρ + m^ρ)^(rts/ρ)
+    profits(k,l,m,ω,pm,py) = py*exp(ω)*p
+
+    build_function(profits(k,l,mstar,ω,pm,py), k,l,ω,pm,py)
+end
 ```
 
-## Dynamic Labor and Capital Choices
+## Target Function
 
-- $\omega_t$ Markov, $F(\omega_t | \omega_{t-1})$, prices constant
-- Labor and capital chosen before $\omega_t$ known
-- Adjustment cost of capital $c(k',k)$
+```{julia}
+import NaNMath
+function flowprofits_f(k, l, ω, pm, py)
+    begin
+        (+)((*)((*)(-1, pm), (NaNMath.pow)((/)((*)((*)((*)((*)(3//10, (NaNMath.pow)(k, 1//5)), (NaNMath.pow)(l, 2//5)), py), (exp)(ω)), pm), 10//7)), (*)((*)((*)((*)((NaNMath.pow)(k, 1//5), (NaNMath.pow)(l, 2//5)), py), (NaNMath.pow)((/)((*)((*)((*)((*)(3//10, (NaNMath.pow)(k, 1//5)), (NaNMath.pow)(l, 2//5)), py), (exp)(ω)), pm), 3//7)), (exp)(ω)))
+    end
+end
 
-$$
-\begin{align*}
-  V(\omega, k,\ell) = & \max_{k',\ell',m} p_y e^\omega F(k,\ell,m) - p_\ell \ell - p_k k - c(k,k') + \beta E_\omega' [V(\omega', k',\ell') | \omega ] \\
-  = & \max_{k',\ell'} \pi^*(p,\omega, k, \ell) - c(k,k') + \beta E[V(\omega',k',\ell')|\omega]
-\end{align*}
-$$
+flowprofits_f(1.0, 2.0, 0.0, 1.0, 1.0)
+```
 
-## Places for Approximation
-
-- Value function
-- Variable profits
-  - This example has a closed form, but if it didn't may want to replace max over $m$ with an approximation
-
-##
+## Fit on Random Inputs
 
 ```{julia}
 using Surrogates, ForwardDiff
@@ -349,11 +339,11 @@ ub = [10.0, 10.0] #, 3.0]
 pm = 1.0
 py = 1.0
 ω = 0.0
-f0 = x->flowprofits(x..., ω, pm, py)
-x = sample(nfit, lb, ub, SobolSample())
-xtest = sample(ntest, lb, ub, HaltonSample())
+f0 = x->flowprofits_f(x..., 0.0, 1., 1.)
+x = Surrogates.sample(nfit, lb, ub, SobolSample())
+xtest = Surrogates.sample(ntest, lb, ub, HaltonSample())
 y = f0.(x)
-ytest = f0.(xtest)
+ytest = f0.(xtest);
 ```
 
 ## Radial Basis
@@ -361,10 +351,12 @@ ytest = f0.(xtest)
 ```{julia}
 using LinearAlgebra
 radial = RadialBasis(x,y,lb,ub, scale_factor=1.0)
-function errorreport(model, xtest, f0)
-  ntest = length(xtest)
-  println("L2 error ≈ $(norm(model.(xtest) - f0.(xtest))/sqrt(ntest))")
-  println("Grad L2 error ≈ $(Float64(norm([ForwardDiff.gradient(x->(model(Tuple(x)) - f0(x)), [xi...]) for xi in xtest])/sqrt(ntest)))")
+function errorreport(model, xtest, f0; grad=true)
+    ntest = length(xtest)
+    println("L2 error ≈ $(norm(model.(xtest) - f0.(xtest))/sqrt(ntest))")
+    if grad
+        println("Grad L2 error ≈ $(Float64(norm([ForwardDiff.gradient(x->(model(Tuple(x)) - f0(x)), [xi...]) for xi in xtest])/sqrt(ntest)))")
+    end
 end
 errorreport(radial, xtest, f0)
 ```
@@ -374,31 +366,27 @@ errorreport(radial, xtest, f0)
 ```{julia}
 using Plots
 function plotapprox(f0, fapp, lb, ub, xfit; np=25)
-  xp = range(lb[1],ub[1], np)
-  yp = range(lb[2],ub[2], np)
-  p1 = surface(xp, yp, (x, y) -> f0([x y]), title="f0")
-  #scatter!([x[1] for x in xfit], [x[2] for x in xfit], f0.(xfit), marker_z = f0.(xfit), title="f0")
-  p2 = surface(xp, yp, (x, y) -> fapp([x y]), title="Approximation")
-  #scatter!([x[1] for x in xfit], [x[2] for x in xfit], fapp.(xfit), marker_z = fapp.(xfit))
-  err = surface(xp,yp,(x,y)->(fapp([x y]) - f0([x y])), title="Error")
-  return(p1,p2, err)
+    xp = range(lb[1],ub[1], np)
+    yp = range(lb[2],ub[2], np)
+    p1 = surface(xp, yp, (x, y) -> f0([x y]), title="f0")
+    #scatter!([x[1] for x in xfit], [x[2] for x in xfit], f0.(xfit), marker_z = f0.(xfit), title="f0")
+    p2 = surface(xp, yp, (x, y) -> fapp([x y]), title="Approximation")
+    #scatter!([x[1] for x in xfit], [x[2] for x in xfit], fapp.(xfit), marker_z = fapp.(xfit))
+    err = surface(xp,yp,(x,y)->(fapp([x y]) - f0([x y])), title="Error")
+    scatter!([x[1] for x in xfit], [x[2] for x in xfit], fapp.(xfit) - f0.(xfit), marker_z = fapp.(xfit)-f0.(xfit))
+    return(p1,p2, err)
 end
 plot(plotapprox(f0,radial,lb,ub,x)...)
 ```
 
-## Radial Basis (Wendland)
-
-- Polynomial radial basis with compact support
-$$
-\psi(x) = (1- \mathrm{eps} \Vert x - x_j \Vert)_+^\lfloor d/2 \rfloor + 2
-$$
-- Compact support $\Rightarrow$ sparse
-- Very sensitive to $eps$
+## Polynomial
 
 ```{julia}
-wendland = Wendland(x,y, lb, ub, eps=1.0, maxiters=10_000, tol=1e-6)
-errorreport(wendland, xtest, f0)
-plot(plotapprox(f0,wendland,lb,ub,x)...)
+using PolyChaos
+degree = 6
+poly = PolynomialChaosSurrogate(x,y, lb, ub, orthopolys=orthopolys = MultiOrthoPoly([GaussOrthoPoly(degree) for j in 1:length(lb)], degree))
+errorreport(poly, xtest, f0)
+plot(plotapprox(f0,poly,lb,ub,x)...)
 ```
 
 
@@ -419,9 +407,25 @@ using SurrogatesAbstractGPs
 GP = SurrogatesAbstractGPs.GP(0.0, SurrogatesAbstractGPs.KernelFunctions.ScaledKernel(
   SurrogatesAbstractGPs.KernelFunctions.SqExponentialKernel(), 0.1
 ))
-gp = AbstractGPSurrogate(x,y, gp=GP, Σy=0.0)
+gp = Surrogates.AbstractGPSurrogate(x,y, gp=GP, Σy=0.0)
 errorreport(gp, xtest, f0)
 plot(plotapprox(f0,gp,lb,ub,x)...)
+```
+
+## Other Packages
+
+- [There are many!](https://juliamath.github.io/Interpolations.jl/stable/other_packages/#Other-Interpolation-Packages)
+
+## NaturalNeighbours
+
+- [NaturalNeighbours.jl](https://danielvandh.github.io/NaturalNeighbours.jl/stable/)
+
+```{julia}
+import NaturalNeighbours as NN
+itp = NN.interpolate(x,y)
+piecewiselinear=x->itp(x...;method=NN.Triangle())
+errorreport(piecewiselinear, xtest, f0; grad=false)
+plot(plotapprox(piecewiselinear,gp,lb,ub,x)...)
 ```
 
 
