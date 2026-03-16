@@ -1,9 +1,9 @@
 # Final Project
 ## Dates
-* Final project **proposal due** on **December 1st**
+* Final project **proposal due** on **March 30th**
   * The writeup for this can be very short (e.g. 1/2 page or whatever), just so we can all agree on whether it is acceptable.
   * It will not be graded.  If we think that the proposal is inappropriate, or want some clarifications, we will tell you that week
-* The final project is **due December 20th**
+* The final project is **due April 20th**
 
 ## Requirements
 We will accept a wide-range of proposals on many different topics.  The key requirements are that:
@@ -24,6 +24,9 @@ If you want to get the highest possible marks on the project, you will need to:
  * Carefully create tests for each individual function rather than writing out the code all the way to the solution.
  <!-- * Ensure that it runs with continuous integration (i.e. Travis) and with code-coverage -->
  * Ensure that the project is reproducible (i.e. someone else can run the code without any modifications)
- * Demonstrate some use of generic programming
 
- If you are able to make a contribution to an existing open-source project, it is preferred. For contributions to existing projects, we will consider more modest goals since we realize it adds rigors of testing/documentation/etc.
+Your project can be a contribution to an existing open-source project. For contributions to existing projects, we will consider more modest goals since we realize it adds rigors of testing/documentation/etc.
+
+## Presentation
+
+The in-class presentation on April 1st and 8th are meant to help you get started with your project. It should be 10 minutes long per person. It can cover any aspect of your project. A summary of your planned project is fine, but you can also choose to focus on one aspect, or something like a review of a tool or technique that you think might be useful for your project.
